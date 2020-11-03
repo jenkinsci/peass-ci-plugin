@@ -1,0 +1,16 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:st="jelly:stapler">
+    <l:layout title="Performance Measurement"> 
+        <l:side-panel> 
+            <st:include page="sidepanel.jelly" it="${it.run}" optional="true" /> 
+        </l:side-panel>
+        <l:main-panel> 
+            <h1>Performance Measurement Results</h1> 
+            Performance measurement was executed with the following configuration:<br/>           
+            VMs: ${it.config.vms}<br/>
+            Iterations: ${it.config.iterations}<br/>
+            Warmup: ${it.config.warmup}<br/>
+            Repetitions: ${it.config.repetitions}
+        </l:main-panel>
+    </l:layout>
+</j:jelly>
