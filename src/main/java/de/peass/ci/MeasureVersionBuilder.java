@@ -12,11 +12,16 @@ import hudson.tasks.BuildStepDescriptor;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 
-import de.peass.ContinuousExecutor;
+import de.peass.ContinuousExecutionStarter;
+import de.peass.analysis.changes.ProjectChanges;
 import de.peass.dependency.execution.MeasurementConfiguration;
+import de.peass.dependency.execution.MeasurementConfigurationMixin;
+import de.peass.utils.Constants;
+import de.peran.measurement.analysis.ProjectStatistics;
 
 import javax.servlet.ServletException;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 
@@ -43,8 +48,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
 
    @Override
    public void perform(Run<?, ?> run, FilePath workspace, Launcher launcher, TaskListener listener) throws InterruptedException, IOException {
-
-      System.out.println("Building, iterations: " + iterations);
+      final MeasurementConfiguration config = getConfig();
 
       if (!workspace.exists()) {
          listener.getLogger().println("Workspace folder " + workspace.toString() + " does not exist, please asure that the repository was correctly cloned!");
@@ -52,34 +56,34 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
          listener.getLogger().println("Executing on " + workspace.toString());
          PrintStream outOriginal = System.out;
          PrintStream errOriginal = System.err;
+         final File projectFolder = new File(workspace.toString());
+         final ContinuousExecutor executor = new ContinuousExecutor(projectFolder, config, 1, true);
          try {
             System.setOut(listener.getLogger());
             System.setErr(listener.getLogger());
-            System.out.println("Testing System.out");
-            ContinuousExecutor.main(
-                  new String[] { "-folder", workspace.toString(), 
-                        "-vms", "" + VMs, 
-                        "-iterations", "" + iterations, 
-                        "-warmup", "" + warmup, 
-                        "-repetitions", "" + repetitions });
+            
+            executor.execute();
          } catch (Throwable e) {
             e.printStackTrace();
          } finally {
             System.setOut(outOriginal);
             System.setErr(errOriginal);
          }
+         ProjectChanges changes = Constants.OBJECTMAPPER.readValue(new File(executor.getLocalFolder(), "changes.json"), ProjectChanges.class);
+         ProjectStatistics statistics = Constants.OBJECTMAPPER.readValue(new File(executor.getLocalFolder(), "statistics.json"), ProjectStatistics.class);
+         
+         run.addAction(new MeasureVersionAction(config, changes, statistics));
       }
+   }
 
-      /*
-       * Now, we actually need to create an instance of this class when the build step is executed. We need to extend the perform method in the HelloWorldBuilder class to add an
-       * instance of the action we created to the build that’s being run
-       */
+   private MeasurementConfiguration getConfig() {
       final MeasurementConfiguration config = new MeasurementConfiguration(timeout, VMs, significanceLevel, 0.01);
       config.setIterations(iterations);
       config.setWarmup(warmup);
       config.setRepetitions(repetitions);
       config.setUseGC(useGC);
-      run.addAction(new MeasureVersionAction(config));
+      System.out.println("Building, iterations: " + iterations);
+      return config;
    }
 
    public int getVMs() {

@@ -12,8 +12,17 @@
             Warmup: ${it.config.warmup}<br/>
             Repetitions: ${it.config.repetitions}
             <br /><br />
-            <h2>Changes</h2>
-            <h2>Measured</h2>
+            <h2>Changes (${it.changes.getVersionChanges().size()})</h2>
+            <j:forEach var="change" items="${it.changes.getVersionChanges().entrySet()}" >
+              Version: ${change.getKey()}<br />
+              <j:forEach var="testcase" items="${change.getValue().getTestcaseChanges().entrySet()}" >
+                <b>Testcase</b>: ${testcase.getKey()}<br />
+                <j:forEach var="methodChange" items="${testcase.getValue()}" >
+                  Old time: ${methodChange.oldTime} mikroseconds Change: ${methodChange.changePercent} % (t=${methodChange.tvalue})<br />
+                </j:forEach>
+              </j:forEach>
+            </j:forEach>
+            <h2>Measured (${it.statistics.getStatistics().size()})</h2>
         </l:main-panel>
     </l:layout>
 </j:jelly>
