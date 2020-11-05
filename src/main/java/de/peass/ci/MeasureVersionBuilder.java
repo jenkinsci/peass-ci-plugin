@@ -19,6 +19,8 @@ import javax.servlet.ServletException;
 import javax.xml.bind.JAXBException;
 
 import java.io.IOException;
+import java.io.PrintStream;
+
 import jenkins.tasks.SimpleBuildStep;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundSetter;
@@ -26,33 +28,46 @@ import org.kohsuke.stapler.DataBoundSetter;
 public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
 
    private int VMs;
-   private String iterations;
+   private int iterations;
    private int warmup;
    private int repetitions;
    private int timeout;
-   private int significanceLevel;
-   
+   private double significanceLevel;
+
    private int versionDiff;
    private boolean useGC;
-   
+
    @DataBoundConstructor
    public MeasureVersionBuilder(String test) {
       System.out.println("Initializing" + test);
    }
-   
+
    @Override
    public void perform(Run<?, ?> run, FilePath workspace, Launcher launcher, TaskListener listener) throws InterruptedException, IOException {
 
       System.out.println("Building, iterations: " + iterations);
-      
+
       if (!workspace.exists()) {
-         listener.getLogger().print("Workspace folder " + workspace.toString() + " does not exist, please asure that the repository was correctly cloned!");
+         listener.getLogger().println("Workspace folder " + workspace.toString() + " does not exist, please asure that the repository was correctly cloned!");
       } else {
-         listener.getLogger().print("Executing on " + workspace.toString());
+         listener.getLogger().println("Executing on " + workspace.toString());
+         PrintStream outOriginal = System.out;
+         PrintStream errOriginal = System.err;
          try {
-            ContinuousExecutor.main(new String[] { "-folder", workspace.toString() });
+            System.setOut(listener.getLogger());
+            System.setErr(listener.getLogger());
+            System.out.println("Testing System.out");
+            ContinuousExecutor.main(
+                  new String[] { "-folder", workspace.toString(), 
+                        "-vms", "" + VMs, 
+                        "-iterations", "" + iterations, 
+                        "-warmup", "" + warmup, 
+                        "-repetitions", "" + repetitions });
          } catch (Throwable e) {
             e.printStackTrace();
+         } finally {
+            System.setOut(outOriginal);
+            System.setErr(errOriginal);
          }
       }
 
@@ -61,14 +76,12 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
        * instance of the action we created to the build that’s being run
        */
       final MeasurementConfiguration config = new MeasurementConfiguration(timeout, VMs, significanceLevel, 0.01);
-      config.setIterations(Integer.parseInt(iterations));
+      config.setIterations(iterations);
       config.setWarmup(warmup);
       config.setRepetitions(repetitions);
       config.setUseGC(useGC);
       run.addAction(new MeasureVersionAction(config));
    }
-   
-   
 
    public int getVMs() {
       return VMs;
@@ -79,12 +92,12 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
       VMs = vMs;
    }
 
-   public String getIterations() {
+   public int getIterations() {
       return iterations;
    }
 
    @DataBoundSetter
-   public void setIterations(String iterations) {
+   public void setIterations(int iterations) {
       System.out.println("Setting: " + iterations);
       this.iterations = iterations;
    }
@@ -116,12 +129,12 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
       this.timeout = timeout;
    }
 
-   public int getSignificanceLevel() {
+   public double getSignificanceLevel() {
       return significanceLevel;
    }
 
    @DataBoundSetter
-   public void setSignificanceLevel(int significanceLevel) {
+   public void setSignificanceLevel(double significanceLevel) {
       this.significanceLevel = significanceLevel;
    }
 
@@ -147,7 +160,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
    @Extension
    public static final class DescriptorImpl extends BuildStepDescriptor<Builder> {
 
-      public FormValidation doCheckName(@QueryParameter String value, 
+      public FormValidation doCheckName(@QueryParameter String value,
             @QueryParameter boolean useFrench)
             throws IOException, ServletException {
          if (value.length() == 0)

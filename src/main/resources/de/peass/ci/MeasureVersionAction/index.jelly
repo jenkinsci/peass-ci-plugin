@@ -11,6 +11,9 @@
             Iterations: ${it.config.iterations}<br/>
             Warmup: ${it.config.warmup}<br/>
             Repetitions: ${it.config.repetitions}
+            <br /><br />
+            <h2>Changes</h2>
+            <h2>Measured</h2>
         </l:main-panel>
     </l:layout>
 </j:jelly>
