@@ -16,7 +16,6 @@ import de.peass.ContinuousExecutor;
 import de.peass.dependency.execution.MeasurementConfiguration;
 
 import javax.servlet.ServletException;
-import javax.xml.bind.JAXBException;
 
 import java.io.IOException;
 import java.io.PrintStream;
