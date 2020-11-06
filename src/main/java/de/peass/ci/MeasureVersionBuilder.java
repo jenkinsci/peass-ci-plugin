@@ -30,6 +30,7 @@ import de.peass.measurement.rca.kieker.BothTreeReader;
 import de.peass.testtransformation.JUnitTestTransformer;
 import de.peass.utils.Constants;
 import de.peass.visualization.RCAGenerator;
+import de.peass.visualization.VisualizeRCA;
 import de.peran.measurement.analysis.ProjectStatistics;
 
 import javax.servlet.ServletException;
@@ -47,6 +48,7 @@ import kieker.analysis.exception.AnalysisConfigurationException;
 
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.jenkinsci.Symbol;
+import org.jfree.util.Log;
 import org.kohsuke.stapler.DataBoundSetter;
 
 public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
@@ -87,9 +89,9 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
 
             changes = Constants.OBJECTMAPPER.readValue(new File(executor.getLocalFolder(), "changes.json"), ProjectChanges.class);
 
-            executeRCA(config, executor, changes);
-            
-            RCAGenerator generator = new RCAGenerator(executor.getFolders().getFullMeasurementFolder().getParentFile(), executor.getLocalFolder());
+            executeRCAs(config, executor, changes);
+
+            visualizeRCA(executor);
          } catch (Throwable e) {
             e.printStackTrace();
          } finally {
@@ -102,26 +104,52 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
       }
    }
 
-   private void executeRCA(final MeasurementConfiguration config, final ContinuousExecutor executor, ProjectChanges changes)
+   private void visualizeRCA(final ContinuousExecutor executor) throws Exception {
+      VisualizeRCA visualizer = new VisualizeRCA();
+      visualizer.setData(new File[] { executor.getFolders().getFullMeasurementFolder().getParentFile() });
+      System.out.println("Setting property folder: " + executor.getPropertyFolder());
+      visualizer.setPropertyFolder(executor.getPropertyFolder());
+      final File resultFolder = new File(executor.getLocalFolder(), "visualization");
+      resultFolder.mkdirs();
+      visualizer.setResultFolder(resultFolder);
+      visualizer.call();
+   }
+
+   private void executeRCAs(final MeasurementConfiguration config, final ContinuousExecutor executor, ProjectChanges changes)
          throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException, JAXBException {
       config.setVersion(executor.getLatestVersion());
       config.setVersionOld(executor.getVersionOld());
-      
+
       Changes versionChanges = changes.getVersion(executor.getLatestVersion());
       for (Entry<String, List<Change>> testcases : versionChanges.getTestcaseChanges().entrySet()) {
          for (Change change : testcases.getValue()) {
-            final TestCase testCase = new TestCase(testcases.getKey() + "#" + change.getMethod());
-            final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(testCase, true, true, 5.0, true, 0.01, false, true);
-            config.setUseKieker(true);
-            
-            final CauseSearchFolders alternateFolders = new CauseSearchFolders(executor.getFolders().getProjectFolder());
-            final JUnitTestTransformer testtransformer = new JUnitTestTransformer(executor.getFolders().getProjectFolder(), config);
-            final BothTreeReader reader = new BothTreeReader(causeSearcherConfig, config, alternateFolders);
-            final CauseTester measurer = new CauseTester(alternateFolders, testtransformer, causeSearcherConfig);
-            final CauseSearcher tester = new CauseSearcherComplete(reader, causeSearcherConfig, measurer, config, alternateFolders);
-            tester.search();
+            CauseSearchFolders folders = new CauseSearchFolders(executor.getProjectFolder());
+
+            String onlyTestcaseName = (testcases.getKey().contains(".") ? testcases.getKey().substring(testcases.getKey().lastIndexOf('.') + 1) : testcases.getKey());
+            final File expectedResultFile = new File(folders.getRcaTreeFolder(),
+                  executor.getLatestVersion() + File.separator +
+                        onlyTestcaseName + File.separator +
+                        change.getMethod() + ".json");
+            System.out.println("Testing " + expectedResultFile);
+            if (!expectedResultFile.exists()) {
+               executeRCA(config, executor, testcases, change);
+            }
          }
       }
+   }
+
+   private void executeRCA(final MeasurementConfiguration config, final ContinuousExecutor executor, Entry<String, List<Change>> testcases, Change change)
+         throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException, JAXBException {
+      final TestCase testCase = new TestCase(testcases.getKey() + "#" + change.getMethod());
+      final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(testCase, true, true, 5.0, true, 0.01, false, true);
+      config.setUseKieker(true);
+
+      final CauseSearchFolders alternateFolders = new CauseSearchFolders(executor.getFolders().getProjectFolder());
+      final JUnitTestTransformer testtransformer = new JUnitTestTransformer(executor.getFolders().getProjectFolder(), config);
+      final BothTreeReader reader = new BothTreeReader(causeSearcherConfig, config, alternateFolders);
+      final CauseTester measurer = new CauseTester(alternateFolders, testtransformer, causeSearcherConfig);
+      final CauseSearcher tester = new CauseSearcherComplete(reader, causeSearcherConfig, measurer, config, alternateFolders);
+      tester.search();
    }
 
    private MeasurementConfiguration getConfig() {
