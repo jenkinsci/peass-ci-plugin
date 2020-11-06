@@ -4,7 +4,7 @@
         <l:side-panel> 
             <st:include page="sidepanel.jelly" it="${it.run}" optional="true" /> 
         </l:side-panel>
-        <l:main-panel> 
+        <l:main-panel>
             <h1>Performance Measurement Results</h1> 
             Performance measurement was executed with the following configuration:<br/>           
             VMs: ${it.config.vms}<br/>
@@ -22,7 +22,8 @@
                 </j:forEach>
               </j:forEach>
             </j:forEach>
-            <h2>Measured (${it.statistics.getStatistics().size()})</h2>
+            <!-- <h2>Measured (${it.statistics.getStatistics().size()})</h2> -->
+            <!-- Measured tests and distributions should be added in the future to better understand measurements -->
         </l:main-panel>
     </l:layout>
 </j:jelly>
