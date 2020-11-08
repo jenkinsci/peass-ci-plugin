@@ -1,0 +1,7 @@
+<?jelly escape-by-default='false'?>
+
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:st="jelly:stapler">
+  <st:contentType value="text/html"/>  
+  <j:set var="fileHTML" value="${it.readFile(it.getHtmlFile())}" /> 
+  ${fileHTML}
+</j:jelly>

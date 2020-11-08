@@ -1,26 +1,27 @@
 package de.peass.ci;
 
-import hudson.Launcher;
-import hudson.Extension;
-import hudson.FilePath;
-import hudson.util.FormValidation;
-import hudson.model.AbstractProject;
-import hudson.model.Run;
-import hudson.model.TaskListener;
-import hudson.tasks.Builder;
-import hudson.tasks.BuildStepDescriptor;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.List;
+import java.util.Map.Entry;
+
+import javax.servlet.ServletException;
+import javax.xml.bind.JAXBException;
+
+import org.apache.commons.io.FileUtils;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
+import org.kohsuke.stapler.DataBoundSetter;
 import org.kohsuke.stapler.QueryParameter;
 
-import de.peass.ContinuousExecutionStarter;
-import de.peass.RootCauseAnalysis;
 import de.peass.analysis.changes.Change;
 import de.peass.analysis.changes.Changes;
 import de.peass.analysis.changes.ProjectChanges;
 import de.peass.dependency.CauseSearchFolders;
 import de.peass.dependency.analysis.data.TestCase;
 import de.peass.dependency.execution.MeasurementConfiguration;
-import de.peass.dependency.execution.MeasurementConfigurationMixin;
 import de.peass.dependencyprocessors.ViewNotFoundException;
 import de.peass.measurement.rca.CauseSearcher;
 import de.peass.measurement.rca.CauseSearcherComplete;
@@ -29,27 +30,19 @@ import de.peass.measurement.rca.CauseTester;
 import de.peass.measurement.rca.kieker.BothTreeReader;
 import de.peass.testtransformation.JUnitTestTransformer;
 import de.peass.utils.Constants;
-import de.peass.visualization.RCAGenerator;
 import de.peass.visualization.VisualizeRCA;
 import de.peran.measurement.analysis.ProjectStatistics;
-
-import javax.servlet.ServletException;
-import javax.xml.bind.JAXBException;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
+import hudson.Extension;
+import hudson.FilePath;
+import hudson.Launcher;
+import hudson.model.AbstractProject;
+import hudson.model.Run;
+import hudson.model.TaskListener;
+import hudson.tasks.BuildStepDescriptor;
+import hudson.tasks.Builder;
+import hudson.util.FormValidation;
 import jenkins.tasks.SimpleBuildStep;
 import kieker.analysis.exception.AnalysisConfigurationException;
-
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-import org.jenkinsci.Symbol;
-import org.jfree.util.Log;
-import org.kohsuke.stapler.DataBoundSetter;
 
 public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
 
@@ -91,7 +84,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
 
             executeRCAs(config, executor, changes);
 
-            visualizeRCA(executor);
+            visualizeRCA(executor, changes, run);
          } catch (Throwable e) {
             e.printStackTrace();
          } finally {
@@ -104,7 +97,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
       }
    }
 
-   private void visualizeRCA(final ContinuousExecutor executor) throws Exception {
+   private void visualizeRCA(final ContinuousExecutor executor, ProjectChanges changes, Run<?, ?> run) throws Exception {
       VisualizeRCA visualizer = new VisualizeRCA();
       visualizer.setData(new File[] { executor.getFolders().getFullMeasurementFolder().getParentFile() });
       System.out.println("Setting property folder: " + executor.getPropertyFolder());
@@ -113,6 +106,35 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
       resultFolder.mkdirs();
       visualizer.setResultFolder(resultFolder);
       visualizer.call();
+
+      File rcaResults = new File(run.getRootDir(), "rca_visualization");
+      rcaResults.mkdirs();
+
+      Changes versionChanges = changes.getVersion(executor.getLatestVersion());
+      File versionVisualizationFolder = new File(resultFolder, executor.getLatestVersion());
+
+      createVisualizationActions(run, rcaResults, versionChanges, versionVisualizationFolder);
+   }
+
+   private void createVisualizationActions(Run<?, ?> run, File rcaResults, Changes versionChanges, File versionVisualizationFolder) throws IOException {
+      System.out.println("Creating actions: " + versionChanges.getTestcaseChanges().size());
+      for (Entry<String, List<Change>> testcases : versionChanges.getTestcaseChanges().entrySet()) {
+         for (Change change : testcases.getValue()) {
+            final String name = testcases.getKey() + "#" + change.getMethod();
+            File htmlFile = new File(versionVisualizationFolder, name + ".html");
+            System.out.println("Trying to move " + htmlFile.getAbsolutePath());
+            if (htmlFile.exists()) {
+               String destName = testcases.getKey() + "_" + change.getMethod() + ".html";
+               File rcaDestFile = new File(rcaResults, destName);
+               FileUtils.copyFile(htmlFile, rcaDestFile);
+
+               System.out.println("Adding: " + rcaDestFile + " " + name);
+               run.addAction(new RCAVisualizationAction(name, rcaDestFile));
+            } else {
+               System.out.println("An error occured: " + htmlFile.getAbsolutePath() + " not found");
+            }
+         }
+      }
    }
 
    private void executeRCAs(final MeasurementConfiguration config, final ContinuousExecutor executor, ProjectChanges changes)
