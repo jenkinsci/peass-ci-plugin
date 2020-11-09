@@ -1,4 +1,6 @@
 language: java
 jdk:
  - openjdk8
+install:
+ - git clone https://github.com/DaGeRe/peass.git && cd peass && mvn clean install -DskipTests
 
