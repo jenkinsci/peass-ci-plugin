@@ -2,7 +2,7 @@ This is the peass-ci-Plugin, enabling a continuous performance measurement for J
 
 # Building
 
-Execute `mvn clean package`.
+First get peass by running `git clone https://github.com/DaGeRe/peass.git && cd peass && mvn clean install -DskipTests`. Then, execute `mvn clean package`.
 
 # Running
 
