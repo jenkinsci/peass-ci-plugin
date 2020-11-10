@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 
 import de.peass.analysis.changes.Changes;
 import de.peass.analysis.changes.ProjectChanges;
+import de.peass.ci.helper.HistogramValues;
 import de.peass.dependency.execution.MeasurementConfiguration;
 import de.peran.measurement.analysis.ProjectStatistics;
 import hudson.model.Run;

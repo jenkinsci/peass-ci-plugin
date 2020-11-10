@@ -1,4 +1,4 @@
-package de.peass.ci;
+package de.peass.ci.helper;
 
 import java.util.Arrays;
 

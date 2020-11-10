@@ -1,4 +1,4 @@
-package de.peass.ci;
+package de.peass.ci.helper;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +12,7 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import de.peass.analysis.changes.Change;
 import de.peass.analysis.changes.Changes;
 import de.peass.analysis.changes.ProjectChanges;
+import de.peass.ci.ContinuousExecutor;
 import de.peass.dependency.CauseSearchFolders;
 import de.peass.dependency.analysis.data.TestCase;
 import de.peass.dependency.execution.MeasurementConfiguration;
@@ -24,7 +25,7 @@ import de.peass.measurement.rca.kieker.BothTreeReader;
 import de.peass.testtransformation.JUnitTestTransformer;
 import kieker.analysis.exception.AnalysisConfigurationException;
 
-class RCAExecutor{
+public class RCAExecutor{
    final MeasurementConfiguration config;
    final ContinuousExecutor executor;
    final ProjectChanges changes;

@@ -1,36 +1,25 @@
 package de.peass.ci;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.TreeMap;
 
 import javax.servlet.ServletException;
-import javax.xml.bind.JAXBException;
 
-import org.apache.commons.io.FileUtils;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
 import org.kohsuke.stapler.QueryParameter;
 
-import de.dagere.kopeme.datastorage.XMLDataLoader;
-import de.dagere.kopeme.generated.Kopemedata;
-import de.dagere.kopeme.generated.Result;
-import de.dagere.kopeme.generated.TestcaseType;
-import de.dagere.kopeme.generated.TestcaseType.Datacollector.Chunk;
-import de.peass.analysis.changes.Change;
-import de.peass.analysis.changes.Changes;
 import de.peass.analysis.changes.ProjectChanges;
+import de.peass.ci.helper.HistogramReader;
+import de.peass.ci.helper.HistogramValues;
+import de.peass.ci.helper.RCAExecutor;
+import de.peass.ci.helper.RCAVisualizer;
 import de.peass.dependency.PeASSFolders;
 import de.peass.dependency.execution.MeasurementConfiguration;
 import de.peass.utils.Constants;
-import de.peass.visualization.VisualizeRCA;
 import de.peran.measurement.analysis.ProjectStatistics;
 import hudson.Extension;
 import hudson.FilePath;
@@ -41,7 +30,6 @@ import hudson.model.TaskListener;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
 import hudson.util.FormValidation;
-import io.jenkins.cli.shaded.org.apache.commons.io.filefilter.WildcardFileFilter;
 import jenkins.tasks.SimpleBuildStep;
 
 public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
@@ -80,15 +68,17 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
             final File projectFolder = new File(workspace.toString());
             final ContinuousExecutor executor = new ContinuousExecutor(projectFolder, measurementConfig, 1, true);
             executor.execute();
-
-            Map<String, HistogramValues> measurements =  readMeasurements(executor);
+            
+            final HistogramReader histogramReader = new HistogramReader(executor);
+            Map<String, HistogramValues> measurements =  histogramReader.readMeasurements();
 
             final ProjectChanges changes = Constants.OBJECTMAPPER.readValue(new File(executor.getLocalFolder(), "changes.json"), ProjectChanges.class);
 
-            RCAExecutor rcaexecutor = new RCAExecutor(measurementConfig, executor, changes);
-            rcaexecutor.executeRCAs();
+            RCAExecutor rcaExecutor = new RCAExecutor(measurementConfig, executor, changes);
+            rcaExecutor.executeRCAs();
 
-            visualizeRCA(executor, changes, run);
+            RCAVisualizer rcaVisualizer = new RCAVisualizer(executor, changes, run);
+            rcaVisualizer.visualizeRCA();
 
             ProjectStatistics statistics = Constants.OBJECTMAPPER.readValue(new File(executor.getLocalFolder(), "statistics.json"), ProjectStatistics.class);
 
@@ -103,78 +93,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
 
       }
    }
-
-   private Map<String, HistogramValues> readMeasurements(final ContinuousExecutor executor) throws JAXBException {
-      Map<String, HistogramValues> measurements = new TreeMap<>(); 
-      File measurementsFullFolder = executor.getFullResultsVersion();
-      for (File xmlResultFile : measurementsFullFolder.listFiles((FileFilter) new WildcardFileFilter("*.xml"))) {
-         Kopemedata data = XMLDataLoader.loadData(xmlResultFile);
-         // This assumes measurements are only executed once; if this is not the case, the matching result would need to be searched
-         final TestcaseType testcase = data.getTestcases().getTestcase().get(0);
-         HistogramValues values = getHistogramValues(executor, testcase);
-         measurements.put(data.getTestcases().getClazz() + "#" + testcase.getName(), values);
-      }
-      return measurements;
-   }
-
-   private HistogramValues getHistogramValues(final ContinuousExecutor executor, final TestcaseType testcase) {
-      Chunk chunk = testcase.getDatacollector().get(0).getChunk().get(0);
-
-      List<Double> old = new LinkedList<>();
-      List<Double> current = new LinkedList<>();
-      for (Result result : chunk.getResult()) {
-         if (result.getVersion().getGitversion().equals(executor.getVersionOld())) {
-            old.add(result.getValue());
-         }
-         if (result.getVersion().getGitversion().equals(executor.getLatestVersion())) {
-            current.add(result.getValue());
-         }
-      }
-      HistogramValues values = new HistogramValues(current.stream().mapToDouble(i -> i).toArray(),
-            old.stream().mapToDouble(i -> i).toArray());
-      return values;
-   }
-
-   private void visualizeRCA(final ContinuousExecutor executor, ProjectChanges changes, Run<?, ?> run) throws Exception {
-      VisualizeRCA visualizer = new VisualizeRCA();
-      visualizer.setData(new File[] { executor.getFolders().getFullMeasurementFolder().getParentFile() });
-      System.out.println("Setting property folder: " + executor.getPropertyFolder());
-      visualizer.setPropertyFolder(executor.getPropertyFolder());
-      final File resultFolder = new File(executor.getLocalFolder(), "visualization");
-      resultFolder.mkdirs();
-      visualizer.setResultFolder(resultFolder);
-      visualizer.call();
-
-      File rcaResults = new File(run.getRootDir(), "rca_visualization");
-      rcaResults.mkdirs();
-
-      Changes versionChanges = changes.getVersion(executor.getLatestVersion());
-      File versionVisualizationFolder = new File(resultFolder, executor.getLatestVersion());
-
-      createVisualizationActions(run, rcaResults, versionChanges, versionVisualizationFolder);
-   }
-
-   private void createVisualizationActions(Run<?, ?> run, File rcaResults, Changes versionChanges, File versionVisualizationFolder) throws IOException {
-      System.out.println("Creating actions: " + versionChanges.getTestcaseChanges().size());
-      for (Entry<String, List<Change>> testcases : versionChanges.getTestcaseChanges().entrySet()) {
-         for (Change change : testcases.getValue()) {
-            final String name = testcases.getKey() + "#" + change.getMethod();
-            File htmlFile = new File(versionVisualizationFolder, name + ".html");
-            System.out.println("Trying to move " + htmlFile.getAbsolutePath());
-            if (htmlFile.exists()) {
-               String destName = testcases.getKey() + "_" + change.getMethod() + ".html";
-               File rcaDestFile = new File(rcaResults, destName);
-               FileUtils.copyFile(htmlFile, rcaDestFile);
-
-               System.out.println("Adding: " + rcaDestFile + " " + name);
-               run.addAction(new RCAVisualizationAction(name, rcaDestFile));
-            } else {
-               System.out.println("An error occured: " + htmlFile.getAbsolutePath() + " not found");
-            }
-         }
-      }
-   }
-
+   
    private MeasurementConfiguration getConfig() {
       final MeasurementConfiguration config = new MeasurementConfiguration(timeout, VMs, significanceLevel, 0.01);
       config.setIterations(iterations);
