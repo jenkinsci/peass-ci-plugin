@@ -220,6 +220,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
       config.setWarmup(warmup);
       config.setRepetitions(repetitions);
       config.setUseGC(useGC);
+      config.setEarlyStop(false);
       System.out.println("Building, iterations: " + iterations);
       return config;
    }
