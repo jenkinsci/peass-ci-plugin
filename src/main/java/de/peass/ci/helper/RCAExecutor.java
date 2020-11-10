@@ -39,6 +39,8 @@ public class RCAExecutor{
          throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException, JAXBException {
       config.setVersion(executor.getLatestVersion());
       config.setVersionOld(executor.getVersionOld());
+      MeasurementConfiguration currentConfig = new MeasurementConfiguration(config);
+      
 
       Changes versionChanges = changes.getVersion(executor.getLatestVersion());
       for (Entry<String, List<Change>> testcases : versionChanges.getTestcaseChanges().entrySet()) {
@@ -52,7 +54,7 @@ public class RCAExecutor{
                         change.getMethod() + ".json");
             System.out.println("Testing " + expectedResultFile);
             if (!expectedResultFile.exists()) {
-               executeRCA(config, executor, testcases, change);
+               executeRCA(currentConfig, executor, testcases, change);
             }
          }
       }
