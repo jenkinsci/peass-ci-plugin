@@ -92,7 +92,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
 
             executor.execute();
             
-            File measurementsFullFolder = executor.getFolders().getFullMeasurementFolder();
+            File measurementsFullFolder = executor.getFullResultsVersion();
             for (File xmlResultFile : measurementsFullFolder.listFiles((FileFilter) new WildcardFileFilter("*.xml"))) {
                Kopemedata data = XMLDataLoader.loadData(xmlResultFile);
                //This assumes measurements are only executed once; if this is not the case, the matching result would need to be searched
