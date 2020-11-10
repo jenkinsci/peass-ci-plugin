@@ -1,10 +1,14 @@
 package de.peass.ci;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import javax.servlet.ServletException;
 import javax.xml.bind.JAXBException;
@@ -16,10 +20,16 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
 import org.kohsuke.stapler.QueryParameter;
 
+import de.dagere.kopeme.datastorage.XMLDataLoader;
+import de.dagere.kopeme.generated.Kopemedata;
+import de.dagere.kopeme.generated.Result;
+import de.dagere.kopeme.generated.TestcaseType;
+import de.dagere.kopeme.generated.TestcaseType.Datacollector.Chunk;
 import de.peass.analysis.changes.Change;
 import de.peass.analysis.changes.Changes;
 import de.peass.analysis.changes.ProjectChanges;
 import de.peass.dependency.CauseSearchFolders;
+import de.peass.dependency.PeASSFolders;
 import de.peass.dependency.analysis.data.TestCase;
 import de.peass.dependency.execution.MeasurementConfiguration;
 import de.peass.dependencyprocessors.ViewNotFoundException;
@@ -41,6 +51,7 @@ import hudson.model.TaskListener;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
 import hudson.util.FormValidation;
+import io.jenkins.cli.shaded.org.apache.commons.io.filefilter.WildcardFileFilter;
 import jenkins.tasks.SimpleBuildStep;
 import kieker.analysis.exception.AnalysisConfigurationException;
 
@@ -65,6 +76,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
    public void perform(Run<?, ?> run, FilePath workspace, Launcher launcher, TaskListener listener) throws InterruptedException, IOException {
       final MeasurementConfiguration config = getConfig();
 
+      Map<String, HistogramValues> measurements = new TreeMap<>();
       if (!workspace.exists()) {
          listener.getLogger().println("Workspace folder " + workspace.toString() + " does not exist, please asure that the repository was correctly cloned!");
       } else {
@@ -79,6 +91,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
             System.setErr(listener.getLogger());
 
             executor.execute();
+            
+            File measurementsFullFolder = executor.getFolders().getFullMeasurementFolder();
+            for (File xmlResultFile : measurementsFullFolder.listFiles((FileFilter) new WildcardFileFilter("*.xml"))) {
+               Kopemedata data = XMLDataLoader.loadData(xmlResultFile);
+               //This assumes measurements are only executed once; if this is not the case, the matching result would need to be searched
+               final TestcaseType testcase = data.getTestcases().getTestcase().get(0);
+               HistogramValues values = getHistogramValues(executor, testcase);
+               measurements.put(data.getTestcases().getClazz() + "#" + testcase.getName(), values);
+            }
 
             changes = Constants.OBJECTMAPPER.readValue(new File(executor.getLocalFolder(), "changes.json"), ProjectChanges.class);
 
@@ -93,8 +114,27 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
          }
          ProjectStatistics statistics = Constants.OBJECTMAPPER.readValue(new File(executor.getLocalFolder(), "statistics.json"), ProjectStatistics.class);
 
-         run.addAction(new MeasureVersionAction(config, changes, statistics));
+         final MeasureVersionAction action = new MeasureVersionAction(config, changes, statistics, measurements);
+         run.addAction(action);
       }
+   }
+
+   private HistogramValues getHistogramValues(final ContinuousExecutor executor, final TestcaseType testcase) {
+      Chunk chunk = testcase.getDatacollector().get(0).getChunk().get(0);
+      
+      List<Double> old = new LinkedList<>();
+      List<Double> current = new LinkedList<>();
+      for (Result result : chunk.getResult()) {
+         if (result.getVersion().getGitversion().equals(executor.getVersionOld())){
+            old.add(result.getValue());
+         }
+         if (result.getVersion().getGitversion().equals(executor.getLatestVersion())) {
+            current.add(result.getValue());
+         }
+      }
+      HistogramValues values = new HistogramValues(current.stream().mapToDouble(i -> i).toArray(), 
+            old.stream().mapToDouble(i -> i).toArray());
+      return values;
    }
 
    private void visualizeRCA(final ContinuousExecutor executor, ProjectChanges changes, Run<?, ?> run) throws Exception {
