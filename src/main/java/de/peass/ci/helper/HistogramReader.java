@@ -41,15 +41,18 @@ public class HistogramReader{
    private HistogramValues getHistogramValues(final TestcaseType testcase) {
       Chunk chunk = testcase.getDatacollector().get(0).getChunk().get(0);
 
-      List<Double> old = new LinkedList<>();
-      List<Double> current = new LinkedList<>();
+      final List<Double> current = new LinkedList<>();
+      final List<Double> old = new LinkedList<>();
+      
       for (Result result : chunk.getResult()) {
-         if (result.getVersion().getGitversion().equals(executor.getVersionOld())) {
-            old.add(result.getValue() / result.getRepetitions() / MIKRO);
-         }
+         final double singleRepetitionValue = result.getValue() / result.getRepetitions() / MIKRO;
          if (result.getVersion().getGitversion().equals(executor.getLatestVersion())) {
-            current.add(result.getValue() / result.getRepetitions() / MIKRO);
+            current.add(singleRepetitionValue);
          }
+         if (result.getVersion().getGitversion().equals(executor.getVersionOld())) {
+            old.add(singleRepetitionValue);
+         }
+         
       }
       HistogramValues values = new HistogramValues(current.stream().mapToDouble(i -> i).toArray(),
             old.stream().mapToDouble(i -> i).toArray());

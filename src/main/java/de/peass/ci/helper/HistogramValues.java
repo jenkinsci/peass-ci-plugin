@@ -3,20 +3,20 @@ package de.peass.ci.helper;
 import java.util.Arrays;
 
 public class HistogramValues {
-   double[] valuesBefore;
-   double[] valuesCurrent;
-
+   private double[] valuesCurrent;
+   private double[] valuesBefore;
+   
    public HistogramValues(double[] valuesCurrent, double[] valuesBefore) {
-      this.valuesBefore = valuesBefore;
       this.valuesCurrent = valuesCurrent;
-   }
-
-   public double[] getValuesBefore() {
-      return valuesBefore;
+      this.valuesBefore = valuesBefore;
    }
 
    public double[] getValuesCurrent() {
       return valuesCurrent;
+   }
+   
+   public double[] getValuesBefore() {
+      return valuesBefore;
    }
 
    public String getValuesCurrentReadable() {

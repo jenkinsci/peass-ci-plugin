@@ -32,7 +32,7 @@ public class MeasureVersionAction implements RunAction2 {
 
    @Override
    public String getIconFileName() {
-      return "document.png";
+      return "/plugin/peass-ci/images/sd_slower.png";
    }
 
    @Override
@@ -73,5 +73,9 @@ public class MeasureVersionAction implements RunAction2 {
 
    public Run getRun() {
       return run;
+   }
+   
+   public double round(double value) {
+      return Math.round(value*100)/100d;
    }
 }

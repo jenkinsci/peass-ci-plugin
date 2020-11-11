@@ -22,7 +22,7 @@ public class RCAVisualizationAction implements RunAction2 {
    
    @Override
    public String getIconFileName() {
-      return "document.png";
+      return "/plugin/peass-ci/images/rca.png";
    }
 
    @Override

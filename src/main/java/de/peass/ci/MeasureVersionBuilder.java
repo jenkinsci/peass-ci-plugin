@@ -109,7 +109,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
 
    private List<String> getIncludeList() {
       List<String> includeList = new LinkedList<>();
-      if (includes.trim().length() > 0) {
+      if (includes != null && includes.trim().length() > 0) {
          final String nonSpaceIncludes = includes.replaceAll(" ", "");
          for (String include : nonSpaceIncludes.split(";")) {
             includeList.add(include);
