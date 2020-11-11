@@ -7,21 +7,27 @@
         <l:main-panel>
             <h1>Performance Measurement Results</h1> 
             Performance measurement was executed with the following configuration:<br/>           
-            VMs: ${it.config.vms}<br/>
-            Iterations: ${it.config.iterations}<br/>
-            Warmup: ${it.config.warmup}<br/>
+            VMs: ${it.config.vms} 
+            Iterations: ${it.config.iterations} 
+            Warmup: ${it.config.warmup}
             Repetitions: ${it.config.repetitions}
             <br /><br />
             <h2>Changes</h2>
+            
             <j:forEach var="change" items="${it.changes.getVersionChanges().entrySet()}" >
               Version: ${change.getKey()}<br />
-              <j:forEach var="testcase" items="${change.getValue().getTestcaseChanges().entrySet()}" >
-                <b>Testcase</b>: ${testcase.getKey()}<br />
-                <j:forEach var="methodChange" items="${testcase.getValue()}" >
-                  Method: <a href="../${testcase.getKey()}_${methodChange.method}" target="parent">${methodChange.method}</a><br />
-                  Old time: ${it.round(methodChange.oldTime/1000)} $&#x00B5;s Change: ${methodChange.changePercent} % (t=${it.round(methodChange.tvalue)})<br />
+              <table>
+                <j:forEach var="testcase" items="${change.getValue().getTestcaseChanges().entrySet()}" >
+                  <tr><td><b>Testcase</b>: ${testcase.getKey()}</td>
+                  <td><table>
+                  <j:forEach var="methodChange" items="${testcase.getValue()}" >
+                    <tr><td>Method: <a href="../${testcase.getKey()}_${methodChange.method}" target="parent">${methodChange.method}</a></td>
+                    <td>Old time: ${it.round(methodChange.oldTime/1000)} $&#x00B5;s</td></tr> 
+                    <tr><td>Change: ${methodChange.changePercent} % </td><td> t=${it.round(methodChange.tvalue)}</td></tr>
+                  </j:forEach>
+                  </table></td></tr>
                 </j:forEach>
-              </j:forEach>
+              </table>
             </j:forEach>
             <h2>Measurements</h2>
             <script src="https://cdn.plot.ly/plotly-latest.min.js"/>
