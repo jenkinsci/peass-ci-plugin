@@ -3,6 +3,8 @@ package de.peass.ci;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -44,6 +46,9 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
    private int versionDiff;
    private boolean useGC;
 
+   private String includes = "";
+   private boolean executeRCA = true;
+
    @DataBoundConstructor
    public MeasureVersionBuilder(String test) {
       System.out.println("Initializing" + test);
@@ -55,6 +60,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
          throw new RuntimeException("Workspace folder " + workspace.toString() + " does not exist, please asure that the repository was correctly cloned!");
       } else {
          listener.getLogger().println("Executing on " + workspace.toString());
+         listener.getLogger().println("VMs: " + VMs + " Iterations: " + iterations + " Warmup: " + warmup + " Repetitions: " + repetitions);
+         listener.getLogger().println("Includes: " + includes + " RCA: " + executeRCA);
 
          PrintStream outOriginal = System.out;
          PrintStream errOriginal = System.err;
@@ -64,21 +71,30 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
             System.setErr(listener.getLogger());
 
             final MeasurementConfiguration measurementConfig = getConfig();
-            
+
             final File projectFolder = new File(workspace.toString());
             final ContinuousExecutor executor = new ContinuousExecutor(projectFolder, measurementConfig, 1, true);
-            executor.execute();
-            
+            List<String> includeList = new LinkedList<>();
+            if (includes.trim().length() > 0) {
+               final String nonSpaceIncludes = includes.replaceAll(" ", "");
+               for (String include : nonSpaceIncludes.split(";")) {
+                  includeList.add(include);
+               }
+            }
+            executor.execute(includeList);
+
             final HistogramReader histogramReader = new HistogramReader(executor);
-            Map<String, HistogramValues> measurements =  histogramReader.readMeasurements();
+            Map<String, HistogramValues> measurements = histogramReader.readMeasurements();
 
             final ProjectChanges changes = Constants.OBJECTMAPPER.readValue(new File(executor.getLocalFolder(), "changes.json"), ProjectChanges.class);
 
-            RCAExecutor rcaExecutor = new RCAExecutor(measurementConfig, executor, changes);
-            rcaExecutor.executeRCAs();
+            if (executeRCA) {
+               RCAExecutor rcaExecutor = new RCAExecutor(measurementConfig, executor, changes);
+               rcaExecutor.executeRCAs();
 
-            RCAVisualizer rcaVisualizer = new RCAVisualizer(executor, changes, run);
-            rcaVisualizer.visualizeRCA();
+               RCAVisualizer rcaVisualizer = new RCAVisualizer(executor, changes, run);
+               rcaVisualizer.visualizeRCA();
+            }
 
             ProjectStatistics statistics = Constants.OBJECTMAPPER.readValue(new File(executor.getLocalFolder(), "statistics.json"), ProjectStatistics.class);
 
@@ -93,7 +109,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
 
       }
    }
-   
+
    private MeasurementConfiguration getConfig() {
       final MeasurementConfiguration config = new MeasurementConfiguration(timeout, VMs, significanceLevel, 0.01);
       config.setIterations(iterations);
@@ -177,6 +193,26 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
    public void setUseGC(boolean useGC) {
       this.useGC = useGC;
    }
+
+   public String getIncludes() {
+      return includes;
+   }
+
+   @DataBoundSetter
+   public void setIncludes(String includes) {
+      this.includes = includes;
+   }
+
+   public boolean isExecuteRCA() {
+      return executeRCA;
+   }
+
+   @DataBoundSetter
+   public void setExecuteRCA(boolean executeRCA) {
+      this.executeRCA = executeRCA;
+   }
+
+
 
    @Symbol("measure")
    @Extension

@@ -22,11 +22,15 @@
        description="${%timeoutDescr}">
        <f:textbox  default="5"/>
     </f:entry>
-    <f:entry title="${%significanceLevel}" field="significanceLevel"
-       description="${%significanceLevelDescr}">
-       <f:textbox  default="0.01"/>
+    <f:entry title="${%executeRCA}" field="executeRCA"
+                 description="${%executeRCADescr}">
+       <f:checkbox default="true"/>
     </f:entry>
     <f:advanced>
+        <f:entry title="${%includes}" field="includes"
+           description="${%includesDescr}">
+            <f:textbox  default=""/>
+        </f:entry>
         <f:entry title="${%versionDiff}" field="versionDiff"
                  description="${%versionDiffDescr}">
             <f:textbox default="1" />
@@ -34,6 +38,10 @@
         <f:entry title="${%useGCDiff}" field="useGC"
                  description="${%useGCDescr}">
             <f:checkbox />
+        </f:entry>
+        <f:entry title="${%significanceLevel}" field="significanceLevel"
+           description="${%significanceLevelDescr}">
+            <f:textbox  default="0.01"/>
         </f:entry>
     </f:advanced>
 </j:jelly>
