@@ -18,6 +18,7 @@ import de.peass.ci.ContinuousExecutor;
 import io.jenkins.cli.shaded.org.apache.commons.io.filefilter.WildcardFileFilter;
 
 public class HistogramReader{
+   private static final int MIKRO = 1000;
    final ContinuousExecutor executor;
 
    public HistogramReader(ContinuousExecutor executor) {
@@ -44,10 +45,10 @@ public class HistogramReader{
       List<Double> current = new LinkedList<>();
       for (Result result : chunk.getResult()) {
          if (result.getVersion().getGitversion().equals(executor.getVersionOld())) {
-            old.add(result.getValue());
+            old.add(result.getValue() / result.getRepetitions() / MIKRO);
          }
          if (result.getVersion().getGitversion().equals(executor.getLatestVersion())) {
-            current.add(result.getValue());
+            current.add(result.getValue() / result.getRepetitions() / MIKRO);
          }
       }
       HistogramValues values = new HistogramValues(current.stream().mapToDouble(i -> i).toArray(),

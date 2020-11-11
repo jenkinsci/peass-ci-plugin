@@ -19,7 +19,7 @@
                 <b>Testcase</b>: ${testcase.getKey()}<br />
                 <j:forEach var="methodChange" items="${testcase.getValue()}" >
                   Method: <a href="../${testcase.getKey()}_${methodChange.method}" target="parent">${methodChange.method}</a><br />
-                  Old time: ${methodChange.oldTime} microseconds Change: ${methodChange.changePercent} % (t=${methodChange.tvalue})<br />
+                  Old time: ${methodChange.oldTime/1000} $&#x00B5;s Change: ${methodChange.changePercent} % (t=${methodChange.tvalue})<br />
                 </j:forEach>
               </j:forEach>
             </j:forEach>
@@ -36,7 +36,7 @@
 		    <script>
               var layout = {barmode: "overlay", 
 			    title: { text: "Histogramm"},
-		     	xaxis: { title: { text: "Duration / Mikroseconds"} },
+		     	xaxis: { title: { text: "Duration / &#x00B5;s"} },
 		    	yaxis: { title: { text: "Frequency"} },
 		    	height: 275,
 		    	width: 575

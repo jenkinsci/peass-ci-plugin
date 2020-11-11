@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 
 import javax.xml.bind.JAXBException;
 
+import org.apache.commons.io.FilenameUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import de.peass.MeasurementMode;
@@ -14,6 +15,7 @@ import de.peass.analysis.changes.Change;
 import de.peass.analysis.changes.Changes;
 import de.peass.analysis.changes.ProjectChanges;
 import de.peass.ci.ContinuousExecutor;
+import de.peass.ci.TestChooser;
 import de.peass.dependency.CauseSearchFolders;
 import de.peass.dependency.analysis.data.TestCase;
 import de.peass.dependency.execution.MeasurementConfiguration;
@@ -32,12 +34,14 @@ public class RCAExecutor {
    final ContinuousExecutor executor;
    final ProjectChanges changes;
    private MeasurementMode mode;
+   private List<String> includes;
 
-   public RCAExecutor(MeasurementConfiguration config, ContinuousExecutor executor, ProjectChanges changes, MeasurementMode mode) {
+   public RCAExecutor(MeasurementConfiguration config, ContinuousExecutor executor, ProjectChanges changes, MeasurementMode mode, List<String> includes) {
       this.config = config;
       this.executor = executor;
       this.changes = changes;
       this.mode = mode;
+      this.includes = includes;
    }
 
    public void executeRCAs()
@@ -50,13 +54,15 @@ public class RCAExecutor {
       for (Entry<String, List<Change>> testcases : versionChanges.getTestcaseChanges().entrySet()) {
          for (Change change : testcases.getValue()) {
             final TestCase testCase = new TestCase(testcases.getKey() + "#" + change.getMethod());
-            try {
-               analyseChange(currentConfig, testCase, change);
-            } catch (Exception e) {
-               System.out.println("Was unable to analyze: " + change.getMethod());
-               e.printStackTrace();
+            boolean match = TestChooser.isTestIncluded(testCase, includes);
+            if (match) {
+               try {
+                  analyseChange(currentConfig, testCase, change);
+               } catch (Exception e) {
+                  System.out.println("Was unable to analyze: " + change.getMethod());
+                  e.printStackTrace();
+               }
             }
-
          }
       }
    }

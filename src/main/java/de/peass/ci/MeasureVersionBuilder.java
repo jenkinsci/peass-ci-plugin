@@ -77,13 +77,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
 
             final File projectFolder = new File(workspace.toString());
             final ContinuousExecutor executor = new ContinuousExecutor(projectFolder, measurementConfig, 1, true);
-            List<String> includeList = new LinkedList<>();
-            if (includes.trim().length() > 0) {
-               final String nonSpaceIncludes = includes.replaceAll(" ", "");
-               for (String include : nonSpaceIncludes.split(";")) {
-                  includeList.add(include);
-               }
-            }
+            List<String> includeList = getIncludeList();
             executor.execute(includeList);
 
             final HistogramReader histogramReader = new HistogramReader(executor);
@@ -92,7 +86,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
             final ProjectChanges changes = Constants.OBJECTMAPPER.readValue(new File(executor.getLocalFolder(), "changes.json"), ProjectChanges.class);
 
             if (executeRCA) {
-               RCAExecutor rcaExecutor = new RCAExecutor(measurementConfig, executor, changes, measurementMode);
+               RCAExecutor rcaExecutor = new RCAExecutor(measurementConfig, executor, changes, measurementMode, includeList);
                rcaExecutor.executeRCAs();
 
                RCAVisualizer rcaVisualizer = new RCAVisualizer(executor, changes, run);
@@ -111,6 +105,17 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
          }
 
       }
+   }
+
+   private List<String> getIncludeList() {
+      List<String> includeList = new LinkedList<>();
+      if (includes.trim().length() > 0) {
+         final String nonSpaceIncludes = includes.replaceAll(" ", "");
+         for (String include : nonSpaceIncludes.split(";")) {
+            includeList.add(include);
+         }
+      }
+      return includeList;
    }
 
    private MeasurementConfiguration getConfig() {
