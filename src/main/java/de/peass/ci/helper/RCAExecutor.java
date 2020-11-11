@@ -9,6 +9,7 @@ import javax.xml.bind.JAXBException;
 
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
+import de.peass.MeasurementMode;
 import de.peass.analysis.changes.Change;
 import de.peass.analysis.changes.Changes;
 import de.peass.analysis.changes.ProjectChanges;
@@ -30,11 +31,13 @@ public class RCAExecutor {
    final MeasurementConfiguration config;
    final ContinuousExecutor executor;
    final ProjectChanges changes;
+   private MeasurementMode mode;
 
-   public RCAExecutor(MeasurementConfiguration config, ContinuousExecutor executor, ProjectChanges changes) {
+   public RCAExecutor(MeasurementConfiguration config, ContinuousExecutor executor, ProjectChanges changes, MeasurementMode mode) {
       this.config = config;
       this.executor = executor;
       this.changes = changes;
+      this.mode = mode;
    }
 
    public void executeRCAs()
@@ -82,7 +85,12 @@ public class RCAExecutor {
       final JUnitTestTransformer testtransformer = new JUnitTestTransformer(executor.getFolders().getProjectFolder(), config);
       final BothTreeReader reader = new BothTreeReader(causeSearcherConfig, config, alternateFolders);
       final CauseTester measurer = new CauseTester(alternateFolders, testtransformer, causeSearcherConfig);
-      final CauseSearcher tester = new CauseSearcherComplete(reader, causeSearcherConfig, measurer, config, alternateFolders);
+      final CauseSearcher tester;
+      if (mode == MeasurementMode.COMPLETE) {
+         tester = new CauseSearcherComplete(reader, causeSearcherConfig, measurer, config, alternateFolders);
+      }else {
+         tester = new CauseSearcher(reader, causeSearcherConfig, measurer, config, alternateFolders);
+      }
       tester.search();
    }
 }

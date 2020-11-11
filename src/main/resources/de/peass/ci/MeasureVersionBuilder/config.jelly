@@ -27,6 +27,13 @@
        <f:checkbox default="true"/>
     </f:entry>
     <f:advanced>
+    	<f:entry name="${%measurementMode}" title="Type of RCA" field="measurementMode">
+    		<select name="measurementMode">
+        		<option value="COMPLETE">Complete Measurement</option>
+        		<option value="LEVELWISE">Level-wise Measurement</option>
+        		<option value="PARTIALTREE">Partial Tree Measurement (NOT SUPPORTED CURRENTLY)</option>
+    		</select>
+	</f:entry>
         <f:entry title="${%includes}" field="includes"
            description="${%includesDescr}">
             <f:textbox  default=""/>

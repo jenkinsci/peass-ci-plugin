@@ -9,11 +9,13 @@ import java.util.Map;
 
 import javax.servlet.ServletException;
 
+import org.apache.commons.math3.filter.MeasurementModel;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
 import org.kohsuke.stapler.QueryParameter;
 
+import de.peass.MeasurementMode;
 import de.peass.analysis.changes.ProjectChanges;
 import de.peass.ci.helper.HistogramReader;
 import de.peass.ci.helper.HistogramValues;
@@ -48,6 +50,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
 
    private String includes = "";
    private boolean executeRCA = true;
+   private MeasurementMode measurementMode;
 
    @DataBoundConstructor
    public MeasureVersionBuilder(String test) {
@@ -89,7 +92,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
             final ProjectChanges changes = Constants.OBJECTMAPPER.readValue(new File(executor.getLocalFolder(), "changes.json"), ProjectChanges.class);
 
             if (executeRCA) {
-               RCAExecutor rcaExecutor = new RCAExecutor(measurementConfig, executor, changes);
+               RCAExecutor rcaExecutor = new RCAExecutor(measurementConfig, executor, changes, measurementMode);
                rcaExecutor.executeRCAs();
 
                RCAVisualizer rcaVisualizer = new RCAVisualizer(executor, changes, run);
@@ -212,6 +215,13 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
       this.executeRCA = executeRCA;
    }
 
+   public MeasurementMode getMeasurementMode() {
+      return measurementMode;
+   }
+
+   public void setMeasurementMode(MeasurementMode measurementMode) {
+      this.measurementMode = measurementMode;
+   }
 
 
    @Symbol("measure")
