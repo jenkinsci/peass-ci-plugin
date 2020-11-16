@@ -1,5 +1,6 @@
 package de.peass.ci;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.junit.Assert;
@@ -29,12 +30,12 @@ public class MeasureVersionBuilderTest {
 
       FreeStyleBuild build = jenkins.buildAndAssertStatus(Result.FAILURE, project);
    }
-
+   
    @Test
-   public void testConfiguration() throws Exception {
+   public void testFullBuild() throws Exception {
       FreeStyleProject project = jenkins.createFreeStyleProject();
-      FilePath path = project.getWorkspace();
-
+      initProjectFolder(project);
+      
       MeasureVersionBuilder builder = createSimpleBuilder();
 
       project.getBuildersList().add(builder);
@@ -47,6 +48,16 @@ public class MeasureVersionBuilderTest {
       Assert.assertEquals(11, action.getConfig().getIterations());
       Assert.assertEquals(23, action.getConfig().getVms());
       Assert.assertEquals(0.05, action.getConfig().getType1error(), 0.01);
+   }
+
+   private void initProjectFolder(FreeStyleProject project) throws Exception, InterruptedException, IOException {
+      jenkins.buildAndAssertStatus(Result.SUCCESS, project);
+      
+      FilePath path = project.getSomeWorkspace();
+      
+      File projectFolder = new File(path.toString());
+      GitProjectBuilder gitbuilder = new GitProjectBuilder(projectFolder, new File("src/test/resources/peass-demo/version1"));
+      gitbuilder.addVersion(new File("src/test/resources/peass-demo/version2"), "Slower Version");
    }
 
    private MeasureVersionBuilder createSimpleBuilder() {

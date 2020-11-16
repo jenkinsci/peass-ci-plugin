@@ -29,6 +29,7 @@ import hudson.Extension;
 import hudson.FilePath;
 import hudson.Launcher;
 import hudson.model.AbstractProject;
+import hudson.model.Result;
 import hudson.model.Run;
 import hudson.model.TaskListener;
 import hudson.tasks.BuildStepDescriptor;
@@ -99,11 +100,11 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
             run.addAction(action);
          } catch (Throwable e) {
             e.printStackTrace();
+            run.setResult(Result.FAILURE);
          } finally {
             System.setOut(outOriginal);
             System.setErr(errOriginal);
          }
-
       }
    }
 
@@ -144,7 +145,6 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
 
    @DataBoundSetter
    public void setIterations(int iterations) {
-      System.out.println("Setting: " + iterations);
       this.iterations = iterations;
    }
 
