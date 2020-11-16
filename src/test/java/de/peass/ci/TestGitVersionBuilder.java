@@ -21,6 +21,7 @@ public class TestGitVersionBuilder {
 
    @Test
    public void testBuilding() throws InterruptedException, IOException {
+      LOG.debug("Starting TestGitVersionBuilder");
       File tempFolder = folder.newFolder("testproject");
 
       GitProjectBuilder builder = new GitProjectBuilder(tempFolder, new File("src/test/resources/peass-demo/version1"));
