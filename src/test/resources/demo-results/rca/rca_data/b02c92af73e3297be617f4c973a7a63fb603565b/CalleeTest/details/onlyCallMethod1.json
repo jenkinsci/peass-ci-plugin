@@ -1,0 +1,270 @@
+{
+  "measurementConfig" : {
+    "timeout" : 300000,
+    "vms" : 2,
+    "type1error" : 0.01,
+    "type2error" : 0.01,
+    "version" : "b02c92af73e3297be617f4c973a7a63fb603565b",
+    "versionOld" : "e80d8a1bf747d1f70dc52260616b36cac9e44561",
+    "earlyStop" : false,
+    "warmup" : 1,
+    "iterations" : 2,
+    "repetitions" : 2,
+    "logFullData" : true,
+    "useKieker" : true,
+    "redirectToNull" : true,
+    "useGC" : false,
+    "kiekerAggregationInterval" : 5000,
+    "javaVersion" : "1.8.0_272"
+  },
+  "causeConfig" : {
+    "useAggregation" : true,
+    "saveAll" : true,
+    "outlierFactor" : 5.0,
+    "splitAggregated" : true,
+    "minTime" : 0.01,
+    "ignoreEOIs" : true,
+    "testCase" : {
+      "clazz" : "de.test.CalleeTest",
+      "method" : "onlyCallMethod1",
+      "module" : ""
+    }
+  },
+  "nodes" : {
+    "call" : "de.test.CalleeTest#onlyCallMethod1",
+    "kiekerPattern" : "public void de.test.CalleeTest.onlyCallMethod1()",
+    "otherKiekerPattern" : "public void de.test.CalleeTest.onlyCallMethod1()",
+    "statistic" : {
+      "meanOld" : 1111.5,
+      "meanCurrent" : 20133.25,
+      "deviationOld" : 17.324116139070416,
+      "deviationCurrent" : 15.202795795510772,
+      "vms" : 2,
+      "callsOld" : 8,
+      "calls" : 8,
+      "tvalue" : -1167.1213021285976
+    },
+    "childs" : [ {
+      "call" : "de.test.Callee#<init>",
+      "kiekerPattern" : "public new de.test.Callee.<init>()",
+      "otherKiekerPattern" : "public new de.test.Callee.<init>()",
+      "statistic" : {
+        "meanOld" : 1.25,
+        "meanCurrent" : 2.875,
+        "deviationOld" : 0.0,
+        "deviationCurrent" : 0.1767766952966369,
+        "vms" : 2,
+        "callsOld" : 8,
+        "calls" : 8,
+        "tvalue" : -13.0
+      },
+      "childs" : [ ],
+      "values" : {
+        "values" : {
+          "0" : [ {
+            "mean" : 3.0,
+            "variance" : 0.6666666666666666,
+            "n" : 4,
+            "max" : 4.0,
+            "min" : 2.0,
+            "sum" : 12.0,
+            "standardDeviation" : 0.816496580927726
+          } ],
+          "1" : [ {
+            "mean" : 2.75,
+            "variance" : 0.9166666666666666,
+            "n" : 4,
+            "max" : 4.0,
+            "min" : 2.0,
+            "sum" : 11.0,
+            "standardDeviation" : 0.9574271077563381
+          } ]
+        }
+      },
+      "valuesPredecessor" : {
+        "values" : {
+          "0" : [ {
+            "mean" : 1.25,
+            "variance" : 0.24999999999999994,
+            "n" : 4,
+            "max" : 2.0,
+            "min" : 1.0,
+            "sum" : 5.0,
+            "standardDeviation" : 0.49999999999999994
+          } ],
+          "1" : [ {
+            "mean" : 1.25,
+            "variance" : 0.24999999999999994,
+            "n" : 4,
+            "max" : 2.0,
+            "min" : 1.0,
+            "sum" : 5.0,
+            "standardDeviation" : 0.49999999999999994
+          } ]
+        }
+      }
+    }, {
+      "call" : "de.test.Callee#method1",
+      "kiekerPattern" : "public void de.test.Callee.method1()",
+      "otherKiekerPattern" : "public void de.test.Callee.method1()",
+      "statistic" : {
+        "meanOld" : 1095.75,
+        "meanCurrent" : 20164.25,
+        "deviationOld" : 1.0606601717798212,
+        "deviationCurrent" : 12.727922061357855,
+        "vms" : 2,
+        "callsOld" : 8,
+        "calls" : 8,
+        "tvalue" : -2111.403643454721
+      },
+      "childs" : [ {
+        "call" : "de.test.Callee#innerMethod",
+        "kiekerPattern" : "private void de.test.Callee.innerMethod()",
+        "otherKiekerPattern" : "private void de.test.Callee.innerMethod()",
+        "statistic" : {
+          "meanOld" : 1090.25,
+          "meanCurrent" : 20158.0,
+          "deviationOld" : 18.384776310850235,
+          "deviationCurrent" : 34.294678887547555,
+          "vms" : 2,
+          "callsOld" : 8,
+          "calls" : 8,
+          "tvalue" : -693.0005541847626
+        },
+        "childs" : [ ],
+        "values" : {
+          "values" : {
+            "0" : [ {
+              "mean" : 20182.25,
+              "variance" : 2008.2500000000173,
+              "n" : 4,
+              "max" : 20230.0,
+              "min" : 20126.0,
+              "sum" : 80729.0,
+              "standardDeviation" : 44.813502429513555
+            } ],
+            "1" : [ {
+              "mean" : 20133.75,
+              "variance" : 434.91666666669204,
+              "n" : 4,
+              "max" : 20165.0,
+              "min" : 20122.0,
+              "sum" : 80535.0,
+              "standardDeviation" : 20.854655755171123
+            } ]
+          }
+        },
+        "valuesPredecessor" : {
+          "values" : {
+            "0" : [ {
+              "mean" : 1077.25,
+              "variance" : 932.2499999999985,
+              "n" : 4,
+              "max" : 1103.0,
+              "min" : 1033.0,
+              "sum" : 4309.0,
+              "standardDeviation" : 30.532769281544027
+            } ],
+            "1" : [ {
+              "mean" : 1103.25,
+              "variance" : 142.91666666666669,
+              "n" : 4,
+              "max" : 1119.0,
+              "min" : 1090.0,
+              "sum" : 4413.0,
+              "standardDeviation" : 11.954775893619532
+            } ]
+          }
+        }
+      } ],
+      "values" : {
+        "values" : {
+          "0" : [ {
+            "mean" : 20173.25,
+            "variance" : 4154.916666666683,
+            "n" : 4,
+            "max" : 20241.0,
+            "min" : 20087.0,
+            "sum" : 80693.0,
+            "standardDeviation" : 64.4586430718696
+          } ],
+          "1" : [ {
+            "mean" : 20155.25,
+            "variance" : 2481.583333333346,
+            "n" : 4,
+            "max" : 20215.0,
+            "min" : 20097.0,
+            "sum" : 80621.0,
+            "standardDeviation" : 49.81549290465112
+          } ]
+        }
+      },
+      "valuesPredecessor" : {
+        "values" : {
+          "0" : [ {
+            "mean" : 1096.5,
+            "variance" : 87.00000000000001,
+            "n" : 4,
+            "max" : 1110.0,
+            "min" : 1089.0,
+            "sum" : 4386.0,
+            "standardDeviation" : 9.327379053088816
+          } ],
+          "1" : [ {
+            "mean" : 1095.0,
+            "variance" : 4.666666666666767,
+            "n" : 4,
+            "max" : 1098.0,
+            "min" : 1093.0,
+            "sum" : 4380.0,
+            "standardDeviation" : 2.16024689946931
+          } ]
+        }
+      }
+    } ],
+    "values" : {
+      "values" : {
+        "0" : [ {
+          "mean" : 20144.0,
+          "variance" : 652.6666666666804,
+          "n" : 4,
+          "max" : 20174.0,
+          "min" : 20119.0,
+          "sum" : 80576.0,
+          "standardDeviation" : 25.547341675146562
+        } ],
+        "1" : [ {
+          "mean" : 20122.5,
+          "variance" : 27.0,
+          "n" : 4,
+          "max" : 20127.0,
+          "min" : 20115.0,
+          "sum" : 80490.0,
+          "standardDeviation" : 5.196152422706632
+        } ]
+      }
+    },
+    "valuesPredecessor" : {
+      "values" : {
+        "0" : [ {
+          "mean" : 1123.75,
+          "variance" : 6.250000000000138,
+          "n" : 4,
+          "max" : 1127.0,
+          "min" : 1121.0,
+          "sum" : 4495.0,
+          "standardDeviation" : 2.5000000000000275
+        } ],
+        "1" : [ {
+          "mean" : 1099.25,
+          "variance" : 554.2500000000001,
+          "n" : 4,
+          "max" : 1121.0,
+          "min" : 1076.0,
+          "sum" : 4397.0,
+          "standardDeviation" : 23.542514733987108
+        } ]
+      }
+    }
+  }
+}

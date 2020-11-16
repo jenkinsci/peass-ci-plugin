@@ -12,9 +12,9 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 public class TestGitVersionBuilder {
-   
+
    @Rule
-   public TemporaryFolder folder= new TemporaryFolder();
+   public TemporaryFolder folder = new TemporaryFolder();
 
    @Test
    public void testBuilding() throws InterruptedException, IOException {

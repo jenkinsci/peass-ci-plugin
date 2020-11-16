@@ -1,0 +1,19 @@
+{
+  "versionCount" : 0,
+  "changeCount" : 1,
+  "testcaseCount" : 0,
+  "versionChanges" : {
+    "b02c92af73e3297be617f4c973a7a63fb603565b" : {
+      "testcaseChanges" : {
+        "de.test.CalleeTest" : [ {
+          "diff" : "view_b02c92af73e3297be617f4c973a7a63fb603565b/diffs/CalleeTest#onlyCallMethod1.txt",
+          "method" : "onlyCallMethod1",
+          "oldTime" : 1104908.0,
+          "changePercent" : -1726.53,
+          "tvalue" : -440.3945478496487,
+          "vms" : 2
+        } ]
+      }
+    }
+  }
+}

@@ -27,13 +27,10 @@ public class RCAVisualizer{
    }
    
    public void visualizeRCA() throws Exception {
-      VisualizeRCA visualizer = new VisualizeRCA();
-      visualizer.setData(new File[] { executor.getFolders().getFullMeasurementFolder().getParentFile() });
-      System.out.println("Setting property folder: " + executor.getPropertyFolder());
-      visualizer.setPropertyFolder(executor.getPropertyFolder());
       final File resultFolder = new File(executor.getLocalFolder(), "visualization");
       resultFolder.mkdirs();
-      visualizer.setResultFolder(resultFolder);
+      
+      VisualizeRCA visualizer = preparePeassVisualizer(resultFolder);
       visualizer.call();
 
       File rcaResults = new File(run.getRootDir(), "rca_visualization");
@@ -43,6 +40,15 @@ public class RCAVisualizer{
       File versionVisualizationFolder = new File(resultFolder, executor.getLatestVersion());
 
       createVisualizationActions(rcaResults, versionChanges, versionVisualizationFolder);
+   }
+
+   private VisualizeRCA preparePeassVisualizer(final File resultFolder) {
+      VisualizeRCA visualizer = new VisualizeRCA();
+      visualizer.setData(new File[] { executor.getFolders().getFullMeasurementFolder().getParentFile() });
+      System.out.println("Setting property folder: " + executor.getPropertyFolder());
+      visualizer.setPropertyFolder(executor.getPropertyFolder());
+      visualizer.setResultFolder(resultFolder);
+      return visualizer;
    }
    
    private void createVisualizationActions(File rcaResults, Changes versionChanges, File versionVisualizationFolder) throws IOException {
