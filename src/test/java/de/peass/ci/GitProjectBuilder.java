@@ -6,6 +6,10 @@ import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import de.peass.utils.StreamGobbler;
 
 /**
  * Builds a git project which can be used for integration testing 
@@ -13,6 +17,8 @@ import org.apache.commons.io.IOUtils;
  *
  */
 public class GitProjectBuilder {
+   
+   private static final Logger LOG = LogManager.getLogger(GitProjectBuilder.class);
    
    private final File gitFolder;
    
@@ -23,7 +29,8 @@ public class GitProjectBuilder {
       }
       
       final Process initProcess = Runtime.getRuntime().exec("git init", new String[0], destination);
-      initProcess.waitFor();
+      String initOutput = StreamGobbler.getFullProcess(initProcess, false);
+      LOG.debug("Init output: {}", initOutput);
       
       addVersion(firstVersionFolder, "Initial Commit");
       
@@ -40,11 +47,13 @@ public class GitProjectBuilder {
       FileUtils.copyDirectory(versionFolder, gitFolder);
       
       final Process addProcess = Runtime.getRuntime().exec("git add -A", new String[0], gitFolder);
-      addProcess.waitFor();
+      String addOutput = StreamGobbler.getFullProcess(addProcess, false);
+      LOG.debug("Add output: {}", addOutput);
       
       ProcessBuilder processBuilder = new ProcessBuilder("git", "commit", "-m", commitMessage);
       processBuilder.directory(gitFolder);
       final Process commitProcess = processBuilder.start();
-      commitProcess.waitFor();
+      String commitOutput = StreamGobbler.getFullProcess(commitProcess, false);
+      LOG.debug("Commit output: {}", commitOutput);
    }
 }
