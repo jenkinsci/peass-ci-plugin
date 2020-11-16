@@ -21,4 +21,4 @@ jobs:
       with:
         java-version: 1.8
     - name: Build with Maven
-      run: git clone https://github.com/DaGeRe/peass.git && cd peass && mvn clean install -DskipTests && mvn -B package --file pom.xml
+      run: cd /home/runner/work/ && git clone https://github.com/DaGeRe/peass.git && cd peass && mvn clean install -DskipTests && cd ../peass-ci/ && mvn -B package --file pom.xml
