@@ -11,6 +11,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
+import de.peass.utils.StreamGobbler;
+
 public class TestGitVersionBuilder {
 
    @Rule
@@ -32,13 +34,12 @@ public class TestGitVersionBuilder {
 
    private void testLogContains(File tempFolder, final String... commitMessages) throws IOException {
       final Process logProcess = Runtime.getRuntime().exec("git log", new String[0], tempFolder);
-      String output = IOUtils.toString(logProcess.getInputStream(), StandardCharsets.UTF_8);
-
-      System.out.println("Output: " + output);
-      MatcherAssert.assertThat(output, Matchers.containsString("commit"));
+      String logOutput = StreamGobbler.getFullProcess(logProcess, false);
+      System.out.println("Output: " + logOutput);
+      MatcherAssert.assertThat(logOutput, Matchers.containsString("commit"));
 
       for (String commitMessage : commitMessages) {
-         MatcherAssert.assertThat(output, Matchers.containsString(commitMessage));
+         MatcherAssert.assertThat(logOutput, Matchers.containsString(commitMessage));
       }
    }
 }
