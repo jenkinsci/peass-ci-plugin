@@ -3,7 +3,9 @@ package de.peass.ci;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
@@ -18,6 +20,13 @@ import hudson.model.Result;
 public class MeasureVersionBuilderTest {
    @Rule
    public JenkinsRule jenkins = new JenkinsRule();
+   
+   @Before
+   public void cleanup() throws IOException {
+      final String homeFolderName = System.getenv("PEASS_HOME") != null ? System.getenv("PEASS_HOME") : System.getenv("HOME") + File.separator + ".peass" + File.separator;
+      final File peassFolder = new File(homeFolderName);
+      FileUtils.deleteDirectory(peassFolder);
+   }
 
    @Test
    public void testNoGitFailure() throws Exception {
