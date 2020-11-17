@@ -28,6 +28,8 @@ public class GitProjectBuilder {
          gitFolder.mkdirs();
       }
       
+      configLocalUser(destination);
+      
       final Process initProcess = Runtime.getRuntime().exec("git init", new String[0], destination);
       String initOutput = StreamGobbler.getFullProcess(initProcess, false);
       LOG.debug("Init output: {}", initOutput);
@@ -35,6 +37,15 @@ public class GitProjectBuilder {
       addVersion(firstVersionFolder, "Initial Commit");
       
       
+   }
+
+   private void configLocalUser(File destination) throws IOException {
+      final Process setEmailProcess = Runtime.getRuntime().exec("git config user.email \"test@peass.github.com\"", new String[0], destination);
+      String setEmailOutput = StreamGobbler.getFullProcess(setEmailProcess, false);
+      LOG.debug("setEmailOutput output: {}", setEmailOutput);
+      final Process setUserProcess = Runtime.getRuntime().exec("git config user.name \"Your Name\"", new String[0], destination);
+      String setUserOutput = StreamGobbler.getFullProcess(setUserProcess, false);
+      LOG.debug("setUserOutput output: {}", setUserOutput);
    }
    
    /**
