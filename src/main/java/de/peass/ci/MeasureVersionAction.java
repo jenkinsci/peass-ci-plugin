@@ -1,6 +1,5 @@
 package de.peass.ci;
 
-import java.util.TreeMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -14,7 +13,7 @@ import jenkins.model.RunAction2;
 
 public class MeasureVersionAction implements RunAction2 {
 
-   private transient Run run;
+   private transient Run<?, ?> run;
    private MeasurementConfiguration config;
    private ProjectChanges changes;
    private ProjectStatistics statistics;
@@ -71,7 +70,7 @@ public class MeasureVersionAction implements RunAction2 {
       this.run = run;
    }
 
-   public Run getRun() {
+   public Run<?, ?> getRun() {
       return run;
    }
    

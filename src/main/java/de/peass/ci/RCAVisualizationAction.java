@@ -11,9 +11,9 @@ import jenkins.model.RunAction2;
 
 public class RCAVisualizationAction implements RunAction2 {
 
+   private transient Run<?, ?> run;
    private String displayName;
    private final File htmlFile;
-   private transient Run run;
    
    public RCAVisualizationAction(String displayName, File htmlFile) {
       this.displayName = displayName;
@@ -52,6 +52,10 @@ public class RCAVisualizationAction implements RunAction2 {
    @Override
    public void onLoad(Run<?, ?> run) {
       this.run = run;
+   }
+   
+   public Run<?, ?> getRun() {
+      return run;
    }
 
 }
