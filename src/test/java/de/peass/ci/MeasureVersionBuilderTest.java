@@ -10,6 +10,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
 
+import de.peass.ci.helper.GitProjectBuilder;
 import de.peass.vcs.GitUtils;
 import hudson.FilePath;
 import hudson.model.AbstractBuild;
