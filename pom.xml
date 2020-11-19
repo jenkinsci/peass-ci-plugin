@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.jenkins-ci.plugins</groupId>
 		<artifactId>plugin</artifactId>
-		<version>4.12</version>
+		<version>4.13</version>
 		<relativePath />
 	</parent>
 	<groupId>de.peass</groupId>
@@ -33,6 +33,14 @@
 			<artifactId>peass-distribution</artifactId>
 			<version>0.1-SNAPSHOT</version>
 		</dependency>
+
+		<!-- To avoid enforcer problems -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-math3</artifactId>
+			<version>3.6.1</version>
+		</dependency>
+
 		<dependency>
 			<groupId>de.peass</groupId>
 			<artifactId>analysis</artifactId>

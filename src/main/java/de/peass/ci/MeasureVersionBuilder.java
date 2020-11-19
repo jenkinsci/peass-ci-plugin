@@ -8,12 +8,29 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
+import javax.xml.bind.JAXBException;
 
 import org.apache.commons.math3.filter.MeasurementModel;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.Appender;
+import org.apache.logging.log4j.core.Layout;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.appender.FileAppender;
+import org.apache.logging.log4j.core.appender.OutputStreamAppender;
+import org.apache.logging.log4j.core.config.AppenderRef;
+import org.apache.logging.log4j.core.config.Configuration;
+import org.apache.logging.log4j.core.config.LoggerConfig;
+import org.apache.logging.log4j.core.layout.PatternLayout;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
 import org.kohsuke.stapler.QueryParameter;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 import de.peass.MeasurementMode;
 import de.peass.analysis.changes.ProjectChanges;
@@ -23,6 +40,7 @@ import de.peass.ci.helper.RCAExecutor;
 import de.peass.ci.helper.RCAVisualizer;
 import de.peass.dependency.PeASSFolders;
 import de.peass.dependency.execution.MeasurementConfiguration;
+import de.peass.dependencyprocessors.ViewNotFoundException;
 import de.peass.utils.Constants;
 import de.peran.measurement.analysis.ProjectStatistics;
 import hudson.Extension;
@@ -36,6 +54,7 @@ import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
 import hudson.util.FormValidation;
 import jenkins.tasks.SimpleBuildStep;
+import kieker.analysis.exception.AnalysisConfigurationException;
 
 public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
 
@@ -67,45 +86,68 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
          listener.getLogger().println("VMs: " + VMs + " Iterations: " + iterations + " Warmup: " + warmup + " Repetitions: " + repetitions);
          listener.getLogger().println("Includes: " + includes + " RCA: " + executeRCA);
 
-         PrintStream outOriginal = System.out;
-         PrintStream errOriginal = System.err;
+         final PrintStream outOriginal = System.out;
+         final PrintStream errOriginal = System.err;
+         
+         final LoggerContext loggerContext = (LoggerContext) LogManager.getContext(false);
+         
+         OutputStreamAppender fa = OutputStreamAppender.newBuilder()
+               .setName("jenkinslogger")
+               .setTarget(listener.getLogger())
+               .setLayout(PatternLayout.newBuilder().withPattern("%d{HH:mm:ss.SSS} [%t] %-5level %logger{36}:%L - %msg%n")
+               .build())
+               .setConfiguration(loggerContext.getConfiguration()).build();
+         fa.start();
 
          try {
             System.setOut(listener.getLogger());
             System.setErr(listener.getLogger());
-
-            final MeasurementConfiguration measurementConfig = getConfig();
-
-            final File projectFolder = new File(workspace.toString());
-            final ContinuousExecutor executor = new ContinuousExecutor(projectFolder, measurementConfig, 1, true);
-            List<String> includeList = getIncludeList();
-            executor.execute(includeList);
-
-            final HistogramReader histogramReader = new HistogramReader(executor);
-            Map<String, HistogramValues> measurements = histogramReader.readMeasurements();
-
-            final ProjectChanges changes = Constants.OBJECTMAPPER.readValue(new File(executor.getLocalFolder(), "changes.json"), ProjectChanges.class);
-
-            if (executeRCA) {
-               RCAExecutor rcaExecutor = new RCAExecutor(measurementConfig, executor, changes, measurementMode, includeList);
-               rcaExecutor.executeRCAs();
-
-               RCAVisualizer rcaVisualizer = new RCAVisualizer(executor, changes, run);
-               rcaVisualizer.visualizeRCA();
-            }
-
-            ProjectStatistics statistics = Constants.OBJECTMAPPER.readValue(new File(executor.getLocalFolder(), "statistics.json"), ProjectStatistics.class);
-
-            final MeasureVersionAction action = new MeasureVersionAction(measurementConfig, changes, statistics, measurements);
-            run.addAction(action);
+            
+            loggerContext.getConfiguration().addAppender(fa);
+            loggerContext.getRootLogger().addAppender(loggerContext.getConfiguration().getAppender(fa.getName()));
+            loggerContext.updateLoggers();
+            
+            performExecution(run, workspace);
          } catch (Throwable e) {
             e.printStackTrace();
             run.setResult(Result.FAILURE);
          } finally {
             System.setOut(outOriginal);
             System.setErr(errOriginal);
+
+            fa.stop();
+            loggerContext.getConfiguration().getAppenders().remove(fa.getName());
+            loggerContext.getRootLogger().removeAppender(fa);
          }
       }
+   }
+
+   private void performExecution(Run<?, ?> run, FilePath workspace) throws InterruptedException, IOException, JAXBException, XmlPullParserException, JsonParseException,
+         JsonMappingException, AnalysisConfigurationException, ViewNotFoundException, Exception {
+      final MeasurementConfiguration measurementConfig = getConfig();
+
+      final File projectFolder = new File(workspace.toString());
+      final ContinuousExecutor executor = new ContinuousExecutor(projectFolder, measurementConfig, 1, true);
+      List<String> includeList = getIncludeList();
+      executor.execute(includeList);
+
+      final HistogramReader histogramReader = new HistogramReader(executor);
+      Map<String, HistogramValues> measurements = histogramReader.readMeasurements();
+
+      final ProjectChanges changes = Constants.OBJECTMAPPER.readValue(new File(executor.getLocalFolder(), "changes.json"), ProjectChanges.class);
+
+      if (executeRCA) {
+         RCAExecutor rcaExecutor = new RCAExecutor(measurementConfig, executor, changes, measurementMode, includeList);
+         rcaExecutor.executeRCAs();
+
+         RCAVisualizer rcaVisualizer = new RCAVisualizer(executor, changes, run);
+         rcaVisualizer.visualizeRCA();
+      }
+
+      ProjectStatistics statistics = Constants.OBJECTMAPPER.readValue(new File(executor.getLocalFolder(), "statistics.json"), ProjectStatistics.class);
+
+      final MeasureVersionAction action = new MeasureVersionAction(measurementConfig, changes, statistics, measurements);
+      run.addAction(action);
    }
 
    private List<String> getIncludeList() {
@@ -227,7 +269,6 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
    public void setMeasurementMode(MeasurementMode measurementMode) {
       this.measurementMode = measurementMode;
    }
-
 
    @Symbol("measure")
    @Extension
