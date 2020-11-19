@@ -88,25 +88,25 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
 
          final PrintStream outOriginal = System.out;
          final PrintStream errOriginal = System.err;
-         
+
          final LoggerContext loggerContext = (LoggerContext) LogManager.getContext(false);
-         
+
          OutputStreamAppender fa = OutputStreamAppender.newBuilder()
                .setName("jenkinslogger")
                .setTarget(listener.getLogger())
                .setLayout(PatternLayout.newBuilder().withPattern("%d{HH:mm:ss.SSS} [%t] %-5level %logger{36}:%L - %msg%n")
-               .build())
+                     .build())
                .setConfiguration(loggerContext.getConfiguration()).build();
          fa.start();
 
          try {
             System.setOut(listener.getLogger());
             System.setErr(listener.getLogger());
-            
+
             loggerContext.getConfiguration().addAppender(fa);
             loggerContext.getRootLogger().addAppender(loggerContext.getConfiguration().getAppender(fa.getName()));
             loggerContext.updateLoggers();
-            
+
             performExecution(run, workspace);
          } catch (Throwable e) {
             e.printStackTrace();
@@ -134,20 +134,33 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
       final HistogramReader histogramReader = new HistogramReader(executor);
       Map<String, HistogramValues> measurements = histogramReader.readMeasurements();
 
-      final ProjectChanges changes = Constants.OBJECTMAPPER.readValue(new File(executor.getLocalFolder(), "changes.json"), ProjectChanges.class);
+      final File changeFile = new File(executor.getLocalFolder(), "changes.json");
+      final ProjectChanges changes;
+      if (changeFile.exists()) {
+         changes = Constants.OBJECTMAPPER.readValue(changeFile, ProjectChanges.class);
 
-      if (executeRCA) {
-         RCAExecutor rcaExecutor = new RCAExecutor(measurementConfig, executor, changes, measurementMode, includeList);
-         rcaExecutor.executeRCAs();
+         if (executeRCA) {
+            RCAExecutor rcaExecutor = new RCAExecutor(measurementConfig, executor, changes, measurementMode, includeList);
+            rcaExecutor.executeRCAs();
 
-         RCAVisualizer rcaVisualizer = new RCAVisualizer(executor, changes, run);
-         rcaVisualizer.visualizeRCA();
+            RCAVisualizer rcaVisualizer = new RCAVisualizer(executor, changes, run);
+            rcaVisualizer.visualizeRCA();
+         }
+      } else {
+         changes = new ProjectChanges();
       }
 
-      ProjectStatistics statistics = Constants.OBJECTMAPPER.readValue(new File(executor.getLocalFolder(), "statistics.json"), ProjectStatistics.class);
+      final File statisticsFile = new File(executor.getLocalFolder(), "statistics.json");
+      ProjectStatistics statistics;
+      if (statisticsFile.exists()) {
+         statistics = Constants.OBJECTMAPPER.readValue(statisticsFile, ProjectStatistics.class);
+      } else {
+         statistics = new ProjectStatistics();
+      }
 
       final MeasureVersionAction action = new MeasureVersionAction(measurementConfig, changes, statistics, measurements);
       run.addAction(action);
+
    }
 
    private List<String> getIncludeList() {

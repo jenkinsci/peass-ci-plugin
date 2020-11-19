@@ -28,12 +28,14 @@ public class HistogramReader{
    public Map<String, HistogramValues> readMeasurements() throws JAXBException {
       Map<String, HistogramValues> measurements = new TreeMap<>(); 
       File measurementsFullFolder = executor.getFullResultsVersion();
-      for (File xmlResultFile : measurementsFullFolder.listFiles((FileFilter) new WildcardFileFilter("*.xml"))) {
-         Kopemedata data = XMLDataLoader.loadData(xmlResultFile);
-         // This assumes measurements are only executed once; if this is not the case, the matching result would need to be searched
-         final TestcaseType testcase = data.getTestcases().getTestcase().get(0);
-         HistogramValues values = getHistogramValues(testcase);
-         measurements.put(data.getTestcases().getClazz() + "#" + testcase.getName(), values);
+      if (measurementsFullFolder.exists()) {
+         for (File xmlResultFile : measurementsFullFolder.listFiles((FileFilter) new WildcardFileFilter("*.xml"))) {
+            Kopemedata data = XMLDataLoader.loadData(xmlResultFile);
+            // This assumes measurements are only executed once; if this is not the case, the matching result would need to be searched
+            final TestcaseType testcase = data.getTestcases().getTestcase().get(0);
+            HistogramValues values = getHistogramValues(testcase);
+            measurements.put(data.getTestcases().getClazz() + "#" + testcase.getName(), values);
+         }
       }
       return measurements;
    }
