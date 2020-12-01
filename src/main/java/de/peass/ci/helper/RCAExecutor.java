@@ -20,11 +20,13 @@ import de.peass.dependency.CauseSearchFolders;
 import de.peass.dependency.analysis.data.TestCase;
 import de.peass.dependency.execution.MeasurementConfiguration;
 import de.peass.dependencyprocessors.ViewNotFoundException;
-import de.peass.measurement.rca.CauseSearcher;
-import de.peass.measurement.rca.CauseSearcherComplete;
 import de.peass.measurement.rca.CauseSearcherConfig;
 import de.peass.measurement.rca.CauseTester;
+import de.peass.measurement.rca.RCAStrategy;
 import de.peass.measurement.rca.kieker.BothTreeReader;
+import de.peass.measurement.rca.searcher.CauseSearcher;
+import de.peass.measurement.rca.searcher.CauseSearcherComplete;
+import de.peass.measurement.rca.searcher.LevelCauseSearcher;
 import de.peass.testtransformation.JUnitTestTransformer;
 import jline.internal.Log;
 import kieker.analysis.exception.AnalysisConfigurationException;
@@ -84,7 +86,8 @@ public class RCAExecutor {
 
    private void executeRCA(final MeasurementConfiguration config, final ContinuousExecutor executor, TestCase testCase, Change change)
          throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException, JAXBException {
-      final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(testCase, true, true, 5.0, true, 0.01, false, true);
+      final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(testCase, true, true, 5.0, true, 0.01, false, true, 
+            RCAStrategy.COMPLETE);
       config.setUseKieker(true);
 
       final CauseSearchFolders alternateFolders = new CauseSearchFolders(executor.getFolders().getProjectFolder());
@@ -95,7 +98,7 @@ public class RCAExecutor {
       if (mode == MeasurementMode.COMPLETE) {
          tester = new CauseSearcherComplete(reader, causeSearcherConfig, measurer, config, alternateFolders);
       }else {
-         tester = new CauseSearcher(reader, causeSearcherConfig, measurer, config, alternateFolders);
+         tester = new LevelCauseSearcher(reader, causeSearcherConfig, measurer, config, alternateFolders);
       }
       tester.search();
    }
