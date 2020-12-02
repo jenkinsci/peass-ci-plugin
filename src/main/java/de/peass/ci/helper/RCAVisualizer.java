@@ -78,7 +78,12 @@ public class RCAVisualizer {
    }
 
    private String getLongestPrefix(Changes versionChanges) {
-      String longestPrefix = versionChanges.getTestcaseChanges().keySet().iterator().next();
+      String longestPrefix;
+      if (versionChanges.getTestcaseChanges().size() > 0) {
+         longestPrefix = versionChanges.getTestcaseChanges().keySet().iterator().next();
+      } else {
+         longestPrefix = "";
+      }
       for (final String clazz : versionChanges.getTestcaseChanges().keySet()) {
          String withoutClazzItself = clazz.substring(0, clazz.lastIndexOf('.'));
          longestPrefix = StringUtils.getCommonPrefix(longestPrefix, withoutClazzItself);
