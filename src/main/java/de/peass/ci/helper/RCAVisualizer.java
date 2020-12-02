@@ -6,30 +6,32 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import de.peass.analysis.changes.Change;
 import de.peass.analysis.changes.Changes;
 import de.peass.analysis.changes.ProjectChanges;
 import de.peass.ci.ContinuousExecutor;
 import de.peass.ci.RCAVisualizationAction;
+import de.peass.visualization.GraphNode;
 import de.peass.visualization.VisualizeRCA;
 import hudson.model.Run;
 
-public class RCAVisualizer{
+public class RCAVisualizer {
    final ContinuousExecutor executor;
    final ProjectChanges changes;
    final Run<?, ?> run;
-   
+
    public RCAVisualizer(ContinuousExecutor executor, ProjectChanges changes, Run<?, ?> run) {
       this.executor = executor;
       this.changes = changes;
       this.run = run;
    }
-   
+
    public void visualizeRCA() throws Exception {
       final File resultFolder = new File(executor.getLocalFolder(), "visualization");
       resultFolder.mkdirs();
-      
+
       VisualizeRCA visualizer = preparePeassVisualizer(resultFolder);
       visualizer.call();
 
@@ -50,8 +52,10 @@ public class RCAVisualizer{
       visualizer.setResultFolder(resultFolder);
       return visualizer;
    }
-   
+
    private void createVisualizationActions(File rcaResults, Changes versionChanges, File versionVisualizationFolder) throws IOException {
+      String longestPrefix = getLongestPrefix(versionChanges);
+
       System.out.println("Creating actions: " + versionChanges.getTestcaseChanges().size());
       for (Entry<String, List<Change>> testcases : versionChanges.getTestcaseChanges().entrySet()) {
          for (Change change : testcases.getValue()) {
@@ -64,11 +68,21 @@ public class RCAVisualizer{
                FileUtils.copyFile(jsFile, rcaDestFile);
 
                System.out.println("Adding: " + rcaDestFile + " " + name);
-               run.addAction(new RCAVisualizationAction(name, rcaDestFile));
+               String displayName = name.substring(longestPrefix.length() + 1);
+               run.addAction(new RCAVisualizationAction(displayName, rcaDestFile));
             } else {
                System.out.println("An error occured: " + jsFile.getAbsolutePath() + " not found");
             }
          }
       }
+   }
+
+   private String getLongestPrefix(Changes versionChanges) {
+      String longestPrefix = versionChanges.getTestcaseChanges().keySet().iterator().next();
+      for (final String clazz : versionChanges.getTestcaseChanges().keySet()) {
+         String withoutClazzItself = clazz.substring(0, clazz.lastIndexOf('.'));
+         longestPrefix = StringUtils.getCommonPrefix(longestPrefix, withoutClazzItself);
+      }
+      return longestPrefix;
    }
 }

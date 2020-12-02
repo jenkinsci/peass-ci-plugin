@@ -11,13 +11,16 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 
 import de.peass.analysis.changes.ProjectChanges;
 import de.peass.ci.ContinuousExecutor;
+import de.peass.ci.RCAVisualizationAction;
 import de.peass.dependency.CauseSearchFolders;
 import de.peass.utils.Constants;
+import hudson.model.Action;
 import hudson.model.Run;
 
 public class TestRCAVisualizer {
@@ -44,12 +47,14 @@ public class TestRCAVisualizer {
    }
 
    private void testCorrectResult(final Run run, final File visualizationResultFolder) {
-      Mockito.verify(run, Mockito.times(1)).addAction(Mockito.any());
+      ArgumentCaptor<RCAVisualizationAction> argument = ArgumentCaptor.forClass(RCAVisualizationAction.class);
+      Mockito.verify(run).addAction(argument.capture());
+      Assert.assertEquals("CalleeTest_onlyCallMethod1", argument.getValue().getDisplayName());
       
       File resultFolder = visualizationResultFolder.listFiles()[0];
       File htmlFile = resultFolder.listFiles()[0];
       
-      MatcherAssert.assertThat(htmlFile.getName(), Matchers.endsWith(".html"));
+      MatcherAssert.assertThat(htmlFile.getName(), Matchers.endsWith(".js"));
    }
 
    private ContinuousExecutor mockExecutor() throws IOException {
