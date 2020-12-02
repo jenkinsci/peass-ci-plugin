@@ -55,18 +55,18 @@ public class RCAVisualizer{
       System.out.println("Creating actions: " + versionChanges.getTestcaseChanges().size());
       for (Entry<String, List<Change>> testcases : versionChanges.getTestcaseChanges().entrySet()) {
          for (Change change : testcases.getValue()) {
-            final String name = testcases.getKey() + "#" + change.getMethod();
-            File htmlFile = new File(versionVisualizationFolder, name + ".html");
-            System.out.println("Trying to move " + htmlFile.getAbsolutePath());
-            if (htmlFile.exists()) {
-               String destName = testcases.getKey() + "_" + change.getMethod() + ".html";
+            final String name = testcases.getKey() + "_" + change.getMethod();
+            File jsFile = new File(versionVisualizationFolder, name + ".js");
+            System.out.println("Trying to move " + jsFile.getAbsolutePath());
+            if (jsFile.exists()) {
+               String destName = testcases.getKey() + "_" + change.getMethod() + ".js";
                File rcaDestFile = new File(rcaResults, destName);
-               FileUtils.copyFile(htmlFile, rcaDestFile);
+               FileUtils.copyFile(jsFile, rcaDestFile);
 
                System.out.println("Adding: " + rcaDestFile + " " + name);
                run.addAction(new RCAVisualizationAction(name, rcaDestFile));
             } else {
-               System.out.println("An error occured: " + htmlFile.getAbsolutePath() + " not found");
+               System.out.println("An error occured: " + jsFile.getAbsolutePath() + " not found");
             }
          }
       }

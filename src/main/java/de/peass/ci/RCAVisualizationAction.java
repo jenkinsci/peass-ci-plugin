@@ -2,9 +2,12 @@ package de.peass.ci;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 import hudson.model.Run;
 import jenkins.model.RunAction2;
@@ -13,11 +16,11 @@ public class RCAVisualizationAction implements RunAction2 {
 
    private transient Run<?, ?> run;
    private String displayName;
-   private final File htmlFile;
+   private final File jsFile;
    
-   public RCAVisualizationAction(String displayName, File htmlFile) {
+   public RCAVisualizationAction(String displayName, File jsFile) {
       this.displayName = displayName;
-      this.htmlFile = htmlFile;
+      this.jsFile = jsFile;
    }
    
    @Override
@@ -35,12 +38,14 @@ public class RCAVisualizationAction implements RunAction2 {
       return displayName.replace("#", "_");
    }
    
-   public File getHtmlFile() {
-      return htmlFile;
+   public String getCSS() throws IOException {
+      InputStream cssStream = RCAVisualizationAction.class.getClassLoader().getResourceAsStream("diffview.css");
+      String content = IOUtils.toString(cssStream, StandardCharsets.UTF_8);
+      return content;
    }
    
-   public String readFile(File file) throws IOException {
-      final String content = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+   public String getDataJS() throws IOException {
+      final String content = FileUtils.readFileToString(jsFile, StandardCharsets.UTF_8);
       return content;
    }
    
