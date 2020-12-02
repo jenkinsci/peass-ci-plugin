@@ -157,8 +157,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
       } else {
          statistics = new ProjectStatistics();
       }
-
-      final MeasureVersionAction action = new MeasureVersionAction(measurementConfig, changes, statistics, measurements);
+      
+      final MeasureVersionAction action = new MeasureVersionAction(measurementConfig, changes.getVersion(measurementConfig.getVersion()), statistics, measurements);
       run.addAction(action);
 
    }

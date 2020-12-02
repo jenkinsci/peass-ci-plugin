@@ -77,7 +77,7 @@ public class RCAVisualizer {
       }
    }
 
-   private String getLongestPrefix(Changes versionChanges) {
+   public static String getLongestPrefix(Changes versionChanges) {
       String longestPrefix;
       if (versionChanges.getTestcaseChanges().size() > 0) {
          longestPrefix = versionChanges.getTestcaseChanges().keySet().iterator().next();

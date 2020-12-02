@@ -1,11 +1,14 @@
 package de.peass.ci;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import de.peass.analysis.changes.Change;
 import de.peass.analysis.changes.Changes;
 import de.peass.analysis.changes.ProjectChanges;
 import de.peass.ci.helper.HistogramValues;
+import de.peass.ci.helper.RCAVisualizer;
 import de.peass.dependency.execution.MeasurementConfiguration;
 import de.peran.measurement.analysis.ProjectStatistics;
 import hudson.model.Run;
@@ -14,19 +17,22 @@ import jenkins.model.RunAction2;
 public class MeasureVersionAction implements RunAction2 {
 
    private transient Run<?, ?> run;
+   
    private MeasurementConfiguration config;
-   private ProjectChanges changes;
+   private Changes changes;
    private ProjectStatistics statistics;
    private Map<String, HistogramValues> measurements;
+   private String prefix;
 
-   public MeasureVersionAction(MeasurementConfiguration config, ProjectChanges changes, ProjectStatistics statistics, Map<String, HistogramValues> measurements) {
+   public MeasureVersionAction(MeasurementConfiguration config, Changes changes, ProjectStatistics statistics, Map<String, HistogramValues> measurements) {
       this.config = config;
       this.changes = changes;
       this.statistics = statistics;
       this.measurements = measurements;
-      for (Entry<String, Changes> change : changes.getVersionChanges().entrySet()) {
+      for (Entry<String, List<Change>> change : changes.getTestcaseChanges().entrySet()) {
          System.out.println(change.getKey());
       }
+      prefix = RCAVisualizer.getLongestPrefix(changes);
    }
 
    @Override
@@ -52,12 +58,16 @@ public class MeasureVersionAction implements RunAction2 {
       return statistics;
    }
 
-   public ProjectChanges getChanges() {
+   public Changes getChanges() {
       return changes;
    }
 
    public Map<String, HistogramValues> getMeasurements() {
       return measurements;
+   }
+   
+   public String getReducedName(String name) {
+      return name.substring(prefix.length()+1);
    }
 
    @Override
