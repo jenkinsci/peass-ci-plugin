@@ -61,7 +61,20 @@ public class MeasureVersionAction implements RunAction2 {
    public Changes getChanges() {
       return changes;
    }
-
+   
+   public boolean testIsChanged(String testcase) {
+      boolean isChanged = false;
+      for (Entry<String, List<Change>> changeEntry : changes.getTestcaseChanges().entrySet()) {
+         for (Change change : changeEntry.getValue()) {
+            final String changedTestcase = changeEntry.getKey() + "#" + change.getMethod();
+            if (testcase.equals(changedTestcase)) {
+               isChanged = true;
+            }
+         }
+      }
+      return isChanged;
+   }
+   
    public Map<String, HistogramValues> getMeasurements() {
       return measurements;
    }

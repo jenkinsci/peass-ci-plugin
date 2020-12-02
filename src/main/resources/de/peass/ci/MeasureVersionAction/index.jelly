@@ -14,25 +14,30 @@
             <br /><br />
             <h2>Changes</h2>
             
-            <j:forEach var="change" items="${it.changes.getVersionChanges().entrySet()}" >
-              Version: ${change.getKey()}<br />
+              Version: ${it.getConfig().getVersion()}<br />
               <table>
-                <j:forEach var="testcase" items="${change.getValue().getTestcaseChanges().entrySet()}" >
+                <j:forEach var="testcase" items="${it.getChanges().getTestcaseChanges().entrySet()}" >
                   <tr><td><b>Testcase</b>: ${testcase.getKey()}</td>
                   <td><table>
                   <j:forEach var="methodChange" items="${testcase.getValue()}" >
-                    <tr><td>Method: <a href="../${testcase.getKey()}_${methodChange.method}" target="parent">${methodChange.method}</a></td>
+                    <tr><td>Method: <a href="../${it.getReducedName(testcase.getKey())}_${methodChange.method}">${methodChange.method}</a></td>
                     <td>Old time: ${it.round(methodChange.oldTime/1000)} $&#x00B5;s</td></tr> 
                     <tr><td>Change: ${methodChange.changePercent} % </td><td> t=${it.round(methodChange.tvalue)}</td></tr>
                   </j:forEach>
                   </table></td></tr>
                 </j:forEach>
               </table>
-            </j:forEach>
             <h2>Measurements</h2>
             <script src="https://cdn.plot.ly/plotly-latest.min.js"/>
             <j:forEach var="testcase" items="${it.measurements.entrySet()}">
-              Testcase: ${testcase.getKey()}<br />
+              Testcase: 
+              <j:if test="${it.testIsChanged(testcase.getKey())}">
+                <a href="../${it.getReducedName(testcase.getKey().replace('#', '_'))}">${testcase.getKey()}</a>
+              </j:if>
+              <j:if test="${!it.testIsChanged(testcase.getKey())}">
+                ${testcase.getKey()}
+              </j:if>
+              <br />
               <div style='width: 600px; height: 300px; background-color: #BBBBBB; border: 2px solid blue; border-radius: 1em 1em 1em 1em; padding: 1em;' 
               		id='histogramm_${testcase.getKey()}'>
 
