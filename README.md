@@ -1,4 +1,9 @@
-This is the peass-ci-Plugin, enabling a continuous performance measurement for Java projects in an Jenkins server.
+This is the peass-ci-Plugin, which enables a continuous performance measurement for Java projects in an Jenkins server. By integrating peass-ci in your build process, you will get performance measurements of each unit test and a measurement of call tree nodes, which pinpoints the root cause of your performance changes. Therefore, the following steps will be executed:
+- Regression Test Selection: The unit tests which may have changed performance based on the current commit will be selected by a combination of static and dynamic code analysis.
+- Performance Measurement: The selected tests will be executed (repeating them inside a VM and starting the JVM, as often as you specify it) to identify performance changes.
+- Root Cause Analysis: For every identified performance change, the measurement will be repeated with additional instrumentation of your call tree to identify the method call(s) which cause your performance change (optional).
+
+peass-ci is currently a research prototype and may not work fully. Please file issues if problems occur.
 
 # Building
 
