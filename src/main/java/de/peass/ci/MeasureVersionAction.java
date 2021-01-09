@@ -10,7 +10,7 @@ import de.peass.analysis.changes.ProjectChanges;
 import de.peass.ci.helper.HistogramValues;
 import de.peass.ci.helper.RCAVisualizer;
 import de.peass.dependency.execution.MeasurementConfiguration;
-import de.peran.measurement.analysis.ProjectStatistics;
+import de.peass.measurement.analysis.ProjectStatistics;
 import hudson.model.Run;
 import jenkins.model.RunAction2;
 
