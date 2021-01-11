@@ -12,7 +12,6 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
-import de.peass.MeasurementMode;
 import de.peass.analysis.changes.ProjectChanges;
 import de.peass.ci.helper.HistogramReader;
 import de.peass.ci.helper.HistogramValues;
@@ -21,6 +20,7 @@ import de.peass.ci.helper.RCAVisualizer;
 import de.peass.dependency.execution.MeasurementConfiguration;
 import de.peass.dependencyprocessors.ViewNotFoundException;
 import de.peass.measurement.analysis.ProjectStatistics;
+import de.peass.measurement.rca.RCAStrategy;
 import de.peass.utils.Constants;
 import hudson.FilePath;
 import hudson.model.Run;
@@ -31,9 +31,9 @@ public class ExecutionPerformer {
    private final MeasurementConfiguration measurementConfig;
    private final List<String> includeList;
    private final boolean executeRCA;
-   private final MeasurementMode measurementMode;
+   private final RCAStrategy measurementMode;
    
-   public ExecutionPerformer(MeasurementConfiguration measurementConfig, List<String> includeList, boolean executeRCA, MeasurementMode measurementMode) {
+   public ExecutionPerformer(MeasurementConfiguration measurementConfig, List<String> includeList, boolean executeRCA, RCAStrategy measurementMode) {
       this.measurementConfig = measurementConfig;
       this.includeList = includeList;
       this.executeRCA = executeRCA;

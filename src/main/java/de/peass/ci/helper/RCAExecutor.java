@@ -9,7 +9,6 @@ import javax.xml.bind.JAXBException;
 
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
-import de.peass.MeasurementMode;
 import de.peass.analysis.changes.Change;
 import de.peass.analysis.changes.Changes;
 import de.peass.analysis.changes.ProjectChanges;
@@ -33,10 +32,10 @@ public class RCAExecutor {
    final MeasurementConfiguration config;
    final ContinuousExecutor executor;
    final ProjectChanges changes;
-   private MeasurementMode mode;
+   private RCAStrategy mode;
    private List<String> includes;
 
-   public RCAExecutor(MeasurementConfiguration config, ContinuousExecutor executor, ProjectChanges changes, MeasurementMode mode, List<String> includes) {
+   public RCAExecutor(MeasurementConfiguration config, ContinuousExecutor executor, ProjectChanges changes, RCAStrategy mode, List<String> includes) {
       this.config = config;
       this.executor = executor;
       this.changes = changes;
@@ -84,7 +83,7 @@ public class RCAExecutor {
 
    private void executeRCA(final MeasurementConfiguration config, final ContinuousExecutor executor, TestCase testCase, Change change)
          throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException, JAXBException {
-      final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(testCase, true, true, 5.0, true, 0.01, false, true, 
+      final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(testCase, true, true, 5.0, true, 0.01, false, true,
             RCAStrategy.COMPLETE);
       config.setUseKieker(true);
 
@@ -93,10 +92,12 @@ public class RCAExecutor {
       final BothTreeReader reader = new BothTreeReader(causeSearcherConfig, config, alternateFolders);
       final CauseTester measurer = new CauseTester(alternateFolders, testtransformer, causeSearcherConfig);
       final CauseSearcher tester;
-      if (mode == MeasurementMode.COMPLETE) {
+      if (mode == RCAStrategy.COMPLETE) {
          tester = new CauseSearcherComplete(reader, causeSearcherConfig, measurer, config, alternateFolders);
-      }else {
+      } else if (mode == RCAStrategy.LEVELWISE){
          tester = new LevelCauseSearcher(reader, causeSearcherConfig, measurer, config, alternateFolders);
+      } else {
+         throw new RuntimeException("RCA strategy " + mode + " currently not supported");
       }
       tester.search();
    }

@@ -1,38 +1,18 @@
 package de.peass.ci;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.ServletException;
-import javax.xml.bind.JAXBException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.core.LoggerContext;
-import org.apache.logging.log4j.core.appender.OutputStreamAppender;
-import org.apache.logging.log4j.core.layout.PatternLayout;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
 import org.kohsuke.stapler.QueryParameter;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-
-import de.peass.MeasurementMode;
-import de.peass.analysis.changes.ProjectChanges;
-import de.peass.ci.helper.HistogramReader;
-import de.peass.ci.helper.HistogramValues;
-import de.peass.ci.helper.RCAExecutor;
-import de.peass.ci.helper.RCAVisualizer;
 import de.peass.dependency.execution.MeasurementConfiguration;
-import de.peass.dependencyprocessors.ViewNotFoundException;
-import de.peass.measurement.analysis.ProjectStatistics;
-import de.peass.utils.Constants;
+import de.peass.measurement.rca.RCAStrategy;
 import hudson.Extension;
 import hudson.FilePath;
 import hudson.Launcher;
@@ -44,7 +24,6 @@ import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
 import hudson.util.FormValidation;
 import jenkins.tasks.SimpleBuildStep;
-import kieker.analysis.exception.AnalysisConfigurationException;
 
 public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
 
@@ -60,7 +39,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
 
    private String includes = "";
    private boolean executeRCA = true;
-   private MeasurementMode measurementMode;
+   private RCAStrategy measurementMode = RCAStrategy.LEVELWISE;
 
    @DataBoundConstructor
    public MeasureVersionBuilder(String test) {
@@ -199,11 +178,12 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
       this.executeRCA = executeRCA;
    }
 
-   public MeasurementMode getMeasurementMode() {
+   public RCAStrategy getMeasurementMode() {
       return measurementMode;
    }
 
-   public void setMeasurementMode(MeasurementMode measurementMode) {
+   @DataBoundSetter
+   public void setMeasurementMode(RCAStrategy measurementMode) {
       this.measurementMode = measurementMode;
    }
 
