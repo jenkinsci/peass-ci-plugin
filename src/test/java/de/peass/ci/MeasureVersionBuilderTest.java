@@ -19,6 +19,7 @@ import hudson.model.FreeStyleProject;
 import hudson.model.Result;
 
 public class MeasureVersionBuilderTest {
+   private static final int VMS = 3;
    @Rule
    public JenkinsRule jenkins = new JenkinsRule();
    
@@ -56,7 +57,7 @@ public class MeasureVersionBuilderTest {
       MeasureVersionAction action = build.getActions(MeasureVersionAction.class).get(0);
 
       Assert.assertEquals(11, action.getConfig().getIterations());
-      Assert.assertEquals(23, action.getConfig().getVms());
+      Assert.assertEquals(VMS, action.getConfig().getVms());
       Assert.assertEquals(0.05, action.getConfig().getType1error(), 0.01);
    }
 
@@ -73,7 +74,7 @@ public class MeasureVersionBuilderTest {
    private MeasureVersionBuilder createSimpleBuilder() {
       MeasureVersionBuilder builder = new MeasureVersionBuilder("test");
       builder.setIterations(11);
-      builder.setVMs(23);
+      builder.setVMs(VMS);
       builder.setRepetitions(28);
       builder.setWarmup(17);
       builder.setSignificanceLevel(0.05);
