@@ -9,8 +9,7 @@ import org.apache.logging.log4j.core.layout.PatternLayout;
 
 import hudson.model.TaskListener;
 
-public class LogRedirector implements AutoCloseable {
-
+public class JenkinsLogRedirector implements AutoCloseable {
    
    private final LoggerContext loggerContext = (LoggerContext) LogManager.getContext(false);
    
@@ -18,7 +17,7 @@ public class LogRedirector implements AutoCloseable {
    private final PrintStream errOriginal;
    private final OutputStreamAppender fa;
    
-   public LogRedirector(TaskListener listener) {
+   public JenkinsLogRedirector(TaskListener listener) {
       outOriginal = System.out;
       errOriginal = System.err;
       

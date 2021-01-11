@@ -9,6 +9,7 @@ import javax.xml.bind.JAXBException;
 
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
+import de.peass.RootCauseAnalysis;
 import de.peass.analysis.changes.Change;
 import de.peass.analysis.changes.Changes;
 import de.peass.analysis.changes.ProjectChanges;
@@ -91,14 +92,8 @@ public class RCAExecutor {
       final JUnitTestTransformer testtransformer = new JUnitTestTransformer(executor.getFolders().getProjectFolder(), config);
       final BothTreeReader reader = new BothTreeReader(causeSearcherConfig, config, alternateFolders);
       final CauseTester measurer = new CauseTester(alternateFolders, testtransformer, causeSearcherConfig);
-      final CauseSearcher tester;
-      if (mode == RCAStrategy.COMPLETE) {
-         tester = new CauseSearcherComplete(reader, causeSearcherConfig, measurer, config, alternateFolders);
-      } else if (mode == RCAStrategy.LEVELWISE){
-         tester = new LevelCauseSearcher(reader, causeSearcherConfig, measurer, config, alternateFolders);
-      } else {
-         throw new RuntimeException("RCA strategy " + mode + " currently not supported");
-      }
+      
+      CauseSearcher tester = RootCauseAnalysis.getCauseSeacher(config, testtransformer, causeSearcherConfig, alternateFolders, reader);
       tester.search();
    }
 }

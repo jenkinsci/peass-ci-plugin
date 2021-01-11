@@ -28,13 +28,7 @@
     </f:entry>
     <f:advanced>
     	<f:entry title="${%rcaStrategy}" field="measurementMode" description="${%rcaStrategyDescr}">
-    		<select name="measurementMode">
-        		<option value="COMPLETE">Complete Measurement</option>
-        		<option value="LEVELWISE">Level-wise Measurement</option>
-        		<option value="UNTIL_SOURCE_CHANGE">Until Source Change (Early Testing)</option>
-        		<option value="UNTIL_STRUCTURE_CHANGE">Until Tree Structure Change (NOT SUPPORTED CURRENTLY)</option>
-        		<option value="CONSTANT_LEVELS">Constant Level Count (NOT SUPPORTED CURRENTLY)</option>
-    		</select>
+    		<f:select />
 	</f:entry>
         <f:entry title="${%includes}" field="includes"
            description="${%includesDescr}">

@@ -225,7 +225,6 @@ function diffUsingJS(text1, text2, outputDiv) {
 	}));
 }
 
-
 function shownode(node) {
   if (node.statistic != null){
 	  infos.innerHTML="<table>" +
@@ -243,46 +242,29 @@ function shownode(node) {
   } else {
     var sourceCurrent = source["current"][node.key];
     var sourceOld = source["old"][node.key];
-    if (sourceCurrent == sourceOld) {
-    	const highlightedCode = hljs.highlight("java", source["current"][node.key]).value;
+    if (sourceCurrent != null && sourceOld != null){
+      if (sourceCurrent == sourceOld) {
+        var code = source["current"][node.key];
+      	const highlightedCode = hljs.highlight("java", code).value;
     	quelltext.innerHTML="<pre>"+highlightedCode+"</pre>";
-    } else {
-    	diffUsingJS(sourceOld, sourceCurrent, quelltext);
+      } else {
+    	  diffUsingJS(sourceOld, sourceCurrent, quelltext);
+      }
     }
-    
+  }
+  
+  
+  var inspectLink = "";
+  if (node.ess != -1){
+    inspectLink = "<a href='"+treeData[0].call.replace("#", "_") +"_dashboard.html?ess="+node.ess+"&call=" + encodeURIComponent(node.call)+"' target='parent'>Inspect Node</a><br><br>";
   }
   if (node.kiekerPattern != node.otherKiekerPattern) {
-  	histogramm.innerHTML=node.kiekerPattern + " " + node.otherKiekerPattern
+  	histogramm.innerHTML=node.kiekerPattern + " " + node.otherKiekerPattern + inspectLink;
   } else {
-  	histogramm.innerHTML=node.kiekerPattern
+  	histogramm.innerHTML=node.kiekerPattern + node.otherKiekerPattern + inspectLink;
   }
-  var version = {
-    x: node.values,
-    type: "histogram",
-    name: "Version",
-    opacity: 0.5,
-    marker: {
-     color: 'green',
-    },
-  };
-  var predecessor = {
-    x: node.valuesPredecessor,
-    type: "histogram",
-    name: "Predecessor",
-    opacity: 0.6,
-    marker: {
-     color: 'red',
-    },
-  };
-  var data = [version, predecessor];
-  var layout = {barmode: "overlay", 
-			title: { text: "Histogramm"},
-			xaxis: { title: { text: "Duration / &#x00B5;s"} },
-			yaxis: { title: { text: "Frequency"} },
-			height: 250,
-		    width: 575
-		  };
-  Plotly.newPlot("histogramm", data, layout);
+  plotOverallHistogram("histogramm", node);
+  //document.getElementById("histogramm").innerHtml+="<br><a href='"+treeData[0].call+"_dashboard.html?ess="+1+"&test="+node.call+"'>Inspect Node</a>";
 }
 
 shownode(root);

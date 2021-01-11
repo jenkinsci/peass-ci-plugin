@@ -62,12 +62,12 @@ public class RCAVisualizer {
             File jsFile = new File(versionVisualizationFolder, name + ".js");
             System.out.println("Trying to move " + jsFile.getAbsolutePath());
             if (jsFile.exists()) {
-               String destName = testcases.getKey() + "_" + change.getMethod() + ".js";
-               File rcaDestFile = new File(rcaResults, destName);
+               final String destName = testcases.getKey() + "_" + change.getMethod() + ".js";
+               final File rcaDestFile = new File(rcaResults, destName);
                FileUtils.copyFile(jsFile, rcaDestFile);
 
                System.out.println("Adding: " + rcaDestFile + " " + name);
-               String displayName = name.substring(longestPrefix.length() + 1);
+               final String displayName = name.substring(longestPrefix.length() + 1);
                run.addAction(new RCAVisualizationAction(displayName, rcaDestFile));
             } else {
                System.out.println("An error occured: " + jsFile.getAbsolutePath() + " not found");

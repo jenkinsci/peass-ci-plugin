@@ -23,6 +23,8 @@ import hudson.model.TaskListener;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
 import hudson.util.FormValidation;
+import hudson.util.ListBoxModel;
+import hudson.util.ListBoxModel.Option;
 import jenkins.tasks.SimpleBuildStep;
 
 public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
@@ -55,7 +57,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
          listener.getLogger().println("VMs: " + VMs + " Iterations: " + iterations + " Warmup: " + warmup + " Repetitions: " + repetitions);
          listener.getLogger().println("Includes: " + includes + " RCA: " + executeRCA);
 
-         try (LogRedirector redirector = new LogRedirector(listener)) {
+         try (JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
 
             ExecutionPerformer performer = new ExecutionPerformer(getConfig(), getIncludeList(), executeRCA, measurementMode);
             performer.performExecution(run, workspace);
@@ -186,7 +188,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
    public void setMeasurementMode(RCAStrategy measurementMode) {
       this.measurementMode = measurementMode;
    }
-
+   
    @Symbol("measure")
    @Extension
    public static final class DescriptorImpl extends BuildStepDescriptor<Builder> {
@@ -208,7 +210,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
       public String getDisplayName() {
          return Messages.MeasureVersion_DescriptorImpl_DisplayName();
       }
-
+      
+      public ListBoxModel doFillMeasurementModeItems(@QueryParameter String measurementMode) {
+         ListBoxModel model = new ListBoxModel();
+         model.add(new Option("Complete", "COMPLETE", "COMPLETE".equals(measurementMode)));
+         model.add(new Option("Levelwise", "LEVELWISE", "LEVELWISE".equals(measurementMode)));
+         model.add(new Option("Until Source Change (Early testing)", "UNTIL_SOURCE_CHANGE", "UNTIL_SOURCE_CHANGE".equals(measurementMode)));
+         model.add(new Option("Until Structure Change (NOT IMPLEMENTED)", "UNTIL_STRUCTURE_CHANGE", "UNTIL_STRUCTURE_CHANGE".equals(measurementMode)));
+         model.add(new Option("Constant Levels(NOT IMPLEMENTED)", "CONSTANT_LEVELS", "CONSTANT_LEVELS".equals(measurementMode)));
+         return model;
+      }
    }
-
 }
