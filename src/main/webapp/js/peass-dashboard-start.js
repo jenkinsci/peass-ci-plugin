@@ -34,10 +34,11 @@ function plotVMGraph(divName, node, ids, idsPredecessor, name) {
 		yaxis: {
 			title: { text: "Duration / &#x00B5;s" },
 			mode: "lines+markers"
-		}
+		},
+		margin: {'t': 30, 'b': 35}
 	};
 	var graphDiv = document.getElementById(divName);
-	Plotly.newPlot(graphDiv, data, layout);
+	Plotly.newPlot(graphDiv, data, layout, {displayModeBar: false});
 	graphDiv.on('plotly_relayout', function (event) {
 		console.log(event);
 		xstart = event["xaxis.range[0]"];
@@ -162,7 +163,7 @@ function visualizeHistogram() {
 		yaxis: { title: { text: "Frequency" } }
 	};
 	var selectedHistogram = document.getElementById("selectedHistogram");
-	Plotly.newPlot(selectedHistogram, data, layout);
+	Plotly.newPlot(selectedHistogram, data, layout, {displayModeBar: false});
 	selectedHistogram.on('plotly_relayout', function (event) {
 		console.log("Filtering histogram");
 		histStart = event["xaxis.range[0]"];

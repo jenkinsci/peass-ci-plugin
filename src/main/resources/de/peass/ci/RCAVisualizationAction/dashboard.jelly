@@ -15,14 +15,16 @@
 			<script src="https://cdn.jsdelivr.net/npm/jstat@latest/dist/jstat.min.js"></script>
 			<script src="${rootURL}/plugin/peass-ci/js/jsGraphSource.js"></script>
 			
-			<div id='overallHistogram' class='part' style='float:left; width:45%; height: 47%'>
-
+			<div  class='part' style='float:left; width:45%; height: 47%'>
+				<div id='overallHistogram' style="width:95%; height: 90%">
+    			</div>
 			</div>
-			<div id='selectedHistogram' class='part' style='float:right; width:45%; height: 47%'>
-			
+			<div class='part' style='float:right; width:45%; height: 47%'>
+				<div id='selectedHistogram' style="width:95%; height: 95%">
+    			</div>
 			</div>
 			<div id='selection' class='part' style='float:left; width:45%; height: 47%'>
-			  <div id='selectionTable' style='float:left; width: 45%'>
+			  <div id='selectionTable' style='float:left; width: 45%; height: 95%'>
 			  Available VMs:
 			  <table style="height: 90%; width: 300px;">
 			  	<tr><td>Predecessor</td><td>Current</td></tr>
@@ -42,12 +44,16 @@
 			  
 			  </div>
 			</div>
-			<div id='graphs' style='float: right; width: 47%; height: 47%'>
-				<div id='graphPredecessor' class='part' style='width: 95%; height:47%;' >
-				
+			<div id='graphs' style='float: right; width: 45%; height: 47%'>
+				<div  class='part' style='width: 95%; height:47%;' >
+					<div id='graphPredecessor' style="width:95%; height: 95%">
+					
+					</div>
 				</div>
-				<div id='graphCurrent' class='part' style='width: 95%; height:47%;' >
-				
+				<div class='part' style='width: 95%; height:47%;' >
+				    <div id='graphCurrent' style="width:95%; height: 95%">
+					
+					</div>
 				</div>
 			</div>
 					

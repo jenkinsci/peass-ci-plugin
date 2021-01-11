@@ -4,3 +4,4 @@ target/
 results/
 .classpath
 work/
+.externalToolBuilders/

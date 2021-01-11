@@ -22,9 +22,10 @@ function plotOverallHistogram(divName, node){
   var layout = {barmode: "overlay", 
 			title: { text: "Histogramm"},
 			xaxis: { title: { text: "Duration / &#x00B5;s"} },
-			yaxis: { title: { text: "Frequency"} }
+      yaxis: { title: { text: "Frequency"}, },
+      margin: {'t': 30, 'b': 35}
 		  };
-  Plotly.newPlot(divName, data, layout);
+  Plotly.newPlot(divName, data, layout, {displayModeBar: false});
   
   currentNode = node;
 }

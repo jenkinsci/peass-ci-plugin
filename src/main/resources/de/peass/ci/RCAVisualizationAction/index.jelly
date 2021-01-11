@@ -52,13 +52,13 @@
 			</div>
 			
 			<div id='tree' 
-				style='position: relative; width: 100%; height: 500px; overflow: scroll; border: 2px solid blue; border-radius: 1em 1em 1em 1em;'> 
+				style='position: relative; width: 100%; min-height: 500px; overflow: scroll; border: 2px solid blue; border-radius: 1em 1em 1em 1em;'> 
 			</div>
 			
 			<div id='footer'
 				style='position: relative; width: 100%;'>
 				<div id='histogramm' 
-				   style='float: left; width: 650px; overflow: scroll; background-color: #DDD; border: 2px solid blue; border-radius: 1em 1em 1em 1em; padding: 1em;'>
+				   style='float: left; width: 650px; min-height: 150px; overflow: scroll; background-color: #DDD; border: 2px solid blue; border-radius: 1em 1em 1em 1em; padding: 1em;'>
 				Plot
 				</div>
 				
