@@ -12,6 +12,7 @@ import org.kohsuke.stapler.DataBoundSetter;
 import org.kohsuke.stapler.QueryParameter;
 
 import de.peass.dependency.execution.MeasurementConfiguration;
+import de.peass.dependency.execution.MeasurementStrategy;
 import de.peass.measurement.rca.RCAStrategy;
 import hudson.Extension;
 import hudson.FilePath;
@@ -42,6 +43,11 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
    private String includes = "";
    private boolean executeRCA = true;
    private RCAStrategy measurementMode = RCAStrategy.LEVELWISE;
+   private boolean executeParallel = false;
+   
+   private boolean useSourceInstrumentation = true;
+   private boolean useSampling = true;
+   
 
    @DataBoundConstructor
    public MeasureVersionBuilder(String test) {
@@ -86,6 +92,20 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
       config.setRepetitions(repetitions);
       config.setUseGC(useGC);
       config.setEarlyStop(false);
+      if (executeParallel) {
+         config.setMeasurementStrategy(MeasurementStrategy.PARALLEL);
+      }
+      if (useSourceInstrumentation) {
+         config.setUseSourceInstrumentation(true);
+         config.setUseSelectiveInstrumentation(true);
+         config.setUseCircularQueue(true);
+         if (useSampling) {
+            config.setUseSampling(true);
+         }
+      }
+      if (useSampling && !useSourceInstrumentation) {
+         throw new RuntimeException("Sampling may only be used with source instrumentation currently.");
+      }
       System.out.println("Building, iterations: " + iterations);
       return config;
    }
@@ -189,6 +209,33 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
       this.measurementMode = measurementMode;
    }
    
+   public boolean isUseSourceInstrumentation() {
+      return useSourceInstrumentation;
+   }
+   
+   @DataBoundSetter
+   public void setUseSourceInstrumentation(boolean useSourceInstrumentation) {
+      this.useSourceInstrumentation = useSourceInstrumentation;
+   }
+
+   public boolean isUseSampling() {
+      return useSampling;
+   }
+   
+   @DataBoundSetter
+   public void setUseSampling(boolean useSampling) {
+      this.useSampling = useSampling;
+   }
+
+   public boolean isExecuteParallel() {
+      return executeParallel;
+   }
+
+   @DataBoundSetter
+   public void setExecuteParallel(boolean executeParallel) {
+      this.executeParallel = executeParallel;
+   }
+
    @Symbol("measure")
    @Extension
    public static final class DescriptorImpl extends BuildStepDescriptor<Builder> {
