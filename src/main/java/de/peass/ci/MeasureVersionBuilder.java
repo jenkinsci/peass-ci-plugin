@@ -76,81 +76,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
          listener.getLogger().println("VMs: " + VMs + " Iterations: " + iterations + " Warmup: " + warmup + " Repetitions: " + repetitions);
          listener.getLogger().println("Includes: " + includes + " RCA: " + executeRCA);
 
-         final PrintStream outOriginal = System.out;
-         final PrintStream errOriginal = System.err;
+         try (LogRedirector redirector = new LogRedirector(listener)) {
 
-         final LoggerContext loggerContext = (LoggerContext) LogManager.getContext(false);
-
-         OutputStreamAppender fa = OutputStreamAppender.newBuilder()
-               .setName("jenkinslogger")
-               .setTarget(listener.getLogger())
-               .setLayout(PatternLayout.newBuilder().withPattern("%d{HH:mm:ss.SSS} [%t] %-5level %logger{36}:%L - %msg%n")
-                     .build())
-               .setConfiguration(loggerContext.getConfiguration()).build();
-         fa.start();
-
-         try {
-            System.setOut(listener.getLogger());
-            System.setErr(listener.getLogger());
-
-            loggerContext.getConfiguration().addAppender(fa);
-            loggerContext.getRootLogger().addAppender(loggerContext.getConfiguration().getAppender(fa.getName()));
-            loggerContext.updateLoggers();
-
-            performExecution(run, workspace);
+            ExecutionPerformer performer = new ExecutionPerformer(getConfig(), getIncludeList(), executeRCA, measurementMode);
+            performer.performExecution(run, workspace);
          } catch (Throwable e) {
             e.printStackTrace();
             run.setResult(Result.FAILURE);
-         } finally {
-            System.setOut(outOriginal);
-            System.setErr(errOriginal);
-
-            fa.stop();
-            loggerContext.getConfiguration().getAppenders().remove(fa.getName());
-            loggerContext.getRootLogger().removeAppender(fa);
          }
       }
-   }
-
-   private void performExecution(Run<?, ?> run, FilePath workspace) throws InterruptedException, IOException, JAXBException, XmlPullParserException, JsonParseException,
-         JsonMappingException, AnalysisConfigurationException, ViewNotFoundException, Exception {
-      final MeasurementConfiguration measurementConfig = getConfig();
-
-      final File projectFolder = new File(workspace.toString());
-      final ContinuousExecutor executor = new ContinuousExecutor(projectFolder, measurementConfig, 1, true);
-      List<String> includeList = getIncludeList();
-      executor.execute(includeList);
-
-      final HistogramReader histogramReader = new HistogramReader(executor);
-      Map<String, HistogramValues> measurements = histogramReader.readMeasurements();
-
-      final File changeFile = new File(executor.getLocalFolder(), "changes.json");
-      final ProjectChanges changes;
-      if (changeFile.exists()) {
-         changes = Constants.OBJECTMAPPER.readValue(changeFile, ProjectChanges.class);
-
-         if (executeRCA) {
-            RCAExecutor rcaExecutor = new RCAExecutor(measurementConfig, executor, changes, measurementMode, includeList);
-            rcaExecutor.executeRCAs();
-
-            RCAVisualizer rcaVisualizer = new RCAVisualizer(executor, changes, run);
-            rcaVisualizer.visualizeRCA();
-         }
-      } else {
-         changes = new ProjectChanges();
-      }
-
-      final File statisticsFile = new File(executor.getLocalFolder(), "statistics.json");
-      ProjectStatistics statistics;
-      if (statisticsFile.exists()) {
-         statistics = Constants.OBJECTMAPPER.readValue(statisticsFile, ProjectStatistics.class);
-      } else {
-         statistics = new ProjectStatistics();
-      }
-      
-      final MeasureVersionAction action = new MeasureVersionAction(measurementConfig, changes.getVersion(measurementConfig.getVersion()), statistics, measurements);
-      run.addAction(action);
-
    }
 
    private List<String> getIncludeList() {
