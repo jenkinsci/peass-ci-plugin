@@ -28,10 +28,10 @@ import kieker.analysis.exception.AnalysisConfigurationException;
 
 public class ExecutionPerformer {
    
-   MeasurementConfiguration measurementConfig;
-   List<String> includeList;
-   private boolean executeRCA = true;
-   private MeasurementMode measurementMode;
+   private final MeasurementConfiguration measurementConfig;
+   private final List<String> includeList;
+   private final boolean executeRCA;
+   private final MeasurementMode measurementMode;
    
    public ExecutionPerformer(MeasurementConfiguration measurementConfig, List<String> includeList, boolean executeRCA, MeasurementMode measurementMode) {
       this.measurementConfig = measurementConfig;
@@ -67,15 +67,19 @@ public class ExecutionPerformer {
       }
 
       final File statisticsFile = new File(executor.getLocalFolder(), "statistics.json");
+      ProjectStatistics statistics = readStatistics(statisticsFile);
+
+      final MeasureVersionAction action = new MeasureVersionAction(measurementConfig, changes.getVersion(measurementConfig.getVersion()), statistics, measurements);
+      run.addAction(action);
+   }
+
+   private ProjectStatistics readStatistics(final File statisticsFile) throws IOException, JsonParseException, JsonMappingException {
       ProjectStatistics statistics;
       if (statisticsFile.exists()) {
          statistics = Constants.OBJECTMAPPER.readValue(statisticsFile, ProjectStatistics.class);
       } else {
          statistics = new ProjectStatistics();
       }
-
-      final MeasureVersionAction action = new MeasureVersionAction(measurementConfig, changes.getVersion(measurementConfig.getVersion()), statistics, measurements);
-      run.addAction(action);
-
+      return statistics;
    }
 }
