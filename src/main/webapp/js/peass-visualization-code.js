@@ -256,7 +256,11 @@ function shownode(node) {
   
   var inspectLink = "";
   if (node.ess != -1){
-    inspectLink = "<a href='"+treeData[0].call.replace("#", "_") +"_dashboard.html?ess="+node.ess+"&call=" + encodeURIComponent(node.call)+"' target='parent'>Inspect Node</a><br><br>";
+    if (jenkins){
+      inspectLink = "<a href='dashboard?ess="+node.ess+"&call=" + encodeURIComponent(node.call)+"' target='parent'>Inspect Node</a><br><br>";
+    }else{
+      inspectLink = "<a href='"+treeData[0].call.replace("#", "_") +"_dashboard.html?ess="+node.ess+"&call=" + encodeURIComponent(node.call)+"' target='parent'>Inspect Node</a><br><br>";
+    }
   }
   if (node.kiekerPattern != node.otherKiekerPattern) {
   	histogramm.innerHTML=node.kiekerPattern + " " + node.otherKiekerPattern + inspectLink;
