@@ -6,7 +6,6 @@ import java.util.Map.Entry;
 
 import de.peass.analysis.changes.Change;
 import de.peass.analysis.changes.Changes;
-import de.peass.analysis.changes.ProjectChanges;
 import de.peass.ci.helper.HistogramValues;
 import de.peass.ci.helper.RCAVisualizer;
 import de.peass.dependency.execution.MeasurementConfiguration;

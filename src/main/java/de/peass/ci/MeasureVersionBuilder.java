@@ -10,18 +10,9 @@ import java.util.Map;
 import javax.servlet.ServletException;
 import javax.xml.bind.JAXBException;
 
-import org.apache.commons.math3.filter.MeasurementModel;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.Appender;
-import org.apache.logging.log4j.core.Layout;
 import org.apache.logging.log4j.core.LoggerContext;
-import org.apache.logging.log4j.core.appender.FileAppender;
 import org.apache.logging.log4j.core.appender.OutputStreamAppender;
-import org.apache.logging.log4j.core.config.AppenderRef;
-import org.apache.logging.log4j.core.config.Configuration;
-import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.apache.logging.log4j.core.layout.PatternLayout;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.jenkinsci.Symbol;
@@ -38,7 +29,6 @@ import de.peass.ci.helper.HistogramReader;
 import de.peass.ci.helper.HistogramValues;
 import de.peass.ci.helper.RCAExecutor;
 import de.peass.ci.helper.RCAVisualizer;
-import de.peass.dependency.PeASSFolders;
 import de.peass.dependency.execution.MeasurementConfiguration;
 import de.peass.dependencyprocessors.ViewNotFoundException;
 import de.peass.measurement.analysis.ProjectStatistics;
@@ -74,7 +64,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
 
    @DataBoundConstructor
    public MeasureVersionBuilder(String test) {
-      System.out.println("Initializing" + test);
+      System.out.println("Initializing job: " + test);
    }
 
    @Override

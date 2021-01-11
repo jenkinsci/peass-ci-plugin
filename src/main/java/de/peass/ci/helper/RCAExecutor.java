@@ -7,7 +7,6 @@ import java.util.Map.Entry;
 
 import javax.xml.bind.JAXBException;
 
-import org.apache.commons.io.FilenameUtils;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import de.peass.MeasurementMode;
@@ -28,7 +27,6 @@ import de.peass.measurement.rca.searcher.CauseSearcher;
 import de.peass.measurement.rca.searcher.CauseSearcherComplete;
 import de.peass.measurement.rca.searcher.LevelCauseSearcher;
 import de.peass.testtransformation.JUnitTestTransformer;
-import jline.internal.Log;
 import kieker.analysis.exception.AnalysisConfigurationException;
 
 public class RCAExecutor {
