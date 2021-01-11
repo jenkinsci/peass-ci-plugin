@@ -1,7 +1,7 @@
 de.peass.dependency.execution.MeasurementConfiguration
 de.peass.analysis.changes.ProjectChanges
 de.peass.dependencyprocessors.VersionComparator
-de.peran.measurement.analysis.ProjectStatistics
+de.peass.measurement.analysis.ProjectStatistics
 de.peass.analysis.changes.Changes
 de.peass.analysis.changes.Change
 de.peass.measurement.analysis.statistics.TestcaseStatistic

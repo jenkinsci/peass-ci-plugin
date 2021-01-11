@@ -11,15 +11,18 @@ import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
 
 import de.peass.ci.helper.GitProjectBuilder;
-import de.peass.vcs.GitUtils;
 import hudson.FilePath;
-import hudson.model.AbstractBuild;
 import hudson.model.FreeStyleBuild;
 import hudson.model.FreeStyleProject;
 import hudson.model.Result;
 
 public class MeasureVersionBuilderTest {
-   private static final int VMS = 3;
+   private static final int VMS = 2;
+   
+   private static final int ITERATIONS = 3;
+   private static final int WARMUP = 1;
+   private static final int REPETITIONS = 2;
+   
    @Rule
    public JenkinsRule jenkins = new JenkinsRule();
    
@@ -56,8 +59,10 @@ public class MeasureVersionBuilderTest {
 
       MeasureVersionAction action = build.getActions(MeasureVersionAction.class).get(0);
 
-      Assert.assertEquals(11, action.getConfig().getIterations());
+      Assert.assertEquals(ITERATIONS, action.getConfig().getIterations());
       Assert.assertEquals(VMS, action.getConfig().getVms());
+      Assert.assertEquals(REPETITIONS, action.getConfig().getRepetitions());
+      Assert.assertEquals(WARMUP, action.getConfig().getWarmup());
       Assert.assertEquals(0.05, action.getConfig().getType1error(), 0.01);
    }
 
@@ -73,11 +78,12 @@ public class MeasureVersionBuilderTest {
 
    private MeasureVersionBuilder createSimpleBuilder() {
       MeasureVersionBuilder builder = new MeasureVersionBuilder("test");
-      builder.setIterations(11);
+      builder.setIterations(ITERATIONS);
       builder.setVMs(VMS);
-      builder.setRepetitions(28);
-      builder.setWarmup(17);
+      builder.setRepetitions(REPETITIONS);
+      builder.setWarmup(WARMUP);
       builder.setSignificanceLevel(0.05);
+      builder.setExecuteRCA(false);
       return builder;
    }
 }
