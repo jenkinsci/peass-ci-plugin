@@ -44,10 +44,9 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
    private boolean executeRCA = true;
    private RCAStrategy measurementMode = RCAStrategy.LEVELWISE;
    private boolean executeParallel = false;
-   
+
    private boolean useSourceInstrumentation = true;
    private boolean useSampling = true;
-   
 
    @DataBoundConstructor
    public MeasureVersionBuilder(String test) {
@@ -93,7 +92,10 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
       config.setUseGC(useGC);
       config.setEarlyStop(false);
       if (executeParallel) {
+         System.out.println("Measuring parallel");
          config.setMeasurementStrategy(MeasurementStrategy.PARALLEL);
+      } else {
+         System.out.println("executeparallel is false");
       }
       if (useSourceInstrumentation) {
          config.setUseSourceInstrumentation(true);
@@ -208,11 +210,11 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
    public void setMeasurementMode(RCAStrategy measurementMode) {
       this.measurementMode = measurementMode;
    }
-   
+
    public boolean isUseSourceInstrumentation() {
       return useSourceInstrumentation;
    }
-   
+
    @DataBoundSetter
    public void setUseSourceInstrumentation(boolean useSourceInstrumentation) {
       this.useSourceInstrumentation = useSourceInstrumentation;
@@ -221,7 +223,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
    public boolean isUseSampling() {
       return useSampling;
    }
-   
+
    @DataBoundSetter
    public void setUseSampling(boolean useSampling) {
       this.useSampling = useSampling;
@@ -257,7 +259,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
       public String getDisplayName() {
          return Messages.MeasureVersion_DescriptorImpl_DisplayName();
       }
-      
+
       public ListBoxModel doFillMeasurementModeItems(@QueryParameter String measurementMode) {
          ListBoxModel model = new ListBoxModel();
          model.add(new Option("Complete", "COMPLETE", "COMPLETE".equals(measurementMode)));

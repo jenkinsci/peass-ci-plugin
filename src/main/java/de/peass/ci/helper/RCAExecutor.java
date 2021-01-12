@@ -89,11 +89,9 @@ public class RCAExecutor {
       config.setUseKieker(true);
 
       final CauseSearchFolders alternateFolders = new CauseSearchFolders(executor.getFolders().getProjectFolder());
-      final JUnitTestTransformer testtransformer = new JUnitTestTransformer(executor.getFolders().getProjectFolder(), config);
       final BothTreeReader reader = new BothTreeReader(causeSearcherConfig, config, alternateFolders);
-      final CauseTester measurer = new CauseTester(alternateFolders, testtransformer, causeSearcherConfig);
       
-      CauseSearcher tester = RootCauseAnalysis.getCauseSeacher(config, testtransformer, causeSearcherConfig, alternateFolders, reader);
+      CauseSearcher tester = RootCauseAnalysis.getCauseSeacher(config, causeSearcherConfig, alternateFolders, reader);
       tester.search();
    }
 }
