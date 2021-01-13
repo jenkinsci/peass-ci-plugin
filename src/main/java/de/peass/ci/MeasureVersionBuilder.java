@@ -63,7 +63,6 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
          listener.getLogger().println("Includes: " + includes + " RCA: " + executeRCA);
 
          try (JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
-
             ExecutionPerformer performer = new ExecutionPerformer(getConfig(), getIncludeList(), executeRCA, measurementMode);
             performer.performExecution(run, workspace);
          } catch (Throwable e) {

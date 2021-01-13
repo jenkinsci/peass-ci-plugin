@@ -27,12 +27,12 @@ import hudson.model.Run;
 import kieker.analysis.exception.AnalysisConfigurationException;
 
 public class ExecutionPerformer {
-   
+
    private final MeasurementConfiguration measurementConfig;
    private final List<String> includeList;
    private final boolean executeRCA;
    private final RCAStrategy measurementMode;
-   
+
    public ExecutionPerformer(MeasurementConfiguration measurementConfig, List<String> includeList, boolean executeRCA, RCAStrategy measurementMode) {
       this.measurementConfig = measurementConfig;
       this.includeList = includeList;
@@ -56,11 +56,7 @@ public class ExecutionPerformer {
          changes = Constants.OBJECTMAPPER.readValue(changeFile, ProjectChanges.class);
 
          if (executeRCA) {
-            RCAExecutor rcaExecutor = new RCAExecutor(measurementConfig, executor, changes, measurementMode, includeList);
-            rcaExecutor.executeRCAs();
-
-            RCAVisualizer rcaVisualizer = new RCAVisualizer(executor, changes, run);
-            rcaVisualizer.visualizeRCA();
+            performRCA(run, executor, changes);
          }
       } else {
          changes = new ProjectChanges();
@@ -71,6 +67,19 @@ public class ExecutionPerformer {
 
       final MeasureVersionAction action = new MeasureVersionAction(measurementConfig, changes.getVersion(measurementConfig.getVersion()), statistics, measurements);
       run.addAction(action);
+   }
+
+   private void performRCA(Run<?, ?> run, final ContinuousExecutor executor, final ProjectChanges changes)
+         throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException, JAXBException, Exception {
+      final File logFile = new File(executor.getLocalFolder(), "rca_" + executor.getLatestVersion() + ".txt");
+      System.out.println("Executing regression test selection update - Log goes to " + logFile.getAbsolutePath());
+      try (LogRedirector director = new LogRedirector(logFile)) {
+         final RCAExecutor rcaExecutor = new RCAExecutor(measurementConfig, executor, changes, measurementMode, includeList);
+         rcaExecutor.executeRCAs();
+
+         final RCAVisualizer rcaVisualizer = new RCAVisualizer(executor, changes, run);
+         rcaVisualizer.visualizeRCA();
+      }
    }
 
    private ProjectStatistics readStatistics(final File statisticsFile) throws IOException, JsonParseException, JsonMappingException {
