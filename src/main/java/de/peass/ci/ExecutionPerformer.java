@@ -72,7 +72,7 @@ public class ExecutionPerformer {
    private void performRCA(Run<?, ?> run, final ContinuousExecutor executor, final ProjectChanges changes)
          throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException, JAXBException, Exception {
       final File logFile = new File(executor.getLocalFolder(), "rca_" + executor.getLatestVersion() + ".txt");
-      System.out.println("Executing regression test selection update - Log goes to " + logFile.getAbsolutePath());
+      System.out.println("Executing root cause analysis - Log goes to " + logFile.getAbsolutePath());
       try (LogRedirector director = new LogRedirector(logFile)) {
          final RCAExecutor rcaExecutor = new RCAExecutor(measurementConfig, executor, changes, measurementMode, includeList);
          rcaExecutor.executeRCAs();
