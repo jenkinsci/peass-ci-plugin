@@ -61,6 +61,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
          listener.getLogger().println("Executing on " + workspace.toString());
          listener.getLogger().println("VMs: " + VMs + " Iterations: " + iterations + " Warmup: " + warmup + " Repetitions: " + repetitions);
          listener.getLogger().println("Includes: " + includes + " RCA: " + executeRCA);
+         listener.getLogger().println("Strategy: " + measurementMode + " Source Instrumentation: " + useSourceInstrumentation + " Sampling: " + useSampling);
 
          try (JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
             ExecutionPerformer performer = new ExecutionPerformer(getConfig(), getIncludeList(), executeRCA, measurementMode);
