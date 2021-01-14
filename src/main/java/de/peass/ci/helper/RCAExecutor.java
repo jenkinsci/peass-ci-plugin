@@ -33,14 +33,14 @@ public class RCAExecutor {
    final MeasurementConfiguration config;
    final ContinuousExecutor executor;
    final ProjectChanges changes;
-   private RCAStrategy mode;
+   private RCAStrategy rcaStrategy;
    private List<String> includes;
 
-   public RCAExecutor(MeasurementConfiguration config, ContinuousExecutor executor, ProjectChanges changes, RCAStrategy mode, List<String> includes) {
+   public RCAExecutor(MeasurementConfiguration config, ContinuousExecutor executor, ProjectChanges changes, RCAStrategy rcaStrategy, List<String> includes) {
       this.config = config;
       this.executor = executor;
       this.changes = changes;
-      this.mode = mode;
+      this.rcaStrategy = rcaStrategy;
       this.includes = includes;
    }
 
@@ -85,7 +85,7 @@ public class RCAExecutor {
    private void executeRCA(final MeasurementConfiguration config, final ContinuousExecutor executor, TestCase testCase, Change change)
          throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException, JAXBException {
       final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(testCase, true, true, 5.0, true, 0.01, false, true,
-            RCAStrategy.COMPLETE);
+            rcaStrategy);
       config.setUseKieker(true);
 
       final CauseSearchFolders alternateFolders = new CauseSearchFolders(executor.getFolders().getProjectFolder());

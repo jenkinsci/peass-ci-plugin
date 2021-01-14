@@ -31,13 +31,13 @@ public class ExecutionPerformer {
    private final MeasurementConfiguration measurementConfig;
    private final List<String> includeList;
    private final boolean executeRCA;
-   private final RCAStrategy measurementMode;
+   private final RCAStrategy rcaStrategy;
 
    public ExecutionPerformer(MeasurementConfiguration measurementConfig, List<String> includeList, boolean executeRCA, RCAStrategy measurementMode) {
       this.measurementConfig = measurementConfig;
       this.includeList = includeList;
       this.executeRCA = executeRCA;
-      this.measurementMode = measurementMode;
+      this.rcaStrategy = measurementMode;
    }
 
    public void performExecution(Run<?, ?> run, FilePath workspace) throws InterruptedException, IOException, JAXBException, XmlPullParserException, JsonParseException,
@@ -74,7 +74,7 @@ public class ExecutionPerformer {
       final File logFile = new File(executor.getLocalFolder(), "rca_" + executor.getLatestVersion() + ".txt");
       System.out.println("Executing root cause analysis - Log goes to " + logFile.getAbsolutePath());
       try (LogRedirector director = new LogRedirector(logFile)) {
-         final RCAExecutor rcaExecutor = new RCAExecutor(measurementConfig, executor, changes, measurementMode, includeList);
+         final RCAExecutor rcaExecutor = new RCAExecutor(measurementConfig, executor, changes, rcaStrategy, includeList);
          rcaExecutor.executeRCAs();
 
          final RCAVisualizer rcaVisualizer = new RCAVisualizer(executor, changes, run);
