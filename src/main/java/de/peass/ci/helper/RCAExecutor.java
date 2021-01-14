@@ -7,6 +7,8 @@ import java.util.Map.Entry;
 
 import javax.xml.bind.JAXBException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import de.peass.RootCauseAnalysis;
@@ -19,6 +21,7 @@ import de.peass.dependency.CauseSearchFolders;
 import de.peass.dependency.analysis.data.TestCase;
 import de.peass.dependency.execution.MeasurementConfiguration;
 import de.peass.dependencyprocessors.ViewNotFoundException;
+import de.peass.kiekerInstrument.InstrumentKiekerSource;
 import de.peass.measurement.rca.CauseSearcherConfig;
 import de.peass.measurement.rca.CauseTester;
 import de.peass.measurement.rca.RCAStrategy;
@@ -30,6 +33,9 @@ import de.peass.testtransformation.JUnitTestTransformer;
 import kieker.analysis.exception.AnalysisConfigurationException;
 
 public class RCAExecutor {
+
+   private static final Logger LOG = LogManager.getLogger(RCAExecutor.class);
+
    final MeasurementConfiguration config;
    final ContinuousExecutor executor;
    final ProjectChanges changes;
@@ -89,10 +95,10 @@ public class RCAExecutor {
       config.setUseKieker(true);
 
       saveOldPeassFolder(executor);
-      
+
       final CauseSearchFolders alternateFolders = new CauseSearchFolders(executor.getFolders().getProjectFolder());
       final BothTreeReader reader = new BothTreeReader(causeSearcherConfig, config, alternateFolders);
-      
+
       CauseSearcher tester = RootCauseAnalysis.getCauseSeacher(config, causeSearcherConfig, alternateFolders, reader);
       tester.search();
    }
@@ -106,7 +112,9 @@ public class RCAExecutor {
             i++;
             destFolder = new File(oldPeassFolder.getParentFile(), "oldPeassFolder_" + i);
          }
-         oldPeassFolder.renameTo(destFolder);
+         LOG.debug("Moving Peass folder {} to {}", oldPeassFolder, destFolder.getAbsolutePath());
+         boolean success = oldPeassFolder.renameTo(destFolder);
+         LOG.debug("Success: {}", success);
       }
    }
 }
