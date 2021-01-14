@@ -88,10 +88,25 @@ public class RCAExecutor {
             rcaStrategy);
       config.setUseKieker(true);
 
+      saveOldPeassFolder(executor);
+      
       final CauseSearchFolders alternateFolders = new CauseSearchFolders(executor.getFolders().getProjectFolder());
       final BothTreeReader reader = new BothTreeReader(causeSearcherConfig, config, alternateFolders);
       
       CauseSearcher tester = RootCauseAnalysis.getCauseSeacher(config, causeSearcherConfig, alternateFolders, reader);
       tester.search();
+   }
+
+   private void saveOldPeassFolder(final ContinuousExecutor executor) {
+      final File oldPeassFolder = executor.getFolders().getPeassFolder();
+      if (oldPeassFolder.exists()) {
+         int i = 0;
+         File destFolder = new File(oldPeassFolder.getParentFile(), "oldPeassFolder_" + i);
+         while (destFolder.exists()) {
+            i++;
+            destFolder = new File(oldPeassFolder.getParentFile(), "oldPeassFolder_" + i);
+         }
+         oldPeassFolder.renameTo(destFolder);
+      }
    }
 }
