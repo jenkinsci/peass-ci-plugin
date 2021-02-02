@@ -33,14 +33,14 @@ public class ExecutionPerformer {
    private final boolean executeRCA;
    private final RCAStrategy rcaStrategy;
 
-   public ExecutionPerformer(MeasurementConfiguration measurementConfig, List<String> includeList, boolean executeRCA, RCAStrategy measurementMode) {
+   public ExecutionPerformer(final MeasurementConfiguration measurementConfig, final List<String> includeList, final boolean executeRCA, final RCAStrategy measurementMode) {
       this.measurementConfig = measurementConfig;
       this.includeList = includeList;
       this.executeRCA = executeRCA;
       this.rcaStrategy = measurementMode;
    }
 
-   public void performExecution(Run<?, ?> run, FilePath workspace) throws InterruptedException, IOException, JAXBException, XmlPullParserException, JsonParseException,
+   public void performExecution(final Run<?, ?> run, final FilePath workspace) throws InterruptedException, IOException, JAXBException, XmlPullParserException, JsonParseException,
          JsonMappingException, AnalysisConfigurationException, ViewNotFoundException, Exception {
 
       final File projectFolder = new File(workspace.toString());
@@ -48,7 +48,7 @@ public class ExecutionPerformer {
       executor.execute(includeList);
 
       final HistogramReader histogramReader = new HistogramReader(executor);
-      Map<String, HistogramValues> measurements = histogramReader.readMeasurements();
+      final Map<String, HistogramValues> measurements = histogramReader.readMeasurements();
 
       final File changeFile = new File(executor.getLocalFolder(), "changes.json");
       final ProjectChanges changes;
@@ -63,13 +63,13 @@ public class ExecutionPerformer {
       }
 
       final File statisticsFile = new File(executor.getLocalFolder(), "statistics.json");
-      ProjectStatistics statistics = readStatistics(statisticsFile);
+      final ProjectStatistics statistics = readStatistics(statisticsFile);
 
       final MeasureVersionAction action = new MeasureVersionAction(measurementConfig, changes.getVersion(measurementConfig.getVersion()), statistics, measurements);
       run.addAction(action);
    }
 
-   private void performRCA(Run<?, ?> run, final ContinuousExecutor executor, final ProjectChanges changes)
+   private void performRCA(final Run<?, ?> run, final ContinuousExecutor executor, final ProjectChanges changes)
          throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException, JAXBException, Exception {
       final File logFile = new File(executor.getLocalFolder(), "rca_" + executor.getLatestVersion() + ".txt");
       System.out.println("Executing root cause analysis - Log goes to " + logFile.getAbsolutePath());

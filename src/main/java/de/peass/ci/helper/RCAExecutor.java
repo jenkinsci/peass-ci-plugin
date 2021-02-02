@@ -21,28 +21,23 @@ import de.peass.dependency.CauseSearchFolders;
 import de.peass.dependency.analysis.data.TestCase;
 import de.peass.dependency.execution.MeasurementConfiguration;
 import de.peass.dependencyprocessors.ViewNotFoundException;
-import de.peass.kiekerInstrument.InstrumentKiekerSource;
 import de.peass.measurement.rca.CauseSearcherConfig;
-import de.peass.measurement.rca.CauseTester;
 import de.peass.measurement.rca.RCAStrategy;
 import de.peass.measurement.rca.kieker.BothTreeReader;
 import de.peass.measurement.rca.searcher.CauseSearcher;
-import de.peass.measurement.rca.searcher.CauseSearcherComplete;
-import de.peass.measurement.rca.searcher.LevelCauseSearcher;
-import de.peass.testtransformation.JUnitTestTransformer;
 import kieker.analysis.exception.AnalysisConfigurationException;
 
 public class RCAExecutor {
 
    private static final Logger LOG = LogManager.getLogger(RCAExecutor.class);
 
-   final MeasurementConfiguration config;
-   final ContinuousExecutor executor;
-   final ProjectChanges changes;
-   private RCAStrategy rcaStrategy;
-   private List<String> includes;
+   private final MeasurementConfiguration config;
+   private final ContinuousExecutor executor;
+   private final ProjectChanges changes;
+   private final RCAStrategy rcaStrategy;
+   private final List<String> includes;
 
-   public RCAExecutor(MeasurementConfiguration config, ContinuousExecutor executor, ProjectChanges changes, RCAStrategy rcaStrategy, List<String> includes) {
+   public RCAExecutor(final MeasurementConfiguration config, final ContinuousExecutor executor, final ProjectChanges changes, final RCAStrategy rcaStrategy, final List<String> includes) {
       this.config = config;
       this.executor = executor;
       this.changes = changes;
@@ -59,7 +54,7 @@ public class RCAExecutor {
       Changes versionChanges = changes.getVersion(executor.getLatestVersion());
       for (Entry<String, List<Change>> testcases : versionChanges.getTestcaseChanges().entrySet()) {
          for (Change change : testcases.getValue()) {
-            final TestCase testCase = new TestCase(testcases.getKey() + "#" + change.getMethod());
+            final TestCase testCase = new TestCase(testcases.getKey(), change.getMethod());
             boolean match = TestChooser.isTestIncluded(testCase, includes);
             if (match) {
                try {
@@ -68,12 +63,14 @@ public class RCAExecutor {
                   System.out.println("Was unable to analyze: " + change.getMethod());
                   e.printStackTrace();
                }
+            } else {
+               LOG.info("Skipping not included test: {}", testCase);
             }
          }
       }
    }
 
-   private void analyseChange(MeasurementConfiguration currentConfig, TestCase testCase, Change change)
+   private void analyseChange(final MeasurementConfiguration currentConfig, final TestCase testCase, final Change change)
          throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException, JAXBException {
       CauseSearchFolders folders = new CauseSearchFolders(executor.getProjectFolder());
 
@@ -88,7 +85,7 @@ public class RCAExecutor {
       }
    }
 
-   private void executeRCA(final MeasurementConfiguration config, final ContinuousExecutor executor, TestCase testCase, Change change)
+   private void executeRCA(final MeasurementConfiguration config, final ContinuousExecutor executor, final TestCase testCase, final Change change)
          throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException, JAXBException {
       final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(testCase, true, true, 5.0, true, 0.01, false, true,
             rcaStrategy);
@@ -115,6 +112,8 @@ public class RCAExecutor {
          LOG.debug("Moving Peass folder {} to {}", oldPeassFolder, destFolder.getAbsolutePath());
          boolean success = oldPeassFolder.renameTo(destFolder);
          LOG.debug("Success: {}", success);
+      } else {
+         LOG.debug("Folder {} does not exist", oldPeassFolder.getAbsolutePath());
       }
    }
 }

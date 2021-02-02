@@ -19,21 +19,22 @@ import io.jenkins.cli.shaded.org.apache.commons.io.filefilter.WildcardFileFilter
 
 public class HistogramReader{
    private static final int MIKRO = 1000;
-   final ContinuousExecutor executor;
+   
+   private final ContinuousExecutor executor;
 
-   public HistogramReader(ContinuousExecutor executor) {
+   public HistogramReader(final ContinuousExecutor executor) {
       this.executor = executor;
    }
    
    public Map<String, HistogramValues> readMeasurements() throws JAXBException {
-      Map<String, HistogramValues> measurements = new TreeMap<>(); 
-      File measurementsFullFolder = executor.getFullResultsVersion();
+      final Map<String, HistogramValues> measurements = new TreeMap<>(); 
+      final File measurementsFullFolder = executor.getFullResultsVersion();
       if (measurementsFullFolder.exists()) {
          for (File xmlResultFile : measurementsFullFolder.listFiles((FileFilter) new WildcardFileFilter("*.xml"))) {
             Kopemedata data = XMLDataLoader.loadData(xmlResultFile);
             // This assumes measurements are only executed once; if this is not the case, the matching result would need to be searched
             final TestcaseType testcase = data.getTestcases().getTestcase().get(0);
-            HistogramValues values = getHistogramValues(testcase);
+            final HistogramValues values = getHistogramValues(testcase);
             measurements.put(data.getTestcases().getClazz() + "#" + testcase.getName(), values);
          }
       }
