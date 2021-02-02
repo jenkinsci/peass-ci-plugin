@@ -7,6 +7,8 @@ import java.util.Map.Entry;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import de.peass.analysis.changes.Change;
 import de.peass.analysis.changes.Changes;
@@ -17,11 +19,14 @@ import de.peass.visualization.VisualizeRCA;
 import hudson.model.Run;
 
 public class RCAVisualizer {
-   final ContinuousExecutor executor;
-   final ProjectChanges changes;
-   final Run<?, ?> run;
+   
+   private static final Logger LOG = LogManager.getLogger(RCAVisualizer.class);
+   
+   private final ContinuousExecutor executor;
+   private final ProjectChanges changes;
+   private final Run<?, ?> run;
 
-   public RCAVisualizer(ContinuousExecutor executor, ProjectChanges changes, Run<?, ?> run) {
+   public RCAVisualizer(final ContinuousExecutor executor, final ProjectChanges changes, final Run<?, ?> run) {
       this.executor = executor;
       this.changes = changes;
       this.run = run;
@@ -46,37 +51,37 @@ public class RCAVisualizer {
    private VisualizeRCA preparePeassVisualizer(final File resultFolder) {
       VisualizeRCA visualizer = new VisualizeRCA();
       visualizer.setData(new File[] { executor.getFolders().getFullMeasurementFolder().getParentFile() });
-      System.out.println("Setting property folder: " + executor.getPropertyFolder());
+      LOG.info("Setting property folder: " + executor.getPropertyFolder());
       visualizer.setPropertyFolder(executor.getPropertyFolder());
       visualizer.setResultFolder(resultFolder);
       return visualizer;
    }
 
-   private void createVisualizationActions(File rcaResults, Changes versionChanges, File versionVisualizationFolder) throws IOException {
+   private void createVisualizationActions(final File rcaResults, final Changes versionChanges, final File versionVisualizationFolder) throws IOException {
       String longestPrefix = getLongestPrefix(versionChanges);
 
-      System.out.println("Creating actions: " + versionChanges.getTestcaseChanges().size());
+      LOG.info("Creating actions: " + versionChanges.getTestcaseChanges().size());
       for (Entry<String, List<Change>> testcases : versionChanges.getTestcaseChanges().entrySet()) {
          for (Change change : testcases.getValue()) {
             final String name = testcases.getKey() + "_" + change.getMethod();
             File jsFile = new File(versionVisualizationFolder, name + ".js");
-            System.out.println("Trying to move " + jsFile.getAbsolutePath());
+            LOG.info("Trying to move " + jsFile.getAbsolutePath());
             if (jsFile.exists()) {
                final String destName = testcases.getKey() + "_" + change.getMethod() + ".js";
                final File rcaDestFile = new File(rcaResults, destName);
                FileUtils.copyFile(jsFile, rcaDestFile);
 
-               System.out.println("Adding: " + rcaDestFile + " " + name);
+               LOG.info("Adding: " + rcaDestFile + " " + name);
                final String displayName = name.substring(longestPrefix.length() + 1);
                run.addAction(new RCAVisualizationAction(displayName, rcaDestFile));
             } else {
-               System.out.println("An error occured: " + jsFile.getAbsolutePath() + " not found");
+               LOG.error("An error occured: " + jsFile.getAbsolutePath() + " not found");
             }
          }
       }
    }
 
-   public static String getLongestPrefix(Changes versionChanges) {
+   public static String getLongestPrefix(final Changes versionChanges) {
       String longestPrefix;
       if (versionChanges.getTestcaseChanges().size() > 0) {
          longestPrefix = versionChanges.getTestcaseChanges().keySet().iterator().next();
