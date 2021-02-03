@@ -14,7 +14,7 @@
 	<version>0.1-SNAPSHOT</version>
 	<packaging>hpi</packaging>
 	<properties>
-		<jenkins.version>2.263.2</jenkins.version>
+		<jenkins.version>2.263.3</jenkins.version>
 		<java.level>8</java.level>
 		<maven.test.redirectTestOutputToFile>false</maven.test.redirectTestOutputToFile>
 	</properties>
@@ -54,7 +54,6 @@
 			<artifactId>log4j-web</artifactId>
 			<version>2.14.0</version>
 		</dependency>
-
 
 		<dependency>
 			<groupId>org.jenkins-ci.plugins</groupId>

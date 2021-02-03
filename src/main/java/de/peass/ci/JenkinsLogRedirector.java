@@ -11,13 +11,13 @@ import hudson.model.TaskListener;
 
 public class JenkinsLogRedirector implements AutoCloseable {
    
-   private final LoggerContext loggerContext = (LoggerContext) LogManager.getContext(false);
+   private final LoggerContext loggerContext = (LoggerContext) LogManager.getContext(LogManager.class.getClassLoader(), false);
    
    private final PrintStream outOriginal;
    private final PrintStream errOriginal;
    private final OutputStreamAppender fa;
    
-   public JenkinsLogRedirector(TaskListener listener) {
+   public JenkinsLogRedirector(final TaskListener listener) {
       outOriginal = System.out;
       errOriginal = System.err;
       
