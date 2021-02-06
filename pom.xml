@@ -36,7 +36,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>de.peass</groupId>
-			<artifactId>peass-distribution</artifactId>
+			<artifactId>analysis</artifactId>
 			<version>0.1-SNAPSHOT</version>
 		</dependency>
 
