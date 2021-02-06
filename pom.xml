@@ -19,14 +19,20 @@
 		<maven.test.redirectTestOutputToFile>false</maven.test.redirectTestOutputToFile>
 	</properties>
 	<name>Peass-CI Plugin</name>
-	<!-- The default licence for Jenkins OSS Plugins is MIT. Substitute for 
-		the applicable one if needed. -->
+	
 	<licenses>
+		<!-- The Peass-CI plugin is licensed under MIT and AGPL license -->
 		<license>
 			<name>MIT License</name>
 			<url>https://opensource.org/licenses/MIT</url>
 		</license>
+		<license>
+			<name>GNU Affero General Public License</name>
+			<url>https://www.gnu.org/licenses/agpl.txt</url>
+			<distribution>repo</distribution>
+		</license>
 	</licenses>
+	
 	<dependencies>
 		<dependency>
 			<groupId>de.peass</groupId>
