@@ -1,12 +1,12 @@
 Peass-CI
 ===================
 
-The peass-ci-Plugin enables a continuous performance measurement for Java projects in an Jenkins server. By integrating peass-ci in your build process, you will get performance measurements of each unit test and a measurement of call tree nodes, which pinpoints the root cause of your performance changes. Therefore, the following steps will be executed:
+The Peass-CI-Plugin enables a continuous performance measurement for Java projects in an Jenkins server. By integrating Peass-CI in your build process, you will get performance measurements of each unit test and a measurement of call tree nodes, which pinpoints the root cause of your performance changes. Therefore, the following steps are executed:
 - Regression Test Selection: The unit tests which may have changed performance based on the current commit will be selected by a combination of static and dynamic code analysis.
 - Performance Measurement: The selected tests will be executed (repeating them inside a VM and starting the JVM, as often as you specify it) to identify performance changes.
 - Root Cause Analysis: For every identified performance change, the measurement will be repeated with additional instrumentation of your call tree to identify the method call(s) which cause your performance change (optional).
 
-peass-ci is currently a research prototype and may not work fully. Please file issues if problems occur.
+Peass-CI is currently a research prototype and may not work fully. Please file issues if problems occur.
 
 # Building
 
@@ -16,7 +16,7 @@ First get peass by running `git clone https://github.com/DaGeRe/peass.git && cd 
 
 For testing, run `mvn hpi:run` and access `localhost:8080/jenkins`. 
 
-For the easiest setup, get the .war-file of Jenkins (https://www.jenkins.io/download/) and run it using `java -jar jenkins.war`. Stop jenkins, copy `target/peass-ci.hpi` (which was created by building) to `~/.jenkins/plugins/` (or wherever your jenkins home is) and restart Jenkins. Afterwards, when creating a project, a peass-ci build step may be added.
+For the easiest setup, get the .war-file of Jenkins (https://www.jenkins.io/download/) and run it using `java -jar jenkins.war`. Stop jenkins, copy `target/peass-ci.hpi` (which was created by building) to `~/.jenkins/plugins/` (or wherever your jenkins home is) and restart Jenkins. Afterwards, when creating a project, a Peass-CI build step may be added.
 
 # Example
 
