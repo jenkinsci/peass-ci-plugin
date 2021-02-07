@@ -19,7 +19,7 @@
 		<maven.test.redirectTestOutputToFile>false</maven.test.redirectTestOutputToFile>
 	</properties>
 	<name>Peass-CI Plugin</name>
-	
+
 	<licenses>
 		<!-- The Peass-CI plugin is licensed under MIT and AGPL license -->
 		<license>
@@ -32,12 +32,18 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>de.peass</groupId>
 			<artifactId>analysis</artifactId>
 			<version>0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.13.1</version>
 		</dependency>
 
 		<!-- To avoid enforcer problems -->
