@@ -1,0 +1,78 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout">
+	<l:layout title="Project Measurement Trend">
+		<l:main-panel>
+
+			<h1>
+				Project Measurement Trend
+			</h1>
+
+			<ul>
+				<li>
+					Build Steps: ${it.buildStepsCount}
+				</li>
+				<li>
+					Post-Build Steps: ${it.postBuildStepsCount}
+				</li>
+			</ul>
+
+			<div id="parent">
+				<div id="meanValuePlot"></div>
+			</div>
+
+			<script src="${rootURL}/plugin/peass-ci/js/plotly-latest.min.js"/>
+
+			<script>
+				var means = {
+					x: ${it.getBuildnumbersReadable()},
+					y: ${it.getMeansReadable()},
+					color: 'green',
+					mode: 'lines+markers',
+					line: {
+				      color: 'green',
+				    }
+					};
+					
+				var deviationLower = {
+					x: ${it.getBuildnumbersReadable()},
+					y: ${it.getLowerBoundReadable()},
+					fill: 'tonexty',
+					color: 'green',
+ 					type: 'lines',
+ 					showlegend: false,
+					line: {
+				      color: 'green'
+				    }
+					};
+					
+				var deviationUpper = {
+					x: ${it.getBuildnumbersReadable()},
+					y: ${it.getUpperBoundReadable()},
+					fill: 'toself',
+					color: 'green',
+ 					type: 'lines',
+ 					showlegend: false,
+					line: {
+				      color: 'green', 
+				      opacity: 0.1
+				    }
+					};
+
+				var data = [ means, deviationUpper, deviationLower];
+
+				var	layout =
+				{
+					title: { text: "Duration per Build"},
+					xaxis: { title: {
+					text: "Buildnumber"} },
+					yaxis: { title: { text: "Duration / ms"} },
+				};
+
+				Plotly.newPlot('meanValuePlot',
+					data,
+					layout);
+			</script>
+
+		</l:main-panel>
+	</l:layout>
+</j:jelly> 

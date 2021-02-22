@@ -17,6 +17,7 @@ import de.peass.ci.helper.HistogramReader;
 import de.peass.ci.helper.HistogramValues;
 import de.peass.ci.helper.RCAExecutor;
 import de.peass.ci.helper.RCAVisualizer;
+import de.peass.ci.persistence.TrendFileUtil;
 import de.peass.dependency.execution.MeasurementConfiguration;
 import de.peass.dependencyprocessors.ViewNotFoundException;
 import de.peass.measurement.analysis.ProjectStatistics;
@@ -64,10 +65,14 @@ public class ExecutionPerformer {
 
       final File statisticsFile = new File(executor.getLocalFolder(), "statistics.json");
       final ProjectStatistics statistics = readStatistics(statisticsFile);
+      
+      TrendFileUtil.persistTrend(run, executor, statistics);
 
       final MeasureVersionAction action = new MeasureVersionAction(measurementConfig, changes.getVersion(measurementConfig.getVersion()), statistics, measurements);
       run.addAction(action);
    }
+
+   
 
    private void performRCA(final Run<?, ?> run, final ContinuousExecutor executor, final ProjectChanges changes)
          throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException, JAXBException, Exception {
