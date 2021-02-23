@@ -1,0 +1,26 @@
+{
+  "statistics" : {
+    "674b88a5ac60eee57eb7d8c87e519ff211b415d6" : {
+      "TestCase [clazz=de.test.CalleeTest, method=onlyCallMethod1]" : {
+        "meanOld" : 3.01409685E7,
+        "meanCurrent" : 2.6161527E7,
+        "deviationOld" : 13984.45081152635,
+        "deviationCurrent" : 8505.080364111793,
+        "vms" : 2,
+        "callsOld" : 2,
+        "calls" : 2,
+        "tvalue" : 343.83473441375196
+      },
+      "TestCase [clazz=de.test.CalleeTest, method=onlyCallMethod2]" : {
+        "meanOld" : 6.0297998E7,
+        "meanCurrent" : 5.22804245E7,
+        "deviationOld" : 12703.880430797513,
+        "deviationCurrent" : 15376.036956901477,
+        "vms" : 2,
+        "callsOld" : 2,
+        "calls" : 2,
+        "tvalue" : 568.4856474045968
+      }
+    }
+  }
+}

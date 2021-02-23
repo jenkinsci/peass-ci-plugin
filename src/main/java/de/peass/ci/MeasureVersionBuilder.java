@@ -11,9 +11,14 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
 import org.kohsuke.stapler.QueryParameter;
 
+import com.fasterxml.jackson.databind.module.SimpleModule;
+
+import de.peass.ci.persistence.TestcaseKeyDeserializer;
+import de.peass.dependency.analysis.data.TestCase;
 import de.peass.dependency.execution.MeasurementConfiguration;
 import de.peass.dependency.execution.MeasurementStrategy;
 import de.peass.measurement.rca.RCAStrategy;
+import de.peass.utils.Constants;
 import hudson.Extension;
 import hudson.FilePath;
 import hudson.Launcher;
@@ -29,6 +34,10 @@ import hudson.util.ListBoxModel.Option;
 import jenkins.tasks.SimpleBuildStep;
 
 public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
+
+   static {
+      Constants.OBJECTMAPPER.registerModules(new SimpleModule().addKeyDeserializer(TestCase.class, new TestcaseKeyDeserializer()));
+   }
 
    private int VMs;
    private int iterations;
@@ -49,12 +58,12 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
    private boolean useSampling = true;
 
    @DataBoundConstructor
-   public MeasureVersionBuilder(String test) {
+   public MeasureVersionBuilder(final String test) {
       System.out.println("Initializing job: " + test);
    }
 
    @Override
-   public void perform(Run<?, ?> run, FilePath workspace, Launcher launcher, TaskListener listener) throws InterruptedException, IOException {
+   public void perform(final Run<?, ?> run, final FilePath workspace, final Launcher launcher, final TaskListener listener) throws InterruptedException, IOException {
       if (!workspace.exists()) {
          throw new RuntimeException("Workspace folder " + workspace.toString() + " does not exist, please asure that the repository was correctly cloned!");
       } else {
@@ -117,7 +126,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
    }
 
    @DataBoundSetter
-   public void setVMs(int vMs) {
+   public void setVMs(final int vMs) {
       VMs = vMs;
    }
 
@@ -126,7 +135,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
    }
 
    @DataBoundSetter
-   public void setIterations(int iterations) {
+   public void setIterations(final int iterations) {
       this.iterations = iterations;
    }
 
@@ -135,7 +144,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
    }
 
    @DataBoundSetter
-   public void setWarmup(int warmup) {
+   public void setWarmup(final int warmup) {
       this.warmup = warmup;
    }
 
@@ -144,7 +153,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
    }
 
    @DataBoundSetter
-   public void setRepetitions(int repetitions) {
+   public void setRepetitions(final int repetitions) {
       this.repetitions = repetitions;
    }
 
@@ -153,7 +162,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
    }
 
    @DataBoundSetter
-   public void setTimeout(int timeout) {
+   public void setTimeout(final int timeout) {
       this.timeout = timeout;
    }
 
@@ -162,7 +171,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
    }
 
    @DataBoundSetter
-   public void setSignificanceLevel(double significanceLevel) {
+   public void setSignificanceLevel(final double significanceLevel) {
       this.significanceLevel = significanceLevel;
    }
 
@@ -171,7 +180,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
    }
 
    @DataBoundSetter
-   public void setVersionDiff(int versionDiff) {
+   public void setVersionDiff(final int versionDiff) {
       this.versionDiff = versionDiff;
    }
 
@@ -180,7 +189,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
    }
 
    @DataBoundSetter
-   public void setUseGC(boolean useGC) {
+   public void setUseGC(final boolean useGC) {
       this.useGC = useGC;
    }
 
@@ -189,7 +198,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
    }
 
    @DataBoundSetter
-   public void setIncludes(String includes) {
+   public void setIncludes(final String includes) {
       this.includes = includes;
    }
 
@@ -198,7 +207,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
    }
 
    @DataBoundSetter
-   public void setExecuteRCA(boolean executeRCA) {
+   public void setExecuteRCA(final boolean executeRCA) {
       this.executeRCA = executeRCA;
    }
 
@@ -207,7 +216,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
    }
 
    @DataBoundSetter
-   public void setMeasurementMode(RCAStrategy measurementMode) {
+   public void setMeasurementMode(final RCAStrategy measurementMode) {
       this.measurementMode = measurementMode;
    }
 
@@ -216,7 +225,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
    }
 
    @DataBoundSetter
-   public void setUseSourceInstrumentation(boolean useSourceInstrumentation) {
+   public void setUseSourceInstrumentation(final boolean useSourceInstrumentation) {
       this.useSourceInstrumentation = useSourceInstrumentation;
    }
 
@@ -225,7 +234,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
    }
 
    @DataBoundSetter
-   public void setUseSampling(boolean useSampling) {
+   public void setUseSampling(final boolean useSampling) {
       this.useSampling = useSampling;
    }
 
@@ -234,7 +243,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
    }
 
    @DataBoundSetter
-   public void setExecuteParallel(boolean executeParallel) {
+   public void setExecuteParallel(final boolean executeParallel) {
       this.executeParallel = executeParallel;
    }
 
@@ -242,8 +251,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
    @Extension
    public static final class DescriptorImpl extends BuildStepDescriptor<Builder> {
 
-      public FormValidation doCheckName(@QueryParameter String value,
-            @QueryParameter boolean useFrench)
+      public FormValidation doCheckName(@QueryParameter final String value,
+            @QueryParameter final boolean useFrench)
             throws IOException, ServletException {
          if (value.length() == 0)
             return FormValidation.error("Strange value: " + value);
@@ -251,7 +260,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
       }
 
       @Override
-      public boolean isApplicable(Class<? extends AbstractProject> aClass) {
+      public boolean isApplicable(final Class<? extends AbstractProject> aClass) {
          return true;
       }
 
@@ -260,7 +269,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
          return Messages.MeasureVersion_DescriptorImpl_DisplayName();
       }
 
-      public ListBoxModel doFillMeasurementModeItems(@QueryParameter String measurementMode) {
+      public ListBoxModel doFillMeasurementModeItems(@QueryParameter final String measurementMode) {
          ListBoxModel model = new ListBoxModel();
          model.add(new Option("Complete", "COMPLETE", "COMPLETE".equals(measurementMode)));
          model.add(new Option("Levelwise", "LEVELWISE", "LEVELWISE".equals(measurementMode)));
