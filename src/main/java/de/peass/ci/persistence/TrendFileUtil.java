@@ -21,7 +21,8 @@ public class TrendFileUtil {
       Constants.OBJECTMAPPER.writeValue(trendFile, values);
    }
 
-   public static BuildMeasurementValues readMeasurementValues(final ContinuousExecutor executor) throws JsonParseException, JsonMappingException, IOException {
+   public static BuildMeasurementValues readMeasurementValues(final File projectFolder) throws JsonParseException, JsonMappingException, IOException, InterruptedException {
+      final ContinuousExecutor executor = new ContinuousExecutor(projectFolder, null, 1, true);
       File trendFile = new File(executor.getLocalFolder(), "trend.json");
       BuildMeasurementValues values = getValues(trendFile);
       return values;

@@ -22,10 +22,15 @@
 
 			<script src="${rootURL}/plugin/peass-ci/js/plotly-latest.min.js"/>
 
-			<script>
+			
+			<j:forEach var="testcase" items="${it.getTestcases()}" >	
+				<div id="parent">
+					<div id="meanValuePlot_${testcase}"></div>
+				</div>
+				<script>
 				var means = {
-					x: ${it.getBuildnumbersReadable()},
-					y: ${it.getMeansReadable()},
+					x: ${it.getBuildnumbersReadable(testcase)},
+					y: ${it.getMeansReadable(testcase)},
 					color: 'green',
 					mode: 'lines+markers',
 					line: {
@@ -34,8 +39,8 @@
 					};
 					
 				var deviationLower = {
-					x: ${it.getBuildnumbersReadable()},
-					y: ${it.getLowerBoundReadable()},
+					x: ${it.getBuildnumbersReadable(testcase)},
+					y: ${it.getLowerBoundReadable(testcase)},
 					fill: 'tonexty',
 					color: 'green',
  					type: 'lines',
@@ -46,8 +51,8 @@
 					};
 					
 				var deviationUpper = {
-					x: ${it.getBuildnumbersReadable()},
-					y: ${it.getUpperBoundReadable()},
+					x: ${it.getBuildnumbersReadable(testcase)},
+					y: ${it.getUpperBoundReadable(testcase)},
 					fill: 'toself',
 					color: 'green',
  					type: 'lines',
@@ -62,16 +67,18 @@
 
 				var	layout =
 				{
-					title: { text: "Duration per Build"},
+					title: { text: "${testcase}"},
 					xaxis: { title: {
 					text: "Buildnumber"} },
 					yaxis: { title: { text: "Duration / ms"} },
 				};
 
-				Plotly.newPlot('meanValuePlot',
+				Plotly.newPlot('meanValuePlot_${testcase}',
 					data,
 					layout);
-			</script>
+				</script>
+			</j:forEach>
+			
 
 		</l:main-panel>
 	</l:layout>
