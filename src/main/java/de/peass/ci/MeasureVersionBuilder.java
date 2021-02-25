@@ -32,6 +32,7 @@ import hudson.util.FormValidation;
 import hudson.util.ListBoxModel;
 import hudson.util.ListBoxModel.Option;
 import jenkins.tasks.SimpleBuildStep;
+import net.kieker.sourceinstrumentation.AllowedKiekerRecord;
 
 public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
 
@@ -113,11 +114,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
          config.setUseCircularQueue(true);
          if (useSampling) {
             config.setUseSampling(true);
+            config.setRecord(AllowedKiekerRecord.REDUCED_OPERATIONEXECUTION);
          }
       }
       if (useSampling && !useSourceInstrumentation) {
          throw new RuntimeException("Sampling may only be used with source instrumentation currently.");
       }
+      config.setVersion("HEAD");
+      config.setVersionOld("HEAD~" + versionDiff);
+
       System.out.println("Building, iterations: " + iterations);
       return config;
    }

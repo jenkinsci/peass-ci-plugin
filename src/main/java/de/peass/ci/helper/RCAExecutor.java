@@ -37,7 +37,8 @@ public class RCAExecutor {
    private final RCAStrategy rcaStrategy;
    private final List<String> includes;
 
-   public RCAExecutor(final MeasurementConfiguration config, final ContinuousExecutor executor, final ProjectChanges changes, final RCAStrategy rcaStrategy, final List<String> includes) {
+   public RCAExecutor(final MeasurementConfiguration config, final ContinuousExecutor executor, final ProjectChanges changes, final RCAStrategy rcaStrategy,
+         final List<String> includes) {
       this.config = config;
       this.executor = executor;
       this.changes = changes;
@@ -47,6 +48,8 @@ public class RCAExecutor {
 
    public void executeRCAs()
          throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException, JAXBException {
+      saveOldPeassFolder(executor);
+      
       config.setVersion(executor.getLatestVersion());
       config.setVersionOld(executor.getVersionOld());
       MeasurementConfiguration currentConfig = new MeasurementConfiguration(config);
@@ -79,8 +82,9 @@ public class RCAExecutor {
             executor.getLatestVersion() + File.separator +
                   onlyTestcaseName + File.separator +
                   change.getMethod() + ".json");
-      System.out.println("Testing " + expectedResultFile);
+      LOG.info("Testing {}", expectedResultFile);
       if (!expectedResultFile.exists()) {
+         LOG.debug("Needs execution");
          executeRCA(currentConfig, executor, testCase, change);
       }
    }
@@ -90,8 +94,6 @@ public class RCAExecutor {
       final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(testCase, true, true, 5.0, true, 0.01, false, true,
             rcaStrategy);
       config.setUseKieker(true);
-
-      saveOldPeassFolder(executor);
 
       final CauseSearchFolders alternateFolders = new CauseSearchFolders(executor.getFolders().getProjectFolder());
       final BothTreeReader reader = new BothTreeReader(causeSearcherConfig, config, alternateFolders);
