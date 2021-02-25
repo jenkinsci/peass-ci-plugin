@@ -23,7 +23,6 @@ import de.peass.dependencyprocessors.ViewNotFoundException;
 import de.peass.measurement.analysis.ProjectStatistics;
 import de.peass.measurement.rca.RCAStrategy;
 import de.peass.utils.Constants;
-import hudson.FilePath;
 import hudson.model.Run;
 import kieker.analysis.exception.AnalysisConfigurationException;
 
@@ -41,11 +40,10 @@ public class ExecutionPerformer {
       this.rcaStrategy = measurementMode;
    }
 
-   public void performExecution(final Run<?, ?> run, final FilePath workspace) throws InterruptedException, IOException, JAXBException, XmlPullParserException, JsonParseException,
+   public void performExecution(final Run<?, ?> run, final File workspaceFolder) throws InterruptedException, IOException, JAXBException, XmlPullParserException, JsonParseException,
          JsonMappingException, AnalysisConfigurationException, ViewNotFoundException, Exception {
 
-      final File projectFolder = new File(workspace.toString());
-      final ContinuousExecutor executor = new ContinuousExecutor(projectFolder, measurementConfig, 1, true);
+      final ContinuousExecutor executor = new ContinuousExecutor(workspaceFolder, measurementConfig, 1, true);
       executor.execute(includeList);
 
       final HistogramReader histogramReader = new HistogramReader(executor);

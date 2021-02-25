@@ -1,5 +1,6 @@
 package de.peass.ci;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,6 +20,7 @@ import de.peass.dependency.execution.MeasurementConfiguration;
 import de.peass.dependency.execution.MeasurementStrategy;
 import de.peass.measurement.rca.RCAStrategy;
 import de.peass.utils.Constants;
+import de.peass.vcs.GitUtils;
 import hudson.Extension;
 import hudson.FilePath;
 import hudson.Launcher;
@@ -73,9 +75,11 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
          listener.getLogger().println("Includes: " + includes + " RCA: " + executeRCA);
          listener.getLogger().println("Strategy: " + measurementMode + " Source Instrumentation: " + useSourceInstrumentation + " Sampling: " + useSampling);
 
+         final File workspaceFolder = new File(workspace.toString());
+         
          try (JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
-            ExecutionPerformer performer = new ExecutionPerformer(getConfig(), getIncludeList(), executeRCA, measurementMode);
-            performer.performExecution(run, workspace);
+            ExecutionPerformer performer = new ExecutionPerformer(getConfig(workspaceFolder), getIncludeList(), executeRCA, measurementMode);
+            performer.performExecution(run, workspaceFolder);
          } catch (Throwable e) {
             e.printStackTrace(listener.getLogger());
             e.printStackTrace();
@@ -95,7 +99,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
       return includeList;
    }
 
-   private MeasurementConfiguration getConfig() {
+   private MeasurementConfiguration getConfig(final File workspaceFolder) {
       final MeasurementConfiguration config = new MeasurementConfiguration(timeout, VMs, significanceLevel, 0.01);
       config.setIterations(iterations);
       config.setWarmup(warmup);
@@ -120,8 +124,9 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
       if (useSampling && !useSourceInstrumentation) {
          throw new RuntimeException("Sampling may only be used with source instrumentation currently.");
       }
-      config.setVersion("HEAD");
-      config.setVersionOld("HEAD~" + versionDiff);
+      
+      config.setVersion(GitUtils.getName("HEAD", workspaceFolder));
+      config.setVersionOld(GitUtils.getName("HEAD~" + versionDiff, workspaceFolder));
 
       System.out.println("Building, iterations: " + iterations);
       return config;
