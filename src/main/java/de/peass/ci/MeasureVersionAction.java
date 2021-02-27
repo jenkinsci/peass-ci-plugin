@@ -8,7 +8,7 @@ import de.peass.analysis.changes.Change;
 import de.peass.analysis.changes.Changes;
 import de.peass.ci.helper.HistogramValues;
 import de.peass.ci.helper.RCAVisualizer;
-import de.peass.dependency.execution.MeasurementConfiguration;
+import de.peass.config.MeasurementConfiguration;
 import de.peass.measurement.analysis.ProjectStatistics;
 import hudson.model.Run;
 import jenkins.model.RunAction2;

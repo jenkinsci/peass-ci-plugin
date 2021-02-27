@@ -2,7 +2,6 @@ package de.peass.ci;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.JAXBException;
@@ -18,7 +17,7 @@ import de.peass.ci.helper.HistogramValues;
 import de.peass.ci.helper.RCAExecutor;
 import de.peass.ci.helper.RCAVisualizer;
 import de.peass.ci.persistence.TrendFileUtil;
-import de.peass.dependency.execution.MeasurementConfiguration;
+import de.peass.config.MeasurementConfiguration;
 import de.peass.dependencyprocessors.ViewNotFoundException;
 import de.peass.measurement.analysis.ProjectStatistics;
 import de.peass.measurement.rca.RCAStrategy;
@@ -29,13 +28,11 @@ import kieker.analysis.exception.AnalysisConfigurationException;
 public class ExecutionPerformer {
 
    private final MeasurementConfiguration measurementConfig;
-   private final List<String> includeList;
    private final boolean executeRCA;
    private final RCAStrategy rcaStrategy;
 
-   public ExecutionPerformer(final MeasurementConfiguration measurementConfig, final List<String> includeList, final boolean executeRCA, final RCAStrategy measurementMode) {
+   public ExecutionPerformer(final MeasurementConfiguration measurementConfig, final boolean executeRCA, final RCAStrategy measurementMode) {
       this.measurementConfig = measurementConfig;
-      this.includeList = includeList;
       this.executeRCA = executeRCA;
       this.rcaStrategy = measurementMode;
    }
@@ -44,7 +41,7 @@ public class ExecutionPerformer {
          JsonMappingException, AnalysisConfigurationException, ViewNotFoundException, Exception {
 
       final ContinuousExecutor executor = new ContinuousExecutor(workspaceFolder, measurementConfig, 1, true);
-      executor.execute(includeList);
+      executor.execute();
 
       final HistogramReader histogramReader = new HistogramReader(executor);
       final Map<String, HistogramValues> measurements = histogramReader.readMeasurements();
@@ -77,7 +74,7 @@ public class ExecutionPerformer {
       final File logFile = new File(executor.getLocalFolder(), "rca_" + executor.getLatestVersion() + ".txt");
       System.out.println("Executing root cause analysis - Log goes to " + logFile.getAbsolutePath());
       try (LogRedirector director = new LogRedirector(logFile)) {
-         final RCAExecutor rcaExecutor = new RCAExecutor(measurementConfig, executor, changes, rcaStrategy, includeList);
+         final RCAExecutor rcaExecutor = new RCAExecutor(measurementConfig, executor, changes, rcaStrategy);
          rcaExecutor.executeRCAs();
 
          final RCAVisualizer rcaVisualizer = new RCAVisualizer(executor, changes, run);

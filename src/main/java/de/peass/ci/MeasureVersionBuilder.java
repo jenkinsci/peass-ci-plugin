@@ -15,9 +15,9 @@ import org.kohsuke.stapler.QueryParameter;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import de.peass.ci.persistence.TestcaseKeyDeserializer;
+import de.peass.config.MeasurementConfiguration;
+import de.peass.config.MeasurementStrategy;
 import de.peass.dependency.analysis.data.TestCase;
-import de.peass.dependency.execution.MeasurementConfiguration;
-import de.peass.dependency.execution.MeasurementStrategy;
 import de.peass.measurement.rca.RCAStrategy;
 import de.peass.utils.Constants;
 import de.peass.vcs.GitUtils;
@@ -78,7 +78,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
          final File workspaceFolder = new File(workspace.toString());
          
          try (JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
-            ExecutionPerformer performer = new ExecutionPerformer(getConfig(workspaceFolder), getIncludeList(), executeRCA, measurementMode);
+            ExecutionPerformer performer = new ExecutionPerformer(getConfig(workspaceFolder), executeRCA, measurementMode);
             performer.performExecution(run, workspaceFolder);
          } catch (Throwable e) {
             e.printStackTrace(listener.getLogger());
@@ -127,6 +127,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
       
       config.setVersion(GitUtils.getName("HEAD", workspaceFolder));
       config.setVersionOld(GitUtils.getName("HEAD~" + versionDiff, workspaceFolder));
+      
+      config.setIncludes(getIncludeList());
 
       System.out.println("Building, iterations: " + iterations);
       return config;

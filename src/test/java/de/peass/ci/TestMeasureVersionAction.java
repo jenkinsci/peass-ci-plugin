@@ -8,8 +8,8 @@ import org.junit.Test;
 import de.peass.analysis.changes.Change;
 import de.peass.analysis.changes.ProjectChanges;
 import de.peass.ci.helper.HistogramValues;
+import de.peass.config.MeasurementConfiguration;
 import de.peass.dependency.analysis.data.TestCase;
-import de.peass.dependency.execution.MeasurementConfiguration;
 import de.peass.measurement.analysis.ProjectStatistics;
 
 public class TestMeasureVersionAction {

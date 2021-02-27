@@ -20,9 +20,9 @@ import de.peass.analysis.changes.Changes;
 import de.peass.analysis.changes.ProjectChanges;
 import de.peass.ci.ContinuousExecutor;
 import de.peass.ci.TestChooser;
+import de.peass.config.MeasurementConfiguration;
 import de.peass.dependency.CauseSearchFolders;
 import de.peass.dependency.analysis.data.TestCase;
-import de.peass.dependency.execution.MeasurementConfiguration;
 import de.peass.dependencyprocessors.ViewNotFoundException;
 import de.peass.measurement.rca.CauseSearcherConfig;
 import de.peass.measurement.rca.RCAStrategy;
@@ -40,15 +40,12 @@ public class RCAExecutor {
    private final ContinuousExecutor executor;
    private final ProjectChanges changes;
    private final RCAStrategy rcaStrategy;
-   private final List<String> includes;
 
-   public RCAExecutor(final MeasurementConfiguration config, final ContinuousExecutor executor, final ProjectChanges changes, final RCAStrategy rcaStrategy,
-         final List<String> includes) {
+   public RCAExecutor(final MeasurementConfiguration config, final ContinuousExecutor executor, final ProjectChanges changes, final RCAStrategy rcaStrategy) {
       this.config = config;
       this.executor = executor;
       this.changes = changes;
       this.rcaStrategy = rcaStrategy;
-      this.includes = includes;
    }
 
    public void executeRCAs()
@@ -68,7 +65,7 @@ public class RCAExecutor {
          for (Entry<String, List<Change>> testcases : versionChanges.getTestcaseChanges().entrySet()) {
             for (Change change : testcases.getValue()) {
                final TestCase testCase = new TestCase(testcases.getKey(), change.getMethod());
-               boolean match = TestChooser.isTestIncluded(testCase, includes);
+               boolean match = TestChooser.isTestIncluded(testCase, config.getIncludes());
                if (match) {
                   try {
                      analyseChange(currentConfig, testCase);
@@ -85,12 +82,12 @@ public class RCAExecutor {
 
    }
 
-   private boolean checkNeedsRCA(Changes versionChanges) throws IOException, JsonParseException, JsonMappingException {
+   private boolean checkNeedsRCA(final Changes versionChanges) throws IOException, JsonParseException, JsonMappingException {
       boolean needsRCA = false;
       for (Entry<String, List<Change>> testcases : versionChanges.getTestcaseChanges().entrySet()) {
          for (Change change : testcases.getValue()) {
             final TestCase testCase = new TestCase(testcases.getKey(), change.getMethod());
-            boolean match = TestChooser.isTestIncluded(testCase, includes);
+            boolean match = TestChooser.isTestIncluded(testCase, config.getIncludes());
             if (match) {
                final File expectedResultFile = getExpectedRCAFile(testCase);
                if (!expectedResultFile.exists()) {
