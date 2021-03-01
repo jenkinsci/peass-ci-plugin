@@ -78,7 +78,6 @@ public class MeasureVersionBuilderTest {
 
    private MeasureVersionBuilder createSimpleBuilder() {
       MeasureVersionBuilder builder = new MeasureVersionBuilder("test");
-      builder.setTimeout(5);
       builder.setIterations(ITERATIONS);
       builder.setVMs(VMS);
       builder.setRepetitions(REPETITIONS);

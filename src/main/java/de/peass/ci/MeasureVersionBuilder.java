@@ -46,10 +46,10 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
    private int iterations;
    private int warmup;
    private int repetitions;
-   private int timeout;
+   private int timeout = 5;
    private double significanceLevel;
 
-   private int versionDiff;
+   private int versionDiff = 1;
    private boolean useGC;
 
    private String includes = "";
@@ -125,6 +125,9 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
          throw new RuntimeException("Sampling may only be used with source instrumentation currently.");
       }
 
+      if (versionDiff <= 0) {
+         throw new RuntimeException("The version difference should be at least 1, but was " + versionDiff);
+      }
       config.setVersion(GitUtils.getName("HEAD", workspaceFolder));
       config.setVersionOld(GitUtils.getName("HEAD~" + versionDiff, workspaceFolder));
 
