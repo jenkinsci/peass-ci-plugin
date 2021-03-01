@@ -19,7 +19,7 @@ import de.peass.analysis.changes.Change;
 import de.peass.analysis.changes.Changes;
 import de.peass.analysis.changes.ProjectChanges;
 import de.peass.ci.ContinuousExecutor;
-import de.peass.ci.TestChooser;
+import de.peass.ci.NonIncludedTestRemover;
 import de.peass.config.MeasurementConfiguration;
 import de.peass.dependency.CauseSearchFolders;
 import de.peass.dependency.analysis.data.TestCase;
@@ -65,7 +65,7 @@ public class RCAExecutor {
          for (Entry<String, List<Change>> testcases : versionChanges.getTestcaseChanges().entrySet()) {
             for (Change change : testcases.getValue()) {
                final TestCase testCase = new TestCase(testcases.getKey(), change.getMethod());
-               boolean match = TestChooser.isTestIncluded(testCase, config.getIncludes());
+               boolean match = NonIncludedTestRemover.isTestIncluded(testCase, config.getIncludes());
                if (match) {
                   try {
                      analyseChange(currentConfig, testCase);
@@ -87,7 +87,7 @@ public class RCAExecutor {
       for (Entry<String, List<Change>> testcases : versionChanges.getTestcaseChanges().entrySet()) {
          for (Change change : testcases.getValue()) {
             final TestCase testCase = new TestCase(testcases.getKey(), change.getMethod());
-            boolean match = TestChooser.isTestIncluded(testCase, config.getIncludes());
+            boolean match = NonIncludedTestRemover.isTestIncluded(testCase, config.getIncludes());
             if (match) {
                final File expectedResultFile = getExpectedRCAFile(testCase);
                if (!expectedResultFile.exists()) {
