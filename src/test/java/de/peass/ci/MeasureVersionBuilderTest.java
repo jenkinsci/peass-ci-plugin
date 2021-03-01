@@ -66,7 +66,7 @@ public class MeasureVersionBuilderTest {
       Assert.assertEquals(0.05, action.getConfig().getType1error(), 0.01);
    }
 
-   private void initProjectFolder(FreeStyleProject project) throws Exception, InterruptedException, IOException {
+   private void initProjectFolder(final FreeStyleProject project) throws Exception, InterruptedException, IOException {
       jenkins.buildAndAssertStatus(Result.SUCCESS, project);
       
       FilePath path = project.getSomeWorkspace();
@@ -78,6 +78,7 @@ public class MeasureVersionBuilderTest {
 
    private MeasureVersionBuilder createSimpleBuilder() {
       MeasureVersionBuilder builder = new MeasureVersionBuilder("test");
+      builder.setTimeout(5);
       builder.setIterations(ITERATIONS);
       builder.setVMs(VMS);
       builder.setRepetitions(REPETITIONS);

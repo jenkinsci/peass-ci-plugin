@@ -76,7 +76,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
          listener.getLogger().println("Strategy: " + measurementMode + " Source Instrumentation: " + useSourceInstrumentation + " Sampling: " + useSampling);
 
          final File workspaceFolder = new File(workspace.toString());
-         
+
          try (JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
             ExecutionPerformer performer = new ExecutionPerformer(getConfig(workspaceFolder), executeRCA, measurementMode);
             performer.performExecution(run, workspaceFolder);
@@ -100,7 +100,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
    }
 
    private MeasurementConfiguration getConfig(final File workspaceFolder) {
-      final MeasurementConfiguration config = new MeasurementConfiguration(timeout, VMs, significanceLevel, 0.01);
+      final MeasurementConfiguration config = new MeasurementConfiguration(timeout * 60 * 1000, VMs, significanceLevel, 0.01);
       config.setIterations(iterations);
       config.setWarmup(warmup);
       config.setRepetitions(repetitions);
@@ -124,10 +124,10 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
       if (useSampling && !useSourceInstrumentation) {
          throw new RuntimeException("Sampling may only be used with source instrumentation currently.");
       }
-      
+
       config.setVersion(GitUtils.getName("HEAD", workspaceFolder));
       config.setVersionOld(GitUtils.getName("HEAD~" + versionDiff, workspaceFolder));
-      
+
       config.setIncludes(getIncludeList());
 
       System.out.println("Building, iterations: " + iterations);
