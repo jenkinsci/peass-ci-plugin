@@ -14,7 +14,7 @@ First get peass by running `git clone https://github.com/DaGeRe/peass.git && cd 
 
 # Running
 
-For installing Peass-CI to your Jenkins installation, you may either upload it through the website (Manage Jenkins -> Manage Plugins -> Advanced -> Upload Plugin) or stop Jenkins, copy target/peass-ci.hpi to `~/.jenkins/plugins` (or wherever your Jenkins home is) and restart Jenkins. Afterwards, when configuring your project, the `Measure Version Performance` step is available. Peass-CI is currently not available in the plugin repository.
+For installing Peass-CI to your Jenkins installation, you may either upload it through the website (Manage Jenkins -> Manage Plugins -> Advanced -> Upload Plugin) or stop Jenkins, copy `target/peass-ci.hpi` to `~/.jenkins/plugins` (or wherever your Jenkins home is) and restart Jenkins. Afterwards, when configuring your project, the `Measure Version Performance` step is available. Peass-CI is currently not available in the plugin repository.
 
 If you want to include Peass-CI in your Jenkins Pipeline, you may configure it like this:
 
