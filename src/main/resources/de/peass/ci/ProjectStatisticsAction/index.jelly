@@ -53,9 +53,8 @@
 				var deviationUpper = {
 					x: ${it.getBuildnumbersReadable(testcase)},
 					y: ${it.getUpperBoundReadable(testcase)},
-					fill: 'toself',
 					color: 'green',
- 					type: 'lines',
+					mode: 'lines+markers',
  					showlegend: false,
 					line: {
 				      color: 'green', 
@@ -63,7 +62,7 @@
 				    }
 					};
 
-				var data = [ means, deviationUpper, deviationLower];
+				var data = [ means, deviationUpper, deviationLower ];
 
 				var	layout =
 				{
