@@ -61,8 +61,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
    private boolean useSampling = true;
 
    @DataBoundConstructor
-   public MeasureVersionBuilder(final String test) {
-      System.out.println("Initializing job: " + test);
+   public MeasureVersionBuilder() {
+      System.out.println("Initializing job");
    }
 
    @Override

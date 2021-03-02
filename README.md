@@ -18,6 +18,24 @@ For testing, run `mvn hpi:run` and access `localhost:8080/jenkins`.
 
 For the easiest setup, get the .war-file of Jenkins (https://www.jenkins.io/download/) and run it using `java -jar jenkins.war`. Stop jenkins, copy `target/peass-ci.hpi` (which was created by building) to `~/.jenkins/plugins/` (or wherever your jenkins home is) and restart Jenkins. Afterwards, when creating a project, a Peass-CI build step may be added.
 
+```groovy
+pipeline {
+    agent any
+    stages {
+        stage('build') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+        stage('test') {
+            steps {
+                measure VMs: 2, iterations: 2, repetitions: 2
+            }
+        }
+    }
+}
+```
+
 # Example
 
 After successfull experiment execution, you'll get an overview over performance measurements (and especially the detected changes) like this:

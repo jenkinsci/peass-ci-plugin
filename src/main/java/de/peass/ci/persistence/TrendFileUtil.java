@@ -20,6 +20,12 @@ public class TrendFileUtil {
       values.addMeasurement(statistics, run.getNumber());
       Constants.OBJECTMAPPER.writeValue(trendFile, values);
    }
+   
+   public static BuildMeasurementValues readMeasurementValues(final String name) throws JsonParseException, JsonMappingException, IOException, InterruptedException {
+      File trendFile = new File(ContinuousExecutor.getLocalFolder(name), "trend.json");
+      BuildMeasurementValues values = getValues(trendFile);
+      return values;
+   }
 
    public static BuildMeasurementValues readMeasurementValues(final File projectFolder) throws JsonParseException, JsonMappingException, IOException, InterruptedException {
       final ContinuousExecutor executor = new ContinuousExecutor(projectFolder, null, 1, true);
