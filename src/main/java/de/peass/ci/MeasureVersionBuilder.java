@@ -2,12 +2,14 @@ package de.peass.ci;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.ServletException;
 
 import org.jenkinsci.Symbol;
+import org.jenkinsci.plugins.workflow.job.WorkflowRun;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
 import org.kohsuke.stapler.QueryParameter;
@@ -36,7 +38,9 @@ import hudson.util.ListBoxModel.Option;
 import jenkins.tasks.SimpleBuildStep;
 import net.kieker.sourceinstrumentation.AllowedKiekerRecord;
 
-public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
+public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, Serializable {
+
+   private static final long serialVersionUID = -7455227251645979702L;
 
    static {
       Constants.OBJECTMAPPER.registerModules(new SimpleModule().addKeyDeserializer(TestCase.class, new TestcaseKeyDeserializer()));
@@ -70,16 +74,22 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
       if (!workspace.exists()) {
          throw new RuntimeException("Workspace folder " + workspace.toString() + " does not exist, please asure that the repository was correctly cloned!");
       } else {
-         listener.getLogger().println("Executing on " + workspace.toString());
+         listener.getLogger().println("Master workspace " + workspace.toString());
          listener.getLogger().println("VMs: " + VMs + " Iterations: " + iterations + " Warmup: " + warmup + " Repetitions: " + repetitions);
          listener.getLogger().println("Includes: " + includes + " RCA: " + executeRCA);
          listener.getLogger().println("Strategy: " + measurementMode + " Source Instrumentation: " + useSourceInstrumentation + " Sampling: " + useSampling);
 
-         final File workspaceFolder = new File(workspace.toString());
-
          try (JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
-            ExecutionPerformer performer = new ExecutionPerformer(getConfig(workspaceFolder), executeRCA, measurementMode);
-            performer.performExecution(run, workspaceFolder);
+            File localRoot;
+            if (run instanceof WorkflowRun) {
+               WorkflowRun workflow = (WorkflowRun) run;
+               localRoot = workflow.getRootDir();
+            } else {
+               localRoot = new File(workspace.toString());
+            }
+            final MeasurementConfiguration measurementConfig = getConfig(localRoot);
+            ExecutionPerformer performer = new ExecutionPerformer(measurementConfig, executeRCA, measurementMode);
+            performer.performExecution(run, localRoot);
          } catch (Throwable e) {
             e.printStackTrace(listener.getLogger());
             e.printStackTrace();
