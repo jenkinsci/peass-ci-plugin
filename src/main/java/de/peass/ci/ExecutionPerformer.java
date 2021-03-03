@@ -20,7 +20,7 @@ import de.peass.ci.persistence.TrendFileUtil;
 import de.peass.config.MeasurementConfiguration;
 import de.peass.dependencyprocessors.ViewNotFoundException;
 import de.peass.measurement.analysis.ProjectStatistics;
-import de.peass.measurement.rca.RCAStrategy;
+import de.peass.measurement.rca.CauseSearcherConfig;
 import de.peass.utils.Constants;
 import hudson.model.Run;
 import kieker.analysis.exception.AnalysisConfigurationException;
@@ -29,12 +29,12 @@ public class ExecutionPerformer {
 
    private final MeasurementConfiguration measurementConfig;
    private final boolean executeRCA;
-   private final RCAStrategy rcaStrategy;
+   private final CauseSearcherConfig causeConfig;
 
-   public ExecutionPerformer(final MeasurementConfiguration measurementConfig, final boolean executeRCA, final RCAStrategy measurementMode) {
+   public ExecutionPerformer(final MeasurementConfiguration measurementConfig, final boolean executeRCA, final CauseSearcherConfig causeConfig) {
       this.measurementConfig = measurementConfig;
       this.executeRCA = executeRCA;
-      this.rcaStrategy = measurementMode;
+      this.causeConfig = causeConfig;
    }
 
    public void performExecution(final Run<?, ?> run, final File workspaceFolder) throws InterruptedException, IOException, JAXBException, XmlPullParserException, JsonParseException,
@@ -74,7 +74,7 @@ public class ExecutionPerformer {
       final File logFile = new File(executor.getLocalFolder(), "rca_" + executor.getLatestVersion() + ".txt");
       System.out.println("Executing root cause analysis - Log goes to " + logFile.getAbsolutePath());
       try (LogRedirector director = new LogRedirector(logFile)) {
-         final RCAExecutor rcaExecutor = new RCAExecutor(measurementConfig, executor, changes, rcaStrategy);
+         final RCAExecutor rcaExecutor = new RCAExecutor(measurementConfig, executor, changes, causeConfig);
          rcaExecutor.executeRCAs();
 
          final RCAVisualizer rcaVisualizer = new RCAVisualizer(executor, changes, run);

@@ -25,7 +25,6 @@ import de.peass.dependency.CauseSearchFolders;
 import de.peass.dependency.analysis.data.TestCase;
 import de.peass.dependencyprocessors.ViewNotFoundException;
 import de.peass.measurement.rca.CauseSearcherConfig;
-import de.peass.measurement.rca.RCAStrategy;
 import de.peass.measurement.rca.data.CauseSearchData;
 import de.peass.measurement.rca.kieker.BothTreeReader;
 import de.peass.measurement.rca.searcher.CauseSearcher;
@@ -39,13 +38,13 @@ public class RCAExecutor {
    private final MeasurementConfiguration config;
    private final ContinuousExecutor executor;
    private final ProjectChanges changes;
-   private final RCAStrategy rcaStrategy;
+   private final CauseSearcherConfig causeConfig;
 
-   public RCAExecutor(final MeasurementConfiguration config, final ContinuousExecutor executor, final ProjectChanges changes, final RCAStrategy rcaStrategy) {
+   public RCAExecutor(final MeasurementConfiguration config, final ContinuousExecutor executor, final ProjectChanges changes, final CauseSearcherConfig causeConfig) {
       this.config = config;
       this.executor = executor;
       this.changes = changes;
-      this.rcaStrategy = rcaStrategy;
+      this.causeConfig = causeConfig;
    }
 
    public void executeRCAs()
@@ -127,8 +126,7 @@ public class RCAExecutor {
 
    private void executeRCA(final MeasurementConfiguration config, final ContinuousExecutor executor, final TestCase testCase)
          throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException, JAXBException {
-      final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(testCase, true, true, 5.0, true, 0.01, false, true,
-            rcaStrategy);
+      final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(testCase, causeConfig);
       config.setUseKieker(true);
 
       final CauseSearchFolders alternateFolders = new CauseSearchFolders(executor.getFolders().getProjectFolder());

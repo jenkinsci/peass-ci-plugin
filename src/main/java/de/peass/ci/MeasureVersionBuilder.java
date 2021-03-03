@@ -20,6 +20,7 @@ import de.peass.ci.persistence.TestcaseKeyDeserializer;
 import de.peass.config.MeasurementConfiguration;
 import de.peass.config.MeasurementStrategy;
 import de.peass.dependency.analysis.data.TestCase;
+import de.peass.measurement.rca.CauseSearcherConfig;
 import de.peass.measurement.rca.RCAStrategy;
 import de.peass.utils.Constants;
 import de.peass.vcs.GitUtils;
@@ -87,8 +88,9 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
             } else {
                localRoot = new File(workspace.toString());
             }
-            final MeasurementConfiguration measurementConfig = getConfig(localRoot);
-            ExecutionPerformer performer = new ExecutionPerformer(measurementConfig, executeRCA, measurementMode);
+            final MeasurementConfiguration measurementConfig = getMeasurementConfig(localRoot);
+            final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(null, true, true, 5.0, true, 0.01, false, true, measurementMode);
+            ExecutionPerformer performer = new ExecutionPerformer(measurementConfig, executeRCA, causeSearcherConfig);
             performer.performExecution(run, localRoot);
          } catch (Throwable e) {
             e.printStackTrace(listener.getLogger());
@@ -109,7 +111,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       return includeList;
    }
 
-   private MeasurementConfiguration getConfig(final File workspaceFolder) {
+   private MeasurementConfiguration getMeasurementConfig(final File workspaceFolder) {
       final MeasurementConfiguration config = new MeasurementConfiguration(timeout * 60 * 1000, VMs, significanceLevel, 0.01);
       config.setIterations(iterations);
       config.setWarmup(warmup);
