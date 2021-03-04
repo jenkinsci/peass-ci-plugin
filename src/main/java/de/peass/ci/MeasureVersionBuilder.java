@@ -94,8 +94,14 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          }
 
          try (JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
-            final MeasurementConfiguration configWithRealGitVersions = executePerformanceMeasurement(workspace, listener);
-
+            final MeasurementConfiguration configWithRealGitVersions = generateMeasurementConfig(workspace, listener);
+            boolean worked = measure(workspace, listener, configWithRealGitVersions);
+            
+            if (!worked) {
+               run.setResult(Result.FAILURE);
+               return;
+            }
+            
             copyFromRemote(workspace, listener, localWorkspace);
 
             ProjectChanges changes = visualizeMeasurementData(run, localWorkspace, configWithRealGitVersions);
@@ -119,15 +125,20 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       }
    }
 
-   private MeasurementConfiguration executePerformanceMeasurement(final FilePath workspace, final TaskListener listener) throws IOException, InterruptedException {
+   private boolean measure(final FilePath workspace, final TaskListener listener, final MeasurementConfiguration configWithRealGitVersions)
+         throws IOException, InterruptedException {
+      final RemoteMeasurer remotePerformer = new RemoteMeasurer(configWithRealGitVersions, listener);
+      boolean worked = workspace.act(remotePerformer);
+      listener.getLogger().println("First stage result: " + worked);
+      return worked;
+   }
+
+   private MeasurementConfiguration generateMeasurementConfig(final FilePath workspace, final TaskListener listener) throws IOException, InterruptedException {
       final MeasurementConfiguration measurementConfig = getMeasurementConfig();
       System.out.println("Startig RemoteVersionReader");
       final RemoteVersionReader remoteVersionReader = new RemoteVersionReader(measurementConfig, listener);
       final MeasurementConfiguration configWithRealGitVersions = workspace.act(remoteVersionReader);
       listener.getLogger().println("Read version: " + configWithRealGitVersions.getVersion());
-      final RemoteMeasurer remotePerformer = new RemoteMeasurer(configWithRealGitVersions, listener);
-      boolean worked = workspace.act(remotePerformer);
-      listener.getLogger().println("First stage result: " + worked);
       return configWithRealGitVersions;
    }
 
