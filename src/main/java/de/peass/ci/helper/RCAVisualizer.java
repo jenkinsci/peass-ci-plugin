@@ -13,27 +13,29 @@ import org.apache.logging.log4j.Logger;
 import de.peass.analysis.changes.Change;
 import de.peass.analysis.changes.Changes;
 import de.peass.analysis.changes.ProjectChanges;
-import de.peass.ci.ContinuousExecutor;
 import de.peass.ci.RCAVisualizationAction;
+import de.peass.config.MeasurementConfiguration;
 import de.peass.visualization.VisualizeRCA;
 import hudson.model.Run;
 
 public class RCAVisualizer {
-   
+
    private static final Logger LOG = LogManager.getLogger(RCAVisualizer.class);
-   
-   private final ContinuousExecutor executor;
+
+   private final MeasurementConfiguration measurementConfig;
+   private final File localWorkspace;
    private final ProjectChanges changes;
    private final Run<?, ?> run;
 
-   public RCAVisualizer(final ContinuousExecutor executor, final ProjectChanges changes, final Run<?, ?> run) {
-      this.executor = executor;
+   public RCAVisualizer(final MeasurementConfiguration measurementConfig, final File localWorkspace, final ProjectChanges changes, final Run<?, ?> run) {
+      this.measurementConfig = measurementConfig;
+      this.localWorkspace = localWorkspace;
       this.changes = changes;
       this.run = run;
    }
 
    public void visualizeRCA() throws Exception {
-      final File resultFolder = new File(executor.getLocalFolder(), "visualization");
+      final File resultFolder = new File(localWorkspace, "visualization");
       resultFolder.mkdirs();
 
       VisualizeRCA visualizer = preparePeassVisualizer(resultFolder);
@@ -42,17 +44,19 @@ public class RCAVisualizer {
       File rcaResults = new File(run.getRootDir(), "rca_visualization");
       rcaResults.mkdirs();
 
-      Changes versionChanges = changes.getVersion(executor.getLatestVersion());
-      File versionVisualizationFolder = new File(resultFolder, executor.getLatestVersion());
+      Changes versionChanges = changes.getVersion(measurementConfig.getVersion());
+      File versionVisualizationFolder = new File(resultFolder, measurementConfig.getVersion());
 
       createVisualizationActions(rcaResults, versionChanges, versionVisualizationFolder);
    }
 
    private VisualizeRCA preparePeassVisualizer(final File resultFolder) {
       VisualizeRCA visualizer = new VisualizeRCA();
-      visualizer.setData(new File[] { executor.getFolders().getFullMeasurementFolder().getParentFile() });
-      LOG.info("Setting property folder: " + executor.getPropertyFolder());
-      visualizer.setPropertyFolder(executor.getPropertyFolder());
+      File dataFolder = new File(localWorkspace, run.getParent().getFullDisplayName() + "_peass");
+      visualizer.setData(new File[] { dataFolder });
+      File propertyFolder = new File(localWorkspace, "properties");
+      LOG.info("Setting property folder: " + propertyFolder);
+      visualizer.setPropertyFolder(propertyFolder);
       visualizer.setResultFolder(resultFolder);
       return visualizer;
    }

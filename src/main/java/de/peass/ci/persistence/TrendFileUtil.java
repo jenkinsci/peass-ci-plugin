@@ -7,30 +7,23 @@ import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
-import de.peass.ci.ContinuousExecutor;
 import de.peass.measurement.analysis.ProjectStatistics;
 import de.peass.utils.Constants;
 import hudson.model.Run;
 
 public class TrendFileUtil {
-   public static void persistTrend(final Run<?, ?> run, final ContinuousExecutor executor, final ProjectStatistics statistics)
+   public static void persistTrend(final Run<?, ?> run, final File localWorkspace, final ProjectStatistics statistics)
          throws IOException, JsonParseException, JsonMappingException, JsonGenerationException {
-      File trendFile = new File(executor.getLocalFolder(), "trend.json");
+      File trendFile = new File(localWorkspace, "trend.json");
       BuildMeasurementValues values = getValues(trendFile);
       values.addMeasurement(statistics, run.getNumber());
       Constants.OBJECTMAPPER.writeValue(trendFile, values);
    }
    
-   public static BuildMeasurementValues readMeasurementValues(final String name) throws JsonParseException, JsonMappingException, IOException, InterruptedException {
-      File trendFile = new File(ContinuousExecutor.getLocalFolder(name), "trend.json");
-      BuildMeasurementValues values = getValues(trendFile);
-      return values;
-   }
-
-   public static BuildMeasurementValues readMeasurementValues(final File projectFolder) throws JsonParseException, JsonMappingException, IOException, InterruptedException {
-      final ContinuousExecutor executor = new ContinuousExecutor(projectFolder, null, 1, true);
-      File trendFile = new File(executor.getLocalFolder(), "trend.json");
-      BuildMeasurementValues values = getValues(trendFile);
+   public static BuildMeasurementValues readMeasurementValues(final File localWorkspace) throws JsonParseException, JsonMappingException, IOException, InterruptedException {
+      final File trendFile = new File(localWorkspace, "trend.json");
+      System.out.println(trendFile.getAbsolutePath() + " " + trendFile.exists());
+      final BuildMeasurementValues values = getValues(trendFile);
       return values;
    }
    

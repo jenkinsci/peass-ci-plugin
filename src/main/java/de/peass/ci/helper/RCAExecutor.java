@@ -18,10 +18,10 @@ import de.peass.RootCauseAnalysis;
 import de.peass.analysis.changes.Change;
 import de.peass.analysis.changes.Changes;
 import de.peass.analysis.changes.ProjectChanges;
-import de.peass.ci.ContinuousExecutor;
 import de.peass.ci.NonIncludedTestRemover;
 import de.peass.config.MeasurementConfiguration;
 import de.peass.dependency.CauseSearchFolders;
+import de.peass.dependency.PeASSFolders;
 import de.peass.dependency.analysis.data.TestCase;
 import de.peass.dependencyprocessors.ViewNotFoundException;
 import de.peass.measurement.rca.CauseSearcherConfig;
@@ -36,29 +36,27 @@ public class RCAExecutor {
    private static final Logger LOG = LogManager.getLogger(RCAExecutor.class);
 
    private final MeasurementConfiguration config;
-   private final ContinuousExecutor executor;
+   private final File projectFolder;
    private final ProjectChanges changes;
    private final CauseSearcherConfig causeConfig;
 
-   public RCAExecutor(final MeasurementConfiguration config, final ContinuousExecutor executor, final ProjectChanges changes, final CauseSearcherConfig causeConfig) {
+   public RCAExecutor(final MeasurementConfiguration config, final File workspaceFolder, final ProjectChanges changes, final CauseSearcherConfig causeConfig) {
       this.config = config;
-      this.executor = executor;
+      this.projectFolder = workspaceFolder;
       this.changes = changes;
       this.causeConfig = causeConfig;
    }
 
    public void executeRCAs()
          throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException, JAXBException {
-      Changes versionChanges = changes.getVersion(executor.getLatestVersion());
+      Changes versionChanges = changes.getVersion(config.getVersion());
 
       boolean needsRCA = checkNeedsRCA(versionChanges);
 
       if (needsRCA) {
          LOG.info("At least one testcase was not successfully executed in the last build for the current version - executing RCA");
-         saveOldPeassFolder(executor);
+         saveOldPeassFolder();
 
-         config.setVersion(executor.getLatestVersion());
-         config.setVersionOld(executor.getVersionOld());
          MeasurementConfiguration currentConfig = new MeasurementConfiguration(config);
 
          for (Entry<String, List<Change>> testcases : versionChanges.getTestcaseChanges().entrySet()) {
@@ -113,31 +111,31 @@ public class RCAExecutor {
       LOG.info("Testing {}", expectedResultFile);
       if (!expectedResultFile.exists()) {
          LOG.debug("Needs execution");
-         executeRCA(currentConfig, executor, testCase);
+         executeRCA(currentConfig, testCase);
       }
    }
 
    private File getExpectedRCAFile(final TestCase testCase) {
-      CauseSearchFolders folders = new CauseSearchFolders(executor.getProjectFolder());
-      final File expectedResultFile = new File(folders.getRcaTreeFolder(executor.getLatestVersion(), testCase),
+      CauseSearchFolders folders = new CauseSearchFolders(projectFolder);
+      final File expectedResultFile = new File(folders.getRcaTreeFolder(config.getVersion(), testCase),
             testCase.getMethod() + ".json");
       return expectedResultFile;
    }
 
-   private void executeRCA(final MeasurementConfiguration config, final ContinuousExecutor executor, final TestCase testCase)
+   private void executeRCA(final MeasurementConfiguration config, final TestCase testCase)
          throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException, JAXBException {
       final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(testCase, causeConfig);
       config.setUseKieker(true);
 
-      final CauseSearchFolders alternateFolders = new CauseSearchFolders(executor.getFolders().getProjectFolder());
+      final CauseSearchFolders alternateFolders = new CauseSearchFolders(projectFolder);
       final BothTreeReader reader = new BothTreeReader(causeSearcherConfig, config, alternateFolders);
 
       CauseSearcher tester = RootCauseAnalysis.getCauseSeacher(config, causeSearcherConfig, alternateFolders, reader);
       tester.search();
    }
 
-   private void saveOldPeassFolder(final ContinuousExecutor executor) {
-      final File oldPeassFolder = executor.getFolders().getPeassFolder();
+   private void saveOldPeassFolder() {
+      final File oldPeassFolder = PeASSFolders.getPeassFolder(projectFolder);
       if (oldPeassFolder.exists()) {
          int i = 0;
          File destFolder = new File(oldPeassFolder.getParentFile(), "oldPeassFolder_" + i);

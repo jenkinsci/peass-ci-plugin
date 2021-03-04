@@ -5,25 +5,37 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
+import javax.xml.bind.JAXBException;
 
 import org.jenkinsci.Symbol;
-import org.jenkinsci.plugins.workflow.job.WorkflowRun;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
 import org.kohsuke.stapler.QueryParameter;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
+import de.peass.analysis.changes.ProjectChanges;
+import de.peass.ci.helper.HistogramReader;
+import de.peass.ci.helper.HistogramValues;
+import de.peass.ci.helper.RCAVisualizer;
 import de.peass.ci.persistence.TestcaseKeyDeserializer;
+import de.peass.ci.persistence.TrendFileUtil;
+import de.peass.ci.remote.RemoteMeasurer;
+import de.peass.ci.remote.RemoteRCA;
+import de.peass.ci.remote.RemoteVersionReader;
 import de.peass.config.MeasurementConfiguration;
 import de.peass.config.MeasurementStrategy;
 import de.peass.dependency.analysis.data.TestCase;
+import de.peass.measurement.analysis.ProjectStatistics;
 import de.peass.measurement.rca.CauseSearcherConfig;
 import de.peass.measurement.rca.RCAStrategy;
 import de.peass.utils.Constants;
-import de.peass.vcs.GitUtils;
 import hudson.Extension;
 import hudson.FilePath;
 import hudson.Launcher;
@@ -67,7 +79,6 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
    @DataBoundConstructor
    public MeasureVersionBuilder() {
-      System.out.println("Initializing job");
    }
 
    @Override
@@ -75,29 +86,104 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       if (!workspace.exists()) {
          throw new RuntimeException("Workspace folder " + workspace.toString() + " does not exist, please asure that the repository was correctly cloned!");
       } else {
-         listener.getLogger().println("Master workspace " + workspace.toString());
-         listener.getLogger().println("VMs: " + VMs + " Iterations: " + iterations + " Warmup: " + warmup + " Repetitions: " + repetitions);
-         listener.getLogger().println("Includes: " + includes + " RCA: " + executeRCA);
-         listener.getLogger().println("Strategy: " + measurementMode + " Source Instrumentation: " + useSourceInstrumentation + " Sampling: " + useSampling);
+         final File localWorkspace = new File(run.getRootDir(), ".." + File.separator + ".." + File.separator + "peass-data").getCanonicalFile();
+         printRunMetadata(run, workspace, listener, localWorkspace);
+
+         if (!localWorkspace.exists()) {
+            localWorkspace.mkdirs();
+         }
 
          try (JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
-            File localRoot;
-            if (run instanceof WorkflowRun) {
-               WorkflowRun workflow = (WorkflowRun) run;
-               localRoot = workflow.getRootDir();
-            } else {
-               localRoot = new File(workspace.toString());
+            final MeasurementConfiguration configWithRealGitVersions = executePerformanceMeasurement(workspace, listener);
+
+            copyFromRemote(workspace, listener, localWorkspace);
+
+            ProjectChanges changes = visualizeMeasurementData(run, localWorkspace, configWithRealGitVersions);
+
+            if (executeRCA) {
+               final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(null, true, true, 5.0, true, 0.01, false, true, measurementMode);
+
+               RemoteRCA remoteRCAExecutor = new RemoteRCA(configWithRealGitVersions, causeSearcherConfig, changes, listener);
+               workspace.act(remoteRCAExecutor);
+
+               copyFromRemote(workspace, listener, localWorkspace);
+
+               final RCAVisualizer rcaVisualizer = new RCAVisualizer(configWithRealGitVersions, localWorkspace, changes, run);
+               rcaVisualizer.visualizeRCA();
             }
-            final MeasurementConfiguration measurementConfig = getMeasurementConfig(localRoot);
-            final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(null, true, true, 5.0, true, 0.01, false, true, measurementMode);
-            ExecutionPerformer performer = new ExecutionPerformer(measurementConfig, executeRCA, causeSearcherConfig);
-            performer.performExecution(run, localRoot);
          } catch (Throwable e) {
             e.printStackTrace(listener.getLogger());
             e.printStackTrace();
             run.setResult(Result.FAILURE);
          }
       }
+   }
+
+   private MeasurementConfiguration executePerformanceMeasurement(final FilePath workspace, final TaskListener listener) throws IOException, InterruptedException {
+      final MeasurementConfiguration measurementConfig = getMeasurementConfig();
+      System.out.println("Startig RemoteVersionReader");
+      final RemoteVersionReader remoteVersionReader = new RemoteVersionReader(measurementConfig, listener);
+      final MeasurementConfiguration configWithRealGitVersions = workspace.act(remoteVersionReader);
+      listener.getLogger().println("Read version: " + configWithRealGitVersions.getVersion());
+      final RemoteMeasurer remotePerformer = new RemoteMeasurer(configWithRealGitVersions, listener);
+      boolean worked = workspace.act(remotePerformer);
+      listener.getLogger().println("First stage result: " + worked);
+      return configWithRealGitVersions;
+   }
+
+   private void copyFromRemote(final FilePath workspace, final TaskListener listener, final File localWorkspace) throws IOException, InterruptedException {
+      String remotePeassPath = ContinuousExecutor.getLocalFolder(new File(workspace.getRemote())).getPath();
+      listener.getLogger().println("Remote Peass path: " + remotePeassPath);
+      FilePath remotePeassFolder = new FilePath(workspace.getChannel(), remotePeassPath);
+      int count = remotePeassFolder.copyRecursiveTo(new FilePath(localWorkspace));
+      listener.getLogger().println("Copied " + count + " files from " + remotePeassFolder + " to " + localWorkspace.getAbsolutePath());
+   }
+
+   private ProjectChanges visualizeMeasurementData(final Run<?, ?> run, final File localWorkspace, final MeasurementConfiguration measurementConfig)
+         throws JAXBException, IOException, JsonParseException, JsonMappingException, JsonGenerationException {
+      File dataFolder = new File(localWorkspace, measurementConfig.getVersion() + "_" + measurementConfig.getVersionOld());
+      final HistogramReader histogramReader = new HistogramReader(measurementConfig, dataFolder);
+      final Map<String, HistogramValues> measurements = histogramReader.readMeasurements();
+
+      final File changeFile = new File(localWorkspace, "changes.json");
+      final ProjectChanges changes;
+      if (changeFile.exists()) {
+         changes = Constants.OBJECTMAPPER.readValue(changeFile, ProjectChanges.class);
+      } else {
+         changes = new ProjectChanges();
+      }
+
+      final File statisticsFile = new File(localWorkspace, "statistics.json");
+      final ProjectStatistics statistics = readStatistics(statisticsFile);
+
+      TrendFileUtil.persistTrend(run, localWorkspace, statistics);
+
+      final MeasureVersionAction action = new MeasureVersionAction(measurementConfig, changes.getVersion(measurementConfig.getVersion()), statistics, measurements);
+      run.addAction(action);
+
+      return changes;
+   }
+
+   private ProjectStatistics readStatistics(final File statisticsFile) throws IOException, JsonParseException, JsonMappingException {
+      ProjectStatistics statistics;
+      if (statisticsFile.exists()) {
+         statistics = Constants.OBJECTMAPPER.readValue(statisticsFile, ProjectStatistics.class);
+      } else {
+         statistics = new ProjectStatistics();
+      }
+      return statistics;
+   }
+
+   private void printRunMetadata(final Run<?, ?> run, final FilePath workspace, final TaskListener listener, final File localWorkspace) {
+      listener.getLogger().println("Current Job: " + getJobName(run));
+      listener.getLogger().println("Local workspace " + workspace.toString() + " Run dir: " + run.getRootDir() + " Local workspace: " + localWorkspace);
+      listener.getLogger().println("VMs: " + VMs + " Iterations: " + iterations + " Warmup: " + warmup + " Repetitions: " + repetitions);
+      listener.getLogger().println("Includes: " + includes + " RCA: " + executeRCA);
+      listener.getLogger().println("Strategy: " + measurementMode + " Source Instrumentation: " + useSourceInstrumentation + " Sampling: " + useSampling);
+   }
+
+   private String getJobName(final Run<?, ?> run) {
+      return run.getParent().getFullDisplayName();
    }
 
    private List<String> getIncludeList() {
@@ -111,7 +197,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       return includeList;
    }
 
-   private MeasurementConfiguration getMeasurementConfig(final File workspaceFolder) {
+   private MeasurementConfiguration getMeasurementConfig() {
       final MeasurementConfiguration config = new MeasurementConfiguration(timeout * 60 * 1000, VMs, significanceLevel, 0.01);
       config.setIterations(iterations);
       config.setWarmup(warmup);
@@ -140,8 +226,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       if (versionDiff <= 0) {
          throw new RuntimeException("The version difference should be at least 1, but was " + versionDiff);
       }
-      config.setVersion(GitUtils.getName("HEAD", workspaceFolder));
-      config.setVersionOld(GitUtils.getName("HEAD~" + versionDiff, workspaceFolder));
+      config.setVersion("HEAD");
+      config.setVersionOld("HEAD~" + versionDiff);
 
       config.setIncludes(getIncludeList());
 

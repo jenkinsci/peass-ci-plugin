@@ -1,5 +1,6 @@
 package de.peass.ci;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -103,7 +104,8 @@ public class ProjectStatisticsAction implements Action {
 
    private BuildMeasurementValues readValues() throws InterruptedException, IOException, JsonParseException, JsonMappingException {
       if (project instanceof WorkflowJob || project instanceof Project) {
-         BuildMeasurementValues values = TrendFileUtil.readMeasurementValues(project.getName());
+         File localWorkspace = new File(project.getRootDir(), "peass-data");
+         BuildMeasurementValues values = TrendFileUtil.readMeasurementValues(localWorkspace);
          return values;
       } else {
          return null;
