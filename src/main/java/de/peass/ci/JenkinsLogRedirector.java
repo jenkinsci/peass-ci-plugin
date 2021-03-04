@@ -10,8 +10,8 @@ import org.apache.logging.log4j.core.layout.PatternLayout;
 import hudson.model.TaskListener;
 
 public class JenkinsLogRedirector implements AutoCloseable {
-
-   private final LoggerContext loggerContext = (LoggerContext) LogManager.getContext(LogManager.class.getClassLoader(), false);
+   
+   private final LoggerContext loggerContext = (LoggerContext) LogManager.getContext(JenkinsLogRedirector.class.getClassLoader(), false);
 
    private final PrintStream outOriginal;
    private final PrintStream errOriginal;

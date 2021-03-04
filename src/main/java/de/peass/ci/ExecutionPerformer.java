@@ -43,7 +43,7 @@ public class ExecutionPerformer {
       final ContinuousExecutor executor = new ContinuousExecutor(workspaceFolder, measurementConfig, 1, true);
       executor.execute();
 
-      final HistogramReader histogramReader = new HistogramReader(executor);
+      final HistogramReader histogramReader = new HistogramReader(measurementConfig, executor.getFullResultsVersion());
       final Map<String, HistogramValues> measurements = histogramReader.readMeasurements();
 
       final File changeFile = new File(executor.getLocalFolder(), "changes.json");
