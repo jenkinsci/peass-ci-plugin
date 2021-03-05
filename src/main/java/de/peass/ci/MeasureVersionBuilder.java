@@ -107,7 +107,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
             ProjectChanges changes = visualizeMeasurementData(run, localWorkspace, configWithRealGitVersions);
 
             if (executeRCA) {
-               final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(null, true, true, 5.0, true, 0.01, false, true, measurementMode);
+               final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(null, true, true, true, 0.01, false, true, measurementMode);
 
                RemoteRCA remoteRCAExecutor = new RemoteRCA(configWithRealGitVersions, causeSearcherConfig, changes, listener);
                workspace.act(remoteRCAExecutor);
