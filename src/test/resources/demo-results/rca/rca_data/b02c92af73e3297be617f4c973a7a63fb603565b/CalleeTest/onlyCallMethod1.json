@@ -20,7 +20,6 @@
   "causeConfig" : {
     "useAggregation" : true,
     "saveAll" : true,
-    "outlierFactor" : 5.0,
     "splitAggregated" : true,
     "minTime" : 0.01,
     "ignoreEOIs" : true,
