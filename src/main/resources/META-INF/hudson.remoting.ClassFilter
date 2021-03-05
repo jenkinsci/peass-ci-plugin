@@ -1,5 +1,6 @@
 de.peass.config.MeasurementConfiguration
 de.peass.config.ExecutionConfig
+de.peass.config.StatisticsConfiguration
 de.peass.analysis.changes.ProjectChanges
 de.peass.dependencyprocessors.VersionComparator
 de.peass.measurement.analysis.ProjectStatistics
