@@ -24,7 +24,7 @@ public class RCAVisualizationAction implements RunAction2 {
    
    @Override
    public String getIconFileName() {
-      return "/plugin/peass-ci/images/trend.png";
+      return "/plugin/peass-ci/images/rca.png";
    }
 
    @Override

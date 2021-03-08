@@ -114,7 +114,7 @@ public class TrendAction implements Action {
 
    @Override
    public String getIconFileName() {
-      return "/plugin/peass-ci/images/rca.png";
+      return "/plugin/peass-ci/images/trend.png";
    }
 
    @Override
