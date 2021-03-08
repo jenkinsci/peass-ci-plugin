@@ -19,11 +19,11 @@ import hudson.model.Action;
 import hudson.model.Job;
 import hudson.model.Project;
 
-public class ProjectStatisticsAction implements Action {
+public class TrendAction implements Action {
 
    private Job<?, ?> project;
 
-   public ProjectStatisticsAction(final Job<?, ?> project) {
+   public TrendAction(final Job<?, ?> project) {
       this.project = project;
    }
 

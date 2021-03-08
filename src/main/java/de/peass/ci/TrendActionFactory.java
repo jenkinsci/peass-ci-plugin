@@ -10,7 +10,7 @@ import hudson.model.Job;
 import jenkins.model.TransientActionFactory;
 
 @Extension
-public class ProjectStatisticsActionFactory extends TransientActionFactory<Job> {
+public class TrendActionFactory extends TransientActionFactory<Job> {
 
    @Override
    public Class<Job> type() {
@@ -21,7 +21,7 @@ public class ProjectStatisticsActionFactory extends TransientActionFactory<Job> 
    @Override
    public Collection<? extends Action> createFor(@NonNull final Job project) {
 
-      return Collections.singleton(new ProjectStatisticsAction(project));
+      return Collections.singleton(new TrendAction(project));
    }
 
 }
