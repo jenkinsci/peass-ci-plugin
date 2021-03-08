@@ -94,6 +94,7 @@ public class RCAExecutor {
                   if (lastData.getMeasurementConfig().getVersion().equals(config.getVersion())
                         && lastData.getMeasurementConfig().getVersionOld().equals(config.getVersionOld())) {
                      LOG.debug("Found version {} vs {} of testcase {}", config.getVersion(), config.getVersionOld(), testCase);
+                     LOG.debug("RCA-file: {}", expectedResultFile.getAbsolutePath());
                   } else {
                      LOG.debug("Did not find version {} vs {} of testcase {}", config.getVersion(), config.getVersionOld(), testCase);
                      needsRCA = true;
