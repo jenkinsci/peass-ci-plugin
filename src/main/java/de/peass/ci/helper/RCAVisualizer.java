@@ -35,19 +35,37 @@ public class RCAVisualizer {
    }
 
    public void visualizeRCA() throws Exception {
-      final File resultFolder = new File(localWorkspace, "visualization");
-      resultFolder.mkdirs();
+      final File visualizationFolder = getVisualizationFolder();
 
-      VisualizeRCA visualizer = preparePeassVisualizer(resultFolder);
+      VisualizeRCA visualizer = preparePeassVisualizer(visualizationFolder);
       visualizer.call();
 
-      File rcaResults = new File(run.getRootDir(), "rca_visualization");
-      rcaResults.mkdirs();
+      File rcaResults = getRcaResultFolder();
 
       Changes versionChanges = changes.getVersion(measurementConfig.getVersion());
-      File versionVisualizationFolder = new File(resultFolder, measurementConfig.getVersion());
+      File versionVisualizationFolder = new File(visualizationFolder, measurementConfig.getVersion());
 
       createVisualizationActions(rcaResults, versionChanges, versionVisualizationFolder);
+   }
+
+   private File getRcaResultFolder() {
+      File rcaResults = new File(run.getRootDir(), "rca_visualization");
+      if (!rcaResults.exists()) {
+         if (!rcaResults.mkdirs()) {
+            throw new RuntimeException("Could not create " + rcaResults.getAbsolutePath());
+         }
+      }
+      return rcaResults;
+   }
+
+   private File getVisualizationFolder() {
+      final File visualizationFolder = new File(localWorkspace, "visualization");
+      if (!visualizationFolder.exists()) {
+         if (!visualizationFolder.mkdirs()) {
+            throw new RuntimeException("Could not create " + visualizationFolder.getAbsolutePath());
+         }
+      }
+      return visualizationFolder;
    }
 
    private VisualizeRCA preparePeassVisualizer(final File resultFolder) {

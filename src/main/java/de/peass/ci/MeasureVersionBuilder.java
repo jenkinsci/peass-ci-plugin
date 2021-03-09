@@ -90,7 +90,9 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          printRunMetadata(run, workspace, listener, localWorkspace);
 
          if (!localWorkspace.exists()) {
-            localWorkspace.mkdirs();
+            if (!localWorkspace.mkdirs()) {
+               throw new RuntimeException("Was not able to create folder");
+            }
          }
 
          try (JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
@@ -107,15 +109,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
             ProjectChanges changes = visualizeMeasurementData(run, localWorkspace, configWithRealGitVersions);
 
             if (executeRCA) {
-               final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(null, true, true, true, 0.01, false, true, measurementMode);
-
-               RemoteRCA remoteRCAExecutor = new RemoteRCA(configWithRealGitVersions, causeSearcherConfig, changes, listener);
-               workspace.act(remoteRCAExecutor);
-
-               copyFromRemote(workspace, listener, localWorkspace);
-
-               final RCAVisualizer rcaVisualizer = new RCAVisualizer(configWithRealGitVersions, localWorkspace, changes, run);
-               rcaVisualizer.visualizeRCA();
+               rca(run, workspace, listener, localWorkspace, configWithRealGitVersions, changes);
             }
          } catch (Throwable e) {
             e.printStackTrace(listener.getLogger());
@@ -123,6 +117,23 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
             run.setResult(Result.FAILURE);
          }
       }
+   }
+
+   private void rca(final Run<?, ?> run, final FilePath workspace, final TaskListener listener, final File localWorkspace, final MeasurementConfiguration configWithRealGitVersions,
+         final ProjectChanges changes) throws IOException, InterruptedException, Exception {
+      final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(null, true, true, true, 0.01, false, true, measurementMode);
+
+      RemoteRCA remoteRCAExecutor = new RemoteRCA(configWithRealGitVersions, causeSearcherConfig, changes, listener);
+      boolean rcaWorked = workspace.act(remoteRCAExecutor);
+      if (!rcaWorked) {
+         run.setResult(Result.FAILURE);
+         return;
+      }
+
+      copyFromRemote(workspace, listener, localWorkspace);
+
+      final RCAVisualizer rcaVisualizer = new RCAVisualizer(configWithRealGitVersions, localWorkspace, changes, run);
+      rcaVisualizer.visualizeRCA();
    }
 
    private boolean measure(final FilePath workspace, final TaskListener listener, final MeasurementConfiguration configWithRealGitVersions)

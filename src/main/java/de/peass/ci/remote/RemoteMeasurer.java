@@ -40,7 +40,7 @@ public class RemoteMeasurer implements FileCallable<Boolean> {
          return true;
       } catch (Throwable e) {
          File test = new File(workspaceFolder, "error.txt"); // Workaround, since error redirection on Jenkins agents currently does not work
-         PrintStream writer = new PrintStream(test);
+         PrintStream writer = new PrintStream(test, "UTF-8");
          e.printStackTrace(writer);
          writer.flush();
          listener.getLogger().println("Exception thrown");

@@ -52,16 +52,17 @@ public class RemoteRCA implements FileCallable<Boolean>, Serializable {
          File projectFolderLocal = new File(localFolder, workspaceFolder.getName());
          final RCAExecutor rcaExecutor = new RCAExecutor(measurementConfig, projectFolderLocal, changes, causeConfig);
          rcaExecutor.executeRCAs();
+         return true;
       } catch (XmlPullParserException | AnalysisConfigurationException | ViewNotFoundException | JAXBException e) {
          File test = new File(workspaceFolder, "error.txt"); // Workaround, since error redirection on Jenkins agents currently does not work
-         PrintStream writer = new PrintStream(test);
+         PrintStream writer = new PrintStream(test, "UTF-8");
          e.printStackTrace(writer);
          writer.flush();
          listener.getLogger().println("Exception thrown");
          e.printStackTrace(listener.getLogger());
          e.printStackTrace();
+         return false;
       }
-      return null;
    }
 
 }
