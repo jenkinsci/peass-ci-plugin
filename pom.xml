@@ -34,7 +34,7 @@
 	</licenses>
 
 	<dependencies>
-	    <!-- Higher import order needed for tests -->
+		<!-- Higher import order needed for tests -->
 		<dependency>
 			<groupId>org.hamcrest</groupId>
 			<artifactId>hamcrest-core</artifactId>
@@ -131,17 +131,24 @@
 					</environmentVariables>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>com.github.spotbugs</groupId>
+				<artifactId>spotbugs-maven-plugin</artifactId>
+				<configuration>
+					<excludeFilterFile>spotbugs-exclude.xml</excludeFilterFile>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-                                <groupId>io.jenkins.tools.bom</groupId>
-                                <artifactId>bom-2.263.x</artifactId>
-                                <version>23</version>
-                                <type>pom</type>
-                                <scope>import</scope>
+				<groupId>io.jenkins.tools.bom</groupId>
+				<artifactId>bom-2.263.x</artifactId>
+				<version>23</version>
+				<type>pom</type>
+				<scope>import</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.jenkins-ci.plugins</groupId>

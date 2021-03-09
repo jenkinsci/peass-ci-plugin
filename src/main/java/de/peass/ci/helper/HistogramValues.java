@@ -1,22 +1,15 @@
 package de.peass.ci.helper;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class HistogramValues {
    private final double[] valuesCurrent;
    private final double[] valuesBefore;
    
-   public HistogramValues(final double[] valuesCurrent, final double[] valuesBefore) {
-      this.valuesCurrent = valuesCurrent;
-      this.valuesBefore = valuesBefore;
-   }
-
-   public double[] getValuesCurrent() {
-      return valuesCurrent;
-   }
-   
-   public double[] getValuesBefore() {
-      return valuesBefore;
+   public HistogramValues(final List<Double> valuesCurrent, final List<Double> valuesBefore) {
+      this.valuesCurrent = valuesCurrent.stream().mapToDouble(i -> i).toArray();
+      this.valuesBefore = valuesBefore.stream().mapToDouble(i -> i).toArray();
    }
 
    public String getValuesCurrentReadable() {

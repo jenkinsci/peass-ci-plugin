@@ -23,8 +23,8 @@ public class TestHistogramReader {
       
       System.out.println(measurements.keySet());
       
-      Assert.assertEquals(measurements.get("de.test.CalleeTest#onlyCallMethod1").getValuesBefore().length, 2);
-      Assert.assertEquals(measurements.get("de.test.CalleeTest#onlyCallMethod1").getValuesCurrent().length, 2);
+      Assert.assertEquals(measurements.get("de.test.CalleeTest#onlyCallMethod1").getValuesBeforeReadable().split(",").length, 2);
+      Assert.assertEquals(measurements.get("de.test.CalleeTest#onlyCallMethod1").getValuesBeforeReadable().split(",").length, 2);
    }
    
    @Test
@@ -35,5 +35,7 @@ public class TestHistogramReader {
       
       HistogramReader reader = new HistogramReader(measurementConfig, new File("src/test/resources/demo-results/histogram/e80d8a1bf747d1f70dc52260616b36cac9e44561"));
       Map<String, HistogramValues> measurements = reader.readMeasurements();
+      
+      Assert.assertNull(measurements.get("e80d8a1bf747d1f70dc52260616b36cac9e44561"));
    }
 }
