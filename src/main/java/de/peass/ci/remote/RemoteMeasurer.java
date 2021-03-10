@@ -35,6 +35,12 @@ public class RemoteMeasurer implements FileCallable<Boolean> {
       try (JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
          System.out.println("Starting remote invocation, VMs: " + measurementConfig.getVms());
          // if (true) throw new RuntimeException("Finish with stupid exception");
+
+         /*
+          * This is just a workaround until all dependencies are available in maven central repository.
+          */
+         checkKopemeAndKieker(workspaceFolder);
+
          final ContinuousExecutor executor = new ContinuousExecutor(workspaceFolder, measurementConfig, 1, true);
          executor.execute();
          return true;
@@ -48,6 +54,25 @@ public class RemoteMeasurer implements FileCallable<Boolean> {
          e.printStackTrace();
          return false;
       }
+   }
+
+   private void checkKopemeAndKieker(final File workspaceFolder) throws InterruptedException, IOException {
+      final File kopeme = new File("/home/ubuntu/.m2/repository/de/dagere/kopeme/kopeme-junit/0.14-SNAPSHOT");
+      final File kieker = new File("/home/noname/.m2/repository/net/kieker-monitoring/kieker/1.15-SNAPSHOT");
+      if(!kopeme.exists() || !kieker.exists()) {
+         cloneAndinstallPeass(workspaceFolder);
+      }
+   }
+
+   private void cloneAndinstallPeass(final File workspaceFolder) throws InterruptedException, IOException {
+      System.out.println("Cloning peass");
+      final ProcessBuilder builder = new ProcessBuilder("git", "clone", "https://github.com/DaGeRe/peass")
+            .directory(new File(workspaceFolder.getAbsolutePath() + "/.."));
+      builder.start().waitFor();
+
+      builder.directory(new File(workspaceFolder.getAbsolutePath() + "/../peass"));
+      builder.command("mvn", "install", "-DskipTests");
+      builder.inheritIO().start().waitFor();
    }
 
 }
