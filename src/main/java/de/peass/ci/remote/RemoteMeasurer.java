@@ -32,7 +32,7 @@ public class RemoteMeasurer implements FileCallable<Boolean> {
 
    @Override
    public Boolean invoke(final File workspaceFolder, final VirtualChannel channel) throws IOException, InterruptedException {
-      try (JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
+      try (final JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
          System.out.println("Starting remote invocation, VMs: " + measurementConfig.getVms());
          // if (true) throw new RuntimeException("Finish with stupid exception");
 
@@ -79,12 +79,13 @@ public class RemoteMeasurer implements FileCallable<Boolean> {
    }
 
    private void cloneAndinstallPeass(final File workspaceFolder) throws InterruptedException, IOException {
-      System.out.println("Cloning peass");
+      System.out.println("Kopeme and/or Kieker dependencies could not be found. Installing peass.");
+      final String seperator = File.separator;
       final ProcessBuilder builder = new ProcessBuilder("git", "clone", "https://github.com/DaGeRe/peass")
-            .directory(new File(workspaceFolder.getAbsolutePath() + "/.."));
+            .directory(new File(workspaceFolder.getAbsolutePath() + seperator + ".."));
       builder.start().waitFor();
 
-      builder.directory(new File(workspaceFolder.getAbsolutePath() + "/../peass"));
+      builder.directory(new File(workspaceFolder.getAbsolutePath() + seperator + ".." + seperator + "peass"));
       builder.command("mvn", "install", "-DskipTests");
       builder.inheritIO().start().waitFor();
    }
