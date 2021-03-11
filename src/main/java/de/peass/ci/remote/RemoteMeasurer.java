@@ -36,10 +36,29 @@ public class RemoteMeasurer implements FileCallable<Boolean> {
          System.out.println("Starting remote invocation, VMs: " + measurementConfig.getVms());
          // if (true) throw new RuntimeException("Finish with stupid exception");
 
+         final String home = System.getenv("HOME");
+         System.out.println("home: " + home);
+         final String seperator = File.separator;
+         final String mavenRepo = home + seperator + ".m2" + seperator + "repository" + seperator;
+
+         final File kopeme = new File(mavenRepo + "de" + seperator + "dagere" + seperator + "kopeme" + seperator + "kopeme-junit" + seperator + "0.14-SNAPSHOT");
+         final File kieker = new File(mavenRepo + "net" + seperator + "kieker-monitoring" + seperator + "kieker" + seperator + "1.15-SNAPSHOT");
+
          /*
           * This is just a workaround until all dependencies are available in maven central repository.
           */
-         checkKopemeAndKieker(workspaceFolder);
+         //checkKopemeAndKieker(workspaceFolder);
+
+         if (!kopeme.exists() || !kieker.exists()) {
+            cloneAndinstallPeass(workspaceFolder);
+         }
+
+         if (!kopeme.exists() || !kieker.exists()) {
+            System.out.println("Not existing!");
+         }
+         else {
+            System.out.println("Existing!");
+         }
 
          final ContinuousExecutor executor = new ContinuousExecutor(workspaceFolder, measurementConfig, 1, true);
          executor.execute();
@@ -53,14 +72,6 @@ public class RemoteMeasurer implements FileCallable<Boolean> {
          e.printStackTrace(listener.getLogger());
          e.printStackTrace();
          return false;
-      }
-   }
-
-   private void checkKopemeAndKieker(final File workspaceFolder) throws InterruptedException, IOException {
-      final File kopeme = new File("/home/ubuntu/.m2/repository/de/dagere/kopeme/kopeme-junit/0.14-SNAPSHOT");
-      final File kieker = new File("/home/noname/.m2/repository/net/kieker-monitoring/kieker/1.15-SNAPSHOT");
-      if(!kopeme.exists() || !kieker.exists()) {
-         cloneAndinstallPeass(workspaceFolder);
       }
    }
 
