@@ -21,6 +21,8 @@ public class RemoteMeasurer implements FileCallable<Boolean> {
 
    private static final Logger LOG = LogManager.getLogger();
 
+   private static final String seperator = File.separator;
+
    private final MeasurementConfiguration measurementConfig;
 
    private final TaskListener listener;
@@ -63,7 +65,7 @@ public class RemoteMeasurer implements FileCallable<Boolean> {
    private void checkKopemeAndKieker(final File workspaceFolder) throws InterruptedException, IOException {
 
       final String home = System.getenv("HOME");
-      final String seperator = File.separator;
+
       final String mavenRepo = home + seperator + ".m2" + seperator + "repository" + seperator;
 
       final File kopeme = new File(mavenRepo + "de" + seperator + "dagere" + seperator + "kopeme" + seperator + "kopeme-junit" + seperator + "0.14-SNAPSHOT");
@@ -84,14 +86,29 @@ public class RemoteMeasurer implements FileCallable<Boolean> {
 
    private void cloneAndinstallPeass(final File workspaceFolder) throws InterruptedException, IOException {
       LOG.warn("Kopeme and/or Kieker dependencies could not be found. Installing peass.");
-      final String seperator = File.separator;
-      final ProcessBuilder builder = new ProcessBuilder("git", "clone", "https://github.com/DaGeRe/peass")
-            .directory(new File(workspaceFolder.getAbsolutePath() + seperator + ".."));
-      builder.start().waitFor();
 
-      builder.directory(new File(workspaceFolder.getAbsolutePath() + seperator + ".." + seperator + "peass"));
-      builder.command("mvn", "install", "-DskipTests");
-      builder.inheritIO().start().waitFor();
+      clonePeass(workspaceFolder);
+      installPeass(workspaceFolder);
+   }
+
+   private void clonePeass(final File workspaceFolder) throws InterruptedException, IOException {
+      final File logFile = new File(workspaceFolder, "clonePeassLog.txt");
+      LOG.info("Cloning peass. Log goes to {}", logFile.getAbsolutePath());
+
+      final ProcessBuilder builder = new ProcessBuilder("git", "clone", "--progress", "https://github.com/DaGeRe/peass")
+            .directory(new File(workspaceFolder.getAbsolutePath() + seperator + ".."))
+            .redirectError(logFile);
+      builder.start().waitFor();
+   }
+
+   private void installPeass(final File workspaceFolder) throws InterruptedException, IOException {
+      final File logFile = new File(workspaceFolder, "installPeassLog.txt");
+      LOG.info("Installing peass. Log goes to {}", logFile.getAbsolutePath());
+
+      final ProcessBuilder builder = new ProcessBuilder("mvn", "install", "-DskipTests")
+            .directory(new File(workspaceFolder.getAbsolutePath() + seperator + ".." + seperator + "peass"))
+            .redirectOutput(logFile);
+      builder.start().waitFor();
    }
 
 }
