@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jenkinsci.remoting.RoleChecker;
 
 import de.peass.ci.ContinuousExecutor;
@@ -16,6 +18,8 @@ import hudson.remoting.VirtualChannel;
 public class RemoteMeasurer implements FileCallable<Boolean> {
 
    private static final long serialVersionUID = 5145199366806250594L;
+
+   private static final Logger LOG = LogManager.getLogger();
 
    private final MeasurementConfiguration measurementConfig;
 
@@ -70,7 +74,7 @@ public class RemoteMeasurer implements FileCallable<Boolean> {
       }
 
       if (!kopemeAndKiekerExist(kopeme, kieker)) {
-         System.out.println("Not existing!");
+         LOG.warn("Kopeme and/or Kieker dependencies could still not be found! Build will possibly fail!");
       }
    }
 
@@ -79,7 +83,7 @@ public class RemoteMeasurer implements FileCallable<Boolean> {
    }
 
    private void cloneAndinstallPeass(final File workspaceFolder) throws InterruptedException, IOException {
-      System.out.println("Kopeme and/or Kieker dependencies could not be found. Installing peass.");
+      LOG.warn("Kopeme and/or Kieker dependencies could not be found. Installing peass.");
       final String seperator = File.separator;
       final ProcessBuilder builder = new ProcessBuilder("git", "clone", "https://github.com/DaGeRe/peass")
             .directory(new File(workspaceFolder.getAbsolutePath() + seperator + ".."));
