@@ -64,7 +64,7 @@ public class RemoteMeasurer implements FileCallable<Boolean> {
 
    private void checkKopemeAndKieker(final File workspaceFolder) throws InterruptedException, IOException {
 
-      final String home = System.getenv("user.home");
+      final String home = System.getProperty("user.home");
 
       final String mavenRepo = home + seperator + ".m2" + seperator + "repository" + seperator;
 
