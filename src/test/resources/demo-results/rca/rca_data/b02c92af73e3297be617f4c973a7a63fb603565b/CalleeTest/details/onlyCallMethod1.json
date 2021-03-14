@@ -19,7 +19,6 @@
   },
   "causeConfig" : {
     "useAggregation" : true,
-    "saveAll" : true,
     "splitAggregated" : true,
     "minTime" : 0.01,
     "ignoreEOIs" : true,
