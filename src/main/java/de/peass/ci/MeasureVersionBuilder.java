@@ -73,6 +73,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private boolean executeRCA = true;
    private RCAStrategy measurementMode = RCAStrategy.LEVELWISE;
    private boolean executeParallel = false;
+   private boolean executeBeforeClassInMeasurement = false;
 
    private boolean useSourceInstrumentation = true;
    private boolean useSampling = true;
@@ -121,7 +122,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
    private void rca(final Run<?, ?> run, final FilePath workspace, final TaskListener listener, final File localWorkspace, final MeasurementConfiguration configWithRealGitVersions,
          final ProjectChanges changes) throws IOException, InterruptedException, Exception {
-      final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(null, true, true, true, 0.01, false, true, measurementMode);
+      final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(null, true, true, 0.01, false, true, measurementMode);
 
       RemoteRCA remoteRCAExecutor = new RemoteRCA(configWithRealGitVersions, causeSearcherConfig, changes, listener);
       boolean rcaWorked = workspace.act(remoteRCAExecutor);
@@ -345,6 +346,14 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    @DataBoundSetter
    public void setExecuteRCA(final boolean executeRCA) {
       this.executeRCA = executeRCA;
+   }
+
+   public boolean isExecuteBeforeClassInMeasurement() {
+      return executeBeforeClassInMeasurement;
+   }
+
+   public void setExecuteBeforeClassInMeasurement(final boolean executeBeforeClassInMeasurement) {
+      this.executeBeforeClassInMeasurement = executeBeforeClassInMeasurement;
    }
 
    public RCAStrategy getMeasurementMode() {
