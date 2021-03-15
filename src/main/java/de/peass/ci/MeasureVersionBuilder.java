@@ -64,7 +64,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private int warmup;
    private int repetitions;
    private int timeout = 5;
-   private double significanceLevel;
+   private double significanceLevel = 0.01;
 
    private int versionDiff = 1;
    private boolean useGC;
