@@ -99,12 +99,12 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          try (JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
             final MeasurementConfiguration configWithRealGitVersions = generateMeasurementConfig(workspace, listener);
             boolean worked = measure(workspace, listener, configWithRealGitVersions);
-            
+
             if (!worked) {
                run.setResult(Result.FAILURE);
                return;
             }
-            
+
             copyFromRemote(workspace, listener, localWorkspace);
 
             ProjectChanges changes = visualizeMeasurementData(run, localWorkspace, configWithRealGitVersions);
@@ -221,6 +221,9 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    }
 
    private MeasurementConfiguration getMeasurementConfig() {
+      if (significanceLevel == 0.0) {
+         significanceLevel = 0.01;
+      }
       final MeasurementConfiguration config = new MeasurementConfiguration(timeout * 60 * 1000, VMs, significanceLevel, 0.01);
       config.setIterations(iterations);
       config.setWarmup(warmup);
