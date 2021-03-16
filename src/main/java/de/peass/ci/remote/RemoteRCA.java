@@ -11,7 +11,7 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.jenkinsci.remoting.RoleChecker;
 
 import de.peass.analysis.changes.ProjectChanges;
-import de.peass.ci.ContinuousExecutor;
+import de.peass.ci.ContinuousFolderUtil;
 import de.peass.ci.LogRedirector;
 import de.peass.ci.helper.RCAExecutor;
 import de.peass.config.MeasurementConfiguration;
@@ -48,7 +48,7 @@ public class RemoteRCA implements FileCallable<Boolean>, Serializable {
       final File logFile = new File(workspaceFolder, "rca_" + measurementConfig.getVersion() + ".txt");
       listener.getLogger().println("Executing root cause analysis - Log goes to " + logFile.getAbsolutePath());
       try (LogRedirector director = new LogRedirector(logFile)) {
-         File localFolder = ContinuousExecutor.getLocalFolder(workspaceFolder);
+         File localFolder = ContinuousFolderUtil.getLocalFolder(workspaceFolder);
          File projectFolderLocal = new File(localFolder, workspaceFolder.getName());
          final RCAExecutor rcaExecutor = new RCAExecutor(measurementConfig, projectFolderLocal, changes, causeConfig);
          rcaExecutor.executeRCAs();

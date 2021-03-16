@@ -155,7 +155,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    }
 
    private void copyFromRemote(final FilePath workspace, final TaskListener listener, final File localWorkspace) throws IOException, InterruptedException {
-      String remotePeassPath = ContinuousExecutor.getLocalFolder(new File(workspace.getRemote())).getPath();
+      String remotePeassPath = ContinuousFolderUtil.getLocalFolder(new File(workspace.getRemote())).getPath();
       listener.getLogger().println("Remote Peass path: " + remotePeassPath);
       FilePath remotePeassFolder = new FilePath(workspace.getChannel(), remotePeassPath);
       int count = remotePeassFolder.copyRecursiveTo(new FilePath(localWorkspace));
