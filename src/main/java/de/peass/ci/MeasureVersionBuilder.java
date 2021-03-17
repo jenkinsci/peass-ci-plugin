@@ -64,7 +64,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private int warmup;
    private int repetitions;
    private int timeout = 5;
-   private double significanceLevel;
+   private double significanceLevel = 0.01;
 
    private int versionDiff = 1;
    private boolean useGC;
@@ -99,12 +99,12 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          try (JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
             final MeasurementConfiguration configWithRealGitVersions = generateMeasurementConfig(workspace, listener);
             boolean worked = measure(workspace, listener, configWithRealGitVersions);
-            
+
             if (!worked) {
                run.setResult(Result.FAILURE);
                return;
             }
-            
+
             copyFromRemote(workspace, listener, localWorkspace);
 
             ProjectChanges changes = visualizeMeasurementData(run, localWorkspace, configWithRealGitVersions);
@@ -155,7 +155,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    }
 
    private void copyFromRemote(final FilePath workspace, final TaskListener listener, final File localWorkspace) throws IOException, InterruptedException {
-      String remotePeassPath = ContinuousExecutor.getLocalFolder(new File(workspace.getRemote())).getPath();
+      String remotePeassPath = ContinuousFolderUtil.getLocalFolder(new File(workspace.getRemote())).getPath();
       listener.getLogger().println("Remote Peass path: " + remotePeassPath);
       FilePath remotePeassFolder = new FilePath(workspace.getChannel(), remotePeassPath);
       int count = remotePeassFolder.copyRecursiveTo(new FilePath(localWorkspace));
@@ -221,6 +221,9 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    }
 
    private MeasurementConfiguration getMeasurementConfig() {
+      if (significanceLevel == 0.0) {
+         significanceLevel = 0.01;
+      }
       final MeasurementConfiguration config = new MeasurementConfiguration(timeout * 60 * 1000, VMs, significanceLevel, 0.01);
       config.setIterations(iterations);
       config.setWarmup(warmup);
