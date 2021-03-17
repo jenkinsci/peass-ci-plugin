@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 public class SnapshotDependencyChecker {
    
-   private static final Logger LOG = LogManager.getLogger();
+   private static final Logger LOG = LogManager.getLogger(SnapshotDependencyChecker.class);
    private static final String seperator = File.separator;
    
    protected static void checkKopemeAndKieker(final File workspaceFolder) throws InterruptedException, IOException {
