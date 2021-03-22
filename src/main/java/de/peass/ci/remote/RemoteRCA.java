@@ -17,26 +17,29 @@ import de.peass.ci.helper.RCAExecutor;
 import de.peass.config.MeasurementConfiguration;
 import de.peass.dependencyprocessors.ViewNotFoundException;
 import de.peass.measurement.rca.CauseSearcherConfig;
+import hudson.EnvVars;
 import hudson.FilePath.FileCallable;
 import hudson.model.TaskListener;
 import hudson.remoting.VirtualChannel;
 import kieker.analysis.exception.AnalysisConfigurationException;
 
 public class RemoteRCA implements FileCallable<Boolean>, Serializable {
-   
+
    private static final long serialVersionUID = 5375409887559433077L;
-   
+
    private final MeasurementConfiguration measurementConfig;
    private final CauseSearcherConfig causeConfig;
    private final ProjectChanges changes;
-
+   private final EnvVars env;
    private final TaskListener listener;
 
-   public RemoteRCA(final MeasurementConfiguration measurementConfig, final CauseSearcherConfig causeConfig, final ProjectChanges changes, final TaskListener listener) {
+   public RemoteRCA(final MeasurementConfiguration measurementConfig, final CauseSearcherConfig causeConfig, final ProjectChanges changes, final TaskListener listener,
+         final EnvVars env) {
       this.measurementConfig = measurementConfig;
       this.causeConfig = causeConfig;
       this.changes = changes;
       this.listener = listener;
+      this.env = env;
    }
 
    @Override
@@ -50,7 +53,7 @@ public class RemoteRCA implements FileCallable<Boolean>, Serializable {
       try (LogRedirector director = new LogRedirector(logFile)) {
          File localFolder = ContinuousFolderUtil.getLocalFolder(workspaceFolder);
          File projectFolderLocal = new File(localFolder, workspaceFolder.getName());
-         final RCAExecutor rcaExecutor = new RCAExecutor(measurementConfig, projectFolderLocal, changes, causeConfig);
+         final RCAExecutor rcaExecutor = new RCAExecutor(measurementConfig, projectFolderLocal, changes, causeConfig, env);
          rcaExecutor.executeRCAs();
          return true;
       } catch (XmlPullParserException | AnalysisConfigurationException | ViewNotFoundException | JAXBException e) {

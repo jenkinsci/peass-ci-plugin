@@ -87,7 +87,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          try (JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
             final MeasurementConfiguration configWithRealGitVersions = generateMeasurementConfig(workspace, listener);
             
-            final LocalPeassProcessManager processManager = new LocalPeassProcessManager(workspace, localWorkspace, listener, configWithRealGitVersions);
+            final LocalPeassProcessManager processManager = new LocalPeassProcessManager(workspace, localWorkspace, listener, configWithRealGitVersions, env);
             boolean worked = processManager.measure();
 
             if (!worked) {

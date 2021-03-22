@@ -9,6 +9,7 @@ import org.jenkinsci.remoting.RoleChecker;
 import de.peass.ci.ContinuousExecutor;
 import de.peass.ci.JenkinsLogRedirector;
 import de.peass.config.MeasurementConfiguration;
+import hudson.EnvVars;
 import hudson.FilePath.FileCallable;
 import hudson.model.TaskListener;
 import hudson.remoting.VirtualChannel;
@@ -18,12 +19,14 @@ public class RemoteMeasurer implements FileCallable<Boolean> {
    private static final long serialVersionUID = 5145199366806250594L;
 
    private final MeasurementConfiguration measurementConfig;
+   private final EnvVars envVars;
 
    private final TaskListener listener;
 
-   public RemoteMeasurer(final MeasurementConfiguration measurementConfig, final TaskListener listener) {
+   public RemoteMeasurer(final MeasurementConfiguration measurementConfig, final TaskListener listener, final EnvVars envVars) {
       this.measurementConfig = measurementConfig;
       this.listener = listener;
+      this.envVars = envVars;
    }
 
    @Override
@@ -40,8 +43,7 @@ public class RemoteMeasurer implements FileCallable<Boolean> {
           * This is just a workaround until all dependencies are available in maven central repository.
           */
          SnapshotDependencyChecker.checkKopemeAndKieker(workspaceFolder);
-
-         final ContinuousExecutor executor = new ContinuousExecutor(workspaceFolder, measurementConfig, 1, true);
+         final ContinuousExecutor executor = new ContinuousExecutor(workspaceFolder, measurementConfig, 1, true, envVars);
          executor.execute();
          return true;
       } catch (Throwable e) {

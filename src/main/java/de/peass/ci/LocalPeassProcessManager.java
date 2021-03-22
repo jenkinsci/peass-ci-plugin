@@ -22,26 +22,29 @@ import de.peass.measurement.analysis.ProjectStatistics;
 import de.peass.measurement.rca.CauseSearcherConfig;
 import de.peass.measurement.rca.RCAStrategy;
 import de.peass.utils.Constants;
+import hudson.EnvVars;
 import hudson.FilePath;
 import hudson.model.Result;
 import hudson.model.Run;
 import hudson.model.TaskListener;
 
 public class LocalPeassProcessManager {
-   final FilePath workspace;
-   File localWorkspace;
-   final TaskListener listener;
-   final MeasurementConfiguration configWithRealGitVersions;
+   private final FilePath workspace;
+   private final File localWorkspace;
+   private final TaskListener listener;
+   private final MeasurementConfiguration configWithRealGitVersions;
+   private final EnvVars envVars;
 
-   public LocalPeassProcessManager(final FilePath workspace, final File localWorkspace, final TaskListener listener, final MeasurementConfiguration configWithRealGitVersions) {
+   public LocalPeassProcessManager(final FilePath workspace, final File localWorkspace, final TaskListener listener, final MeasurementConfiguration configWithRealGitVersions, final EnvVars envVars) {
       this.workspace = workspace;
       this.localWorkspace = localWorkspace;
       this.listener = listener;
       this.configWithRealGitVersions = configWithRealGitVersions;
+      this.envVars = envVars;
    }
 
    public boolean measure() throws IOException, InterruptedException {
-      final RemoteMeasurer remotePerformer = new RemoteMeasurer(configWithRealGitVersions, listener);
+      final RemoteMeasurer remotePerformer = new RemoteMeasurer(configWithRealGitVersions, listener, envVars);
       boolean worked = workspace.act(remotePerformer);
       listener.getLogger().println("First stage result: " + worked);
       return worked;
@@ -94,7 +97,7 @@ public class LocalPeassProcessManager {
    public void rca(final Run<?, ?> run, final ProjectChanges changes, final RCAStrategy rcaStrategy) throws IOException, InterruptedException, Exception {
       final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(null, true, true, 0.01, false, true, rcaStrategy);
 
-      RemoteRCA remoteRCAExecutor = new RemoteRCA(configWithRealGitVersions, causeSearcherConfig, changes, listener);
+      RemoteRCA remoteRCAExecutor = new RemoteRCA(configWithRealGitVersions, causeSearcherConfig, changes, listener, envVars);
       boolean rcaWorked = workspace.act(remoteRCAExecutor);
       if (!rcaWorked) {
          run.setResult(Result.FAILURE);
