@@ -275,6 +275,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public boolean isExecuteRCA() {
       return executeRCA;
    }
+   
+   @DataBoundSetter
+   public void setProperties(final String properties) {
+      this.properties = properties;
+   }
+   
+   public String getProperties() {
+      return properties;
+   }
 
    @DataBoundSetter
    public void setExecuteRCA(final boolean executeRCA) {
