@@ -16,18 +16,20 @@ import de.peass.utils.Constants;
 import hudson.model.Run;
 
 public class TrendFileUtil {
-   
+
    public static final String TREND_FILE_NAME = "trend.json";
-   
+
    public static void persistTrend(final Run<?, ?> run, final File localWorkspace, final ProjectStatistics statistics)
          throws IOException, JsonParseException, JsonMappingException, JsonGenerationException {
       File trendFile = new File(localWorkspace, TREND_FILE_NAME);
       BuildMeasurementValues values = getValues(trendFile);
-      if (values.getValues().size() == 0) {
-         addFakePredecessorStatistics(run, statistics, values);
+      if (statistics.getStatistics().size() > 0) {
+         if (values.getValues().size() == 0) {
+            addFakePredecessorStatistics(run, statistics, values);
+         }
+         values.addMeasurement(statistics, run.getNumber());
+         Constants.OBJECTMAPPER.writeValue(trendFile, values);
       }
-      values.addMeasurement(statistics, run.getNumber());
-      Constants.OBJECTMAPPER.writeValue(trendFile, values);
    }
 
    private static void addFakePredecessorStatistics(final Run<?, ?> run, final ProjectStatistics statistics, final BuildMeasurementValues values) {
@@ -40,7 +42,7 @@ public class TrendFileUtil {
          predecessor.setMeanCurrent(entry.getValue().getMeanOld());
          predecessor.setDeviationCurrent(entry.getValue().getDeviationOld());
          predecessor.setVMs(entry.getValue().getVMs());
-         fakePredecessorStatistics.addMeasurement(version+"~1", entry.getKey(), predecessor);
+         fakePredecessorStatistics.addMeasurement(version + "~1", entry.getKey(), predecessor);
       }
       values.addMeasurement(fakePredecessorStatistics, run.getNumber() - 1);
    }
