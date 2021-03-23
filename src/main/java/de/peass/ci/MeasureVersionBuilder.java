@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 
@@ -21,6 +22,7 @@ import de.peass.ci.remote.RemoteVersionReader;
 import de.peass.config.MeasurementConfiguration;
 import de.peass.config.MeasurementStrategy;
 import de.peass.dependency.analysis.data.TestCase;
+import de.peass.dependency.execution.EnvironmentVariables;
 import de.peass.measurement.rca.RCAStrategy;
 import de.peass.utils.Constants;
 import hudson.EnvVars;
@@ -58,6 +60,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private boolean useGC;
 
    private String includes = "";
+   private String properties = "";
    private boolean executeRCA = true;
    private RCAStrategy measurementMode = RCAStrategy.LEVELWISE;
    private boolean executeParallel = false;
@@ -87,7 +90,12 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          try (JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
             final MeasurementConfiguration configWithRealGitVersions = generateMeasurementConfig(workspace, listener);
             
-            final LocalPeassProcessManager processManager = new LocalPeassProcessManager(workspace, localWorkspace, listener, configWithRealGitVersions, env);
+            EnvironmentVariables peassEnv = new EnvironmentVariables(properties);
+            for (Map.Entry<String, String> entry : env.entrySet()) {
+               peassEnv.getEnvironmentVariables().put(entry.getKey(), entry.getValue());
+            }
+            
+            final LocalPeassProcessManager processManager = new LocalPeassProcessManager(workspace, localWorkspace, listener, configWithRealGitVersions, peassEnv);
             boolean worked = processManager.measure();
 
             if (!worked) {

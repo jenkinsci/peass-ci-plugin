@@ -9,7 +9,7 @@ import org.jenkinsci.remoting.RoleChecker;
 import de.peass.ci.ContinuousExecutor;
 import de.peass.ci.JenkinsLogRedirector;
 import de.peass.config.MeasurementConfiguration;
-import hudson.EnvVars;
+import de.peass.dependency.execution.EnvironmentVariables;
 import hudson.FilePath.FileCallable;
 import hudson.model.TaskListener;
 import hudson.remoting.VirtualChannel;
@@ -19,11 +19,11 @@ public class RemoteMeasurer implements FileCallable<Boolean> {
    private static final long serialVersionUID = 5145199366806250594L;
 
    private final MeasurementConfiguration measurementConfig;
-   private final EnvVars envVars;
+   private final EnvironmentVariables envVars;
 
    private final TaskListener listener;
 
-   public RemoteMeasurer(final MeasurementConfiguration measurementConfig, final TaskListener listener, final EnvVars envVars) {
+   public RemoteMeasurer(final MeasurementConfiguration measurementConfig, final TaskListener listener, final EnvironmentVariables envVars) {
       this.measurementConfig = measurementConfig;
       this.listener = listener;
       this.envVars = envVars;

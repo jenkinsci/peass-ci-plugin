@@ -15,9 +15,9 @@ import de.peass.ci.ContinuousFolderUtil;
 import de.peass.ci.LogRedirector;
 import de.peass.ci.helper.RCAExecutor;
 import de.peass.config.MeasurementConfiguration;
+import de.peass.dependency.execution.EnvironmentVariables;
 import de.peass.dependencyprocessors.ViewNotFoundException;
 import de.peass.measurement.rca.CauseSearcherConfig;
-import hudson.EnvVars;
 import hudson.FilePath.FileCallable;
 import hudson.model.TaskListener;
 import hudson.remoting.VirtualChannel;
@@ -30,11 +30,11 @@ public class RemoteRCA implements FileCallable<Boolean>, Serializable {
    private final MeasurementConfiguration measurementConfig;
    private final CauseSearcherConfig causeConfig;
    private final ProjectChanges changes;
-   private final EnvVars env;
+   private final EnvironmentVariables env;
    private final TaskListener listener;
 
    public RemoteRCA(final MeasurementConfiguration measurementConfig, final CauseSearcherConfig causeConfig, final ProjectChanges changes, final TaskListener listener,
-         final EnvVars env) {
+         final EnvironmentVariables env) {
       this.measurementConfig = measurementConfig;
       this.causeConfig = causeConfig;
       this.changes = changes;

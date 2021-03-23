@@ -18,11 +18,11 @@ import de.peass.ci.persistence.TrendFileUtil;
 import de.peass.ci.remote.RemoteMeasurer;
 import de.peass.ci.remote.RemoteRCA;
 import de.peass.config.MeasurementConfiguration;
+import de.peass.dependency.execution.EnvironmentVariables;
 import de.peass.measurement.analysis.ProjectStatistics;
 import de.peass.measurement.rca.CauseSearcherConfig;
 import de.peass.measurement.rca.RCAStrategy;
 import de.peass.utils.Constants;
-import hudson.EnvVars;
 import hudson.FilePath;
 import hudson.model.Result;
 import hudson.model.Run;
@@ -33,9 +33,9 @@ public class LocalPeassProcessManager {
    private final File localWorkspace;
    private final TaskListener listener;
    private final MeasurementConfiguration configWithRealGitVersions;
-   private final EnvVars envVars;
+   private final EnvironmentVariables envVars;
 
-   public LocalPeassProcessManager(final FilePath workspace, final File localWorkspace, final TaskListener listener, final MeasurementConfiguration configWithRealGitVersions, final EnvVars envVars) {
+   public LocalPeassProcessManager(final FilePath workspace, final File localWorkspace, final TaskListener listener, final MeasurementConfiguration configWithRealGitVersions, final EnvironmentVariables envVars) {
       this.workspace = workspace;
       this.localWorkspace = localWorkspace;
       this.listener = listener;

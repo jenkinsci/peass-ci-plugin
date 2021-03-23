@@ -3,7 +3,6 @@ package de.peass.ci.helper;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.xml.bind.JAXBException;
@@ -31,7 +30,6 @@ import de.peass.measurement.rca.data.CauseSearchData;
 import de.peass.measurement.rca.kieker.BothTreeReader;
 import de.peass.measurement.rca.searcher.CauseSearcher;
 import de.peass.utils.Constants;
-import hudson.EnvVars;
 import kieker.analysis.exception.AnalysisConfigurationException;
 
 public class RCAExecutor {
@@ -42,10 +40,10 @@ public class RCAExecutor {
    private final File projectFolder;
    private final ProjectChanges changes;
    private final CauseSearcherConfig causeConfig;
-   private final EnvVars env;
+   private final EnvironmentVariables env;
 
    public RCAExecutor(final MeasurementConfiguration config, final File workspaceFolder, final ProjectChanges changes, final CauseSearcherConfig causeConfig,
-         final EnvVars env) {
+         final EnvironmentVariables env) {
       this.config = config;
       this.projectFolder = workspaceFolder;
       this.changes = changes;
@@ -135,11 +133,7 @@ public class RCAExecutor {
       config.setUseKieker(true);
 
       final CauseSearchFolders alternateFolders = new CauseSearchFolders(projectFolder);
-      EnvironmentVariables peassEnv = new EnvironmentVariables();
-      for (Map.Entry<String, String> environment : env.entrySet()) {
-         peassEnv.getEnvironmentVariables().put(environment.getKey(), environment.getValue());
-      }
-      final BothTreeReader reader = new BothTreeReader(causeSearcherConfig, config, alternateFolders, peassEnv);
+      final BothTreeReader reader = new BothTreeReader(causeSearcherConfig, config, alternateFolders, env);
 
       CauseSearcher tester = RootCauseAnalysis.getCauseSeacher(config, causeSearcherConfig, alternateFolders, reader);
       tester.search();
