@@ -47,12 +47,24 @@ public class SnapshotDependencyChecker {
             .redirectError(logFile);
       builder.start().waitFor();
    }
+   
+   private static String getMavenCall() {
+      String mvnCall;
+      if (!System.getProperty("os.name").startsWith("Windows")) {
+         mvnCall = "./mvnw";
+      } else {
+         mvnCall = "mvnw.cmd";
+      }
+      return mvnCall;
+   }
 
    private static void installPeass(final File workspaceFolder) throws InterruptedException, IOException {
       final File logFile = new File(workspaceFolder, "installPeassLog.txt");
       LOG.info("Installing peass. Log goes to {}", logFile.getAbsolutePath());
 
-      final ProcessBuilder builder = new ProcessBuilder("mvn", "install", "-DskipTests")
+      String mavenWrapperName = getMavenCall();
+      
+      final ProcessBuilder builder = new ProcessBuilder(mavenWrapperName, "install", "-DskipTests")
             .directory(new File(workspaceFolder.getAbsolutePath() + seperator + ".." + seperator + "peass"))
             .redirectOutput(logFile);
       builder.start().waitFor();
