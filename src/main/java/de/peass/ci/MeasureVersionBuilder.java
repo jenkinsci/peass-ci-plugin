@@ -134,6 +134,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       listener.getLogger().println("VMs: " + VMs + " Iterations: " + iterations + " Warmup: " + warmup + " Repetitions: " + repetitions);
       listener.getLogger().println("Includes: " + includes + " RCA: " + executeRCA);
       listener.getLogger().println("Strategy: " + measurementMode + " Source Instrumentation: " + useSourceInstrumentation + " Sampling: " + useSampling);
+      listener.getLogger().println("Create default constructor: " + createDefaultConstructor);
    }
 
    private String getJobName(final Run<?, ?> run) {
