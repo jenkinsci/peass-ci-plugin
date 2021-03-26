@@ -68,6 +68,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
    private boolean useSourceInstrumentation = true;
    private boolean useSampling = true;
+   private boolean createDefaultConstructor = true;
 
    @DataBoundConstructor
    public MeasureVersionBuilder() {
@@ -160,6 +161,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       config.setRepetitions(repetitions);
       config.setUseGC(useGC);
       config.setEarlyStop(false);
+      config.setCreateDefaultConstructor(createDefaultConstructor);
       if (executeParallel) {
          System.out.println("Measuring parallel");
          config.setMeasurementStrategy(MeasurementStrategy.PARALLEL);
@@ -332,6 +334,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    @DataBoundSetter
    public void setExecuteParallel(final boolean executeParallel) {
       this.executeParallel = executeParallel;
+   }
+     
+   public boolean isCreateDefaultConstructor() {
+      return createDefaultConstructor;
+   }
+   
+   @DataBoundSetter
+   public void setCreateDefaultConstructor(final boolean createDefaultConstructor) {
+      this.createDefaultConstructor = createDefaultConstructor;
    }
 
    @Symbol("measure")
