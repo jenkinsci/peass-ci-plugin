@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jenkinsci.remoting.RoleChecker;
 
 import de.peass.ci.ContinuousExecutor;
@@ -15,6 +17,8 @@ import hudson.model.TaskListener;
 import hudson.remoting.VirtualChannel;
 
 public class RemoteMeasurer implements FileCallable<Boolean> {
+   
+   private static final Logger LOG = LogManager.getLogger(RemoteMeasurer.class);
 
    private static final long serialVersionUID = 5145199366806250594L;
 
@@ -36,7 +40,7 @@ public class RemoteMeasurer implements FileCallable<Boolean> {
    @Override
    public Boolean invoke(final File workspaceFolder, final VirtualChannel channel) throws IOException, InterruptedException {
       try (final JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
-         System.out.println("Starting remote invocation, VMs: " + measurementConfig.getVms());
+         LOG.info("Starting remote invocation, VMs: " + measurementConfig.getVms());
          // if (true) throw new RuntimeException("Finish with stupid exception");
 
          /*
