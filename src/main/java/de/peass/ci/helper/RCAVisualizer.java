@@ -70,13 +70,26 @@ public class RCAVisualizer {
 
    private VisualizeRCA preparePeassVisualizer(final File resultFolder) {
       VisualizeRCA visualizer = new VisualizeRCA();
-      File dataFolder = new File(localWorkspace, run.getParent().getFullDisplayName() + "_peass");
+      File dataFolder = getDataFolder();
       visualizer.setData(new File[] { dataFolder });
       File propertyFolder = new File(localWorkspace, "properties");
       LOG.info("Setting property folder: " + propertyFolder);
       visualizer.setPropertyFolder(propertyFolder);
       visualizer.setResultFolder(resultFolder);
       return visualizer;
+   }
+
+   private File getDataFolder() {
+      String rcaResultFolder = run.getParent().getFullDisplayName() + "_peass";
+      File dataFolder = new File(localWorkspace, rcaResultFolder);
+      if (!dataFolder.exists()) {
+         dataFolder = new File(localWorkspace, "workspace_peass");
+         if (!dataFolder.exists()) {
+            throw new RuntimeException(
+                  localWorkspace.getAbsolutePath() + " neither contains workspace_peass nor " + rcaResultFolder + "; one must exist for visualization!");
+         }
+      }
+      return dataFolder;
    }
 
    private void createVisualizationActions(final File rcaResults, final Changes versionChanges, final File versionVisualizationFolder) throws IOException {
