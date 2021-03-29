@@ -10,10 +10,10 @@
             <st:include page="sidepanel.jelly" it="${it.run}" optional="true" /> 
         </l:side-panel>
         <l:main-panel>
-        	<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-			<script src="https://cdn.jsdelivr.net/npm/jstat@latest/dist/jstat.min.js"></script>
-			<script src="${rootURL}/plugin/peass-ci/js/jsGraphSource.js"></script>
+        	<script type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+			<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+			<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jstat@latest/dist/jstat.min.js"></script>
+			<script type="text/javascript" src="${rootURL}/plugin/peass-ci/js/jsGraphSource.js"></script>
 			
 			<div  class='part' style='float:left; width:45%; height: 47%'>
 				<div id='overallHistogram' style="width:95%; height: 90%">
@@ -61,7 +61,7 @@
 			<script>
 			  ${dataJS}
 			</script>	
-			<script src="${rootURL}/plugin/peass-ci/js/peass-dashboard-start.js"/>	
+			<script type="text/javascript" src="${rootURL}/plugin/peass-ci/js/peass-dashboard-start.js"/>	
         </l:main-panel>
     </l:layout>
 </j:jelly>
