@@ -42,6 +42,10 @@
            description="${%propertiesDescr}">
             <f:textbox  default=""/>
         </f:entry>
+        <f:entry title="${%testGoal}" field="testGoal"
+           description="${%testGoalDescr}">
+            <f:textbox  default=""/>
+        </f:entry>
         <f:entry title="${%versionDiff}" field="versionDiff"
                  description="${%versionDiffDescr}">
             <f:textbox default="1" />

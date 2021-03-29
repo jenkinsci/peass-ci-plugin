@@ -61,6 +61,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
    private String includes = "";
    private String properties = "";
+   private String testGoal = "test";
    private boolean executeRCA = true;
    private RCAStrategy measurementMode = RCAStrategy.LEVELWISE;
    private boolean executeParallel = false;
@@ -189,8 +190,12 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       config.setVersionOld("HEAD~" + versionDiff);
 
       config.setIncludes(getIncludeList());
+      
+      if (testGoal != null && !"".equals(testGoal)) {
+         config.setTestGoal(testGoal);
+      }
 
-      System.out.println("Building, iterations: " + iterations);
+      System.out.println("Building, iterations: " + iterations + " test goal: " + testGoal);
       return config;
    }
 
@@ -286,6 +291,14 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    
    public String getProperties() {
       return properties;
+   }
+
+   public String getTestGoal() {
+      return testGoal;
+   }
+
+   public void setTestGoal(final String testGoal) {
+      this.testGoal = testGoal;
    }
 
    @DataBoundSetter
