@@ -297,6 +297,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       return testGoal;
    }
 
+   @DataBoundSetter
    public void setTestGoal(final String testGoal) {
       this.testGoal = testGoal;
    }
