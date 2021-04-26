@@ -63,6 +63,7 @@ public class SnapshotDependencyChecker {
       File parentFolder = workspaceFolder.getParentFile();
       final ProcessBuilder builder = new ProcessBuilder("git", "clone", "--progress", "https://github.com/DaGeRe/peass")
             .directory(parentFolder)
+            .redirectOutput(logFile)
             .redirectError(logFile);
       builder.start().waitFor();
    }
@@ -86,7 +87,8 @@ public class SnapshotDependencyChecker {
       File directory = new File(workspaceFolder.getParentFile(), "peass");
       final ProcessBuilder builder = new ProcessBuilder(mavenWrapperName, "install", "-DskipTests")
             .directory(directory)
-            .redirectOutput(logFile);
+            .redirectOutput(logFile)
+            .redirectError(logFile);
       builder.environment().put("MAVEN_CONFIG", "");
       // Somehow, using default set MAVEN_CONFIG lets install fail: https://github.com/aws/aws-codebuild-docker-images/issues/237
       LOG.debug("Full command: {}", builder.command());
