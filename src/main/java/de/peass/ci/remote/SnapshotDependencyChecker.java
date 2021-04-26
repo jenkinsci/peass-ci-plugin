@@ -60,8 +60,9 @@ public class SnapshotDependencyChecker {
       final File logFile = new File(workspaceFolder, "clonePeassLog.txt");
       LOG.info("Cloning peass. Log goes to {}", logFile.getAbsolutePath());
 
+      File parentFolder = workspaceFolder.getParentFile();
       final ProcessBuilder builder = new ProcessBuilder("git", "clone", "--progress", "https://github.com/DaGeRe/peass")
-            .directory(new File(workspaceFolder.getAbsolutePath() + seperator + ".."))
+            .directory(parentFolder)
             .redirectError(logFile);
       builder.start().waitFor();
    }
@@ -82,7 +83,7 @@ public class SnapshotDependencyChecker {
 
       String mavenWrapperName = getMavenCall();
 
-      File directory = new File(workspaceFolder.getAbsolutePath() + seperator + ".." + seperator + "peass");
+      File directory = new File(workspaceFolder.getParentFile(), "peass");
       final ProcessBuilder builder = new ProcessBuilder(mavenWrapperName, "install", "-DskipTests")
             .directory(directory)
             .redirectOutput(logFile);
