@@ -1,33 +1,48 @@
 package de.peass.ci.remote;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import de.peass.config.MeasurementConfiguration;
 
 public class SnapshotDependencyChecker {
 
    private static final Logger LOG = LogManager.getLogger(SnapshotDependencyChecker.class);
    private static final String seperator = File.separator;
 
-   protected static void checkKopemeAndKieker(final File workspaceFolder) throws InterruptedException, IOException {
-      final File mavenRepo = getRepository();
+   private final MeasurementConfiguration measurementConfig;
+   private final File workspaceFolder;
+   private final File kopemeFile, kiekerFile;
+   private final PrintStream output;
 
+   public SnapshotDependencyChecker(final MeasurementConfiguration measurementConfig, final File workspaceFolder, final PrintStream output) {
+      this.measurementConfig = measurementConfig;
+      this.workspaceFolder = workspaceFolder;
+      this.output = output;
+
+      final File mavenRepo = getRepository();
       final File kopemeArtifactFolder = new File(mavenRepo, "de" + File.separator + "dagere" + File.separator + "kopeme" + File.separator +
             "kopeme-junit" + File.separator + "0.14-SNAPSHOT");
-      final File kopeme = new File(kopemeArtifactFolder, "kopeme-junit-0.14-SNAPSHOT.jar");
+      kopemeFile = new File(kopemeArtifactFolder, "kopeme-junit-0.14-SNAPSHOT.jar");
       File kiekerArtifactFolder = new File(mavenRepo, "net" + File.separator + "kieker-monitoring" + File.separator +
             "kieker" + File.separator + "1.15-SNAPSHOT");
-      final File kieker = new File(kiekerArtifactFolder, "kieker-1.15-SNAPSHOT-jar.jar");
+      kiekerFile = new File(kiekerArtifactFolder, "kieker-1.15-SNAPSHOT-jar.jar");
+   }
 
-      boolean snapshotDependenciesExist = kopemeAndKiekerExist(kopeme, kieker);
-      LOG.info("Snapshot dependencies existing: {} Path: {}", snapshotDependenciesExist, kopeme.getAbsolutePath());
+   public void checkKopemeAndKieker() throws InterruptedException, IOException {
+      boolean snapshotDependenciesExist = kopemeAndKiekerExist();
+      LOG.info("Snapshot dependencies existing: {} Path: {}", snapshotDependenciesExist, kopemeFile.getAbsolutePath());
       if (!snapshotDependenciesExist) {
-         cloneAndinstallPeass(workspaceFolder);
+         cloneAndinstallPeass();
       }
 
-      if (!kopemeAndKiekerExist(kopeme, kieker)) {
+      if (!kopemeAndKiekerExist()) {
          LOG.warn("Kopeme and/or Kieker dependencies could still not be found! Build will possibly fail!");
       }
    }
@@ -46,26 +61,31 @@ public class SnapshotDependencyChecker {
       return new File(mavenRepo);
    }
 
-   private static boolean kopemeAndKiekerExist(final File kopeme, final File kieker) {
-      return kopeme.exists() && kieker.exists();
+   private boolean kopemeAndKiekerExist() {
+      return kopemeFile.exists() && kiekerFile.exists();
    }
 
-   private static void cloneAndinstallPeass(final File workspaceFolder) throws InterruptedException, IOException {
+   private void cloneAndinstallPeass() throws InterruptedException, IOException {
       LOG.warn("Snapshot dependencies could not be found. Installing them.");
-      clonePeass(workspaceFolder);
-      installPeass(workspaceFolder);
+      clonePeass();
+      installPeass();
    }
 
-   private static void clonePeass(final File workspaceFolder) throws InterruptedException, IOException {
+   private void clonePeass() throws InterruptedException, IOException {
       final File logFile = new File(workspaceFolder, "clonePeassLog.txt");
-      LOG.info("Cloning peass. Log goes to {}", logFile.getAbsolutePath());
+      LOG.info("Cloning peass.");
 
       File parentFolder = workspaceFolder.getParentFile();
-      final ProcessBuilder builder = new ProcessBuilder("git", "clone", "--progress", "https://github.com/DaGeRe/peass")
-            .directory(parentFolder)
-            .redirectOutput(logFile)
-            .redirectError(logFile);
-      builder.start().waitFor();
+      File peassFolder = new File(parentFolder, "peass");
+      if (!peassFolder.exists()) {
+         ProcessBuilder builder = new ProcessBuilder("git", "clone", "--progress", "https://github.com/DaGeRe/peass")
+               .directory(parentFolder);
+         setRedirection(logFile, builder);
+      } else {
+         ProcessBuilder builder = new ProcessBuilder("git", "pull")
+               .directory(peassFolder);
+         setRedirection(logFile, builder);
+      }
    }
 
    private static String getMavenCall() {
@@ -78,21 +98,42 @@ public class SnapshotDependencyChecker {
       return mvnCall;
    }
 
-   private static void installPeass(final File workspaceFolder) throws InterruptedException, IOException {
+   private void installPeass() throws InterruptedException, IOException {
       final File logFile = new File(workspaceFolder, "installPeassLog.txt");
-      LOG.info("Installing peass. Log goes to {}", logFile.getAbsolutePath());
+      LOG.info("Installing peass.");
 
       String mavenWrapperName = getMavenCall();
 
       File directory = new File(workspaceFolder.getParentFile(), "peass");
-      final ProcessBuilder builder = new ProcessBuilder(mavenWrapperName, "install", "-DskipTests")
-            .directory(directory)
-            .redirectOutput(logFile)
-            .redirectError(logFile);
-      builder.environment().put("MAVEN_CONFIG", "");
+      ProcessBuilder builder = new ProcessBuilder(mavenWrapperName, "install", "-DskipTests")
+            .directory(directory);
       // Somehow, using default set MAVEN_CONFIG lets install fail: https://github.com/aws/aws-codebuild-docker-images/issues/237
-      LOG.debug("Full command: {}", builder.command());
-      builder.start().waitFor();
+      builder.environment().put("MAVEN_CONFIG", "");
+      setRedirection(logFile, builder);
+   }
+
+   private ProcessBuilder setRedirection(final File logFile, ProcessBuilder builder) throws InterruptedException, IOException {
+      if (measurementConfig.isRedirectSubprocessOutputToFile()) {
+         LOG.debug("Log goes to {}", logFile.getAbsolutePath());
+         builder = builder.redirectOutput(logFile)
+               .redirectError(logFile);
+
+         builder.start().waitFor();
+      } else {
+         LOG.debug("Not redirecting subprocess output to file, instead inheriting");
+         builder.redirectErrorStream(true);
+
+         Process process = builder.start();
+
+         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+         String line;
+         while ((line = reader.readLine()) != null) {
+            output.println(line);
+         }
+
+         process.waitFor();
+      }
+      return builder;
    }
 
 }

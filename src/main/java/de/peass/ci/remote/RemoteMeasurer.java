@@ -46,7 +46,7 @@ public class RemoteMeasurer implements FileCallable<Boolean> {
          /*
           * This is just a workaround until all dependencies are available in maven central repository.
           */
-         SnapshotDependencyChecker.checkKopemeAndKieker(workspaceFolder);
+         new SnapshotDependencyChecker(measurementConfig, workspaceFolder, listener.getLogger()).checkKopemeAndKieker();
          final ContinuousExecutor executor = new ContinuousExecutor(workspaceFolder, measurementConfig, 1, true, envVars);
          executor.execute();
          return true;

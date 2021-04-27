@@ -70,13 +70,16 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private boolean useSourceInstrumentation = true;
    private boolean useSampling = true;
    private boolean createDefaultConstructor = true;
+   
+   private boolean redirectSubprocessOutputToFile = true;
 
    @DataBoundConstructor
    public MeasureVersionBuilder() {
    }
 
    @Override
-   public void perform(final Run<?, ?> run, final FilePath workspace, final EnvVars env, final Launcher launcher, final TaskListener listener) throws InterruptedException, IOException {
+   public void perform(final Run<?, ?> run, final FilePath workspace, final EnvVars env, final Launcher launcher, final TaskListener listener)
+         throws InterruptedException, IOException {
       if (!workspace.exists()) {
          throw new RuntimeException("Workspace folder " + workspace.toString() + " does not exist, please asure that the repository was correctly cloned!");
       } else {
@@ -91,12 +94,12 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
          try (JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
             final MeasurementConfiguration configWithRealGitVersions = generateMeasurementConfig(workspace, listener);
-            
+
             EnvironmentVariables peassEnv = new EnvironmentVariables(properties);
             for (Map.Entry<String, String> entry : env.entrySet()) {
                peassEnv.getEnvironmentVariables().put(entry.getKey(), entry.getValue());
             }
-            
+
             final LocalPeassProcessManager processManager = new LocalPeassProcessManager(workspace, localWorkspace, listener, configWithRealGitVersions, peassEnv);
             boolean worked = processManager.measure();
 
@@ -190,6 +193,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       config.setVersionOld("HEAD~" + versionDiff);
 
       config.setIncludes(getIncludeList());
+
+      config.setRedirectSubprocessOutputToFile(redirectSubprocessOutputToFile);
       
       if (testGoal != null && !"".equals(testGoal)) {
          config.setTestGoal(testGoal);
@@ -262,6 +267,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       this.versionDiff = versionDiff;
    }
 
+   public boolean isRedirectSubprocessOutputToFile() {
+      return redirectSubprocessOutputToFile;
+   }
+
+   @DataBoundSetter
+   public void setRedirectSubprocessOutputToFile(final boolean redirectSubprocessOutputToFile) {
+      this.redirectSubprocessOutputToFile = redirectSubprocessOutputToFile;
+   }
+
    public boolean isUseGC() {
       return useGC;
    }
@@ -283,12 +297,12 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public boolean isExecuteRCA() {
       return executeRCA;
    }
-   
+
    @DataBoundSetter
    public void setProperties(final String properties) {
       this.properties = properties;
    }
-   
+
    public String getProperties() {
       return properties;
    }
@@ -350,11 +364,11 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public void setExecuteParallel(final boolean executeParallel) {
       this.executeParallel = executeParallel;
    }
-     
+
    public boolean isCreateDefaultConstructor() {
       return createDefaultConstructor;
    }
-   
+
    @DataBoundSetter
    public void setCreateDefaultConstructor(final boolean createDefaultConstructor) {
       this.createDefaultConstructor = createDefaultConstructor;
