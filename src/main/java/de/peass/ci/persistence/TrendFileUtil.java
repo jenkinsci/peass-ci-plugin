@@ -9,10 +9,10 @@ import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
-import de.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.measurement.analysis.statistics.TestcaseStatistic;
+import de.dagere.peass.utils.Constants;
 import de.peass.measurement.analysis.ProjectStatistics;
-import de.peass.measurement.analysis.statistics.TestcaseStatistic;
-import de.peass.utils.Constants;
 import hudson.model.Run;
 
 public class TrendFileUtil {

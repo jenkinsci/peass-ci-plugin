@@ -8,10 +8,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jenkinsci.remoting.RoleChecker;
 
+import de.dagere.peass.config.MeasurementConfiguration;
+import de.dagere.peass.dependency.execution.EnvironmentVariables;
 import de.peass.ci.ContinuousExecutor;
 import de.peass.ci.JenkinsLogRedirector;
-import de.peass.config.MeasurementConfiguration;
-import de.peass.dependency.execution.EnvironmentVariables;
 import hudson.FilePath.FileCallable;
 import hudson.model.TaskListener;
 import hudson.remoting.VirtualChannel;

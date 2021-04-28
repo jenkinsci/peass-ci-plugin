@@ -9,7 +9,7 @@ import java.io.PrintStream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import de.peass.config.MeasurementConfiguration;
+import de.dagere.peass.config.MeasurementConfiguration;
 
 public class SnapshotDependencyChecker {
 

@@ -8,7 +8,7 @@ import javax.xml.bind.JAXBException;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.peass.config.MeasurementConfiguration;
+import de.dagere.peass.config.MeasurementConfiguration;
 
 public class TestHistogramReader {
    
