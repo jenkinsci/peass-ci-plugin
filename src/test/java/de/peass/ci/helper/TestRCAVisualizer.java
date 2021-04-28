@@ -13,10 +13,10 @@ import org.junit.rules.TemporaryFolder;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
+import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.config.MeasurementConfiguration;
 import de.dagere.peass.dependency.CauseSearchFolders;
 import de.dagere.peass.utils.Constants;
-import de.peass.analysis.changes.ProjectChanges;
 import de.peass.ci.RCAVisualizationAction;
 import hudson.model.Job;
 import hudson.model.Run;

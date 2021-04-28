@@ -11,11 +11,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import de.dagere.peass.analysis.changes.Change;
+import de.dagere.peass.analysis.changes.Changes;
+import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.config.MeasurementConfiguration;
-import de.peass.analysis.changes.Changes;
-import de.peass.analysis.changes.ProjectChanges;
+import de.dagere.peass.visualization.VisualizeRCA;
 import de.peass.ci.RCAVisualizationAction;
-import de.peass.visualization.VisualizeRCA;
 import hudson.model.Run;
 
 public class RCAVisualizer {

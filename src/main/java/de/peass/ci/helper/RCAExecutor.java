@@ -16,6 +16,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 import de.dagere.peass.RootCauseAnalysis;
 import de.dagere.peass.analysis.changes.Change;
+import de.dagere.peass.analysis.changes.Changes;
+import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.ci.NonIncludedTestRemover;
 import de.dagere.peass.config.MeasurementConfiguration;
 import de.dagere.peass.dependency.CauseSearchFolders;
@@ -28,8 +30,6 @@ import de.dagere.peass.measurement.rca.data.CauseSearchData;
 import de.dagere.peass.measurement.rca.kieker.BothTreeReader;
 import de.dagere.peass.measurement.rca.searcher.CauseSearcher;
 import de.dagere.peass.utils.Constants;
-import de.peass.analysis.changes.Changes;
-import de.peass.analysis.changes.ProjectChanges;
 import kieker.analysis.exception.AnalysisConfigurationException;
 
 public class RCAExecutor {

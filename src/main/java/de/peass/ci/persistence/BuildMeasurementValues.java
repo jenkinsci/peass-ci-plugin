@@ -7,8 +7,8 @@ import java.util.Map.Entry;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.measurement.analysis.ProjectStatistics;
 import de.dagere.peass.measurement.analysis.statistics.TestcaseStatistic;
-import de.peass.measurement.analysis.ProjectStatistics;
 
 public class BuildMeasurementValues {
    private Map<String, TestMeasurementValues> values = new LinkedHashMap<>();

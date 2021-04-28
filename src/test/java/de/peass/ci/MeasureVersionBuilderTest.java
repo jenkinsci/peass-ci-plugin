@@ -8,7 +8,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
 
-import de.peass.ci.helper.GitProjectBuilder;
+import de.dagere.peass.ci.helper.GitProjectBuilder;
 import hudson.FilePath;
 import hudson.model.FreeStyleBuild;
 import hudson.model.FreeStyleProject;
