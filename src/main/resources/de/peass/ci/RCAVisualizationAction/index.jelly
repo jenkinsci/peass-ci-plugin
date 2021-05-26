@@ -27,17 +27,17 @@
             <st:include page="sidepanel.jelly" it="${it.run}" optional="true" /> 
         </l:side-panel>
         <l:main-panel>
-        	<script src="${rootURL}/plugin/peass-ci/js/d3.v3.min.js"/>
-			<script src="${rootURL}/plugin/peass-ci/js/difflib.js"/>
-			<script src="${rootURL}/plugin/peass-ci/js/diffview.js"/>
-			<script src="${rootURL}/plugin/peass-ci/js/plotly-latest.min.js"/>
-			<script src="${rootURL}/plugin/peass-ci/js/textures.js"/>
+        	<script type="text/javascript" src="${rootURL}/plugin/peass-ci/js/d3.v3.min.js"/>
+			<script type="text/javascript" src="${rootURL}/plugin/peass-ci/js/difflib.js"/>
+			<script type="text/javascript" src="${rootURL}/plugin/peass-ci/js/diffview.js"/>
+			<script type="text/javascript" src="${rootURL}/plugin/peass-ci/js/plotly-latest.min.js"/>
+			<script type="text/javascript" src="${rootURL}/plugin/peass-ci/js/textures.js"/>
 			<link rel="stylesheet"
       			href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.4.1/build/styles/default.min.css"></link>
-			<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.4.1/build/highlight.min.js"></script>
-			<script src="http://d3js.org/d3.v3.min.js"></script>
-			<script src="https://unpkg.com/textures@1.2.0/dist/textures.js"></script>
-			<script src="${rootURL}/plugin/peass-ci/js/jsGraphSource.js"></script>	
+			<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.4.1/build/highlight.min.js"></script>
+			<script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
+			<script type="text/javascript" src="https://unpkg.com/textures@1.2.0/dist/textures.js"></script>
+			<script type="text/javascript" src="${rootURL}/plugin/peass-ci/js/jsGraphSource.js"></script>	
 			
 			<div id='header'
 				style='position: relative; width: 100%;'>

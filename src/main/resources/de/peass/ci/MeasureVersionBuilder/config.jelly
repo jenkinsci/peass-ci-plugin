@@ -38,6 +38,14 @@
            description="${%includesDescr}">
             <f:textbox  default=""/>
         </f:entry>
+        <f:entry title="${%properties}" field="properties"
+           description="${%propertiesDescr}">
+            <f:textbox  default=""/>
+        </f:entry>
+        <f:entry title="${%testGoal}" field="testGoal"
+           description="${%testGoalDescr}">
+            <f:textbox  default=""/>
+        </f:entry>
         <f:entry title="${%versionDiff}" field="versionDiff"
                  description="${%versionDiffDescr}">
             <f:textbox default="1" />
@@ -54,9 +62,21 @@
                  description="${%useGCDescr}">
             <f:checkbox />
         </f:entry>
+        <f:entry title="${%createDefaultConstructor}" field="createDefaultConstructor"
+                 description="${%createDefaultConstructorDescr}">
+            <f:checkbox />
+        </f:entry>
+        <f:entry title="${%executeBeforeClassInMeasurement}" field="executeBeforeClassInMeasurement"
+                 description="${%executeBeforeClassInMeasurementDescr}">
+            <f:checkbox />
+        </f:entry>
         <f:entry title="${%significanceLevel}" field="significanceLevel"
            description="${%significanceLevelDescr}">
             <f:textbox  default="0.01"/>
+        </f:entry>
+        <f:entry title="${%redirectSubprocessOutputToFile}" field="redirectSubprocessOutputToFile"
+                 description="${%redirectSubprocessOutputToFileDescr}">
+            <f:checkbox />
         </f:entry>
     </f:advanced>
 </j:jelly>

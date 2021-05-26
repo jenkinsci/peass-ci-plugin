@@ -28,7 +28,7 @@
                 </j:forEach>
               </table>
             <h2>Measurements</h2>
-            <script src="https://cdn.plot.ly/plotly-latest.min.js"/>
+            <script type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js"/>
             <j:forEach var="testcase" items="${it.measurements.entrySet()}">
               Testcase: 
               <j:if test="${it.testIsChanged(testcase.getKey())}">

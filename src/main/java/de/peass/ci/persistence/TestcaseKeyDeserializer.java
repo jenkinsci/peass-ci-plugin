@@ -5,7 +5,7 @@ import java.io.IOException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.KeyDeserializer;
 
-import de.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.data.TestCase;
 
 public class TestcaseKeyDeserializer extends KeyDeserializer {
 

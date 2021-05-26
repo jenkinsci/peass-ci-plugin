@@ -2,8 +2,10 @@ package de.peass.ci;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 
@@ -14,13 +16,16 @@ import org.kohsuke.stapler.QueryParameter;
 
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
+import de.dagere.peass.analysis.changes.ProjectChanges;
+import de.dagere.peass.config.MeasurementConfiguration;
+import de.dagere.peass.config.MeasurementStrategy;
+import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.execution.EnvironmentVariables;
+import de.dagere.peass.measurement.rca.RCAStrategy;
+import de.dagere.peass.utils.Constants;
 import de.peass.ci.persistence.TestcaseKeyDeserializer;
-import de.peass.config.MeasurementConfiguration;
-import de.peass.config.MeasurementStrategy;
-import de.peass.dependency.analysis.data.TestCase;
-import de.peass.measurement.rca.RCAStrategy;
-import de.peass.utils.Constants;
-import de.peass.vcs.GitUtils;
+import de.peass.ci.remote.RemoteVersionReader;
+import hudson.EnvVars;
 import hudson.Extension;
 import hudson.FilePath;
 import hudson.Launcher;
@@ -36,7 +41,9 @@ import hudson.util.ListBoxModel.Option;
 import jenkins.tasks.SimpleBuildStep;
 import net.kieker.sourceinstrumentation.AllowedKiekerRecord;
 
-public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
+public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, Serializable {
+
+   private static final long serialVersionUID = -7455227251645979702L;
 
    static {
       Constants.OBJECTMAPPER.registerModules(new SimpleModule().addKeyDeserializer(TestCase.class, new TestcaseKeyDeserializer()));
@@ -46,46 +53,96 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
    private int iterations;
    private int warmup;
    private int repetitions;
-   private int timeout;
-   private double significanceLevel;
+   private int timeout = 5;
+   private double significanceLevel = 0.01;
 
-   private int versionDiff;
+   private int versionDiff = 1;
    private boolean useGC;
 
    private String includes = "";
+   private String properties = "";
+   private String testGoal = "test";
    private boolean executeRCA = true;
    private RCAStrategy measurementMode = RCAStrategy.LEVELWISE;
    private boolean executeParallel = false;
+   private boolean executeBeforeClassInMeasurement = false;
 
    private boolean useSourceInstrumentation = true;
    private boolean useSampling = true;
+   private boolean createDefaultConstructor = true;
+   
+   private boolean redirectSubprocessOutputToFile = true;
 
    @DataBoundConstructor
-   public MeasureVersionBuilder(final String test) {
-      System.out.println("Initializing job: " + test);
+   public MeasureVersionBuilder() {
    }
 
    @Override
-   public void perform(final Run<?, ?> run, final FilePath workspace, final Launcher launcher, final TaskListener listener) throws InterruptedException, IOException {
+   public void perform(final Run<?, ?> run, final FilePath workspace, final EnvVars env, final Launcher launcher, final TaskListener listener)
+         throws InterruptedException, IOException {
       if (!workspace.exists()) {
          throw new RuntimeException("Workspace folder " + workspace.toString() + " does not exist, please asure that the repository was correctly cloned!");
       } else {
-         listener.getLogger().println("Executing on " + workspace.toString());
-         listener.getLogger().println("VMs: " + VMs + " Iterations: " + iterations + " Warmup: " + warmup + " Repetitions: " + repetitions);
-         listener.getLogger().println("Includes: " + includes + " RCA: " + executeRCA);
-         listener.getLogger().println("Strategy: " + measurementMode + " Source Instrumentation: " + useSourceInstrumentation + " Sampling: " + useSampling);
+         final File localWorkspace = new File(run.getRootDir(), ".." + File.separator + ".." + File.separator + "peass-data").getCanonicalFile();
+         printRunMetadata(run, workspace, listener, localWorkspace);
 
-         final File workspaceFolder = new File(workspace.toString());
-         
+         if (!localWorkspace.exists()) {
+            if (!localWorkspace.mkdirs()) {
+               throw new RuntimeException("Was not able to create folder");
+            }
+         }
+
          try (JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
-            ExecutionPerformer performer = new ExecutionPerformer(getConfig(workspaceFolder), executeRCA, measurementMode);
-            performer.performExecution(run, workspaceFolder);
+            final MeasurementConfiguration configWithRealGitVersions = generateMeasurementConfig(workspace, listener);
+
+            EnvironmentVariables peassEnv = new EnvironmentVariables(properties);
+            for (Map.Entry<String, String> entry : env.entrySet()) {
+               peassEnv.getEnvironmentVariables().put(entry.getKey(), entry.getValue());
+            }
+
+            final LocalPeassProcessManager processManager = new LocalPeassProcessManager(workspace, localWorkspace, listener, configWithRealGitVersions, peassEnv);
+            boolean worked = processManager.measure();
+
+            if (!worked) {
+               run.setResult(Result.FAILURE);
+               return;
+            }
+
+            processManager.copyFromRemote();
+
+            ProjectChanges changes = processManager.visualizeMeasurementData(run);
+
+            if (executeRCA) {
+               processManager.rca(run, changes, measurementMode);
+            }
          } catch (Throwable e) {
             e.printStackTrace(listener.getLogger());
             e.printStackTrace();
             run.setResult(Result.FAILURE);
          }
       }
+   }
+
+   private MeasurementConfiguration generateMeasurementConfig(final FilePath workspace, final TaskListener listener) throws IOException, InterruptedException {
+      final MeasurementConfiguration measurementConfig = getMeasurementConfig();
+      System.out.println("Startig RemoteVersionReader");
+      final RemoteVersionReader remoteVersionReader = new RemoteVersionReader(measurementConfig, listener);
+      final MeasurementConfiguration configWithRealGitVersions = workspace.act(remoteVersionReader);
+      listener.getLogger().println("Read version: " + configWithRealGitVersions.getVersion());
+      return configWithRealGitVersions;
+   }
+
+   private void printRunMetadata(final Run<?, ?> run, final FilePath workspace, final TaskListener listener, final File localWorkspace) {
+      listener.getLogger().println("Current Job: " + getJobName(run));
+      listener.getLogger().println("Local workspace " + workspace.toString() + " Run dir: " + run.getRootDir() + " Local workspace: " + localWorkspace);
+      listener.getLogger().println("VMs: " + VMs + " Iterations: " + iterations + " Warmup: " + warmup + " Repetitions: " + repetitions);
+      listener.getLogger().println("Includes: " + includes + " RCA: " + executeRCA);
+      listener.getLogger().println("Strategy: " + measurementMode + " Source Instrumentation: " + useSourceInstrumentation + " Sampling: " + useSampling);
+      listener.getLogger().println("Create default constructor: " + createDefaultConstructor);
+   }
+
+   private String getJobName(final Run<?, ?> run) {
+      return run.getParent().getFullDisplayName();
    }
 
    private List<String> getIncludeList() {
@@ -99,13 +156,17 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
       return includeList;
    }
 
-   private MeasurementConfiguration getConfig(final File workspaceFolder) {
-      final MeasurementConfiguration config = new MeasurementConfiguration(timeout, VMs, significanceLevel, 0.01);
+   private MeasurementConfiguration getMeasurementConfig() {
+      if (significanceLevel == 0.0) {
+         significanceLevel = 0.01;
+      }
+      final MeasurementConfiguration config = new MeasurementConfiguration(timeout * 60 * 1000, VMs, significanceLevel, 0.01);
       config.setIterations(iterations);
       config.setWarmup(warmup);
       config.setRepetitions(repetitions);
       config.setUseGC(useGC);
       config.setEarlyStop(false);
+      config.getExecutionConfig().setCreateDefaultConstructor(createDefaultConstructor);
       if (executeParallel) {
          System.out.println("Measuring parallel");
          config.setMeasurementStrategy(MeasurementStrategy.PARALLEL);
@@ -124,13 +185,22 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
       if (useSampling && !useSourceInstrumentation) {
          throw new RuntimeException("Sampling may only be used with source instrumentation currently.");
       }
-      
-      config.setVersion(GitUtils.getName("HEAD", workspaceFolder));
-      config.setVersionOld(GitUtils.getName("HEAD~" + versionDiff, workspaceFolder));
-      
+
+      if (versionDiff <= 0) {
+         throw new RuntimeException("The version difference should be at least 1, but was " + versionDiff);
+      }
+      config.setVersion("HEAD");
+      config.setVersionOld("HEAD~" + versionDiff);
+
       config.setIncludes(getIncludeList());
 
-      System.out.println("Building, iterations: " + iterations);
+      config.setRedirectSubprocessOutputToFile(redirectSubprocessOutputToFile);
+      
+      if (testGoal != null && !"".equals(testGoal)) {
+         config.setTestGoal(testGoal);
+      }
+
+      System.out.println("Building, iterations: " + iterations + " test goal: " + testGoal);
       return config;
    }
 
@@ -197,6 +267,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
       this.versionDiff = versionDiff;
    }
 
+   public boolean isRedirectSubprocessOutputToFile() {
+      return redirectSubprocessOutputToFile;
+   }
+
+   @DataBoundSetter
+   public void setRedirectSubprocessOutputToFile(final boolean redirectSubprocessOutputToFile) {
+      this.redirectSubprocessOutputToFile = redirectSubprocessOutputToFile;
+   }
+
    public boolean isUseGC() {
       return useGC;
    }
@@ -220,8 +299,34 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
    }
 
    @DataBoundSetter
+   public void setProperties(final String properties) {
+      this.properties = properties;
+   }
+
+   public String getProperties() {
+      return properties;
+   }
+
+   public String getTestGoal() {
+      return testGoal;
+   }
+
+   @DataBoundSetter
+   public void setTestGoal(final String testGoal) {
+      this.testGoal = testGoal;
+   }
+
+   @DataBoundSetter
    public void setExecuteRCA(final boolean executeRCA) {
       this.executeRCA = executeRCA;
+   }
+
+   public boolean isExecuteBeforeClassInMeasurement() {
+      return executeBeforeClassInMeasurement;
+   }
+
+   public void setExecuteBeforeClassInMeasurement(final boolean executeBeforeClassInMeasurement) {
+      this.executeBeforeClassInMeasurement = executeBeforeClassInMeasurement;
    }
 
    public RCAStrategy getMeasurementMode() {
@@ -258,6 +363,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep {
    @DataBoundSetter
    public void setExecuteParallel(final boolean executeParallel) {
       this.executeParallel = executeParallel;
+   }
+
+   public boolean isCreateDefaultConstructor() {
+      return createDefaultConstructor;
+   }
+
+   @DataBoundSetter
+   public void setCreateDefaultConstructor(final boolean createDefaultConstructor) {
+      this.createDefaultConstructor = createDefaultConstructor;
    }
 
    @Symbol("measure")

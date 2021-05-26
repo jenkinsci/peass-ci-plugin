@@ -3,7 +3,7 @@ package de.peass.ci.persistence;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import de.peass.measurement.analysis.statistics.TestcaseStatistic;
+import de.dagere.peass.measurement.analysis.statistics.TestcaseStatistic;
 
 public class TestMeasurementValues {
    private Map<Integer, TestcaseStatistic> statistics = new LinkedHashMap<>();

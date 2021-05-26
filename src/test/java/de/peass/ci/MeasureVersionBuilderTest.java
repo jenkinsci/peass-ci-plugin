@@ -3,14 +3,12 @@ package de.peass.ci;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
 
-import de.peass.ci.helper.GitProjectBuilder;
+import de.dagere.peass.ci.helper.GitProjectBuilder;
 import hudson.FilePath;
 import hudson.model.FreeStyleBuild;
 import hudson.model.FreeStyleProject;
@@ -26,13 +24,6 @@ public class MeasureVersionBuilderTest {
    @Rule
    public JenkinsRule jenkins = new JenkinsRule();
    
-   @Before
-   public void cleanup() throws IOException {
-      final String homeFolderName = System.getenv("PEASS_HOME") != null ? System.getenv("PEASS_HOME") : System.getenv("HOME") + File.separator + ".peass" + File.separator;
-      final File peassFolder = new File(homeFolderName);
-      FileUtils.deleteDirectory(peassFolder);
-   }
-
    @Test
    public void testNoGitFailure() throws Exception {
       FreeStyleProject project = jenkins.createFreeStyleProject();
@@ -66,7 +57,7 @@ public class MeasureVersionBuilderTest {
       Assert.assertEquals(0.05, action.getConfig().getType1error(), 0.01);
    }
 
-   private void initProjectFolder(FreeStyleProject project) throws Exception, InterruptedException, IOException {
+   private void initProjectFolder(final FreeStyleProject project) throws Exception, InterruptedException, IOException {
       jenkins.buildAndAssertStatus(Result.SUCCESS, project);
       
       FilePath path = project.getSomeWorkspace();
@@ -77,7 +68,7 @@ public class MeasureVersionBuilderTest {
    }
 
    private MeasureVersionBuilder createSimpleBuilder() {
-      MeasureVersionBuilder builder = new MeasureVersionBuilder("test");
+      MeasureVersionBuilder builder = new MeasureVersionBuilder();
       builder.setIterations(ITERATIONS);
       builder.setVMs(VMS);
       builder.setRepetitions(REPETITIONS);

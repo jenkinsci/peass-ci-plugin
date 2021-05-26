@@ -14,22 +14,22 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
-import de.peass.RootCauseAnalysis;
-import de.peass.analysis.changes.Change;
-import de.peass.analysis.changes.Changes;
-import de.peass.analysis.changes.ProjectChanges;
-import de.peass.ci.ContinuousExecutor;
-import de.peass.ci.TestChooser;
-import de.peass.config.MeasurementConfiguration;
-import de.peass.dependency.CauseSearchFolders;
-import de.peass.dependency.analysis.data.TestCase;
-import de.peass.dependencyprocessors.ViewNotFoundException;
-import de.peass.measurement.rca.CauseSearcherConfig;
-import de.peass.measurement.rca.RCAStrategy;
-import de.peass.measurement.rca.data.CauseSearchData;
-import de.peass.measurement.rca.kieker.BothTreeReader;
-import de.peass.measurement.rca.searcher.CauseSearcher;
-import de.peass.utils.Constants;
+import de.dagere.peass.RootCauseAnalysis;
+import de.dagere.peass.analysis.changes.Change;
+import de.dagere.peass.analysis.changes.Changes;
+import de.dagere.peass.analysis.changes.ProjectChanges;
+import de.dagere.peass.ci.NonIncludedTestRemover;
+import de.dagere.peass.config.MeasurementConfiguration;
+import de.dagere.peass.dependency.CauseSearchFolders;
+import de.dagere.peass.dependency.PeASSFolders;
+import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.execution.EnvironmentVariables;
+import de.dagere.peass.dependencyprocessors.ViewNotFoundException;
+import de.dagere.peass.measurement.rca.CauseSearcherConfig;
+import de.dagere.peass.measurement.rca.data.CauseSearchData;
+import de.dagere.peass.measurement.rca.kieker.BothTreeReader;
+import de.dagere.peass.measurement.rca.searcher.CauseSearcher;
+import de.dagere.peass.utils.Constants;
 import kieker.analysis.exception.AnalysisConfigurationException;
 
 public class RCAExecutor {
@@ -37,35 +37,36 @@ public class RCAExecutor {
    private static final Logger LOG = LogManager.getLogger(RCAExecutor.class);
 
    private final MeasurementConfiguration config;
-   private final ContinuousExecutor executor;
+   private final File projectFolder;
    private final ProjectChanges changes;
-   private final RCAStrategy rcaStrategy;
+   private final CauseSearcherConfig causeConfig;
+   private final EnvironmentVariables env;
 
-   public RCAExecutor(final MeasurementConfiguration config, final ContinuousExecutor executor, final ProjectChanges changes, final RCAStrategy rcaStrategy) {
+   public RCAExecutor(final MeasurementConfiguration config, final File workspaceFolder, final ProjectChanges changes, final CauseSearcherConfig causeConfig,
+         final EnvironmentVariables env) {
       this.config = config;
-      this.executor = executor;
+      this.projectFolder = workspaceFolder;
       this.changes = changes;
-      this.rcaStrategy = rcaStrategy;
+      this.causeConfig = causeConfig;
+      this.env = env;
    }
 
    public void executeRCAs()
          throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException, JAXBException {
-      Changes versionChanges = changes.getVersion(executor.getLatestVersion());
+      Changes versionChanges = changes.getVersion(config.getVersion());
 
       boolean needsRCA = checkNeedsRCA(versionChanges);
 
       if (needsRCA) {
          LOG.info("At least one testcase was not successfully executed in the last build for the current version - executing RCA");
-         saveOldPeassFolder(executor);
+         saveOldPeassFolder();
 
-         config.setVersion(executor.getLatestVersion());
-         config.setVersionOld(executor.getVersionOld());
          MeasurementConfiguration currentConfig = new MeasurementConfiguration(config);
 
          for (Entry<String, List<Change>> testcases : versionChanges.getTestcaseChanges().entrySet()) {
             for (Change change : testcases.getValue()) {
                final TestCase testCase = new TestCase(testcases.getKey(), change.getMethod());
-               boolean match = TestChooser.isTestIncluded(testCase, config.getIncludes());
+               boolean match = NonIncludedTestRemover.isTestIncluded(testCase, config.getIncludes());
                if (match) {
                   try {
                      analyseChange(currentConfig, testCase);
@@ -87,7 +88,7 @@ public class RCAExecutor {
       for (Entry<String, List<Change>> testcases : versionChanges.getTestcaseChanges().entrySet()) {
          for (Change change : testcases.getValue()) {
             final TestCase testCase = new TestCase(testcases.getKey(), change.getMethod());
-            boolean match = TestChooser.isTestIncluded(testCase, config.getIncludes());
+            boolean match = NonIncludedTestRemover.isTestIncluded(testCase, config.getIncludes());
             if (match) {
                final File expectedResultFile = getExpectedRCAFile(testCase);
                if (!expectedResultFile.exists()) {
@@ -97,6 +98,7 @@ public class RCAExecutor {
                   if (lastData.getMeasurementConfig().getVersion().equals(config.getVersion())
                         && lastData.getMeasurementConfig().getVersionOld().equals(config.getVersionOld())) {
                      LOG.debug("Found version {} vs {} of testcase {}", config.getVersion(), config.getVersionOld(), testCase);
+                     LOG.debug("RCA-file: {}", expectedResultFile.getAbsolutePath());
                   } else {
                      LOG.debug("Did not find version {} vs {} of testcase {}", config.getVersion(), config.getVersionOld(), testCase);
                      needsRCA = true;
@@ -114,32 +116,31 @@ public class RCAExecutor {
       LOG.info("Testing {}", expectedResultFile);
       if (!expectedResultFile.exists()) {
          LOG.debug("Needs execution");
-         executeRCA(currentConfig, executor, testCase);
+         executeRCA(currentConfig, testCase);
       }
    }
 
    private File getExpectedRCAFile(final TestCase testCase) {
-      CauseSearchFolders folders = new CauseSearchFolders(executor.getProjectFolder());
-      final File expectedResultFile = new File(folders.getRcaTreeFolder(executor.getLatestVersion(), testCase),
+      CauseSearchFolders folders = new CauseSearchFolders(projectFolder);
+      final File expectedResultFile = new File(folders.getRcaTreeFolder(config.getVersion(), testCase),
             testCase.getMethod() + ".json");
       return expectedResultFile;
    }
 
-   private void executeRCA(final MeasurementConfiguration config, final ContinuousExecutor executor, final TestCase testCase)
+   private void executeRCA(final MeasurementConfiguration config, final TestCase testCase)
          throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException, JAXBException {
-      final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(testCase, true, true, 5.0, true, 0.01, false, true,
-            rcaStrategy);
+      final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(testCase, causeConfig);
       config.setUseKieker(true);
 
-      final CauseSearchFolders alternateFolders = new CauseSearchFolders(executor.getFolders().getProjectFolder());
-      final BothTreeReader reader = new BothTreeReader(causeSearcherConfig, config, alternateFolders);
+      final CauseSearchFolders alternateFolders = new CauseSearchFolders(projectFolder);
+      final BothTreeReader reader = new BothTreeReader(causeSearcherConfig, config, alternateFolders, env);
 
       CauseSearcher tester = RootCauseAnalysis.getCauseSeacher(config, causeSearcherConfig, alternateFolders, reader);
       tester.search();
    }
 
-   private void saveOldPeassFolder(final ContinuousExecutor executor) {
-      final File oldPeassFolder = executor.getFolders().getPeassFolder();
+   private void saveOldPeassFolder() {
+      final File oldPeassFolder = PeASSFolders.getPeassFolder(projectFolder);
       if (oldPeassFolder.exists()) {
          int i = 0;
          File destFolder = new File(oldPeassFolder.getParentFile(), "oldPeassFolder_" + i);

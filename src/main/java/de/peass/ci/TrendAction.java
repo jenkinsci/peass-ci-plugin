@@ -6,30 +6,37 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.jenkinsci.plugins.workflow.job.WorkflowJob;
+
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
+import de.dagere.peass.measurement.analysis.statistics.TestcaseStatistic;
 import de.peass.ci.persistence.BuildMeasurementValues;
 import de.peass.ci.persistence.TestMeasurementValues;
 import de.peass.ci.persistence.TrendFileUtil;
-import de.peass.measurement.analysis.statistics.TestcaseStatistic;
 import hudson.model.Action;
+import hudson.model.Job;
 import hudson.model.Project;
 
-public class ProjectStatisticsAction implements Action {
+public class TrendAction implements Action {
 
-   private Project<?, ?> project;
+   private Job<?, ?> project;
 
-   public ProjectStatisticsAction(final Project<?, ?> project) {
+   public TrendAction(final Job<?, ?> project) {
       this.project = project;
    }
 
    public int getBuildStepsCount() {
-      return project.getBuilders().size();
-   }
-
-   public int getPostBuildStepsCount() {
-      return project.getPublishersList().size();
+      if (project instanceof WorkflowJob) {
+         WorkflowJob job = (WorkflowJob) project;
+         return job.getBuilds().size();
+         // WorkflowJob job = project;
+      } else if (project instanceof Project) {
+         return ((Project) project).getBuilders().size();
+      } else {
+         return 0;
+      }
    }
 
    /**
@@ -75,35 +82,39 @@ public class ProjectStatisticsAction implements Action {
    }
 
    public Set<String> getTestcases() throws JsonParseException, JsonMappingException, InterruptedException, IOException {
-       BuildMeasurementValues values = readValues();
-       return values.getValues().keySet();
+      BuildMeasurementValues values = readValues();
+      return values.getValues().keySet();
    }
 
    public String getBuildnumbersReadable(final String testcase) throws InterruptedException, IOException {
-       return getMeanMap(testcase).keySet().toString();
+      return getMeanMap(testcase).keySet().toString();
    }
 
    public String getMeansReadable(final String testcase) throws InterruptedException, IOException {
-       return getMeanMap(testcase).values().toString();
+      return getMeanMap(testcase).values().toString();
    }
 
    public String getLowerBoundReadable(final String testcase) throws InterruptedException, IOException {
-       return getLowerBound(testcase).values().toString();
+      return getLowerBound(testcase).values().toString();
    }
 
    public String getUpperBoundReadable(final String testcase) throws InterruptedException, IOException {
-       return getUpperBound(testcase).values().toString();
+      return getUpperBound(testcase).values().toString();
    }
 
    private BuildMeasurementValues readValues() throws InterruptedException, IOException, JsonParseException, JsonMappingException {
-      final File projectFolder = new File(project.getWorkspace().toString());
-      BuildMeasurementValues values = TrendFileUtil.readMeasurementValues(projectFolder);
-      return values;
+      if (project instanceof WorkflowJob || project instanceof Project) {
+         File localWorkspace = new File(project.getRootDir(), "peass-data");
+         BuildMeasurementValues values = TrendFileUtil.readMeasurementValues(localWorkspace);
+         return values;
+      } else {
+         return null;
+      }
    }
 
    @Override
    public String getIconFileName() {
-      return "/plugin/peass-ci/images/rca.png";
+      return "/plugin/peass-ci/images/trend.png";
    }
 
    @Override

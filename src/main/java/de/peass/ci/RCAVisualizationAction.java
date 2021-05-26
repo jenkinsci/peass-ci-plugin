@@ -17,7 +17,7 @@ public class RCAVisualizationAction implements RunAction2 {
    private String displayName;
    private final File jsFile;
    
-   public RCAVisualizationAction(String displayName, File jsFile) {
+   public RCAVisualizationAction(final String displayName, final File jsFile) {
       this.displayName = displayName;
       this.jsFile = jsFile;
    }
@@ -49,12 +49,12 @@ public class RCAVisualizationAction implements RunAction2 {
    }
    
    @Override
-   public void onAttached(Run<?, ?> run) {
+   public void onAttached(final Run<?, ?> run) {
       this.run = run;
    }
 
    @Override
-   public void onLoad(Run<?, ?> run) {
+   public void onLoad(final Run<?, ?> run) {
       this.run = run;
    }
    

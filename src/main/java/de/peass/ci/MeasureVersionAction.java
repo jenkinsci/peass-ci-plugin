@@ -4,12 +4,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import de.peass.analysis.changes.Change;
-import de.peass.analysis.changes.Changes;
+import de.dagere.peass.analysis.changes.Change;
+import de.dagere.peass.analysis.changes.Changes;
+import de.dagere.peass.config.MeasurementConfiguration;
+import de.dagere.peass.measurement.analysis.ProjectStatistics;
 import de.peass.ci.helper.HistogramValues;
 import de.peass.ci.helper.RCAVisualizer;
-import de.peass.config.MeasurementConfiguration;
-import de.peass.measurement.analysis.ProjectStatistics;
 import hudson.model.Run;
 import jenkins.model.RunAction2;
 
@@ -23,7 +23,7 @@ public class MeasureVersionAction implements RunAction2 {
    private Map<String, HistogramValues> measurements;
    private String prefix;
 
-   public MeasureVersionAction(MeasurementConfiguration config, Changes changes, ProjectStatistics statistics, Map<String, HistogramValues> measurements) {
+   public MeasureVersionAction(final MeasurementConfiguration config, final Changes changes, final ProjectStatistics statistics, final Map<String, HistogramValues> measurements) {
       this.config = config;
       this.changes = changes;
       this.statistics = statistics;
@@ -61,7 +61,7 @@ public class MeasureVersionAction implements RunAction2 {
       return changes;
    }
    
-   public boolean testIsChanged(String testcase) {
+   public boolean testIsChanged(final String testcase) {
       boolean isChanged = false;
       for (Entry<String, List<Change>> changeEntry : changes.getTestcaseChanges().entrySet()) {
          for (Change change : changeEntry.getValue()) {
@@ -78,17 +78,17 @@ public class MeasureVersionAction implements RunAction2 {
       return measurements;
    }
    
-   public String getReducedName(String name) {
+   public String getReducedName(final String name) {
       return name.substring(prefix.length()+1);
    }
 
    @Override
-   public void onAttached(Run<?, ?> run) {
+   public void onAttached(final Run<?, ?> run) {
       this.run = run;
    }
 
    @Override
-   public void onLoad(Run<?, ?> run) {
+   public void onLoad(final Run<?, ?> run) {
       this.run = run;
    }
 
@@ -96,7 +96,7 @@ public class MeasureVersionAction implements RunAction2 {
       return run;
    }
    
-   public double round(double value) {
+   public double round(final double value) {
       return Math.round(value*100)/100d;
    }
 }

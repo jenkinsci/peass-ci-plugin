@@ -10,51 +10,86 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import de.peass.analysis.changes.Change;
-import de.peass.analysis.changes.Changes;
-import de.peass.analysis.changes.ProjectChanges;
-import de.peass.ci.ContinuousExecutor;
+import de.dagere.peass.analysis.changes.Change;
+import de.dagere.peass.analysis.changes.Changes;
+import de.dagere.peass.analysis.changes.ProjectChanges;
+import de.dagere.peass.config.MeasurementConfiguration;
+import de.dagere.peass.visualization.VisualizeRCA;
 import de.peass.ci.RCAVisualizationAction;
-import de.peass.visualization.VisualizeRCA;
 import hudson.model.Run;
 
 public class RCAVisualizer {
-   
+
    private static final Logger LOG = LogManager.getLogger(RCAVisualizer.class);
-   
-   private final ContinuousExecutor executor;
+
+   private final MeasurementConfiguration measurementConfig;
+   private final File localWorkspace;
    private final ProjectChanges changes;
    private final Run<?, ?> run;
 
-   public RCAVisualizer(final ContinuousExecutor executor, final ProjectChanges changes, final Run<?, ?> run) {
-      this.executor = executor;
+   public RCAVisualizer(final MeasurementConfiguration measurementConfig, final File localWorkspace, final ProjectChanges changes, final Run<?, ?> run) {
+      this.measurementConfig = measurementConfig;
+      this.localWorkspace = localWorkspace;
       this.changes = changes;
       this.run = run;
    }
 
    public void visualizeRCA() throws Exception {
-      final File resultFolder = new File(executor.getLocalFolder(), "visualization");
-      resultFolder.mkdirs();
+      final File visualizationFolder = getVisualizationFolder();
 
-      VisualizeRCA visualizer = preparePeassVisualizer(resultFolder);
+      VisualizeRCA visualizer = preparePeassVisualizer(visualizationFolder);
       visualizer.call();
 
-      File rcaResults = new File(run.getRootDir(), "rca_visualization");
-      rcaResults.mkdirs();
+      File rcaResults = getRcaResultFolder();
 
-      Changes versionChanges = changes.getVersion(executor.getLatestVersion());
-      File versionVisualizationFolder = new File(resultFolder, executor.getLatestVersion());
+      Changes versionChanges = changes.getVersion(measurementConfig.getVersion());
+      File versionVisualizationFolder = new File(visualizationFolder, measurementConfig.getVersion());
 
       createVisualizationActions(rcaResults, versionChanges, versionVisualizationFolder);
    }
 
+   private File getRcaResultFolder() {
+      File rcaResults = new File(run.getRootDir(), "rca_visualization");
+      if (!rcaResults.exists()) {
+         if (!rcaResults.mkdirs()) {
+            throw new RuntimeException("Could not create " + rcaResults.getAbsolutePath());
+         }
+      }
+      return rcaResults;
+   }
+
+   private File getVisualizationFolder() {
+      final File visualizationFolder = new File(localWorkspace, "visualization");
+      if (!visualizationFolder.exists()) {
+         if (!visualizationFolder.mkdirs()) {
+            throw new RuntimeException("Could not create " + visualizationFolder.getAbsolutePath());
+         }
+      }
+      return visualizationFolder;
+   }
+
    private VisualizeRCA preparePeassVisualizer(final File resultFolder) {
       VisualizeRCA visualizer = new VisualizeRCA();
-      visualizer.setData(new File[] { executor.getFolders().getFullMeasurementFolder().getParentFile() });
-      LOG.info("Setting property folder: " + executor.getPropertyFolder());
-      visualizer.setPropertyFolder(executor.getPropertyFolder());
+      File dataFolder = getDataFolder();
+      visualizer.setData(new File[] { dataFolder });
+      File propertyFolder = new File(localWorkspace, "properties");
+      LOG.info("Setting property folder: " + propertyFolder);
+      visualizer.setPropertyFolder(propertyFolder);
       visualizer.setResultFolder(resultFolder);
       return visualizer;
+   }
+
+   private File getDataFolder() {
+      String rcaResultFolder = run.getParent().getFullDisplayName() + "_peass";
+      File dataFolder = new File(localWorkspace, rcaResultFolder);
+      if (!dataFolder.exists()) {
+         dataFolder = new File(localWorkspace, "workspace_peass");
+         if (!dataFolder.exists()) {
+            throw new RuntimeException(
+                  localWorkspace.getAbsolutePath() + " neither contains workspace_peass nor " + rcaResultFolder + "; one must exist for visualization!");
+         }
+      }
+      return dataFolder;
    }
 
    private void createVisualizationActions(final File rcaResults, final Changes versionChanges, final File versionVisualizationFolder) throws IOException {

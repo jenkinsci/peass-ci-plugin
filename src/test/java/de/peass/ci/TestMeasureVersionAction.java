@@ -5,12 +5,12 @@ import java.util.HashMap;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.peass.analysis.changes.Change;
-import de.peass.analysis.changes.ProjectChanges;
+import de.dagere.peass.analysis.changes.Change;
+import de.dagere.peass.analysis.changes.ProjectChanges;
+import de.dagere.peass.config.MeasurementConfiguration;
+import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.measurement.analysis.ProjectStatistics;
 import de.peass.ci.helper.HistogramValues;
-import de.peass.config.MeasurementConfiguration;
-import de.peass.dependency.analysis.data.TestCase;
-import de.peass.measurement.analysis.ProjectStatistics;
 
 public class TestMeasureVersionAction {
 

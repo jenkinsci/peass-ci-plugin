@@ -31,39 +31,45 @@
 				var means = {
 					x: ${it.getBuildnumbersReadable(testcase)},
 					y: ${it.getMeansReadable(testcase)},
-					color: 'green',
+					color: 'black',
 					mode: 'lines+markers',
 					line: {
-				      color: 'green',
+				      color: 'black',
 				    }
 					};
 					
 				var deviationLower = {
 					x: ${it.getBuildnumbersReadable(testcase)},
 					y: ${it.getLowerBoundReadable(testcase)},
-					fill: 'tonexty',
-					color: 'green',
  					type: 'lines',
  					showlegend: false,
 					line: {
-				      color: 'green'
+					  dash: 'dot',
+				      color: 'black'
 				    }
+					};
+				var area = {
+					x: ${it.getBuildnumbersReadable(testcase)},
+					y: ${it.getLowerBoundReadable(testcase)},
+					fill: 'tonexty',
+ 					type: 'lines',
+ 					showlegend: false,
+ 					line: {color: '#CCFFCC', mode: 'none'}
 					};
 					
 				var deviationUpper = {
 					x: ${it.getBuildnumbersReadable(testcase)},
 					y: ${it.getUpperBoundReadable(testcase)},
-					fill: 'toself',
-					color: 'green',
- 					type: 'lines',
+					mode: 'lines+markers',
  					showlegend: false,
 					line: {
-				      color: 'green', 
+					  dash: 'dot',
+				      color: 'black', 
 				      opacity: 0.1
 				    }
 					};
 
-				var data = [ means, deviationUpper, deviationLower];
+				var data = [ deviationUpper, area, deviationLower, means ];
 
 				var	layout =
 				{
