@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 import org.jenkinsci.remoting.RoleChecker;
 
 import de.dagere.peass.ci.ContinuousExecutor;
+import de.dagere.peass.config.DependencyConfig;
 import de.dagere.peass.config.MeasurementConfiguration;
 import de.dagere.peass.dependency.execution.EnvironmentVariables;
 import de.peass.ci.JenkinsLogRedirector;
@@ -47,7 +48,9 @@ public class RemoteMeasurer implements FileCallable<Boolean> {
           * This is just a workaround until all dependencies are available in maven central repository.
           */
          new SnapshotDependencyChecker(measurementConfig, workspaceFolder, listener.getLogger()).checkKopemeAndKieker();
-         final ContinuousExecutor executor = new ContinuousExecutor(workspaceFolder, measurementConfig, 1, true, envVars);
+         
+         DependencyConfig dependencyConfig = new DependencyConfig(1, true, true);
+         final ContinuousExecutor executor = new ContinuousExecutor(workspaceFolder, measurementConfig, dependencyConfig, envVars);
          executor.execute();
          return true;
       } catch (Throwable e) {

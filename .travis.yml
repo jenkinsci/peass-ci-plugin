@@ -2,6 +2,6 @@ language: java
 jdk:
  - openjdk8
 install:
- - start=$(pwd) && cd /tmp && git clone https://github.com/DaGeRe/peass.git && cd peass && mvn clean install -DskipTests && cd $start
+ - start=$(pwd) && cd /tmp && git clone -b develop https://github.com/DaGeRe/peass.git && cd peass && mvn clean install -DskipTests && cd $start
  - mvn clean package
 
