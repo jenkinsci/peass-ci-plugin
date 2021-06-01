@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -125,13 +126,14 @@ public class SnapshotDependencyChecker {
 
          Process process = builder.start();
 
-         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-         String line;
-         while ((line = reader.readLine()) != null) {
-            output.println(line);
-         }
+         try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+               output.println(line);
+            }
 
-         process.waitFor();
+            process.waitFor();
+         }
       }
       return builder;
    }
