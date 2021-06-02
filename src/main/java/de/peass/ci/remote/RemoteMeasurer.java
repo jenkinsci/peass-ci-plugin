@@ -49,7 +49,7 @@ public class RemoteMeasurer implements FileCallable<Boolean> {
           */
          new SnapshotDependencyChecker(measurementConfig, workspaceFolder, listener.getLogger()).checkKopemeAndKieker();
          
-         DependencyConfig dependencyConfig = new DependencyConfig(1, true, true);
+         DependencyConfig dependencyConfig = new DependencyConfig(1, false, true);
          final ContinuousExecutor executor = new ContinuousExecutor(workspaceFolder, measurementConfig, dependencyConfig, envVars);
          executor.execute();
          return true;
