@@ -17,6 +17,7 @@ import org.kohsuke.stapler.QueryParameter;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import de.dagere.peass.analysis.changes.ProjectChanges;
+import de.dagere.peass.config.DependencyConfig;
 import de.dagere.peass.config.MeasurementConfiguration;
 import de.dagere.peass.config.MeasurementStrategy;
 import de.dagere.peass.dependency.analysis.data.TestCase;
@@ -58,6 +59,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private double significanceLevel = 0.01;
 
    private int versionDiff = 1;
+   private boolean generateCoverageSelection = true;
    private boolean useGC;
 
    private String includes = "";
@@ -101,7 +103,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
                peassEnv.getEnvironmentVariables().put(entry.getKey(), entry.getValue());
             }
 
-            final LocalPeassProcessManager processManager = new LocalPeassProcessManager(workspace, localWorkspace, listener, configWithRealGitVersions, peassEnv);
+            DependencyConfig dependencyConfig = new DependencyConfig(1, false, true, generateCoverageSelection);
+            final LocalPeassProcessManager processManager = new LocalPeassProcessManager(workspace, localWorkspace, listener, configWithRealGitVersions, dependencyConfig, peassEnv);
             boolean worked = processManager.measure();
 
             if (!worked) {
@@ -270,6 +273,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
    public boolean isRedirectSubprocessOutputToFile() {
       return redirectSubprocessOutputToFile;
+   }
+   
+   @DataBoundSetter
+   public void setGenerateCoverageSelection(final boolean generateCoverageSelection) {
+      this.generateCoverageSelection = generateCoverageSelection;
+   }
+   
+   public boolean isGenerateCoverageSelection() {
+      return generateCoverageSelection;
    }
 
    @DataBoundSetter

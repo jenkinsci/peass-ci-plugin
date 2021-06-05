@@ -24,12 +24,14 @@ public class RemoteMeasurer implements FileCallable<Boolean> {
    private static final long serialVersionUID = 5145199366806250594L;
 
    private final MeasurementConfiguration measurementConfig;
+   private final DependencyConfig dependencyConfig;
    private final EnvironmentVariables envVars;
 
    private final TaskListener listener;
 
-   public RemoteMeasurer(final MeasurementConfiguration measurementConfig, final TaskListener listener, final EnvironmentVariables envVars) {
+   public RemoteMeasurer(final MeasurementConfiguration measurementConfig, final DependencyConfig dependencyConfig, final TaskListener listener, final EnvironmentVariables envVars) {
       this.measurementConfig = measurementConfig;
+      this.dependencyConfig = dependencyConfig;
       this.listener = listener;
       this.envVars = envVars;
    }
@@ -49,7 +51,6 @@ public class RemoteMeasurer implements FileCallable<Boolean> {
           */
          new SnapshotDependencyChecker(measurementConfig, workspaceFolder, listener.getLogger()).checkKopemeAndKieker();
          
-         DependencyConfig dependencyConfig = new DependencyConfig(1, false, true);
          final ContinuousExecutor executor = new ContinuousExecutor(workspaceFolder, measurementConfig, dependencyConfig, envVars);
          executor.execute();
          return true;

@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.ci.ContinuousFolderUtil;
+import de.dagere.peass.config.DependencyConfig;
 import de.dagere.peass.config.MeasurementConfiguration;
 import de.dagere.peass.dependency.execution.EnvironmentVariables;
 import de.dagere.peass.measurement.analysis.ProjectStatistics;
@@ -40,19 +41,21 @@ public class LocalPeassProcessManager {
    private final File localWorkspace;
    private final TaskListener listener;
    private final MeasurementConfiguration configWithRealGitVersions;
+   private final DependencyConfig dependencyConfig;
    private final EnvironmentVariables envVars;
 
    public LocalPeassProcessManager(final FilePath workspace, final File localWorkspace, final TaskListener listener, final MeasurementConfiguration configWithRealGitVersions,
-         final EnvironmentVariables envVars) {
+         final DependencyConfig dependencyConfig, final EnvironmentVariables envVars) {
       this.workspace = workspace;
       this.localWorkspace = localWorkspace;
       this.listener = listener;
       this.configWithRealGitVersions = configWithRealGitVersions;
+      this.dependencyConfig = dependencyConfig;
       this.envVars = envVars;
    }
 
    public boolean measure() throws IOException, InterruptedException {
-      final RemoteMeasurer remotePerformer = new RemoteMeasurer(configWithRealGitVersions, listener, envVars);
+      final RemoteMeasurer remotePerformer = new RemoteMeasurer(configWithRealGitVersions, dependencyConfig, listener, envVars);
       boolean worked = workspace.act(remotePerformer);
       listener.getLogger().println("First stage result: " + worked);
       return worked;
