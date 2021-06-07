@@ -21,7 +21,7 @@ import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.ci.NonIncludedTestRemover;
 import de.dagere.peass.config.MeasurementConfiguration;
 import de.dagere.peass.dependency.CauseSearchFolders;
-import de.dagere.peass.dependency.PeASSFolders;
+import de.dagere.peass.dependency.PeassFolders;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.execution.EnvironmentVariables;
 import de.dagere.peass.dependencyprocessors.ViewNotFoundException;
@@ -140,7 +140,7 @@ public class RCAExecutor {
    }
 
    private void saveOldPeassFolder() {
-      final File oldPeassFolder = PeASSFolders.getPeassFolder(projectFolder);
+      final File oldPeassFolder = PeassFolders.getPeassFolder(projectFolder);
       if (oldPeassFolder.exists()) {
          int i = 0;
          File destFolder = new File(oldPeassFolder.getParentFile(), "oldPeassFolder_" + i);
