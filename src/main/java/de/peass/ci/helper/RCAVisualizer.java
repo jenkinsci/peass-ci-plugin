@@ -72,7 +72,10 @@ public class RCAVisualizer {
       VisualizeRCA visualizer = new VisualizeRCA();
       File dataFolder = getDataFolder();
       visualizer.setData(new File[] { dataFolder });
-      File propertyFolder = new File(localWorkspace, "properties");
+      File propertyFolder = new File(localWorkspace, "properties_" + run.getParent().getFullDisplayName());
+      if (!propertyFolder.exists()) {
+         propertyFolder = new File(localWorkspace, "properties_workspace");
+      }
       LOG.info("Setting property folder: " + propertyFolder);
       visualizer.setPropertyFolder(propertyFolder);
       visualizer.setResultFolder(resultFolder);
