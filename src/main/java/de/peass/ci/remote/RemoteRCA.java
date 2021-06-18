@@ -17,6 +17,7 @@ import de.dagere.peass.config.MeasurementConfiguration;
 import de.dagere.peass.dependency.execution.EnvironmentVariables;
 import de.dagere.peass.dependencyprocessors.ViewNotFoundException;
 import de.dagere.peass.measurement.rca.CauseSearcherConfig;
+import de.peass.ci.PeassProcessConfiguration;
 import de.peass.ci.helper.RCAExecutor;
 import hudson.FilePath.FileCallable;
 import hudson.model.TaskListener;
@@ -33,13 +34,12 @@ public class RemoteRCA implements FileCallable<Boolean>, Serializable {
    private final EnvironmentVariables env;
    private final TaskListener listener;
 
-   public RemoteRCA(final MeasurementConfiguration measurementConfig, final CauseSearcherConfig causeConfig, final ProjectChanges changes, final TaskListener listener,
-         final EnvironmentVariables env) {
-      this.measurementConfig = measurementConfig;
+   public RemoteRCA(final PeassProcessConfiguration peassConfig, final CauseSearcherConfig causeConfig, final ProjectChanges changes, final TaskListener listener) {
+      this.measurementConfig = peassConfig.getMeasurementConfig();
       this.causeConfig = causeConfig;
       this.changes = changes;
       this.listener = listener;
-      this.env = env;
+      this.env = peassConfig.getEnvVars();
    }
 
    @Override

@@ -13,11 +13,9 @@ import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
+import de.dagere.peass.analysis.changes.Changes;
 import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.ci.ContinuousFolderUtil;
-import de.dagere.peass.config.DependencyConfig;
-import de.dagere.peass.config.MeasurementConfiguration;
-import de.dagere.peass.dependency.execution.EnvironmentVariables;
 import de.dagere.peass.measurement.analysis.ProjectStatistics;
 import de.dagere.peass.measurement.rca.CauseSearcherConfig;
 import de.dagere.peass.measurement.rca.RCAStrategy;
@@ -40,24 +38,17 @@ public class LocalPeassProcessManager {
    private final FilePath workspace;
    private final File localWorkspace;
    private final TaskListener listener;
-   private final boolean updateSnapshotDependencies;
-   private final MeasurementConfiguration configWithRealGitVersions;
-   private final DependencyConfig dependencyConfig;
-   private final EnvironmentVariables envVars;
+   private final PeassProcessConfiguration peassConfig;
 
-   public LocalPeassProcessManager(final boolean updateSnapshotDependencies, final FilePath workspace, final File localWorkspace, final TaskListener listener, final MeasurementConfiguration configWithRealGitVersions,
-         final DependencyConfig dependencyConfig, final EnvironmentVariables envVars) {
-      this.updateSnapshotDependencies = updateSnapshotDependencies;
+   public LocalPeassProcessManager(final PeassProcessConfiguration peassConfig, final FilePath workspace, final File localWorkspace, final TaskListener listener) {
+      this.peassConfig = peassConfig;
       this.workspace = workspace;
       this.localWorkspace = localWorkspace;
       this.listener = listener;
-      this.configWithRealGitVersions = configWithRealGitVersions;
-      this.dependencyConfig = dependencyConfig;
-      this.envVars = envVars;
    }
 
    public boolean measure() throws IOException, InterruptedException {
-      final RemoteMeasurer remotePerformer = new RemoteMeasurer(updateSnapshotDependencies, configWithRealGitVersions, dependencyConfig, listener, envVars);
+      final RemoteMeasurer remotePerformer = new RemoteMeasurer(peassConfig, listener);
       boolean worked = workspace.act(remotePerformer);
       listener.getLogger().println("First stage result: " + worked);
       return worked;
@@ -73,8 +64,8 @@ public class LocalPeassProcessManager {
 
    public ProjectChanges visualizeMeasurementData(final Run<?, ?> run)
          throws JAXBException, IOException, JsonParseException, JsonMappingException, JsonGenerationException {
-      File dataFolder = new File(localWorkspace, configWithRealGitVersions.getVersion() + "_" + configWithRealGitVersions.getVersionOld());
-      final HistogramReader histogramReader = new HistogramReader(configWithRealGitVersions, dataFolder);
+      File dataFolder = new File(localWorkspace, peassConfig.getMeasurementConfig().getVersion() + "_" + peassConfig.getMeasurementConfig().getVersionOld());
+      final HistogramReader histogramReader = new HistogramReader(peassConfig.getMeasurementConfig(), dataFolder);
       final Map<String, HistogramValues> measurements = histogramReader.readMeasurements();
 
       final File changeFile = new File(localWorkspace, "changes.json");
@@ -90,7 +81,8 @@ public class LocalPeassProcessManager {
 
       TrendFileUtil.persistTrend(run, localWorkspace, statistics);
 
-      final MeasureVersionAction action = new MeasureVersionAction(configWithRealGitVersions, changes.getVersion(configWithRealGitVersions.getVersion()), statistics, measurements);
+      Changes versionChanges = changes.getVersion(peassConfig.getMeasurementConfig().getVersion());
+      final MeasureVersionAction action = new MeasureVersionAction(peassConfig.getMeasurementConfig(), versionChanges, statistics, measurements);
       run.addAction(action);
 
       return changes;
@@ -109,7 +101,7 @@ public class LocalPeassProcessManager {
    public void rca(final Run<?, ?> run, final ProjectChanges changes, final RCAStrategy rcaStrategy) throws IOException, InterruptedException, Exception {
       final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(null, true, true, 0.01, false, true, rcaStrategy, 1);
 
-      RemoteRCA remoteRCAExecutor = new RemoteRCA(configWithRealGitVersions, causeSearcherConfig, changes, listener, envVars);
+      RemoteRCA remoteRCAExecutor = new RemoteRCA(peassConfig, causeSearcherConfig, changes, listener);
       boolean rcaWorked = workspace.act(remoteRCAExecutor);
       if (!rcaWorked) {
          run.setResult(Result.FAILURE);
@@ -118,7 +110,7 @@ public class LocalPeassProcessManager {
 
       copyFromRemote();
 
-      final RCAVisualizer rcaVisualizer = new RCAVisualizer(configWithRealGitVersions, localWorkspace, changes, run);
+      final RCAVisualizer rcaVisualizer = new RCAVisualizer(peassConfig.getMeasurementConfig(), localWorkspace, changes, run);
       rcaVisualizer.visualizeRCA();
    }
 

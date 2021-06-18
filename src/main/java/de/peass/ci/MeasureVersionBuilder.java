@@ -98,15 +98,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          }
 
          try (JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
-            final MeasurementConfiguration configWithRealGitVersions = generateMeasurementConfig(workspace, listener);
-
-            EnvironmentVariables peassEnv = new EnvironmentVariables(properties);
-            for (Map.Entry<String, String> entry : env.entrySet()) {
-               peassEnv.getEnvironmentVariables().put(entry.getKey(), entry.getValue());
-            }
-
-            DependencyConfig dependencyConfig = new DependencyConfig(1, false, true, generateCoverageSelection);
-            final LocalPeassProcessManager processManager = new LocalPeassProcessManager(updateSnapshotDependencies, workspace, localWorkspace, listener, configWithRealGitVersions, dependencyConfig, peassEnv);
+            PeassProcessConfiguration peassConfig = buildConfiguration(workspace, env, listener);
+            final LocalPeassProcessManager processManager = new LocalPeassProcessManager(peassConfig, workspace, localWorkspace, listener);
             boolean worked = processManager.measure();
 
             if (!worked) {
@@ -127,6 +120,19 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
             run.setResult(Result.FAILURE);
          }
       }
+   }
+
+   private PeassProcessConfiguration buildConfiguration(final FilePath workspace, final EnvVars env, final TaskListener listener) throws IOException, InterruptedException {
+      final MeasurementConfiguration configWithRealGitVersions = generateMeasurementConfig(workspace, listener);
+
+      EnvironmentVariables peassEnv = new EnvironmentVariables(properties);
+      for (Map.Entry<String, String> entry : env.entrySet()) {
+         peassEnv.getEnvironmentVariables().put(entry.getKey(), entry.getValue());
+      }
+
+      DependencyConfig dependencyConfig = new DependencyConfig(1, false, true, generateCoverageSelection);
+      PeassProcessConfiguration peassConfig = new PeassProcessConfiguration(updateSnapshotDependencies, configWithRealGitVersions, dependencyConfig, peassEnv);
+      return peassConfig;
    }
 
    private MeasurementConfiguration generateMeasurementConfig(final FilePath workspace, final TaskListener listener) throws IOException, InterruptedException {
@@ -397,8 +403,6 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public void setUpdateSnapshotDependencies(final boolean updateSnapshotDependencies) {
       this.updateSnapshotDependencies = updateSnapshotDependencies;
    }
-
-
 
    @Symbol("measure")
    @Extension
