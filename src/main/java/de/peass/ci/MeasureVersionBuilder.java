@@ -70,6 +70,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private boolean executeParallel = false;
    private boolean executeBeforeClassInMeasurement = false;
 
+   private boolean updateSnapshotDependencies = false;
+   
    private boolean useSourceInstrumentation = true;
    private boolean useSampling = true;
    private boolean createDefaultConstructor = true;
@@ -104,7 +106,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
             }
 
             DependencyConfig dependencyConfig = new DependencyConfig(1, false, true, generateCoverageSelection);
-            final LocalPeassProcessManager processManager = new LocalPeassProcessManager(workspace, localWorkspace, listener, configWithRealGitVersions, dependencyConfig, peassEnv);
+            final LocalPeassProcessManager processManager = new LocalPeassProcessManager(updateSnapshotDependencies, workspace, localWorkspace, listener, configWithRealGitVersions, dependencyConfig, peassEnv);
             boolean worked = processManager.measure();
 
             if (!worked) {
@@ -386,6 +388,17 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public void setCreateDefaultConstructor(final boolean createDefaultConstructor) {
       this.createDefaultConstructor = createDefaultConstructor;
    }
+
+   public boolean isUpdateSnapshotDependencies() {
+      return updateSnapshotDependencies;
+   }
+
+   @DataBoundSetter
+   public void setUpdateSnapshotDependencies(final boolean updateSnapshotDependencies) {
+      this.updateSnapshotDependencies = updateSnapshotDependencies;
+   }
+
+
 
    @Symbol("measure")
    @Extension

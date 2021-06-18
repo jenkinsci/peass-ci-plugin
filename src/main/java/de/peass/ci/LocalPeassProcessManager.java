@@ -40,12 +40,14 @@ public class LocalPeassProcessManager {
    private final FilePath workspace;
    private final File localWorkspace;
    private final TaskListener listener;
+   private final boolean updateSnapshotDependencies;
    private final MeasurementConfiguration configWithRealGitVersions;
    private final DependencyConfig dependencyConfig;
    private final EnvironmentVariables envVars;
 
-   public LocalPeassProcessManager(final FilePath workspace, final File localWorkspace, final TaskListener listener, final MeasurementConfiguration configWithRealGitVersions,
+   public LocalPeassProcessManager(final boolean updateSnapshotDependencies, final FilePath workspace, final File localWorkspace, final TaskListener listener, final MeasurementConfiguration configWithRealGitVersions,
          final DependencyConfig dependencyConfig, final EnvironmentVariables envVars) {
+      this.updateSnapshotDependencies = updateSnapshotDependencies;
       this.workspace = workspace;
       this.localWorkspace = localWorkspace;
       this.listener = listener;
@@ -55,7 +57,7 @@ public class LocalPeassProcessManager {
    }
 
    public boolean measure() throws IOException, InterruptedException {
-      final RemoteMeasurer remotePerformer = new RemoteMeasurer(configWithRealGitVersions, dependencyConfig, listener, envVars);
+      final RemoteMeasurer remotePerformer = new RemoteMeasurer(updateSnapshotDependencies, configWithRealGitVersions, dependencyConfig, listener, envVars);
       boolean worked = workspace.act(remotePerformer);
       listener.getLogger().println("First stage result: " + worked);
       return worked;

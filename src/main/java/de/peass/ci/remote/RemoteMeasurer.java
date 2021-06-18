@@ -23,13 +23,15 @@ public class RemoteMeasurer implements FileCallable<Boolean> {
 
    private static final long serialVersionUID = 5145199366806250594L;
 
+   private final boolean updateSnapshotDependencies;
    private final MeasurementConfiguration measurementConfig;
    private final DependencyConfig dependencyConfig;
    private final EnvironmentVariables envVars;
 
    private final TaskListener listener;
 
-   public RemoteMeasurer(final MeasurementConfiguration measurementConfig, final DependencyConfig dependencyConfig, final TaskListener listener, final EnvironmentVariables envVars) {
+   public RemoteMeasurer(final boolean updateSnapshotDependencies, final MeasurementConfiguration measurementConfig, final DependencyConfig dependencyConfig, final TaskListener listener, final EnvironmentVariables envVars) {
+      this.updateSnapshotDependencies = updateSnapshotDependencies;
       this.measurementConfig = measurementConfig;
       this.dependencyConfig = dependencyConfig;
       this.listener = listener;
@@ -44,12 +46,13 @@ public class RemoteMeasurer implements FileCallable<Boolean> {
    public Boolean invoke(final File workspaceFolder, final VirtualChannel channel) throws IOException, InterruptedException {
       try (final JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
          LOG.info("Starting remote invocation, VMs: " + measurementConfig.getVms());
-         // if (true) throw new RuntimeException("Finish with stupid exception");
 
-         /*
-          * This is just a workaround until all dependencies are available in maven central repository.
-          */
-         new SnapshotDependencyChecker(measurementConfig, workspaceFolder, listener.getLogger()).checkKopemeAndKieker();
+         if (updateSnapshotDependencies) {
+            /*
+             * This is just a workaround until all dependencies are available in maven central repository.
+             */
+            new SnapshotDependencyChecker(measurementConfig, workspaceFolder, listener.getLogger()).checkKopemeAndKieker();
+         }
          
          final ContinuousExecutor executor = new ContinuousExecutor(workspaceFolder, measurementConfig, dependencyConfig, envVars);
          executor.execute();

@@ -50,6 +50,10 @@
                  description="${%versionDiffDescr}">
             <f:textbox default="1" />
         </f:entry>
+        <f:entry title="${%updateSnapshotDependencies}" field="updateSnapshotDependencies"
+                 description="${%updateSnapshotDependenciesDescr}">
+            <f:checkbox />
+        </f:entry>
         <f:entry title="${%useSourceInstrumentation}" field="useSourceInstrumentation"
                  description="${%useSourceInstrumentationDescr}">
             <f:checkbox />
