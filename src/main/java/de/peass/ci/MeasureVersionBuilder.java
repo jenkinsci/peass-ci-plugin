@@ -179,6 +179,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       config.setUseGC(useGC);
       config.setEarlyStop(false);
       config.getExecutionConfig().setCreateDefaultConstructor(createDefaultConstructor);
+      config.setExecuteBeforeClassInMeasurement(executeBeforeClassInMeasurement);
       if (executeParallel) {
          System.out.println("Measuring parallel");
          config.setMeasurementStrategy(MeasurementStrategy.PARALLEL);
