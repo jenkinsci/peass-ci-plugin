@@ -70,7 +70,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private boolean executeParallel = false;
    private boolean executeBeforeClassInMeasurement = false;
 
-   private boolean updateSnapshotDependencies = false;
+   private boolean updateSnapshotDependencies = true;
    
    private boolean useSourceInstrumentation = true;
    private boolean useSampling = true;
