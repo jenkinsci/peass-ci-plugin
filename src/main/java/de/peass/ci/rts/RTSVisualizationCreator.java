@@ -30,22 +30,25 @@ public class RTSVisualizationCreator {
       this.peassConfig = peassConfig;
    }
 
-   public void visualize(final Run run) {
+   public void visualize(final Run<?,?> run) {
       try {
          Map<String, List<String>> changesList = new LinkedHashMap<String, List<String>>();
          readStaticSelection(run, changesList);
          
-         List<String> selectedTests = new LinkedList<>();
-         readDynamicSelection(run, selectedTests);
+         List<String> selectedTests = readDynamicSelection(run);
+         List<String> coverageSelectedTests = readDynamicSelection(run);
          
-         RTSVisualizationAction rtsVisualizationAction = new RTSVisualizationAction(peassConfig.getDependencyConfig(), changesList, selectedTests);
+         System.out.println("Selected: " + selectedTests + " Coverage: " + coverageSelectedTests);
+         
+         RTSVisualizationAction rtsVisualizationAction = new RTSVisualizationAction(peassConfig.getDependencyConfig(), changesList, selectedTests, coverageSelectedTests);
          run.addAction(rtsVisualizationAction);
       } catch (IOException e) {
          throw new RuntimeException(e);
       }
    }
 
-   private void readDynamicSelection(final Run run, final List<String> selectedTests) throws IOException, JsonParseException, JsonMappingException {
+   private List<String> readDynamicSelection(final Run<?,?> run) throws IOException, JsonParseException, JsonMappingException {
+      List<String> selectedTests = new LinkedList<>();
       File executionfile = new File(localWorkspace, "execute_" + run.getParent().getFullDisplayName() + ".json");
       if (executionfile.exists()) {
          ExecutionData executions = Constants.OBJECTMAPPER.readValue(executionfile, ExecutionData.class);
@@ -55,9 +58,24 @@ public class RTSVisualizationCreator {
             selectedTests.add(test.getExecutable());
          }
       }
+      return selectedTests;
+   }
+   
+   private List<String> readCoverageSelection(final Run<?,?> run) throws IOException, JsonParseException, JsonMappingException {
+      List<String> selectedTests = new LinkedList<>();
+      File executionfile = new File(localWorkspace, "coverageSelection_" + run.getParent().getFullDisplayName() + ".json");
+      if (executionfile.exists()) {
+         ExecutionData executions = Constants.OBJECTMAPPER.readValue(executionfile, ExecutionData.class);
+         TestSet tests = executions.getVersions().get(peassConfig.getMeasurementConfig().getVersion());
+         
+         for (TestCase test : tests.getTests()) {
+            selectedTests.add(test.getExecutable());
+         }
+      }
+      return selectedTests;
    }
 
-   private void readStaticSelection(final Run run, final Map<String, List<String>> changesList) throws IOException, JsonParseException, JsonMappingException {
+   private void readStaticSelection(final Run<?,?> run, final Map<String, List<String>> changesList) throws IOException, JsonParseException, JsonMappingException {
       File dependencyfile = new File(localWorkspace, "deps_" + run.getParent().getFullDisplayName() + ".json");
       if (dependencyfile.exists()) {
          Dependencies dependencies = Constants.OBJECTMAPPER.readValue(dependencyfile, Dependencies.class);

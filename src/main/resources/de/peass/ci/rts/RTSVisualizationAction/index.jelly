@@ -28,6 +28,9 @@
 	          ${testcase}<br />
 	        </j:forEach>
             <h2>Coverage-based Selected Changes</h2>
+            <j:forEach var="testcase" items="${it.coverageSelection}">
+	          ${testcase}<br />
+	        </j:forEach>
         </l:main-panel>
     </l:layout>
 </j:jelly>

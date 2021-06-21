@@ -13,11 +13,15 @@ public class RTSVisualizationAction implements RunAction2 {
    private final DependencyConfig config;
    private final Map<String, List<String>> staticSelection;
    private final List<String> dynamicSelection;
+   
+   //TODO Display count of calls for each test
+   private final List<String> coverageSelection;
 
-   public RTSVisualizationAction(final DependencyConfig config, final Map<String, List<String>> staticSelection, final List<String> dynamicSelection) {
+   public RTSVisualizationAction(final DependencyConfig config, final Map<String, List<String>> staticSelection, final List<String> dynamicSelection, final List<String> coverageSelection) {
       this.config = config;
       this.staticSelection = staticSelection;
       this.dynamicSelection = dynamicSelection;
+      this.coverageSelection = coverageSelection;
    }
    
    public DependencyConfig getConfig() {
@@ -32,13 +36,13 @@ public class RTSVisualizationAction implements RunAction2 {
       return dynamicSelection;
    }
 
-   public String getCoveragebasedSelection() {
-      return null;
+   public List<String> getCoveragebasedSelection() {
+      return coverageSelection;
    }
 
    @Override
    public String getIconFileName() {
-      return "/plugin/peass-ci/images/rca.png";
+      return "/plugin/peass-ci/images/rts.jpg";
    }
 
    @Override
