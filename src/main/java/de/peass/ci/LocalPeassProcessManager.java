@@ -2,6 +2,9 @@ package de.peass.ci;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.JAXBException;
@@ -16,6 +19,12 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import de.dagere.peass.analysis.changes.Changes;
 import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.ci.ContinuousFolderUtil;
+import de.dagere.peass.dependency.analysis.data.ChangedEntity;
+import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.data.TestSet;
+import de.dagere.peass.dependency.persistence.Dependencies;
+import de.dagere.peass.dependency.persistence.ExecutionData;
+import de.dagere.peass.dependency.persistence.Version;
 import de.dagere.peass.measurement.analysis.ProjectStatistics;
 import de.dagere.peass.measurement.rca.CauseSearcherConfig;
 import de.dagere.peass.measurement.rca.RCAStrategy;
@@ -26,15 +35,16 @@ import de.peass.ci.helper.RCAVisualizer;
 import de.peass.ci.persistence.TrendFileUtil;
 import de.peass.ci.remote.RemoteMeasurer;
 import de.peass.ci.remote.RemoteRCA;
+import de.peass.ci.rts.RTSVisualizationAction;
 import hudson.FilePath;
 import hudson.model.Result;
 import hudson.model.Run;
 import hudson.model.TaskListener;
 
 public class LocalPeassProcessManager {
-   
+
    private static final Logger LOG = LogManager.getLogger(LocalPeassProcessManager.class);
-   
+
    private final FilePath workspace;
    private final File localWorkspace;
    private final TaskListener listener;
@@ -60,6 +70,37 @@ public class LocalPeassProcessManager {
       FilePath remotePeassFolder = new FilePath(workspace.getChannel(), remotePeassPath);
       int count = remotePeassFolder.copyRecursiveTo(new FilePath(localWorkspace));
       listener.getLogger().println("Copied " + count + " files from " + remotePeassFolder + " to " + localWorkspace.getAbsolutePath());
+   }
+
+   public void visualizeDependencies(final Run<?, ?> run) {
+      try {
+         File dependencyfile = new File(localWorkspace, "deps_" + run.getParent().getFullDisplayName() + ".json");
+         Dependencies dependencies = Constants.OBJECTMAPPER.readValue(dependencyfile, Dependencies.class);
+         Version version = dependencies.getVersions().get(peassConfig.getMeasurementConfig().getVersion());
+         
+         Map<String, List<String>> changesList = new LinkedHashMap<String, List<String>>();
+         
+         for (Map.Entry<ChangedEntity, TestSet> entry : version.getChangedClazzes().entrySet()) {
+            List<String> tests = new LinkedList<>();
+            for (TestCase test : entry.getValue().getTests()) {
+               tests.add(test.getExecutable());
+            }
+            changesList.put(entry.getKey().toString(), tests);
+         }
+         
+         File executionfile = new File(localWorkspace, "execute_" + run.getParent().getFullDisplayName() + ".json");
+         ExecutionData executions = Constants.OBJECTMAPPER.readValue(executionfile, ExecutionData.class);
+         TestSet tests = executions.getVersions().get(peassConfig.getMeasurementConfig().getVersion());
+         List<String> selectedTests = new LinkedList<>();
+         for (TestCase test : tests.getTests()) {
+            selectedTests.add(test.getExecutable());
+         }
+         
+         RTSVisualizationAction rtsVisualizationAction = new RTSVisualizationAction(peassConfig.getDependencyConfig(), changesList, selectedTests);
+         run.addAction(rtsVisualizationAction);
+      } catch (IOException e) {
+         throw new RuntimeException(e);
+      }
    }
 
    public ProjectChanges visualizeMeasurementData(final Run<?, ?> run)

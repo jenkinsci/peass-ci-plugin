@@ -1,0 +1,33 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:st="jelly:stapler">
+    <l:layout title="Regression Test Selection"> 
+        <l:side-panel> 
+            <st:include page="sidepanel.jelly" it="${it.run}" optional="true" /> 
+        </l:side-panel>
+        <l:main-panel>
+            <h1>Regression Test Selection Results</h1> 
+            Regression Test Selection was executed with the following configuration:<br/>           
+            <table>
+              <tr><td>Threads</td><td>${it.config.threads}</td></tr>
+              <tr><td>doNotUpdateDependencies</td><td>${it.config.doNotUpdateDependencies}</td></tr>
+              <tr><td>generateViews</td><td>${it.config.generateViews}</td></tr>
+              <tr><td>generateCoverageSelection</td><td>${it.config.generateCoverageSelection}</td></tr>
+            </table>
+            <h2>Statically Selected Changes</h2>
+            <table><tr><th>Change</th><th>Test Cases</th></tr>
+            <j:forEach var="change" items="${it.staticSelection.entrySet()}">
+              <tr><td>${change.getKey()}</td><td>
+                <j:forEach var="testcase" items="${change.getValue()}">
+                  ${testcase}<br />
+                </j:forEach>
+              </td></tr>
+            </j:forEach>
+            </table>
+            <h2>Trace-based Selected Changes</h2>
+	        <j:forEach var="testcase" items="${it.dynamicSelection}">
+	          ${testcase}<br />
+	        </j:forEach>
+            <h2>Coverage-based Selected Changes</h2>
+        </l:main-panel>
+    </l:layout>
+</j:jelly>

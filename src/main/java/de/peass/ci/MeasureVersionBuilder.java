@@ -101,6 +101,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
             PeassProcessConfiguration peassConfig = buildConfiguration(workspace, env, listener);
             final LocalPeassProcessManager processManager = new LocalPeassProcessManager(peassConfig, workspace, localWorkspace, listener);
             boolean worked = processManager.measure();
+            
+            processManager.visualizeDependencies(run);
 
             if (!worked) {
                run.setResult(Result.FAILURE);

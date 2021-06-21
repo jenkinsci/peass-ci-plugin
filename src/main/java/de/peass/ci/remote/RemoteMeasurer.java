@@ -50,7 +50,8 @@ public class RemoteMeasurer implements FileCallable<Boolean> {
                peassConfig.getMeasurementConfig(), 
                peassConfig.getDependencyConfig(), 
                peassConfig.getEnvVars());
-         executor.execute();
+         executor.executeRTS();
+         executor.measure();
          return true;
       } catch (Throwable e) {
          File test = new File(workspaceFolder, "error.txt"); // Workaround, since error redirection on Jenkins agents currently does not work
