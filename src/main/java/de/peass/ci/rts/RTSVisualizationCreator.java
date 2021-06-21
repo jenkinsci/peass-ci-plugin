@@ -1,0 +1,79 @@
+package de.peass.ci.rts;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+
+import de.dagere.peass.dependency.analysis.data.ChangedEntity;
+import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.data.TestSet;
+import de.dagere.peass.dependency.persistence.Dependencies;
+import de.dagere.peass.dependency.persistence.ExecutionData;
+import de.dagere.peass.dependency.persistence.Version;
+import de.dagere.peass.utils.Constants;
+import de.peass.ci.PeassProcessConfiguration;
+import hudson.model.Run;
+
+public class RTSVisualizationCreator {
+   
+   private final File localWorkspace;
+   private final PeassProcessConfiguration peassConfig;
+   
+   public RTSVisualizationCreator(final File localWorkspace, final PeassProcessConfiguration peassConfig) {
+      this.localWorkspace = localWorkspace;
+      this.peassConfig = peassConfig;
+   }
+
+   public void visualize(final Run run) {
+      try {
+         Map<String, List<String>> changesList = new LinkedHashMap<String, List<String>>();
+         readStaticSelection(run, changesList);
+         
+         List<String> selectedTests = new LinkedList<>();
+         readDynamicSelection(run, selectedTests);
+         
+         RTSVisualizationAction rtsVisualizationAction = new RTSVisualizationAction(peassConfig.getDependencyConfig(), changesList, selectedTests);
+         run.addAction(rtsVisualizationAction);
+      } catch (IOException e) {
+         throw new RuntimeException(e);
+      }
+   }
+
+   private void readDynamicSelection(final Run run, final List<String> selectedTests) throws IOException, JsonParseException, JsonMappingException {
+      File executionfile = new File(localWorkspace, "execute_" + run.getParent().getFullDisplayName() + ".json");
+      if (executionfile.exists()) {
+         ExecutionData executions = Constants.OBJECTMAPPER.readValue(executionfile, ExecutionData.class);
+         TestSet tests = executions.getVersions().get(peassConfig.getMeasurementConfig().getVersion());
+         
+         for (TestCase test : tests.getTests()) {
+            selectedTests.add(test.getExecutable());
+         }
+      }
+   }
+
+   private void readStaticSelection(final Run run, final Map<String, List<String>> changesList) throws IOException, JsonParseException, JsonMappingException {
+      File dependencyfile = new File(localWorkspace, "deps_" + run.getParent().getFullDisplayName() + ".json");
+      if (dependencyfile.exists()) {
+         Dependencies dependencies = Constants.OBJECTMAPPER.readValue(dependencyfile, Dependencies.class);
+         Version version = dependencies.getVersions().get(peassConfig.getMeasurementConfig().getVersion());
+         
+         
+         
+         for (Map.Entry<ChangedEntity, TestSet> entry : version.getChangedClazzes().entrySet()) {
+            List<String> tests = new LinkedList<>();
+            for (TestCase test : entry.getValue().getTests()) {
+               tests.add(test.getExecutable());
+            }
+            changesList.put(entry.getKey().toString(), tests);
+         }
+      }
+   }
+   }
+   
+   
