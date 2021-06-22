@@ -1,0 +1,30 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout">
+	<l:layout title="Project Measurement Trend">
+		<l:main-panel>
+
+			<h1>
+				Clean Peass Measurements
+			</h1>
+
+			This will delete all regression test selection, measurement and root cause analysis results. Are you sure you want to proceed?
+			
+			<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+			<script type="text/javascript">
+			  function cleanCache() {
+			    $.get("../cleanTruly", function ( data ){
+			      document.getElementById("result").innerHTML=data;
+			    });
+			  }
+			  
+			</script>
+			
+			<a href='#' onClick='cleanCache();'>Yes</a>
+			<div id="result">
+			
+			</div>
+			
+
+		</l:main-panel>
+	</l:layout>
+</j:jelly> 
