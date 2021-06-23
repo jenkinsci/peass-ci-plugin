@@ -1,4 +1,4 @@
-package de.peass.ci.rts;
+package de.dagere.peass.ci.rts;
 
 import java.io.File;
 import java.io.IOException;

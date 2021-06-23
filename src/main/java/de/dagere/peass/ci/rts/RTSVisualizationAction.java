@@ -1,4 +1,4 @@
-package de.peass.ci.rts;
+package de.dagere.peass.ci.rts;
 
 import java.util.List;
 import java.util.Map;
