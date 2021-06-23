@@ -26,7 +26,7 @@ import de.peass.ci.PeassProcessConfiguration;
 import hudson.model.Run;
 
 public class RTSVisualizationCreator {
-
+   
    private static final Logger LOG = LogManager.getLogger(RTSVisualizationCreator.class);
 
    private final File localWorkspace;
@@ -71,12 +71,14 @@ public class RTSVisualizationCreator {
    }
 
    private CoverageSelectionVersion readCoverageSelection(final Run<?, ?> run) throws IOException, JsonParseException, JsonMappingException {
-      File executionfile = new File(localWorkspace, "coverageInfo_" + run.getParent().getFullDisplayName() + ".json");
-      if (executionfile.exists()) {
-         CoverageSelectionInfo executions = Constants.OBJECTMAPPER.readValue(executionfile, CoverageSelectionInfo.class);
-         return executions.getVersions().get(peassConfig.getMeasurementConfig().getVersion());
+      File coverageInfoFile = new File(localWorkspace, "coverageInfo_" + run.getParent().getFullDisplayName() + ".json");
+      if (coverageInfoFile.exists()) {
+         LOG.info("Reading {}", coverageInfoFile);
+         CoverageSelectionInfo executions = Constants.OBJECTMAPPER.readValue(coverageInfoFile, CoverageSelectionInfo.class);
+         CoverageSelectionVersion currentVersion = executions.getVersions().get(peassConfig.getMeasurementConfig().getVersion());
+         return currentVersion;
       } else {
-         LOG.info("File {} was not found, RTS coverage based selection info might be incomplete", executionfile.getAbsoluteFile());
+         LOG.info("File {} was not found, RTS coverage based selection info might be incomplete", coverageInfoFile.getAbsoluteFile());
       }
       return null;
    }
