@@ -29,7 +29,7 @@
 	        </j:forEach>
             <h2>Coverage-based Selected Changes</h2>
             <table>
-            <tr><th>Test Cases</th><th>Call Counts</th></tr>
+            <tr><th>Test Cases</th><th>Call Counts</th><th>Overall Score</th></tr>
             <j:forEach var="testcase" items="${it.coveragebasedSelection.getTestcases().entrySet()}">
               <tr><td>
               <j:if test="${testcase.getValue().isSelected()}">
@@ -42,7 +42,9 @@
                 <j:forEach var="callCounts" items="${testcase.getValue().getCallCounts()}">
                   ${callCounts.getKey()}: ${callCounts.getValue()}<br />
                 </j:forEach>
-                </td></tr>
+                </td>
+                <td>${testcase.getValue().getOverallScore()}</td>
+                </tr>
 	        </j:forEach>
 	        </table>
         </l:main-panel>
