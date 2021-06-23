@@ -19,6 +19,8 @@ import de.dagere.peass.dependency.analysis.data.TestSet;
 import de.dagere.peass.dependency.persistence.Dependencies;
 import de.dagere.peass.dependency.persistence.ExecutionData;
 import de.dagere.peass.dependency.persistence.Version;
+import de.dagere.peass.dependency.traces.coverage.CoverageSelectionInfo;
+import de.dagere.peass.dependency.traces.coverage.CoverageSelectionVersion;
 import de.dagere.peass.utils.Constants;
 import de.peass.ci.PeassProcessConfiguration;
 import hudson.model.Run;
@@ -41,7 +43,7 @@ public class RTSVisualizationCreator {
          readStaticSelection(run, changesList);
 
          List<String> selectedTests = readDynamicSelection(run);
-         List<String> coverageSelectedTests = readCoverageSelection(run);
+         CoverageSelectionVersion coverageSelectedTests = readCoverageSelection(run);
 
          System.out.println("Selected: " + selectedTests + " Coverage: " + coverageSelectedTests);
 
@@ -68,20 +70,15 @@ public class RTSVisualizationCreator {
       return selectedTests;
    }
 
-   private List<String> readCoverageSelection(final Run<?, ?> run) throws IOException, JsonParseException, JsonMappingException {
-      List<String> selectedTests = new LinkedList<>();
-      File executionfile = new File(localWorkspace, "coverageSelection_" + run.getParent().getFullDisplayName() + ".json");
+   private CoverageSelectionVersion readCoverageSelection(final Run<?, ?> run) throws IOException, JsonParseException, JsonMappingException {
+      File executionfile = new File(localWorkspace, "coverageInfo_" + run.getParent().getFullDisplayName() + ".json");
       if (executionfile.exists()) {
-         ExecutionData executions = Constants.OBJECTMAPPER.readValue(executionfile, ExecutionData.class);
-         TestSet tests = executions.getVersions().get(peassConfig.getMeasurementConfig().getVersion());
-
-         for (TestCase test : tests.getTests()) {
-            selectedTests.add(test.getExecutable());
-         }
+         CoverageSelectionInfo executions = Constants.OBJECTMAPPER.readValue(executionfile, CoverageSelectionInfo.class);
+         return executions.getVersions().get(peassConfig.getMeasurementConfig().getVersion());
       } else {
          LOG.info("File {} was not found, RTS coverage based selection info might be incomplete", executionfile.getAbsoluteFile());
       }
-      return selectedTests;
+      return null;
    }
 
    private void readStaticSelection(final Run<?, ?> run, final Map<String, List<String>> changesList) throws IOException, JsonParseException, JsonMappingException {

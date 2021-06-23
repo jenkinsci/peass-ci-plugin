@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.dagere.peass.config.DependencyConfig;
+import de.dagere.peass.dependency.traces.coverage.CoverageSelectionVersion;
 import hudson.model.Run;
 import jenkins.model.RunAction2;
 
@@ -15,9 +16,9 @@ public class RTSVisualizationAction implements RunAction2 {
    private final List<String> dynamicSelection;
    
    //TODO Display count of calls for each test
-   private final List<String> coverageSelection;
+   private final CoverageSelectionVersion coverageSelection;
 
-   public RTSVisualizationAction(final DependencyConfig config, final Map<String, List<String>> staticSelection, final List<String> dynamicSelection, final List<String> coverageSelection) {
+   public RTSVisualizationAction(final DependencyConfig config, final Map<String, List<String>> staticSelection, final List<String> dynamicSelection, final CoverageSelectionVersion coverageSelection) {
       this.config = config;
       this.staticSelection = staticSelection;
       this.dynamicSelection = dynamicSelection;
@@ -36,7 +37,7 @@ public class RTSVisualizationAction implements RunAction2 {
       return dynamicSelection;
    }
 
-   public List<String> getCoveragebasedSelection() {
+   public CoverageSelectionVersion getCoveragebasedSelection() {
       return coverageSelection;
    }
 

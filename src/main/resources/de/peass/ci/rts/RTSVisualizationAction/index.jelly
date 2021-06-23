@@ -28,9 +28,23 @@
 	          ${testcase}<br />
 	        </j:forEach>
             <h2>Coverage-based Selected Changes</h2>
-            <j:forEach var="testcase" items="${it.coverageSelection}">
-	          ${testcase}<br />
+            <table>
+            <tr><th>Test Cases</th><th>Call Counts</th></tr>
+            <j:forEach var="testcase" items="${it.coveragebasedSelection.getTestcases().entrySet()}">
+              <tr><td>
+              <j:if test="${testcase.getValue().isSelected()}">
+                <b>${testcase.getKey().getExecutable()}</b>
+              </j:if>
+              <j:if test="${!testcase.getValue().isSelected()}">
+                ${testcase.getKey().getExecutable()}
+              </j:if>
+              </td><td>
+                <j:forEach var="callCounts" items="${testcase.getValue().getCallCounts()}">
+                  ${callCounts.getKey()}: ${callCounts.getValue()}<br />
+                </j:forEach>
+                </td></tr>
 	        </j:forEach>
+	        </table>
         </l:main-panel>
     </l:layout>
 </j:jelly>
