@@ -55,7 +55,7 @@ public class TestTrendFileUtil {
       TrendFileUtil.persistTrend(run, LOCAL_WORKSPACE, simpleStatistics);
 
       BuildMeasurementValues values = TrendFileUtil.readMeasurementValues(LOCAL_WORKSPACE);
-      TestMeasurementValues testcaseValues = values.getValues().get("TestCase [clazz=DemoTest, method=methodA]");
+      TestMeasurementValues testcaseValues = values.getValues().get("DemoTest#methodA");
       Assert.assertEquals(testcaseValues.getStatistics().size(), 3);
       Assert.assertEquals(testcaseValues.getStatistics().get(VERSION_INDEX + 1).getMeanOld(), 1, 0.01);
       Assert.assertEquals(testcaseValues.getStatistics().get(VERSION_INDEX + 1).getMeanCurrent(), 2, 0.01);
@@ -64,8 +64,8 @@ public class TestTrendFileUtil {
    private void checkFirstAddition() throws JsonParseException, JsonMappingException, IOException, InterruptedException {
       BuildMeasurementValues values = TrendFileUtil.readMeasurementValues(LOCAL_WORKSPACE);
 
-      MatcherAssert.assertThat(values.getValues().keySet(), Matchers.contains("TestCase [clazz=DemoTest, method=methodA]", "TestCase [clazz=DemoTest, method=methodB]"));
-      TestMeasurementValues testcaseValues = values.getValues().get("TestCase [clazz=DemoTest, method=methodA]");
+      MatcherAssert.assertThat(values.getValues().keySet(), Matchers.contains("DemoTest#methodA", "DemoTest#methodB"));
+      TestMeasurementValues testcaseValues = values.getValues().get("DemoTest#methodA");
       Assert.assertEquals(testcaseValues.getStatistics().size(), 2);
 
       Assert.assertEquals(testcaseValues.getStatistics().get(VERSION_INDEX - 1).getMeanOld(), 0, 0.01);
