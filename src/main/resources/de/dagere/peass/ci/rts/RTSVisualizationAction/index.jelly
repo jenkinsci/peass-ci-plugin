@@ -26,7 +26,7 @@
             <j:if test="${it.config.generateViews}">
             <h2>Trace-based Selected Changes</h2>
 	        <j:forEach var="testcase" items="${it.dynamicSelection}">
-	          ${testcase}<br />
+	           <a href="../rts_${testcase.replace('#', '_')}"> ${testcase} </a><br />
 	        </j:forEach>
 	        </j:if>
 	        

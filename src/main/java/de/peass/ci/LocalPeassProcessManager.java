@@ -17,6 +17,7 @@ import de.dagere.peass.analysis.changes.Changes;
 import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.ci.ContinuousFolderUtil;
 import de.dagere.peass.ci.rts.RTSVisualizationCreator;
+import de.dagere.peass.dependency.ResultsFolders;
 import de.dagere.peass.measurement.analysis.ProjectStatistics;
 import de.dagere.peass.measurement.rca.CauseSearcherConfig;
 import de.dagere.peass.measurement.rca.RCAStrategy;
@@ -64,7 +65,8 @@ public class LocalPeassProcessManager {
    }
 
    public void visualizeDependencies(final Run<?, ?> run) {
-      new RTSVisualizationCreator(localWorkspace, peassConfig).visualize(run);
+      ResultsFolders results = new ResultsFolders(localWorkspace, run.getParent().getFullDisplayName());
+      new RTSVisualizationCreator(results, peassConfig).visualize(run);
    }
 
    public ProjectChanges visualizeMeasurementData(final Run<?, ?> run)

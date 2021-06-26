@@ -2,17 +2,20 @@ package de.dagere.peass.ci.rts;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
+import de.dagere.peass.dependency.ResultsFolders;
 import de.dagere.peass.dependency.analysis.data.ChangedEntity;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.analysis.data.TestSet;
@@ -26,13 +29,13 @@ import de.peass.ci.PeassProcessConfiguration;
 import hudson.model.Run;
 
 public class RTSVisualizationCreator {
-   
+
    private static final Logger LOG = LogManager.getLogger(RTSVisualizationCreator.class);
 
-   private final File localWorkspace;
+   private final ResultsFolders localWorkspace;
    private final PeassProcessConfiguration peassConfig;
 
-   public RTSVisualizationCreator(final File localWorkspace, final PeassProcessConfiguration peassConfig) {
+   public RTSVisualizationCreator(final ResultsFolders localWorkspace, final PeassProcessConfiguration peassConfig) {
       this.localWorkspace = localWorkspace;
       this.peassConfig = peassConfig;
    }
@@ -42,13 +45,27 @@ public class RTSVisualizationCreator {
          Map<String, List<String>> changesList = new LinkedHashMap<String, List<String>>();
          readStaticSelection(run, changesList);
 
-         List<String> selectedTests = readDynamicSelection(run);
+         List<String> traceSelectedTests = readDynamicSelection(run);
          CoverageSelectionVersion coverageSelectedTests = readCoverageSelection(run);
 
-         System.out.println("Selected: " + selectedTests + " Coverage: " + coverageSelectedTests);
+         System.out.println("Selected: " + traceSelectedTests + " Coverage: " + coverageSelectedTests);
 
-         RTSVisualizationAction rtsVisualizationAction = new RTSVisualizationAction(peassConfig.getDependencyConfig(), changesList, selectedTests, coverageSelectedTests);
+         RTSVisualizationAction rtsVisualizationAction = new RTSVisualizationAction(peassConfig.getDependencyConfig(), changesList, traceSelectedTests, coverageSelectedTests);
          run.addAction(rtsVisualizationAction);
+
+         for (String traceSelectedTest : traceSelectedTests) {
+            TestCase testcase = new TestCase(traceSelectedTest);
+            File traceFolder = localWorkspace.getVersionDiffFolder(peassConfig.getMeasurementConfig().getVersion());
+            File traceFile = new File(traceFolder, testcase.getShortClazz() + "#" + testcase.getMethod() + ".txt");
+            System.out.println("Trace file: " + traceFile.getAbsolutePath());
+            String traceSource = "";
+            if (traceFile.exists()) {
+               traceSource = FileUtils.readFileToString(traceFile, StandardCharsets.UTF_8);
+            }
+
+            RTSTraceAction traceAction = new RTSTraceAction(traceSelectedTest, traceSource);
+            run.addAction(traceAction);
+         }
       } catch (IOException e) {
          throw new RuntimeException(e);
       }
@@ -56,7 +73,7 @@ public class RTSVisualizationCreator {
 
    private List<String> readDynamicSelection(final Run<?, ?> run) throws IOException, JsonParseException, JsonMappingException {
       List<String> selectedTests = new LinkedList<>();
-      File executionfile = new File(localWorkspace, "execute_" + run.getParent().getFullDisplayName() + ".json");
+      File executionfile = localWorkspace.getExecutionFile();
       if (executionfile.exists()) {
          ExecutionData executions = Constants.OBJECTMAPPER.readValue(executionfile, ExecutionData.class);
          TestSet tests = executions.getVersions().get(peassConfig.getMeasurementConfig().getVersion());
@@ -71,7 +88,7 @@ public class RTSVisualizationCreator {
    }
 
    private CoverageSelectionVersion readCoverageSelection(final Run<?, ?> run) throws IOException, JsonParseException, JsonMappingException {
-      File coverageInfoFile = new File(localWorkspace, "coverageInfo_" + run.getParent().getFullDisplayName() + ".json");
+      File coverageInfoFile = localWorkspace.getCoverageInfoFile();
       if (coverageInfoFile.exists()) {
          LOG.info("Reading {}", coverageInfoFile);
          CoverageSelectionInfo executions = Constants.OBJECTMAPPER.readValue(coverageInfoFile, CoverageSelectionInfo.class);
@@ -84,7 +101,7 @@ public class RTSVisualizationCreator {
    }
 
    private void readStaticSelection(final Run<?, ?> run, final Map<String, List<String>> changesList) throws IOException, JsonParseException, JsonMappingException {
-      File dependencyfile = new File(localWorkspace, "deps_" + run.getParent().getFullDisplayName() + ".json");
+      File dependencyfile = localWorkspace.getDependencyFile();
       if (dependencyfile.exists()) {
          Dependencies dependencies = Constants.OBJECTMAPPER.readValue(dependencyfile, Dependencies.class);
          Version version = dependencies.getVersions().get(peassConfig.getMeasurementConfig().getVersion());

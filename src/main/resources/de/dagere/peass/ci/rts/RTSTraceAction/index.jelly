@@ -1,0 +1,12 @@
+<?jelly escape-by-default='true'?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:st="jelly:stapler">
+    <l:layout title="Regression Test Selection"> 
+        <l:side-panel> 
+            <st:include page="sidepanel.jelly" it="${it.run}" optional="true" /> 
+        </l:side-panel>
+        <l:main-panel>
+            <h1>${it.testName}</h1>
+        	<pre>${it.trace}</pre>
+        </l:main-panel>
+    </l:layout>
+</j:jelly>
