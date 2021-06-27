@@ -48,7 +48,13 @@
               </j:if>
               </td><td>
                 <j:forEach var="callCounts" items="${testcase.getValue().getCallCounts()}">
-                  ${callCounts.getKey()}: ${callCounts.getValue()}<br />
+                  <j:if test="${testcase.getValue().getSelectedChanges().contains(callCounts.getKey())}">
+                    <b>${callCounts.getKey()}: ${callCounts.getValue()}</b>
+                  </j:if>
+                  <j:if test="${!testcase.getValue().getSelectedChanges().contains(callCounts.getKey())}">
+                    ${callCounts.getKey()}: ${callCounts.getValue()}
+                  </j:if>
+                  <br />
                 </j:forEach>
                 </td>
                 <td>${testcase.getValue().getOverallScore()}</td>
