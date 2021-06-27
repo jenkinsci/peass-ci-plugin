@@ -1,4 +1,4 @@
-package de.peass.ci.helper;
+package de.dagere.peass.ci.helper;
 
 import java.io.File;
 import java.io.IOException;

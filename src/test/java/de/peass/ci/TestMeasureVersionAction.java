@@ -7,10 +7,10 @@ import org.junit.Test;
 
 import de.dagere.peass.analysis.changes.Change;
 import de.dagere.peass.analysis.changes.ProjectChanges;
+import de.dagere.peass.ci.helper.HistogramValues;
 import de.dagere.peass.config.MeasurementConfiguration;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.measurement.analysis.ProjectStatistics;
-import de.peass.ci.helper.HistogramValues;
 
 public class TestMeasureVersionAction {
 

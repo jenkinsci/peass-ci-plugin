@@ -6,10 +6,10 @@ import java.util.Map.Entry;
 
 import de.dagere.peass.analysis.changes.Change;
 import de.dagere.peass.analysis.changes.Changes;
+import de.dagere.peass.ci.helper.HistogramValues;
+import de.dagere.peass.ci.helper.RCAVisualizer;
 import de.dagere.peass.config.MeasurementConfiguration;
 import de.dagere.peass.measurement.analysis.ProjectStatistics;
-import de.peass.ci.helper.HistogramValues;
-import de.peass.ci.helper.RCAVisualizer;
 import hudson.model.Run;
 import jenkins.model.RunAction2;
 

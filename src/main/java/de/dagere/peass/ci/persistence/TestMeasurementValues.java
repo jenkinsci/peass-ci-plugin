@@ -1,4 +1,4 @@
-package de.peass.ci.persistence;
+package de.dagere.peass.ci.persistence;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
