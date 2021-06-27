@@ -1,4 +1,4 @@
-package de.peass.ci;
+package de.dagere.peass.ci;
 
 import java.util.List;
 import java.util.Map;

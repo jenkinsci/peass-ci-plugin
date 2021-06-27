@@ -1,4 +1,4 @@
-package de.peass.ci;
+package de.dagere.peass.ci;
 
 import de.dagere.peass.config.DependencyConfig;
 import de.dagere.peass.config.MeasurementConfiguration;

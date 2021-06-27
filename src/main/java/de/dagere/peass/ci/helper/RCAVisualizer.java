@@ -13,9 +13,9 @@ import org.apache.logging.log4j.Logger;
 import de.dagere.peass.analysis.changes.Change;
 import de.dagere.peass.analysis.changes.Changes;
 import de.dagere.peass.analysis.changes.ProjectChanges;
+import de.dagere.peass.ci.RCAVisualizationAction;
 import de.dagere.peass.config.MeasurementConfiguration;
 import de.dagere.peass.visualization.VisualizeRCA;
-import de.peass.ci.RCAVisualizationAction;
 import hudson.model.Run;
 
 public class RCAVisualizer {

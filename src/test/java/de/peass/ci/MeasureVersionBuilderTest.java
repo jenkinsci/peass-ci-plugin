@@ -8,6 +8,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
 
+import de.dagere.peass.ci.MeasureVersionAction;
+import de.dagere.peass.ci.MeasureVersionBuilder;
 import de.dagere.peass.ci.helper.GitProjectBuilder;
 import hudson.FilePath;
 import hudson.model.FreeStyleBuild;

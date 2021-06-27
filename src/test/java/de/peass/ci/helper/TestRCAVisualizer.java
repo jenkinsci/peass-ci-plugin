@@ -14,11 +14,11 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import de.dagere.peass.analysis.changes.ProjectChanges;
+import de.dagere.peass.ci.RCAVisualizationAction;
 import de.dagere.peass.ci.helper.RCAVisualizer;
 import de.dagere.peass.config.MeasurementConfiguration;
 import de.dagere.peass.dependency.CauseSearchFolders;
 import de.dagere.peass.utils.Constants;
-import de.peass.ci.RCAVisualizationAction;
 import hudson.model.Job;
 import hudson.model.Run;
 
