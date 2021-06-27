@@ -17,6 +17,7 @@ import org.kohsuke.stapler.QueryParameter;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import de.dagere.peass.analysis.changes.ProjectChanges;
+import de.dagere.peass.ci.remote.RemoteVersionReader;
 import de.dagere.peass.config.DependencyConfig;
 import de.dagere.peass.config.MeasurementConfiguration;
 import de.dagere.peass.config.MeasurementStrategy;
@@ -25,7 +26,6 @@ import de.dagere.peass.dependency.execution.EnvironmentVariables;
 import de.dagere.peass.measurement.rca.RCAStrategy;
 import de.dagere.peass.utils.Constants;
 import de.peass.ci.persistence.TestcaseKeyDeserializer;
-import de.peass.ci.remote.RemoteVersionReader;
 import hudson.EnvVars;
 import hudson.Extension;
 import hudson.FilePath;

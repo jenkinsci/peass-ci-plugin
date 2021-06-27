@@ -1,4 +1,4 @@
-package de.peass.ci.remote;
+package de.dagere.peass.ci.remote;
 
 import java.io.BufferedReader;
 import java.io.File;

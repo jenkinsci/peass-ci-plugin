@@ -3,6 +3,7 @@ package de.peass.ci;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.bind.JAXBException;
 
@@ -16,8 +17,12 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import de.dagere.peass.analysis.changes.Changes;
 import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.ci.ContinuousFolderUtil;
+import de.dagere.peass.ci.remote.RemoteMeasurer;
+import de.dagere.peass.ci.remote.RemoteRCA;
+import de.dagere.peass.ci.remote.RemoteRTS;
 import de.dagere.peass.ci.rts.RTSVisualizationCreator;
 import de.dagere.peass.dependency.ResultsFolders;
+import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.measurement.analysis.ProjectStatistics;
 import de.dagere.peass.measurement.rca.CauseSearcherConfig;
 import de.dagere.peass.measurement.rca.RCAStrategy;
@@ -26,8 +31,6 @@ import de.peass.ci.helper.HistogramReader;
 import de.peass.ci.helper.HistogramValues;
 import de.peass.ci.helper.RCAVisualizer;
 import de.peass.ci.persistence.TrendFileUtil;
-import de.peass.ci.remote.RemoteMeasurer;
-import de.peass.ci.remote.RemoteRCA;
 import hudson.FilePath;
 import hudson.model.Result;
 import hudson.model.Run;
@@ -50,10 +53,18 @@ public class LocalPeassProcessManager {
    }
 
    public boolean measure() throws IOException, InterruptedException {
-      final RemoteMeasurer remotePerformer = new RemoteMeasurer(peassConfig, listener);
-      boolean worked = workspace.act(remotePerformer);
-      listener.getLogger().println("First stage result: " + worked);
-      return worked;
+      RemoteRTS rts = new RemoteRTS(peassConfig, listener);
+      Set<TestCase> tests = workspace.act(rts);
+
+      if (tests != null) {
+         final RemoteMeasurer remotePerformer = new RemoteMeasurer(peassConfig, listener, tests);
+         boolean worked = workspace.act(remotePerformer);
+         listener.getLogger().println("Measurement worked: " + worked);
+         return worked;
+      } else {
+         listener.getLogger().println("Regression test selection failed - please check log");
+         return false;
+      }
    }
 
    public void copyFromRemote() throws IOException, InterruptedException {
