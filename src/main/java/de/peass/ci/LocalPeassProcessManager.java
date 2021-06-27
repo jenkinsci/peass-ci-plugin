@@ -52,19 +52,17 @@ public class LocalPeassProcessManager {
       this.listener = listener;
    }
 
-   public boolean measure() throws IOException, InterruptedException {
+   public Set<TestCase> rts() throws IOException, InterruptedException {
       RemoteRTS rts = new RemoteRTS(peassConfig, listener);
       Set<TestCase> tests = workspace.act(rts);
+      return tests;
+   }
 
-      if (tests != null) {
-         final RemoteMeasurer remotePerformer = new RemoteMeasurer(peassConfig, listener, tests);
-         boolean worked = workspace.act(remotePerformer);
-         listener.getLogger().println("Measurement worked: " + worked);
-         return worked;
-      } else {
-         listener.getLogger().println("Regression test selection failed - please check log");
-         return false;
-      }
+   public boolean measure(final Set<TestCase> tests) throws IOException, InterruptedException {
+      final RemoteMeasurer remotePerformer = new RemoteMeasurer(peassConfig, listener, tests);
+      boolean worked = workspace.act(remotePerformer);
+      listener.getLogger().println("Measurement worked: " + worked);
+      return worked;
    }
 
    public void copyFromRemote() throws IOException, InterruptedException {
@@ -75,7 +73,7 @@ public class LocalPeassProcessManager {
       listener.getLogger().println("Copied " + count + " files from " + remotePeassFolder + " to " + localWorkspace.getAbsolutePath());
    }
 
-   public void visualizeDependencies(final Run<?, ?> run) {
+   public void visualizeRTSResults(final Run<?, ?> run) {
       ResultsFolders results = new ResultsFolders(localWorkspace, run.getParent().getFullDisplayName());
       new RTSVisualizationCreator(results, peassConfig).visualize(run);
    }

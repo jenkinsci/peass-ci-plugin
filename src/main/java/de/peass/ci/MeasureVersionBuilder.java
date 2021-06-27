@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 
@@ -100,17 +101,23 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          try (JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
             PeassProcessConfiguration peassConfig = buildConfiguration(workspace, env, listener);
             final LocalPeassProcessManager processManager = new LocalPeassProcessManager(peassConfig, workspace, localWorkspace, listener);
-            boolean worked = processManager.measure();
-
+            
+            Set<TestCase> tests = processManager.rts();
+            if (tests == null) {
+               run.setResult(Result.FAILURE);
+               return;
+            }
+            
+            processManager.copyFromRemote();
+            processManager.visualizeRTSResults(run);
+            
+            boolean worked = processManager.measure(tests);
             if (!worked) {
                run.setResult(Result.FAILURE);
                return;
             }
 
             processManager.copyFromRemote();
-            
-            processManager.visualizeDependencies(run);
-
             ProjectChanges changes = processManager.visualizeMeasurementData(run);
 
             if (executeRCA) {
