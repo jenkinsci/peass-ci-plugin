@@ -9,7 +9,6 @@ import hudson.model.Run;
 import jenkins.model.RunAction2;
 
 public class RTSVisualizationAction implements RunAction2 {
-   private transient Run<?, ?> run;
 
    private final DependencyConfig config;
    private final Map<String, List<String>> staticSelection;
@@ -58,12 +57,11 @@ public class RTSVisualizationAction implements RunAction2 {
 
    @Override
    public void onAttached(final Run<?, ?> run) {
-      this.run = run;
       
    }
 
    @Override
    public void onLoad(final Run<?, ?> run) {
-      this.run = run;
+
    }
 }
