@@ -5,14 +5,11 @@ import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
-import org.jenkinsci.remoting.RoleChecker;
 
 import hudson.FilePath;
-import hudson.FilePath.FileCallable;
 import hudson.model.Action;
 import hudson.model.Job;
 import hudson.model.Project;
-import hudson.remoting.VirtualChannel;
 import jenkins.model.Jenkins;
 
 public class CleanTrulyAction implements Action {
@@ -31,32 +28,18 @@ public class CleanTrulyAction implements Action {
 
             if (project instanceof WorkflowJob) {
                WorkflowJob job = (WorkflowJob) project;
-               FilePath path = Jenkins.getInstanceOrNull().getWorkspaceFor(job);
-               boolean cleaningWorked = path.act(new FileCallable<Boolean>() {
-
-                  @Override
-                  public void checkRoles(final RoleChecker checker) throws SecurityException {
+               Jenkins jenkinsInstance = Jenkins.getInstanceOrNull();
+               if (jenkinsInstance != null) {
+                  FilePath path = jenkinsInstance.getWorkspaceFor(job);
+                  boolean cleaningWorked = path.act(new CleanCallable());
+                  if (cleaningWorked) {
+                     return "Cleaning succeeded";
+                  } else {
+                     return "Some error appeared during cleanup, please check Jenkins server logs";
                   }
-
-                  @Override
-                  public Boolean invoke(final File potentialSlaveWorkspace, final VirtualChannel channel) {
-                     try {
-                        File folder = new File(potentialSlaveWorkspace.getParentFile(), potentialSlaveWorkspace.getName() + "_fullPeass");
-                        System.out.println("Cleaning " + folder.getAbsolutePath());
-                        FileUtils.cleanDirectory(folder);
-                        return true;
-                     } catch (IOException e) {
-                        e.printStackTrace();
-                        return false;
-                     }
-                  }
-               });
-               if (cleaningWorked) {
-                  return "Cleaning succeeded";
                } else {
-                  return "Some error appeared during cleanup, please check Jenkins server logs";
+                  return "Jenkins was not available";
                }
-
             } else {
                return "Full cleaning currently imposible";
             }
