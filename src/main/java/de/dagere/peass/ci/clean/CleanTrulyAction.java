@@ -31,6 +31,9 @@ public class CleanTrulyAction implements Action {
                Jenkins jenkinsInstance = Jenkins.getInstanceOrNull();
                if (jenkinsInstance != null) {
                   FilePath path = jenkinsInstance.getWorkspaceFor(job);
+                  if (path == null) {
+                     return "There exists no workspace for job " + job.toString();
+                  }
                   boolean cleaningWorked = path.act(new CleanCallable());
                   if (cleaningWorked) {
                      return "Cleaning succeeded";
