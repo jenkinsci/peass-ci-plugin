@@ -16,6 +16,7 @@ import de.dagere.peass.ci.LogRedirector;
 import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.ci.helper.RCAExecutor;
 import de.dagere.peass.config.MeasurementConfiguration;
+import de.dagere.peass.dependency.ResultsFolders;
 import de.dagere.peass.dependency.execution.EnvironmentVariables;
 import de.dagere.peass.dependencyprocessors.ViewNotFoundException;
 import de.dagere.peass.measurement.rca.CauseSearcherConfig;
@@ -53,6 +54,10 @@ public class RemoteRCA implements FileCallable<Boolean>, Serializable {
       listener.getLogger().println("Executing root cause analysis - Log goes to " + logFile.getAbsolutePath());
       try (LogRedirector director = new LogRedirector(logFile)) {
          final File projectFolderLocal = new File(localFolder, workspaceFolder.getName());
+         ResultsFolders resultsFolder = new ResultsFolders(localFolder, workspaceFolder.getName());
+         File propertyFolder = resultsFolder.getPropertiesFolder();
+         causeConfig.setPropertyFolder(propertyFolder);
+         listener.getLogger().println("Setting property folder: " + propertyFolder.getAbsolutePath());
          final RCAExecutor rcaExecutor = new RCAExecutor(measurementConfig, projectFolderLocal, changes, causeConfig, env);
          rcaExecutor.executeRCAs();
          return true;
