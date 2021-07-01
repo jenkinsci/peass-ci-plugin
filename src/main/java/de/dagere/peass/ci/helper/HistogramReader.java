@@ -31,7 +31,13 @@ public class HistogramReader {
    public Map<String, HistogramValues> readMeasurements() throws JAXBException {
       final Map<String, HistogramValues> measurements = new TreeMap<>();
       if (fullResultsFolder.exists() && fullResultsFolder.isDirectory()) {
-         for (File xmlResultFile : fullResultsFolder.listFiles((FileFilter) new WildcardFileFilter("*.xml"))) {
+         File[] xmlFiles = fullResultsFolder.listFiles((FileFilter) new WildcardFileFilter("*.xml"));
+         if (xmlFiles == null) {
+            System.out.println("No xml-Files were found, measurements is empty!");
+            return measurements;
+         }
+
+         for (File xmlResultFile : xmlFiles) {
             Kopemedata data = XMLDataLoader.loadData(xmlResultFile);
             // This assumes measurements are only executed once; if this is not the case, the matching result would need to be searched
             final TestcaseType testcase = data.getTestcases().getTestcase().get(0);
