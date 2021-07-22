@@ -30,7 +30,7 @@ jobs:
     - name: Build with Maven
       run: |
          branch=${GITHUB_REF##*/}
-         cd /home/runner/work/ && git clone -b $branch https://github.com/DaGeRe/peass.git && cd peass && mvn clean install -DskipTests
+         cd /home/runner/work/ && git clone -b $branch https://github.com/DaGeRe/peass.git && cd peass && ./mvnw clean install -DskipTests
          cd /home/runner/work/peass-ci/peass-ci/ && ./mvnw -B package --file pom.xml
     - name: Publish Test Report
       if: ${{ always() }}      
