@@ -9,7 +9,9 @@ import de.dagere.peass.analysis.changes.Changes;
 import de.dagere.peass.ci.helper.HistogramValues;
 import de.dagere.peass.ci.helper.RCAVisualizer;
 import de.dagere.peass.config.MeasurementConfiguration;
+import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.measurement.analysis.ProjectStatistics;
+import de.dagere.peass.measurement.analysis.statistics.TestcaseStatistic;
 import hudson.model.Run;
 import jenkins.model.RunAction2;
 
@@ -76,6 +78,12 @@ public class MeasureVersionAction implements RunAction2 {
    
    public Map<String, HistogramValues> getMeasurements() {
       return measurements;
+   }
+   
+   public TestcaseStatistic getTestcaseStatistic(final String testcase) {
+      Entry<String, Map<TestCase, TestcaseStatistic>> testcaseStatisticEntry = statistics.getStatistics().entrySet().iterator().next();
+      Map<TestCase, TestcaseStatistic> testcaseStatistic = testcaseStatisticEntry.getValue();
+      return testcaseStatistic.get(new TestCase(testcase));
    }
    
    public String getReducedName(final String name) {

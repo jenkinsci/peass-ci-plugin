@@ -256,9 +256,9 @@ function shownode(node) {
   
   var inspectLink = "";
   if (node.ess != -1){
-    if (jenkins){
+    if (jenkins) {
       inspectLink = "<a href='dashboard?ess="+node.ess+"&call=" + encodeURIComponent(node.call)+"' target='parent'>Inspect Node</a><br><br>";
-    }else{
+    } else {
       inspectLink = "<a href='"+treeData[0].call.replace("#", "_") +"_dashboard.html?ess="+node.ess+"&call=" + encodeURIComponent(node.call)+"' target='parent'>Inspect Node</a><br><br>";
     }
   }
@@ -268,7 +268,6 @@ function shownode(node) {
   	histogramm.innerHTML=node.kiekerPattern + node.otherKiekerPattern + inspectLink;
   }
   plotOverallHistogram("histogramm", node);
-  //document.getElementById("histogramm").innerHtml+="<br><a href='"+treeData[0].call+"_dashboard.html?ess="+1+"&test="+node.call+"'>Inspect Node</a>";
 }
 
 shownode(root);

@@ -38,10 +38,22 @@
                 ${testcase.getKey()}
               </j:if>
               <br />
-              <div style='width: 600px; height: 300px; background-color: #BBBBBB; border: 2px solid blue; border-radius: 1em 1em 1em 1em; padding: 1em;' 
+              <table>
+              	<tr><td>
+              		<div style='width: 600px; height: 300px; background-color: #BBBBBB; border: 2px solid blue; border-radius: 1em 1em 1em 1em; padding: 1em;' 
               		id='histogramm_${testcase.getKey()}'>
-
-              </div>
+              		</div>
+              	</td><td>
+              	<table>
+              	    <j:set var="currentStatistic" value="${it.getTestcaseStatistic(testcase.getKey())}" /> 
+              		<tr><th>Property</th><th>Predecessor</th><th>Current</th></tr>
+      				<tr><td>Mean</td><td>${it.round(currentStatistic.getMeanOld())} </td><td>${it.round(currentStatistic.getMeanCurrent())}</td></tr>
+      				<tr><td>Deviation</td><td>${it.round(currentStatistic.deviationOld)}</td><td>${it.round(currentStatistic.deviationCurrent)}</td></tr>
+      			</table> 
+      			VMs: ${currentStatistic.getVMs()} T=${it.round(currentStatistic.tvalue)}<br/>
+				<a href="../${it.getReducedName(testcase.getKey().replace('#', '_'))}/dashboard?call=overall&amp;ess=-1" target="parent">Inspect Measurement</a>
+              	</td></tr>
+              </table>
             </j:forEach>
 
 		    <script>
