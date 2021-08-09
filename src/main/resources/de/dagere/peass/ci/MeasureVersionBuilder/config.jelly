@@ -66,6 +66,14 @@
                  description="${%useGCDescr}">
             <f:checkbox />
         </f:entry>
+        <f:entry title="${%redirectToNull}" field="redirectToNull"
+                 description="${%redirectToNullDescr}">
+            <f:checkbox />
+        </f:entry>
+        <f:entry title="${%showStart}" field="showStart"
+                 description="${%showStartDescr}">
+            <f:checkbox />
+        </f:entry>
         <f:entry title="${%createDefaultConstructor}" field="createDefaultConstructor"
                  description="${%createDefaultConstructorDescr}">
             <f:checkbox />

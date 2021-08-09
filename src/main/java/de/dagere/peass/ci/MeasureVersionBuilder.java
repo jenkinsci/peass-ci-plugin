@@ -58,6 +58,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private int repetitions;
    private int timeout = 5;
    private double significanceLevel = 0.01;
+   private boolean redirectToNull = true;
+   private boolean showStart = false;
 
    private int versionDiff = 1;
    private boolean generateCoverageSelection = true;
@@ -189,6 +191,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       config.setEarlyStop(false);
       config.getExecutionConfig().setCreateDefaultConstructor(createDefaultConstructor);
       config.setExecuteBeforeClassInMeasurement(executeBeforeClassInMeasurement);
+      config.setRedirectToNull(redirectToNull);
+      config.setShowStart(showStart);
       if (executeParallel) {
          System.out.println("Measuring parallel");
          config.setMeasurementStrategy(MeasurementStrategy.PARALLEL);
@@ -412,6 +416,24 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    @DataBoundSetter
    public void setUpdateSnapshotDependencies(final boolean updateSnapshotDependencies) {
       this.updateSnapshotDependencies = updateSnapshotDependencies;
+   }
+
+   public boolean isRedirectToNull() {
+      return redirectToNull;
+   }
+
+   @DataBoundSetter
+   public void setRedirectToNull(final boolean redirectToNull) {
+      this.redirectToNull = redirectToNull;
+   }
+
+   public boolean isShowStart() {
+      return showStart;
+   }
+
+   @DataBoundSetter
+   public void setShowStart(final boolean showStart) {
+      this.showStart = showStart;
    }
 
    @Symbol("measure")
