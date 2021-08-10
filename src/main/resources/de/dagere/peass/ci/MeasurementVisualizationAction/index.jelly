@@ -1,6 +1,6 @@
 <?jelly escape-by-default='false'?>
 <j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:st="jelly:stapler">
-	<l:layout title="RCA Dashboard"> 
+	<l:layout title="Measurement Dashboard"> 
 	    <style>
 		.part{
 		  background-color: #DDD; border: 2px solid blue; border-radius: 1em 1em 1em 1em; padding: 1em;

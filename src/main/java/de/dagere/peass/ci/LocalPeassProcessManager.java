@@ -16,10 +16,11 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 import de.dagere.peass.analysis.changes.Changes;
 import de.dagere.peass.analysis.changes.ProjectChanges;
-import de.dagere.peass.ci.ContinuousFolderUtil;
+import de.dagere.peass.ci.helper.DefaultMeasurementVisualizer;
 import de.dagere.peass.ci.helper.HistogramReader;
 import de.dagere.peass.ci.helper.HistogramValues;
 import de.dagere.peass.ci.helper.RCAVisualizer;
+import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.persistence.TrendFileUtil;
 import de.dagere.peass.ci.remote.RemoteMeasurer;
 import de.dagere.peass.ci.remote.RemoteRCA;
@@ -101,6 +102,9 @@ public class LocalPeassProcessManager {
       final MeasureVersionAction action = new MeasureVersionAction(peassConfig.getMeasurementConfig(), versionChanges, statistics, measurements);
       run.addAction(action);
 
+      VisualizationFolderManager visualizationFolders = new VisualizationFolderManager(localWorkspace, run);
+      DefaultMeasurementVisualizer visualizer = new DefaultMeasurementVisualizer(dataFolder, peassConfig.getMeasurementConfig().getVersion(), run, visualizationFolders, measurements);
+      visualizer.visualizeMeasurements();
       return changes;
    }
 
@@ -126,7 +130,8 @@ public class LocalPeassProcessManager {
 
       copyFromRemote();
 
-      final RCAVisualizer rcaVisualizer = new RCAVisualizer(peassConfig.getMeasurementConfig(), localWorkspace, changes, run);
+      VisualizationFolderManager visualizationFolders = new VisualizationFolderManager(localWorkspace, run);
+      final RCAVisualizer rcaVisualizer = new RCAVisualizer(peassConfig.getMeasurementConfig(), visualizationFolders, changes, run);
       rcaVisualizer.visualizeRCA();
    }
 

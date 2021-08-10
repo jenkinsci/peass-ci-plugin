@@ -33,7 +33,7 @@ public class MeasureVersionAction implements RunAction2 {
       for (Entry<String, List<Change>> change : changes.getTestcaseChanges().entrySet()) {
          System.out.println(change.getKey());
       }
-      prefix = RCAVisualizer.getLongestPrefix(changes);
+      prefix = RCAVisualizer.getLongestPrefix(changes.getTestcaseChanges().keySet());
    }
 
    @Override
