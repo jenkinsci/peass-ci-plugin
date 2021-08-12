@@ -62,6 +62,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private boolean showStart = false;
 
    private int versionDiff = 1;
+   private boolean displayLogs = false;
+   private boolean displayRCALogs = false;
    private boolean generateCoverageSelection = true;
    private boolean useGC;
 
@@ -102,7 +104,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
          try (JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
             PeassProcessConfiguration peassConfig = buildConfiguration(workspace, env, listener);
-            final LocalPeassProcessManager processManager = new LocalPeassProcessManager(peassConfig, workspace, localWorkspace, listener);
+            final LocalPeassProcessManager processManager = new LocalPeassProcessManager(peassConfig, workspace, localWorkspace, listener, run);
             
             Set<TestCase> tests = processManager.rts();
             if (tests == null) {
@@ -142,7 +144,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       }
 
       DependencyConfig dependencyConfig = new DependencyConfig(1, false, true, generateCoverageSelection);
-      PeassProcessConfiguration peassConfig = new PeassProcessConfiguration(updateSnapshotDependencies, configWithRealGitVersions, dependencyConfig, peassEnv);
+      PeassProcessConfiguration peassConfig = new PeassProcessConfiguration(updateSnapshotDependencies, configWithRealGitVersions, dependencyConfig, peassEnv, displayLogs, displayRCALogs);
       return peassConfig;
    }
 
@@ -291,6 +293,24 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    @DataBoundSetter
    public void setVersionDiff(final int versionDiff) {
       this.versionDiff = versionDiff;
+   }
+
+   public boolean isDisplayLogs() {
+      return displayLogs;
+   }
+
+   @DataBoundSetter
+   public void setDisplayLogs(final boolean displayLogs) {
+      this.displayLogs = displayLogs;
+   }
+
+   public boolean isDisplayRCALogs() {
+      return displayRCALogs;
+   }
+
+   @DataBoundSetter
+   public void setDisplayRCALogs(final boolean displayRCALogs) {
+      this.displayRCALogs = displayRCALogs;
    }
 
    public boolean isRedirectSubprocessOutputToFile() {

@@ -2,6 +2,7 @@ package de.dagere.peass.ci;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -21,11 +22,15 @@ import de.dagere.peass.ci.helper.HistogramReader;
 import de.dagere.peass.ci.helper.HistogramValues;
 import de.dagere.peass.ci.helper.RCAVisualizer;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
+import de.dagere.peass.ci.logs.LogDisplayAction;
+import de.dagere.peass.ci.logs.LogFileReader;
+import de.dagere.peass.ci.logs.LogFiles;
 import de.dagere.peass.ci.persistence.TrendFileUtil;
 import de.dagere.peass.ci.remote.RemoteMeasurer;
 import de.dagere.peass.ci.remote.RemoteRCA;
 import de.dagere.peass.ci.remote.RemoteRTS;
 import de.dagere.peass.ci.rts.RTSVisualizationCreator;
+import de.dagere.peass.dependency.PeassFolders;
 import de.dagere.peass.dependency.ResultsFolders;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.measurement.analysis.ProjectStatistics;
@@ -45,12 +50,15 @@ public class LocalPeassProcessManager {
    private final File localWorkspace;
    private final TaskListener listener;
    private final PeassProcessConfiguration peassConfig;
+   private final ResultsFolders results;
 
-   public LocalPeassProcessManager(final PeassProcessConfiguration peassConfig, final FilePath workspace, final File localWorkspace, final TaskListener listener) {
+   public LocalPeassProcessManager(final PeassProcessConfiguration peassConfig, final FilePath workspace, final File localWorkspace, final TaskListener listener,
+         final Run<?, ?> run) {
       this.peassConfig = peassConfig;
       this.workspace = workspace;
       this.localWorkspace = localWorkspace;
       this.listener = listener;
+      this.results = new ResultsFolders(localWorkspace, run.getParent().getFullDisplayName());
    }
 
    public Set<TestCase> rts() throws IOException, InterruptedException {
@@ -75,26 +83,18 @@ public class LocalPeassProcessManager {
    }
 
    public void visualizeRTSResults(final Run<?, ?> run) {
-      ResultsFolders results = new ResultsFolders(localWorkspace, run.getParent().getFullDisplayName());
       new RTSVisualizationCreator(results, peassConfig).visualize(run);
    }
 
    public ProjectChanges visualizeMeasurementData(final Run<?, ?> run)
          throws JAXBException, IOException, JsonParseException, JsonMappingException, JsonGenerationException {
-      File dataFolder = new File(localWorkspace, peassConfig.getMeasurementConfig().getVersion() + "_" + peassConfig.getMeasurementConfig().getVersionOld());
+      File dataFolder = results.getVersionFullResultsFolder(peassConfig.getMeasurementConfig().getVersion(), peassConfig.getMeasurementConfig().getVersionOld());
       final HistogramReader histogramReader = new HistogramReader(peassConfig.getMeasurementConfig(), dataFolder);
       final Map<String, HistogramValues> measurements = histogramReader.readMeasurements();
 
-      final File changeFile = new File(localWorkspace, "changes.json");
-      final ProjectChanges changes;
-      if (changeFile.exists()) {
-         changes = Constants.OBJECTMAPPER.readValue(changeFile, ProjectChanges.class);
-      } else {
-         changes = new ProjectChanges();
-      }
+      final ProjectChanges changes = getChanges();
 
-      final File statisticsFile = new File(localWorkspace, "statistics.json");
-      final ProjectStatistics statistics = readStatistics(statisticsFile);
+      final ProjectStatistics statistics = readStatistics();
 
       TrendFileUtil.persistTrend(run, localWorkspace, statistics);
 
@@ -102,13 +102,41 @@ public class LocalPeassProcessManager {
       final MeasureVersionAction action = new MeasureVersionAction(peassConfig.getMeasurementConfig(), versionChanges, statistics, measurements);
       run.addAction(action);
 
-      VisualizationFolderManager visualizationFolders = new VisualizationFolderManager(localWorkspace, run);
-      DefaultMeasurementVisualizer visualizer = new DefaultMeasurementVisualizer(dataFolder, peassConfig.getMeasurementConfig().getVersion(), run, visualizationFolders, measurements);
-      visualizer.visualizeMeasurements();
+      createPureMeasurementVisualization(run, dataFolder, measurements);
+
+      if (peassConfig.isDisplayLogs()) {
+         VisualizationFolderManager visualizationFolders = new VisualizationFolderManager(localWorkspace, run);
+         PeassFolders folders = visualizationFolders.getPeassFolders();
+         LogFileReader creator = new LogFileReader(peassConfig.getMeasurementConfig());
+         Map<TestCase, List<LogFiles>> logFiles = creator.readAllTestcases(folders, statistics);
+         run.addAction(new LogDisplayAction(logFiles));
+      }
+
       return changes;
    }
 
-   private ProjectStatistics readStatistics(final File statisticsFile) throws IOException, JsonParseException, JsonMappingException {
+   
+
+   private void createPureMeasurementVisualization(final Run<?, ?> run, final File dataFolder, final Map<String, HistogramValues> measurements) {
+      VisualizationFolderManager visualizationFolders = new VisualizationFolderManager(localWorkspace, run);
+      DefaultMeasurementVisualizer visualizer = new DefaultMeasurementVisualizer(dataFolder, peassConfig.getMeasurementConfig().getVersion(), run, visualizationFolders,
+            measurements);
+      visualizer.visualizeMeasurements();
+   }
+
+   private ProjectChanges getChanges() throws IOException, JsonParseException, JsonMappingException {
+      final File changeFile = results.getChangeFile();
+      final ProjectChanges changes;
+      if (changeFile.exists()) {
+         changes = Constants.OBJECTMAPPER.readValue(changeFile, ProjectChanges.class);
+      } else {
+         changes = new ProjectChanges();
+      }
+      return changes;
+   }
+
+   private ProjectStatistics readStatistics() throws IOException, JsonParseException, JsonMappingException {
+      final File statisticsFile = results.getStatisticsFile();
       ProjectStatistics statistics;
       if (statisticsFile.exists()) {
          statistics = Constants.OBJECTMAPPER.readValue(statisticsFile, ProjectStatistics.class);

@@ -1,0 +1,19 @@
+----- withMaven Wrapper script -----
+Apache Maven 3.6.3
+Maven home: /usr/share/maven
+Java version: 1.8.0_292, vendor: Private Build, runtime: /usr/lib/jvm/java-8-openjdk-amd64/jre
+Default locale: de_DE, platform encoding: UTF-8
+OS name: "linux", version: "5.4.0-80-generic", arch: "amd64", family: "unix"
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------------< de.test:demo-project >------------------------
+[INFO] Building project 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ demo-project ---
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  0.190 s
+[INFO] Finished at: 2021-08-12T12:58:01+02:00
+[INFO] ------------------------------------------------------------------------

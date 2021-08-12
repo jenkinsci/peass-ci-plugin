@@ -1,0 +1,16 @@
+{
+  "statistics" : {
+    "a23e385264c31def8dcda86c3cf64faa698c62d8" : {
+      "de.test.CalleeTest#onlyCallMethod2" : {
+        "meanOld" : 1.3238616666666668E7,
+        "meanCurrent" : 7.269342083333333E7,
+        "deviationOld" : 840167.7782476277,
+        "deviationCurrent" : 18344.471224322602,
+        "vms" : 2,
+        "callsOld" : 2,
+        "calls" : 2,
+        "tvalue" : -100.0535337270078
+      }
+    }
+  }
+}

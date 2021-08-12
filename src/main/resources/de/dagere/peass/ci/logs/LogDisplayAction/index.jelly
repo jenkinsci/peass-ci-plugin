@@ -1,0 +1,25 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout">
+	<l:layout title="Project Measurement Trend">
+		<l:main-panel>
+
+			<h1>Performance Measurement Logs Overview</h1>
+			<j:forEach var="testcase" items="${it.getLogFiles().entrySet()}" >
+				<b>${testcase.getKey()}</b>
+				VMs: ${testcase.getValue().size()}
+				<table>
+				<j:forEach var="logFilePair" items="${testcase.getValue()}">
+			    	<tr>
+			    		<td>i</td>
+			    		<td>Predecessor</td>
+			    		<td>Current</td>
+			    	</tr>
+				</j:forEach>
+				</table>
+			</j:forEach>
+			
+			
+
+		</l:main-panel>
+	</l:layout>
+</j:jelly> 
