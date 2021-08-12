@@ -16,6 +16,7 @@ import org.mockito.Mockito;
 import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.ci.RCAVisualizationAction;
 import de.dagere.peass.ci.helper.RCAVisualizer;
+import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.config.MeasurementConfiguration;
 import de.dagere.peass.dependency.CauseSearchFolders;
 import de.dagere.peass.utils.Constants;
@@ -40,7 +41,8 @@ public class TestRCAVisualizer {
       // Calls the RCAVisualizer, which should be tested
       MeasurementConfiguration measurementConfig = new MeasurementConfiguration(2);
       measurementConfig.setVersion("b02c92af73e3297be617f4c973a7a63fb603565b");
-      RCAVisualizer visualizer = new RCAVisualizer(measurementConfig, folder.getRoot(), changes, run);
+      VisualizationFolderManager visualizationFolders = new VisualizationFolderManager(folder.getRoot(), run);
+      RCAVisualizer visualizer = new RCAVisualizer(measurementConfig, visualizationFolders, changes, run);
       visualizer.visualizeRCA();
 
       testCorrectResult(run, visualizationResultFolder);
