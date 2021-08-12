@@ -11,13 +11,25 @@ import jenkins.model.RunAction2;
 public class LogDisplayAction implements RunAction2 {
    private transient Run<?, ?> run;
    private Map<TestCase, List<LogFiles>> logFiles = new HashMap<>();
+   private String version;
+   private String versionOld;
 
-   public LogDisplayAction(final Map<TestCase, List<LogFiles>> logFiles) {
+   public LogDisplayAction(final Map<TestCase, List<LogFiles>> logFiles, final String version, final String versionOld) {
       this.logFiles = logFiles;
+      this.version = version;
+      this.versionOld = versionOld;
    }
    
    public Map<TestCase, List<LogFiles>> getLogFiles() {
       return logFiles;
+   }
+   
+   public String getVersion() {
+      return version;
+   }
+   
+   public String getVersionOld() {
+      return versionOld;
    }
 
    @Override

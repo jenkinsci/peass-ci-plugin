@@ -18,5 +18,4 @@ public class LogFiles {
    public File getCurrent() {
       return current;
    }
-
 }

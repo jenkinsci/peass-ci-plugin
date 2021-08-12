@@ -16,9 +16,9 @@ import de.dagere.peass.measurement.analysis.ProjectStatistics;
 
 public class LogFileReader {
    private static final Logger LOG = LogManager.getLogger(LogFileReader.class);
-   
+
    private final MeasurementConfiguration measurementConfig;
-   
+
    public LogFileReader(final MeasurementConfiguration measurementConfig) {
       this.measurementConfig = measurementConfig;
    }
@@ -35,22 +35,23 @@ public class LogFileReader {
       LOG.info("Reading testcase " + testcase);
       List<LogFiles> currentFiles = new LinkedList<>();
       File logFolder = folders.getExistingLogFolder(measurementConfig.getVersion(), testcase);
-      tryLocalLogFolderVMIds(currentFiles, logFolder);
+      tryLocalLogFolderVMIds(testcase, currentFiles, logFolder);
       logFiles.put(testcase, currentFiles);
    }
 
-   private void tryLocalLogFolderVMIds(final List<LogFiles> currentFiles, final File logFolder) {
+   private void tryLocalLogFolderVMIds(final TestCase testcase, final List<LogFiles> currentFiles, final File logFolder) {
       LOG.debug("Log folder: {} {}", logFolder, logFolder.listFiles());
       int tryIndex = 0;
-      File predecessorFile = new File(logFolder, "vm_" + tryIndex + "_" + measurementConfig.getVersionOld());
+      String filenameSuffix = "log_" + testcase.getClazz() + File.separator + testcase.getMethod() + ".txt";
+      File predecessorFile = new File(logFolder, "vm_" + tryIndex + "_" + measurementConfig.getVersionOld() + File.separator + filenameSuffix);
       LOG.debug("Trying whether {} exists", predecessorFile, predecessorFile.exists());
       while (predecessorFile.exists()) {
-         File currentFile = new File(logFolder, "vm_" + tryIndex + "_" + measurementConfig.getVersion());
+         File currentFile = new File(logFolder, "vm_" + tryIndex + "_" + measurementConfig.getVersion() + File.separator + filenameSuffix);
          LogFiles vmidLogFile = new LogFiles(predecessorFile, currentFile);
          currentFiles.add(vmidLogFile);
 
          tryIndex++;
-         predecessorFile = new File(logFolder, "vm_" + tryIndex + "_" + measurementConfig.getVersionOld());
+         predecessorFile = new File(logFolder, "vm_" + tryIndex + "_" + measurementConfig.getVersionOld() + File.separator + filenameSuffix);
          LOG.debug("Trying whether {} exists", predecessorFile, predecessorFile.exists());
       }
    }

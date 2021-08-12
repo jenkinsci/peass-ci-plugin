@@ -9,11 +9,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 import hudson.model.InvisibleAction;
-import hudson.model.Run;
 
 public class MeasurementVisualizationAction extends InvisibleAction {
 
-   private transient Run<?, ?> run;
    private String displayName;
    private final File jsFile;
 
@@ -37,9 +35,4 @@ public class MeasurementVisualizationAction extends InvisibleAction {
       final String content = FileUtils.readFileToString(jsFile, StandardCharsets.UTF_8);
       return content;
    }
-
-   public Run<?, ?> getRun() {
-      return run;
-   }
-
 }
