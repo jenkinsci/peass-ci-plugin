@@ -34,7 +34,7 @@ public class LogDisplayAction implements RunAction2 {
 
    @Override
    public String getIconFileName() {
-      return "/plugin/peass-ci/images/sd_slower.png";
+      return "notepad.png";
    }
 
    @Override
