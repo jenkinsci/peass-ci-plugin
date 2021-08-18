@@ -66,6 +66,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private boolean displayRCALogs = false;
    private boolean generateCoverageSelection = true;
    private boolean useGC;
+   private boolean measureJMH;
 
    private String includes = "";
    private String properties = "";
@@ -161,6 +162,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       listener.getLogger().println("Current Job: " + getJobName(run));
       listener.getLogger().println("Local workspace " + workspace.toString() + " Run dir: " + run.getRootDir() + " Local workspace: " + localWorkspace);
       listener.getLogger().println("VMs: " + VMs + " Iterations: " + iterations + " Warmup: " + warmup + " Repetitions: " + repetitions);
+      listener.getLogger().println("measureJMH: " + measureJMH);
       listener.getLogger().println("Includes: " + includes + " RCA: " + executeRCA);
       listener.getLogger().println("Strategy: " + measurementMode + " Source Instrumentation: " + useSourceInstrumentation + " Sampling: " + useSampling);
       listener.getLogger().println("Create default constructor: " + createDefaultConstructor);
@@ -200,6 +202,10 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          config.setMeasurementStrategy(MeasurementStrategy.PARALLEL);
       } else {
          System.out.println("executeparallel is false");
+      }
+      if(measureJMH) {
+         config.getExecutionConfig().setTestTransformer("de.dagere.peass.dependency.jmh.JmhTestTransformer");
+         config.getExecutionConfig().setTestExecutor("de.dagere.peass.dependency.jmh.JmhTestExecutor");
       }
       if (useSourceInstrumentation) {
          config.setUseSourceInstrumentation(true);
@@ -454,6 +460,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    @DataBoundSetter
    public void setShowStart(final boolean showStart) {
       this.showStart = showStart;
+   }
+
+   public boolean isMeasureJMH() {
+      return measureJMH;
+   }
+
+   @DataBoundSetter
+   public void setMeasureJMH(boolean measureJMH) {
+      this.measureJMH = measureJMH;
    }
 
    @Symbol("measure")
