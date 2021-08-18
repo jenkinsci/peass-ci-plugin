@@ -30,7 +30,7 @@ jobs:
     - name: Build Peass (Current dependent project version)
       run: |
          branch=${GITHUB_REF##*/}
-         cd /home/runner/work/ && git clone -b $branch https://github.com/DaGeRe/peass.git && cd peass && ./mvnw clean install -DskipTests
+         cd /home/runner/work/ && git clone -b $branch https://github.com/DaGeRe/peass.git && cd peass && git rev-parse HEAD && ./mvnw clean install -DskipTests
     - name: Build with Maven
       run: | 
          cd /home/runner/work/peass-ci/peass-ci/ && ./mvnw -B package --file pom.xml
