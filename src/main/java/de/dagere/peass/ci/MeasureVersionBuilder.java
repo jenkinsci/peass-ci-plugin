@@ -77,11 +77,11 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private boolean executeBeforeClassInMeasurement = false;
 
    private boolean updateSnapshotDependencies = true;
-   
+
    private boolean useSourceInstrumentation = true;
    private boolean useSampling = true;
    private boolean createDefaultConstructor = true;
-   
+
    private boolean redirectSubprocessOutputToFile = true;
 
    @DataBoundConstructor
@@ -106,16 +106,16 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          try (JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
             PeassProcessConfiguration peassConfig = buildConfiguration(workspace, env, listener);
             final LocalPeassProcessManager processManager = new LocalPeassProcessManager(peassConfig, workspace, localWorkspace, listener, run);
-            
+
             Set<TestCase> tests = processManager.rts();
             if (tests == null) {
                run.setResult(Result.FAILURE);
                return;
             }
-            
+
             processManager.copyFromRemote();
             processManager.visualizeRTSResults(run);
-            
+
             boolean worked = processManager.measure(tests);
             if (!worked) {
                run.setResult(Result.FAILURE);
@@ -145,7 +145,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       }
 
       DependencyConfig dependencyConfig = new DependencyConfig(1, false, true, generateCoverageSelection);
-      PeassProcessConfiguration peassConfig = new PeassProcessConfiguration(updateSnapshotDependencies, configWithRealGitVersions, dependencyConfig, peassEnv, displayLogs, displayRCALogs);
+      PeassProcessConfiguration peassConfig = new PeassProcessConfiguration(updateSnapshotDependencies, configWithRealGitVersions, dependencyConfig, peassEnv, displayLogs,
+            displayRCALogs);
       return peassConfig;
    }
 
@@ -203,7 +204,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       } else {
          System.out.println("executeparallel is false");
       }
-      if(measureJMH) {
+      if (measureJMH) {
          config.getExecutionConfig().setTestTransformer("de.dagere.peass.dependency.jmh.JmhTestTransformer");
          config.getExecutionConfig().setTestExecutor("de.dagere.peass.dependency.jmh.JmhTestExecutor");
       }
@@ -229,7 +230,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       config.setIncludes(getIncludeList());
 
       config.setRedirectSubprocessOutputToFile(redirectSubprocessOutputToFile);
-      
+
       if (testGoal != null && !"".equals(testGoal)) {
          config.setTestGoal(testGoal);
       }
@@ -322,12 +323,12 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public boolean isRedirectSubprocessOutputToFile() {
       return redirectSubprocessOutputToFile;
    }
-   
+
    @DataBoundSetter
    public void setGenerateCoverageSelection(final boolean generateCoverageSelection) {
       this.generateCoverageSelection = generateCoverageSelection;
    }
-   
+
    public boolean isGenerateCoverageSelection() {
       return generateCoverageSelection;
    }
