@@ -3,6 +3,7 @@ package de.dagere.peass.ci.helper;
 import java.io.File;
 
 import de.dagere.peass.dependency.PeassFolders;
+import de.dagere.peass.dependency.ResultsFolders;
 import hudson.model.Run;
 
 public class VisualizationFolderManager {
@@ -46,17 +47,32 @@ public class VisualizationFolderManager {
    }
 
    public PeassFolders getPeassFolders() {
-      String peassResultFolder = run.getParent().getFullDisplayName();
-      File dataFolder = new File(localWorkspace, peassResultFolder);
-      if (!dataFolder.exists()) {
-         dataFolder = new File(localWorkspace, "workspace");
-         if (!dataFolder.exists()) {
-            throw new RuntimeException(localWorkspace.getAbsolutePath() + " neither contains workspace_peass nor " + peassResultFolder + "; one must exist for visualization!");
+      String projectName = run.getParent().getFullDisplayName();
+      File projectFolder = new File(localWorkspace, projectName);
+      if (!projectFolder.exists()) {
+         projectFolder = new File(localWorkspace, "workspace");
+         if (!projectFolder.exists()) {
+            throw new RuntimeException(localWorkspace.getAbsolutePath() + " neither contains workspace_peass nor " + projectName + "; one must exist for visualization!");
          } else {
-            return new PeassFolders(dataFolder, "workspace");
+            return new PeassFolders(projectFolder, "workspace");
          }
       } else {
-         return new PeassFolders(dataFolder, run.getParent().getFullDisplayName());
+         return new PeassFolders(projectFolder, run.getParent().getFullDisplayName());
+      }
+   }
+
+   public ResultsFolders getResultsFolders() {
+      String projectName = run.getParent().getFullDisplayName();
+      File projectFolder = new File(localWorkspace, projectName);
+      if (!projectFolder.exists()) {
+         projectFolder = new File(localWorkspace, "workspace");
+         if (!projectFolder.exists()) {
+            throw new RuntimeException(localWorkspace.getAbsolutePath() + " neither contains workspace_peass nor " + projectName + "; one must exist for visualization!");
+         } else {
+            return new ResultsFolders(localWorkspace, "workspace");
+         }
+      } else {
+         return new ResultsFolders(localWorkspace, run.getParent().getFullDisplayName());
       }
    }
 
