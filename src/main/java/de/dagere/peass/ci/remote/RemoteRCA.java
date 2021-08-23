@@ -50,11 +50,11 @@ public class RemoteRCA implements FileCallable<Boolean>, Serializable {
    @Override
    public Boolean invoke(final File workspaceFolder, final VirtualChannel channel) throws IOException, InterruptedException {
       final File localFolder = ContinuousFolderUtil.getLocalFolder(workspaceFolder);
-      final File logFile = new File(localFolder, "rca_" + measurementConfig.getVersion() + ".txt");
+      ResultsFolders resultsFolder = new ResultsFolders(localFolder, workspaceFolder.getName());
+      final File logFile = resultsFolder.getRCALogFile(measurementConfig.getVersion(), measurementConfig.getVersionOld());
       listener.getLogger().println("Executing root cause analysis - Log goes to " + logFile.getAbsolutePath());
       try (LogRedirector director = new LogRedirector(logFile)) {
          final File projectFolderLocal = new File(localFolder, workspaceFolder.getName());
-         ResultsFolders resultsFolder = new ResultsFolders(localFolder, workspaceFolder.getName());
          File propertyFolder = resultsFolder.getPropertiesFolder();
          causeConfig.setPropertyFolder(propertyFolder);
          listener.getLogger().println("Setting property folder: " + propertyFolder.getAbsolutePath());
