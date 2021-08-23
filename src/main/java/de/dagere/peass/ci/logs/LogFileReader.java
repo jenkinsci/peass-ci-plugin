@@ -88,7 +88,7 @@ public class LogFileReader {
    public String getMeasureLog() {
       File measureLogFile = visualizationFolders.getResultsFolders().getMeasurementLogFile(measurementConfig.getVersion(), measurementConfig.getVersionOld());
       try {
-         LOG.debug("Reading ", measureLogFile.getAbsolutePath());
+         LOG.debug("Reading {}", measureLogFile.getAbsolutePath());
          String rtsLog = FileUtils.readFileToString(measureLogFile, StandardCharsets.UTF_8);
          return rtsLog;
       } catch (IOException e) {
@@ -100,7 +100,7 @@ public class LogFileReader {
    public String getRCALog() {
       File rcaLogFile = visualizationFolders.getResultsFolders().getRCALogFile(measurementConfig.getVersion(), measurementConfig.getVersionOld());
       try {
-         LOG.debug("Reading ", rcaLogFile.getAbsolutePath());
+         LOG.debug("Reading {}", rcaLogFile.getAbsolutePath());
          String rcaLog = FileUtils.readFileToString(rcaLogFile, StandardCharsets.UTF_8);
          return rcaLog;
       } catch (IOException e) {

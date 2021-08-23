@@ -35,18 +35,21 @@ public class TestLogFileReader {
    @BeforeEach
    public void init() throws IOException {
       File source = new File("src/test/resources/demo-results-logs/demo-vis2_peass");
-      if (testFolder.exists()) {
-         FileUtils.deleteDirectory(testFolder);
+      if (localFolder.exists()) {
+         FileUtils.deleteDirectory(localFolder);
       }
       if (!localFolder.exists()) {
          localFolder.mkdirs();
       }
       
       FileUtils.copyDirectory(source, testFolder);
+
+       ResultsFolders folders = new ResultsFolders(localFolder, "demo-vis2");
+       File measurementLogFile = folders.getMeasurementLogFile(VERSION, VERSION_OLD);
+       FileUtils.write(measurementLogFile, "This is a measurement log test", StandardCharsets.UTF_8);
       
-      ResultsFolders folders = new ResultsFolders(localFolder, "demo-vis2");
-      File rcaLogFile = folders.getRCALogFile(VERSION, VERSION_OLD);
-      FileUtils.write(rcaLogFile, "This is a rca log test", StandardCharsets.UTF_8);
+       File rtsLogFile = folders.getDependencyLogFile(VERSION, VERSION_OLD);
+       FileUtils.write(rtsLogFile, "This is a rts log test", StandardCharsets.UTF_8);
    }
    
    @Test
