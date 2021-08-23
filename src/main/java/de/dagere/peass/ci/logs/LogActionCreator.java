@@ -18,12 +18,14 @@ import hudson.model.Run;
 public class LogActionCreator {
    
    private final PeassProcessConfiguration peassConfig;
+   private final Run<?, ?> run;
    
-   public LogActionCreator(final PeassProcessConfiguration peassConfig) {
+   public LogActionCreator(final PeassProcessConfiguration peassConfig, final Run<?, ?> run) {
       this.peassConfig = peassConfig;
+      this.run = run;
    }
 
-   public void createActions(final File localWorkspace, final Run<?, ?> run, final ProjectStatistics statistics) throws IOException {
+   public void createActions(final File localWorkspace, final ProjectStatistics statistics) throws IOException {
       VisualizationFolderManager visualizationFolders = new VisualizationFolderManager(localWorkspace, run);
       LogFileReader reader = new LogFileReader(visualizationFolders, peassConfig.getMeasurementConfig());
       
@@ -38,13 +40,6 @@ public class LogActionCreator {
       
       LogOverviewAction logOverviewAction = new LogOverviewAction(logFiles, peassConfig.getMeasurementConfig().getVersion().substring(0,6), peassConfig.getMeasurementConfig().getVersionOld().substring(0,6));
       run.addAction(logOverviewAction);
-      
-      String rcaLog = reader.getRCALog();
-      run.addAction(new InternalLogAction("rcaLog", "RCA Log", rcaLog));
-      
-      RCALogOverviewAction rcaOverviewAction = new RCALogOverviewAction(peassConfig.getMeasurementConfig().getVersion().substring(0,6), peassConfig.getMeasurementConfig().getVersionOld().substring(0,6));
-      run.addAction(rcaOverviewAction);
-      
    }
    
    private void createLogActions(final Run<?, ?> run, final Map<TestCase, List<LogFiles>> logFiles) throws IOException {
@@ -59,5 +54,15 @@ public class LogActionCreator {
             vmId++;
          }
       }
+   }
+   
+   public void createRCAActions(final File localWorkspace) {
+      VisualizationFolderManager visualizationFolders = new VisualizationFolderManager(localWorkspace, run);
+      LogFileReader reader = new LogFileReader(visualizationFolders, peassConfig.getMeasurementConfig());
+      String rcaLog = reader.getRCALog();
+      run.addAction(new InternalLogAction("rcaLog", "RCA Log", rcaLog));
+      
+      RCALogOverviewAction rcaOverviewAction = new RCALogOverviewAction(peassConfig.getMeasurementConfig().getVersion().substring(0,6), peassConfig.getMeasurementConfig().getVersionOld().substring(0,6));
+      run.addAction(rcaOverviewAction);
    }
 }
