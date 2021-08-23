@@ -1,4 +1,4 @@
-package de.peass.ci;
+package de.peass.ci.logs;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +25,7 @@ import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.measurement.analysis.ProjectStatistics;
 import de.dagere.peass.utils.Constants;
 
-public class TestLogFileReader {
+public class TestRCALogFileReader {
    
    private static final String VERSION_OLD = "33ce17c04b5218c25c40137d4d09f40fbb3e4f0f";
    private static final String VERSION = "a23e385264c31def8dcda86c3cf64faa698c62d8";

@@ -1,0 +1,11 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout">
+	<l:layout title="Performance Measurement Log Overview">
+		<l:main-panel>
+
+			<h1>Performance RCA Logs Overview</h1>
+			<a href="../rcaLog">Root Cause Analysis Overall Log</a><br />
+
+		</l:main-panel>
+	</l:layout>
+</j:jelly> 

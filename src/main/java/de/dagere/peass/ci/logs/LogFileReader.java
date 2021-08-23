@@ -36,6 +36,11 @@ public class LogFileReader {
       }
       return logFiles;
    }
+   
+   public Map<TestCase, List<LogFiles>> readAllRCATestcases(){
+      Map<TestCase, List<LogFiles>> logFiles = new HashMap<>();
+      return logFiles;
+   }
 
    private void readTestcase(final PeassFolders folders, final Map<TestCase, List<LogFiles>> logFiles, final TestCase testcase) {
       LOG.info("Reading testcase " + testcase);
@@ -80,6 +85,18 @@ public class LogFileReader {
          LOG.debug("Reading ", measureLogFile.getAbsolutePath());
          String rtsLog = FileUtils.readFileToString(measureLogFile, StandardCharsets.UTF_8);
          return rtsLog;
+      } catch (IOException e) {
+         e.printStackTrace();
+         return "Measurement log not readable";
+      }
+   }
+
+   public String getRCALog() {
+      File rcaLogFile = visualizationFolders.getResultsFolders().getRCALogFile(measurementConfig.getVersion(), measurementConfig.getVersionOld());
+      try {
+         LOG.debug("Reading ", rcaLogFile.getAbsolutePath());
+         String rcaLog = FileUtils.readFileToString(rcaLogFile, StandardCharsets.UTF_8);
+         return rcaLog;
       } catch (IOException e) {
          e.printStackTrace();
          return "Measurement log not readable";

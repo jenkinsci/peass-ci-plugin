@@ -1,0 +1,133 @@
+{
+  "measurementConfig" : {
+    "timeout" : 300000,
+    "vms" : 10,
+    "type1error" : 0.01,
+    "type2error" : 0.01,
+    "version" : "a23e385264c31def8dcda86c3cf64faa698c62d8",
+    "versionOld" : "33ce17c04b5218c25c40137d4d09f40fbb3e4f0f",
+    "earlyStop" : false,
+    "warmup" : 0,
+    "iterations" : 20,
+    "repetitions" : 10,
+    "logFullData" : true,
+    "removeSnapshots" : false,
+    "useGC" : false,
+    "executeBeforeClassInMeasurement" : false,
+    "showStart" : false,
+    "useKieker" : true,
+    "useSourceInstrumentation" : false,
+    "useSelectiveInstrumentation" : false,
+    "useSampling" : false,
+    "useCircularQueue" : false,
+    "redirectToNull" : true,
+    "saveAll" : true,
+    "kiekerAggregationInterval" : 5000,
+    "javaVersion" : "11.0.11",
+    "record" : "OPERATIONEXECUTION",
+    "measurementStrategy" : "SEQUENTIAL",
+    "statisticsConfig" : {
+      "type1error" : 0.01,
+      "type2error" : 0.01,
+      "outlierFactor" : 3.29,
+      "statisticTest" : "BIMODAL_T_TEST"
+    },
+    "executionConfig" : {
+      "includes" : [ ],
+      "testGoal" : "test",
+      "timeout" : 300000,
+      "version" : "a23e385264c31def8dcda86c3cf64faa698c62d8",
+      "versionOld" : "33ce17c04b5218c25c40137d4d09f40fbb3e4f0f",
+      "pl" : null,
+      "createDefaultConstructor" : true,
+      "redirectSubprocessOutputToFile" : true,
+      "useTieredCompilation" : false,
+      "testTransformer" : "de.dagere.peass.testtransformation.JUnitTestTransformer",
+      "testExecutor" : "default"
+    },
+    "redirectSubprocessOutputToFile" : true,
+    "testGoal" : "test",
+    "enableAdaptiveConfig" : false,
+    "includes" : [ ]
+  },
+  "causeConfig" : {
+    "useAggregation" : true,
+    "splitAggregated" : true,
+    "minTime" : 0.01,
+    "ignoreEOIs" : true,
+    "rcaStrategy" : "COMPLETE",
+    "levels" : 1,
+    "testCase" : {
+      "clazz" : "de.test.CalleeTest",
+      "method" : "onlyCallMethod2",
+      "module" : "",
+      "params" : null
+    },
+    "propertyFolder" : "/home/reichelt/nvme/workspaces/dissworkspace/permanent/peass-ci/work/workspace/demo-test2/../demo-test2_fullPeass/properties_demo-test2"
+  },
+  "nodes" : {
+    "call" : "de.test.CalleeTest#onlyCallMethod2",
+    "kiekerPattern" : "public void de.test.CalleeTest.onlyCallMethod2()",
+    "otherKiekerPattern" : "public void de.test.CalleeTest.onlyCallMethod2()",
+    "module" : "",
+    "statistic" : {
+      "meanOld" : 4223.778,
+      "meanCurrent" : 24263.609999999997,
+      "deviationOld" : 10.52294667223369,
+      "deviationCurrent" : 18.034342701268205,
+      "vms" : 10,
+      "callsOld" : 2000,
+      "calls" : 2000,
+      "tvalue" : -3035.0497320353
+    },
+    "childs" : [ {
+      "call" : "de.test.Callee#<init>",
+      "kiekerPattern" : "public new de.test.Callee.<init>()",
+      "otherKiekerPattern" : "public new de.test.Callee.<init>()",
+      "module" : "",
+      "statistic" : {
+        "meanOld" : 1.9929999999999999,
+        "meanCurrent" : 2.3925,
+        "deviationOld" : 0.18941723493095589,
+        "deviationCurrent" : 0.29230168965946396,
+        "vms" : 10,
+        "callsOld" : 2000,
+        "calls" : 2000,
+        "tvalue" : -3.627037738973453
+      },
+      "childs" : [ ]
+    }, {
+      "call" : "de.test.Callee#method1",
+      "kiekerPattern" : "public void de.test.Callee.method1()",
+      "otherKiekerPattern" : "public void de.test.Callee.method1()",
+      "module" : "",
+      "statistic" : {
+        "meanOld" : 2079.08775,
+        "meanCurrent" : 12096.252000000002,
+        "deviationOld" : 2.1342863919305457,
+        "deviationCurrent" : 8.905470369388174,
+        "vms" : 10,
+        "callsOld" : 4000,
+        "calls" : 4000,
+        "tvalue" : -3459.080610733562
+      },
+      "childs" : [ {
+        "call" : "de.test.Callee#innerMethod",
+        "kiekerPattern" : "private void de.test.Callee.innerMethod()",
+        "otherKiekerPattern" : "private void de.test.Callee.innerMethod()",
+        "module" : "",
+        "statistic" : {
+          "meanOld" : 2062.540750000001,
+          "meanCurrent" : 12072.027499999995,
+          "deviationOld" : 0.874658703278851,
+          "deviationCurrent" : 7.809548197918453,
+          "vms" : 10,
+          "callsOld" : 4000,
+          "calls" : 4000,
+          "tvalue" : -4027.903089433348
+        },
+        "childs" : [ ]
+      } ]
+    } ]
+  }
+}

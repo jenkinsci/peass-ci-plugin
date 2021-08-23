@@ -8,13 +8,14 @@ import de.dagere.peass.dependency.analysis.data.TestCase;
 import hudson.model.Run;
 import jenkins.model.RunAction2;
 
-public class LogDisplayAction implements RunAction2 {
+public class LogOverviewAction implements RunAction2 {
+   
    private transient Run<?, ?> run;
    private Map<TestCase, List<LogFiles>> logFiles = new HashMap<>();
    private String version;
    private String versionOld;
 
-   public LogDisplayAction(final Map<TestCase, List<LogFiles>> logFiles, final String version, final String versionOld) {
+   public LogOverviewAction(final Map<TestCase, List<LogFiles>> logFiles, final String version, final String versionOld) {
       this.logFiles = logFiles;
       this.version = version;
       this.versionOld = versionOld;
@@ -39,12 +40,12 @@ public class LogDisplayAction implements RunAction2 {
 
    @Override
    public String getDisplayName() {
-      return "Performance Measurement Logs";
+      return "Performance Measurement Overview";
    }
 
    @Override
    public String getUrlName() {
-      return "measurementLogs";
+      return "measurementLogOverview";
    }
 
    @Override
