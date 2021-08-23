@@ -102,7 +102,7 @@ public class LocalPeassProcessManager {
 
       if (peassConfig.isDisplayLogs()) {
             LogActionCreator logActionCreator = new LogActionCreator(peassConfig);
-            logActionCreator.createActions(dataFolder, run, statistics);
+            logActionCreator.createActions(localWorkspace, run, statistics);
       }
 
       return changes;
