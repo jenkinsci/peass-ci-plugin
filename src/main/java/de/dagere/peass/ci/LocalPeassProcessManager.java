@@ -47,6 +47,7 @@ public class LocalPeassProcessManager {
    private final TaskListener listener;
    private final PeassProcessConfiguration peassConfig;
    private final ResultsFolders results;
+   private final LogActionCreator logActionCreator;
 
    public LocalPeassProcessManager(final PeassProcessConfiguration peassConfig, final FilePath workspace, final File localWorkspace, final TaskListener listener,
          final Run<?, ?> run) {
@@ -55,6 +56,7 @@ public class LocalPeassProcessManager {
       this.localWorkspace = localWorkspace;
       this.listener = listener;
       this.results = new ResultsFolders(localWorkspace, run.getParent().getFullDisplayName());
+      this.logActionCreator = new LogActionCreator(peassConfig, run);
    }
 
    public Set<TestCase> rts() throws IOException, InterruptedException {
@@ -101,8 +103,7 @@ public class LocalPeassProcessManager {
       createPureMeasurementVisualization(run, dataFolder, measurements);
 
       if (peassConfig.isDisplayLogs()) {
-            LogActionCreator logActionCreator = new LogActionCreator(peassConfig);
-            logActionCreator.createActions(localWorkspace, run, statistics);
+         logActionCreator.createActions(localWorkspace, statistics);
       }
 
       return changes;
@@ -152,6 +153,10 @@ public class LocalPeassProcessManager {
       VisualizationFolderManager visualizationFolders = new VisualizationFolderManager(localWorkspace, run);
       final RCAVisualizer rcaVisualizer = new RCAVisualizer(peassConfig.getMeasurementConfig(), visualizationFolders, changes, run);
       rcaVisualizer.visualizeRCA();
+      
+      if (peassConfig.isDisplayRCALogs()) {
+         logActionCreator.createRCAActions(localWorkspace);
+      }
    }
 
 }
