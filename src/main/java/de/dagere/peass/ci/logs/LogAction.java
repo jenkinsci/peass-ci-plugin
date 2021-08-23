@@ -7,7 +7,7 @@ import hudson.model.InvisibleAction;
 
 public class LogAction extends InvisibleAction {
    
-   private final String displayName;
+   protected final String displayName;
    private final TestCase test;
    private final int vmId;
    private final String version;

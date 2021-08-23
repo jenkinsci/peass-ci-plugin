@@ -59,7 +59,7 @@ public class RCAExecutor {
 
       if (needsRCA) {
          LOG.info("At least one testcase was not successfully executed in the last build for the current version - executing RCA");
-         saveOldPeassFolder();
+//         saveOldPeassFolder();
 
          MeasurementConfiguration currentConfig = new MeasurementConfiguration(config);
 

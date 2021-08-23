@@ -1,0 +1,11 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout">
+	<l:layout title="RCA Log">
+		<l:main-panel>
+			<h1>RCA Log ${it.test} VM: ${it.getVmId()} Level: {it.level} Version: ${it.version}</h1>
+			<pre>
+			${it.log}
+			</pre>
+		</l:main-panel>
+	</l:layout>
+</j:jelly> 

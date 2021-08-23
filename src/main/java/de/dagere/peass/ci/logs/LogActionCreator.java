@@ -10,6 +10,7 @@ import org.apache.commons.io.FileUtils;
 
 import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
+import de.dagere.peass.ci.logs.rca.RCALevel;
 import de.dagere.peass.ci.logs.rca.RCALogOverviewAction;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.measurement.analysis.ProjectStatistics;
@@ -62,7 +63,9 @@ public class LogActionCreator {
       String rcaLog = reader.getRCALog();
       run.addAction(new InternalLogAction("rcaLog", "RCA Log", rcaLog));
       
-      RCALogOverviewAction rcaOverviewAction = new RCALogOverviewAction(peassConfig.getMeasurementConfig().getVersion().substring(0,6), peassConfig.getMeasurementConfig().getVersionOld().substring(0,6));
+      Map<TestCase, List<RCALevel>> testLevelMap = reader.getRCATestcases();
+      
+      RCALogOverviewAction rcaOverviewAction = new RCALogOverviewAction(testLevelMap, peassConfig.getMeasurementConfig().getVersion().substring(0,6), peassConfig.getMeasurementConfig().getVersionOld().substring(0,6));
       run.addAction(rcaOverviewAction);
    }
 }

@@ -17,13 +17,12 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.LogFileReader;
-import de.dagere.peass.ci.logs.LogFiles;
+import de.dagere.peass.ci.logs.rca.RCALevel;
 import de.dagere.peass.config.MeasurementConfiguration;
+import de.dagere.peass.dependency.CauseSearchFolders;
 import de.dagere.peass.dependency.PeassFolders;
 import de.dagere.peass.dependency.ResultsFolders;
 import de.dagere.peass.dependency.analysis.data.TestCase;
-import de.dagere.peass.measurement.analysis.ProjectStatistics;
-import de.dagere.peass.utils.Constants;
 
 public class TestRCALogFileReader {
    
@@ -58,20 +57,17 @@ public class TestRCALogFileReader {
       
       VisualizationFolderManager visualizationFolders = Mockito.mock(VisualizationFolderManager.class);
       Mockito.when(visualizationFolders.getPeassFolders()).thenReturn(new PeassFolders(testFolder));
+      Mockito.when(visualizationFolders.getPeassRCAFolders()).thenReturn(new CauseSearchFolders(testFolder));
       Mockito.when(visualizationFolders.getResultsFolders()).thenReturn(new ResultsFolders(localFolder, "demo-vis2"));
       LogFileReader reader = new LogFileReader(visualizationFolders, peassDemoConfig);
-      ProjectStatistics statistics = Constants.OBJECTMAPPER.readValue(new File("src/test/resources/demo-results-logs/statistics.json"), ProjectStatistics.class);
-      Map<TestCase, List<LogFiles>> testcases = reader.readAllTestcases(statistics);
       
-      Assert.assertEquals(1, testcases.size());
       TestCase test = new TestCase("de.test.CalleeTest#onlyCallMethod2");
-      List<LogFiles> logFiles = testcases.get(test);
-      Assert.assertEquals(2, logFiles.size());
+      Map<TestCase, List<RCALevel>> rcaTestcases = reader.getRCATestcases();
+      List<RCALevel> levels = rcaTestcases.get(test);
+      Assert.assertEquals(1, levels.size());
       
-      String rtsLog = reader.getRTSLog();
-      Assert.assertEquals("This is a rts log test", rtsLog);
+      String rtsLog = reader.getRCALog();
+      Assert.assertEquals("This is a rca log test", rtsLog);
       
-      String measureLog = reader.getMeasureLog();
-      Assert.assertEquals("This is a measurement log test", measureLog);
    }
 }

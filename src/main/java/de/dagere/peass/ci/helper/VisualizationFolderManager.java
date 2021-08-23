@@ -2,6 +2,7 @@ package de.dagere.peass.ci.helper;
 
 import java.io.File;
 
+import de.dagere.peass.dependency.CauseSearchFolders;
 import de.dagere.peass.dependency.PeassFolders;
 import de.dagere.peass.dependency.ResultsFolders;
 import hudson.model.Run;
@@ -58,6 +59,21 @@ public class VisualizationFolderManager {
          }
       } else {
          return new PeassFolders(projectFolder, run.getParent().getFullDisplayName());
+      }
+   }
+   
+   public CauseSearchFolders getPeassRCAFolders() {
+      String projectName = run.getParent().getFullDisplayName();
+      File projectFolder = new File(localWorkspace, projectName);
+      if (!projectFolder.exists()) {
+         projectFolder = new File(localWorkspace, "workspace");
+         if (!projectFolder.exists()) {
+            throw new RuntimeException(localWorkspace.getAbsolutePath() + " neither contains workspace_peass nor " + projectName + "; one must exist for visualization!");
+         } else {
+            return new CauseSearchFolders(projectFolder);
+         }
+      } else {
+         return new CauseSearchFolders(projectFolder);
       }
    }
 

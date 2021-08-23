@@ -1,6 +1,7 @@
 package de.dagere.peass.ci.logs;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -13,10 +14,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
+import de.dagere.peass.ci.logs.rca.RCALevel;
 import de.dagere.peass.config.MeasurementConfiguration;
+import de.dagere.peass.dependency.CauseSearchFolders;
 import de.dagere.peass.dependency.PeassFolders;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.measurement.analysis.ProjectStatistics;
+import de.dagere.peass.measurement.rca.data.CauseSearchData;
+import de.dagere.peass.utils.Constants;
+import io.jenkins.cli.shaded.org.apache.commons.io.filefilter.WildcardFileFilter;
 
 public class LogFileReader {
    private static final Logger LOG = LogManager.getLogger(LogFileReader.class);
@@ -36,8 +42,8 @@ public class LogFileReader {
       }
       return logFiles;
    }
-   
-   public Map<TestCase, List<LogFiles>> readAllRCATestcases(){
+
+   public Map<TestCase, List<LogFiles>> readAllRCATestcases() {
       Map<TestCase, List<LogFiles>> logFiles = new HashMap<>();
       return logFiles;
    }
@@ -101,5 +107,40 @@ public class LogFileReader {
          e.printStackTrace();
          return "Measurement log not readable";
       }
+   }
+
+   public Map<TestCase, List<RCALevel>> getRCATestcases() {
+      CauseSearchFolders causeFolders = visualizationFolders.getPeassRCAFolders();
+      File versionTreeFolder = new File(causeFolders.getRcaTreeFolder(), measurementConfig.getVersion());
+      Map<TestCase, List<RCALevel>> testcases = new HashMap<>();
+      for (File testcaseName : versionTreeFolder.listFiles()) {
+         for (File jsonFileName : testcaseName.listFiles((FilenameFilter) new WildcardFileFilter("*.json"))) {
+            try {
+               CauseSearchData data = Constants.OBJECTMAPPER.readValue(jsonFileName, CauseSearchData.class);
+               TestCase test = new TestCase(data.getTestcase());
+
+               boolean lastHadLogs = true;
+               int levelId = 0;
+               List<RCALevel> levels = new LinkedList<>();
+               while (lastHadLogs) {
+                  List<LogFiles> currentFiles = new LinkedList<>();
+                  File logFolder = causeFolders.getExistingRCALogFolder(measurementConfig.getVersion(), test, levelId);
+                  tryLocalLogFolderVMIds(test, currentFiles, logFolder);
+                  if (currentFiles.size() > 0) {
+                     RCALevel level = new RCALevel(currentFiles);
+                     levels.add(level);
+                     levelId++;
+                  } else {
+                     lastHadLogs = false;
+                  }
+               }
+
+               testcases.put(test, levels);
+            } catch (IOException e) {
+               e.printStackTrace();
+            }
+         }
+      }
+      return testcases;
    }
 }
