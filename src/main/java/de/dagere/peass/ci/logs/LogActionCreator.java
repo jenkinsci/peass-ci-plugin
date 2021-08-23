@@ -29,6 +29,12 @@ public class LogActionCreator {
       Map<TestCase, List<LogFiles>> logFiles = creator.readAllTestcases(statistics);
       createLogActions(run, logFiles);
       
+      String rtsLog = creator.getRTSLog();
+      run.addAction(new InternalLogAction("rts", "Regression Test Selection Log", rtsLog));
+      
+      String measureLog = creator.getMeasureLog();
+      run.addAction(new InternalLogAction("measurement", "Measurement Log", measureLog));
+      
       run.addAction(new LogDisplayAction(logFiles, peassConfig.getMeasurementConfig().getVersion().substring(0,6), peassConfig.getMeasurementConfig().getVersionOld().substring(0,6)));
    }
    
