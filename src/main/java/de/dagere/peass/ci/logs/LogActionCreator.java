@@ -10,7 +10,6 @@ import org.apache.commons.io.FileUtils;
 
 import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
-import de.dagere.peass.dependency.PeassFolders;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.measurement.analysis.ProjectStatistics;
 import hudson.model.Run;
@@ -25,10 +24,9 @@ public class LogActionCreator {
 
    public void createActions(final File localWorkspace, final Run<?, ?> run, final ProjectStatistics statistics) throws IOException {
       VisualizationFolderManager visualizationFolders = new VisualizationFolderManager(localWorkspace, run);
-      PeassFolders folders = visualizationFolders.getPeassFolders();
-      LogFileReader creator = new LogFileReader(peassConfig.getMeasurementConfig());
+      LogFileReader creator = new LogFileReader(visualizationFolders, peassConfig.getMeasurementConfig());
       
-      Map<TestCase, List<LogFiles>> logFiles = creator.readAllTestcases(folders, statistics);
+      Map<TestCase, List<LogFiles>> logFiles = creator.readAllTestcases(statistics);
       createLogActions(run, logFiles);
       
       run.addAction(new LogDisplayAction(logFiles, peassConfig.getMeasurementConfig().getVersion().substring(0,6), peassConfig.getMeasurementConfig().getVersionOld().substring(0,6)));
