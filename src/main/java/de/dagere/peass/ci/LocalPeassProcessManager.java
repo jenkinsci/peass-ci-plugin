@@ -2,14 +2,11 @@ package de.dagere.peass.ci;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.xml.bind.JAXBException;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,16 +21,12 @@ import de.dagere.peass.ci.helper.HistogramReader;
 import de.dagere.peass.ci.helper.HistogramValues;
 import de.dagere.peass.ci.helper.RCAVisualizer;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
-import de.dagere.peass.ci.logs.LogAction;
-import de.dagere.peass.ci.logs.LogDisplayAction;
-import de.dagere.peass.ci.logs.LogFileReader;
-import de.dagere.peass.ci.logs.LogFiles;
+import de.dagere.peass.ci.logs.LogActionCreator;
 import de.dagere.peass.ci.persistence.TrendFileUtil;
 import de.dagere.peass.ci.remote.RemoteMeasurer;
 import de.dagere.peass.ci.remote.RemoteRCA;
 import de.dagere.peass.ci.remote.RemoteRTS;
 import de.dagere.peass.ci.rts.RTSVisualizationCreator;
-import de.dagere.peass.dependency.PeassFolders;
 import de.dagere.peass.dependency.ResultsFolders;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.measurement.analysis.ProjectStatistics;
@@ -108,33 +101,12 @@ public class LocalPeassProcessManager {
       createPureMeasurementVisualization(run, dataFolder, measurements);
 
       if (peassConfig.isDisplayLogs()) {
-         VisualizationFolderManager visualizationFolders = new VisualizationFolderManager(localWorkspace, run);
-         PeassFolders folders = visualizationFolders.getPeassFolders();
-         LogFileReader creator = new LogFileReader(peassConfig.getMeasurementConfig());
-         Map<TestCase, List<LogFiles>> logFiles = creator.readAllTestcases(folders, statistics);
-         createLogActions(run, logFiles);
-         
-         run.addAction(new LogDisplayAction(logFiles, peassConfig.getMeasurementConfig().getVersion().substring(0,6), peassConfig.getMeasurementConfig().getVersionOld().substring(0,6)));
+            LogActionCreator logActionCreator = new LogActionCreator(peassConfig);
+            logActionCreator.createActions(dataFolder, run, statistics);
       }
 
       return changes;
    }
-
-   private void createLogActions(final Run<?, ?> run, final Map<TestCase, List<LogFiles>> logFiles) throws IOException {
-      for (Map.Entry<TestCase, List<LogFiles>> entry : logFiles.entrySet()) {
-         TestCase testcase = entry.getKey();
-         int vmId = 0;
-         for (LogFiles files : entry.getValue()) {
-            String logData = FileUtils.readFileToString(files.getCurrent(), StandardCharsets.UTF_8);
-            run.addAction(new LogAction(testcase, vmId, peassConfig.getMeasurementConfig().getVersion(), logData));
-            String logDataOld = FileUtils.readFileToString(files.getPredecessor(), StandardCharsets.UTF_8);
-            run.addAction(new LogAction(testcase, vmId, peassConfig.getMeasurementConfig().getVersionOld(), logDataOld));
-            vmId++;
-         }
-      }
-   }
-
-   
 
    private void createPureMeasurementVisualization(final Run<?, ?> run, final File dataFolder, final Map<String, HistogramValues> measurements) {
       VisualizationFolderManager visualizationFolders = new VisualizationFolderManager(localWorkspace, run);
