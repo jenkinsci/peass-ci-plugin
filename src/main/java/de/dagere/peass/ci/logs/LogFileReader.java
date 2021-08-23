@@ -45,7 +45,7 @@ public class LogFileReader {
    private void readTestcase(final PeassFolders folders, final Map<TestCase, List<LogFiles>> logFiles, final TestCase testcase) {
       LOG.info("Reading testcase " + testcase);
       List<LogFiles> currentFiles = new LinkedList<>();
-      File logFolder = folders.getExistingLogFolder(measurementConfig.getVersion(), testcase);
+      File logFolder = folders.getExistingMeasureLogFolder(measurementConfig.getVersion(), testcase);
       tryLocalLogFolderVMIds(testcase, currentFiles, logFolder);
       logFiles.put(testcase, currentFiles);
    }
