@@ -14,7 +14,7 @@ import de.dagere.peass.dependency.analysis.data.TestCase;
 import hudson.model.Run;
 
 public class RTSActionCreator {
-   
+
    private final LogFileReader reader;
    private final Run<?, ?> run;
    private final MeasurementConfiguration measurementConfig;
@@ -27,12 +27,12 @@ public class RTSActionCreator {
 
    public void createRTSActions() throws IOException {
       createOverallLogAction();
-      
+
       Map<String, File> processSuccessRuns = createProcessSuccessRunsActions();
-      
+
       Map<TestCase, RTSLogData> rtsVmRuns = createVersionRTSData(measurementConfig.getVersion());
       Map<TestCase, RTSLogData> rtsVmRunsPredecessor = createVersionRTSData(measurementConfig.getVersionOld());
-      
+
       createOverviewAction(processSuccessRuns, rtsVmRuns, rtsVmRunsPredecessor);
    }
 
@@ -58,11 +58,21 @@ public class RTSActionCreator {
    private Map<TestCase, RTSLogData> createVersionRTSData(final String version) throws IOException {
       Map<TestCase, RTSLogData> rtsVmRuns = reader.getRtsVmRuns(version);
       for (Map.Entry<TestCase, RTSLogData> rtsLogData : rtsVmRuns.entrySet()) {
-         String methodLogData = FileUtils.readFileToString(rtsLogData.getValue().getMethodFile(), StandardCharsets.UTF_8);
-         String cleanLogData = FileUtils.readFileToString(rtsLogData.getValue().getCleanFile(), StandardCharsets.UTF_8);
+         String methodLogData = getLogData(rtsLogData.getValue().getMethodFile());
+         String cleanLogData = getLogData(rtsLogData.getValue().getCleanFile());
          RTSLogAction logAction = new RTSLogAction(rtsLogData.getValue().getVersion(), rtsLogData.getKey(), cleanLogData, methodLogData);
          run.addAction(logAction);
       }
       return rtsVmRuns;
+   }
+
+   private String getLogData(final File methodFile) throws IOException {
+      String methodLogData;
+      if (methodFile.exists()) {
+         methodLogData = FileUtils.readFileToString(methodFile, StandardCharsets.UTF_8);
+      } else {
+         methodLogData = "Log could not be loaded";
+      }
+      return methodLogData;
    }
 }
