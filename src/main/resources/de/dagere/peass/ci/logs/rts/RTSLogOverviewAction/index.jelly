@@ -13,7 +13,13 @@
 			
 			<h2>Trace Creation Runs</h2>
 			<j:forEach var="run" items="${it.getVmRuns().entrySet()}">
-	          <a href="../rtsLog_${run.getKey().getLinkUsable()}_${run.getValue().getVersion()}">Testcase: ${run.getKey()} Version: ${run.getValue().getVersion()}</a><br />
+	          Testcase: ${run.getKey()} <br />
+	            <a href="../rtsLog_${run.getKey().getLinkUsable()}_${run.getValue().getVersion()}">Version: ${run.getValue().getVersion()}</a><br />
+	          <j:if test='${it.getPredecessorVmRuns().get(run.getKey()) != null}'>
+	            <a href="../rtsLog_${run.getKey().getLinkUsable()}_${it.getPredecessorVmRuns().get(run.getKey()).getVersion()}">Version: ${it.getPredecessorVmRuns().get(run.getKey()).getVersion()}</a>
+	            <br />
+	          </j:if>
+	          <br />
 			</j:forEach>
 		</l:main-panel>
 	</l:layout>

@@ -59,14 +59,18 @@ public class TestRTSLogFileReader {
       Assert.assertEquals(1, testcases.size());
       File testRunningFile = testcases.get("a23e385264c31def8dcda86c3cf64faa698c62d8");
       Assert.assertTrue(testRunningFile.exists());
-      
+
       Map<TestCase, RTSLogData> rtsVmRuns = reader.getRtsVmRuns("a23e385264c31def8dcda86c3cf64faa698c62d8");
       Assert.assertEquals(2, rtsVmRuns.size());
-      
+
       File dataFile1 = rtsVmRuns.get(new TestCase("de.test.CalleeTest#onlyCallMethod1")).getMethodFile();
       Assert.assertTrue(dataFile1.exists());
       File dataFile2 = rtsVmRuns.get(new TestCase("de.test.CalleeTest#onlyCallMethod2")).getMethodFile();
       Assert.assertTrue(dataFile2.exists());
+
+      Map<TestCase, RTSLogData> rtsVmRunsPredecessor = reader.getRtsVmRuns("33ce17c04b5218c25c40137d4d09f40fbb3e4f0f");
+      Assert.assertEquals(2, rtsVmRunsPredecessor.size());
+      Assert.assertEquals("33ce17c04b5218c25c40137d4d09f40fbb3e4f0f", rtsVmRunsPredecessor.get(new TestCase("de.test.CalleeTest#onlyCallMethod1")).getVersion());
 
       String rtsLog = reader.getRTSLog();
       Assert.assertEquals("This is a rts log test", rtsLog);

@@ -59,7 +59,7 @@ public class LogFileReader {
          for (File methodFile : testClazzFolder.listFiles()) {
             if (!methodFile.isDirectory()) {
                File cleanFile = new File(testClazzFolder, "clean" + File.separator + methodFile.getName());
-               RTSLogData data = new RTSLogData(measurementConfig.getVersion(), methodFile, cleanFile);
+               RTSLogData data = new RTSLogData(version, methodFile, cleanFile);
                String clazz = testClazzFolder.getName().substring("log_".length());
                String method = methodFile.getName().substring(0, methodFile.getName().length() - ".txt".length());
                TestCase test = new TestCase(clazz + "#" + method);

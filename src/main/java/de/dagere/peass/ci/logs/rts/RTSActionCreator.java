@@ -31,12 +31,12 @@ public class RTSActionCreator {
       Map<String, File> processSuccessRuns = createProcessSuccessRunsActions();
       
       Map<TestCase, RTSLogData> rtsVmRuns = createVersionRTSData(measurementConfig.getVersion());
-      Map<TestCase, RTSLogData> rtsVmRunsPredecessor = createVersionRTSData(measurementConfig.getVersion());
+      Map<TestCase, RTSLogData> rtsVmRunsPredecessor = createVersionRTSData(measurementConfig.getVersionOld());
       
       createOverviewAction(processSuccessRuns, rtsVmRuns, rtsVmRunsPredecessor);
    }
 
-   private void createOverviewAction(Map<String, File> processSuccessRuns, Map<TestCase, RTSLogData> rtsVmRuns, Map<TestCase, RTSLogData> rtsVmRunsPredecessor) {
+   private void createOverviewAction(final Map<String, File> processSuccessRuns, final Map<TestCase, RTSLogData> rtsVmRuns, final Map<TestCase, RTSLogData> rtsVmRunsPredecessor) {
       RTSLogOverviewAction overviewAction = new RTSLogOverviewAction(processSuccessRuns, rtsVmRuns, rtsVmRunsPredecessor);
       run.addAction(overviewAction);
    }
