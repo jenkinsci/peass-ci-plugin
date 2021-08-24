@@ -37,16 +37,16 @@ WARNING: All illegal access operations will be denied in a future release
 [[1;31mERROR[m] WARNING: Please consider reporting this to the maintainers of com.sun.xml.bind.v2.runtime.reflect.opt.Injector
 [[1;31mERROR[m] WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
 [[1;31mERROR[m] WARNING: All illegal access operations will be denied in a future release
-10:30:05.174 [main] DEBUG kieker.monitoring.core.configuration.ConfigurationFactory:59 - Searching for JVM argument 'kieker.monitoring.configuration' ...
-10:30:05.177 [main] INFO  kieker.monitoring.core.configuration.ConfigurationFactory:67 - Loading configuration from JVM-specified location: '/home/reichelt/nvme/workspaces/dissworkspace/permanent/peass-ci/work/workspace/demo-test3/../demo-test3_fullPeass/demo-test3/src/main/resources/META-INF/kieker.monitoring.properties'
-10:30:05.181 [main] INFO  kieker.monitoring.core.controller.TCPController:79 - Could not parse port for the TCPController, deactivating this option. Received string was: 
-Aug. 24, 2021 10:30:05 VORM. de.dagere.kopeme.kieker.writer.ChangeableFolderWriter <init>
+12:29:26.005 [main] DEBUG kieker.monitoring.core.configuration.ConfigurationFactory:59 - Searching for JVM argument 'kieker.monitoring.configuration' ...
+12:29:26.009 [main] INFO  kieker.monitoring.core.configuration.ConfigurationFactory:67 - Loading configuration from JVM-specified location: '/home/reichelt/nvme/workspaces/dissworkspace/permanent/peass-ci/work/workspace/demo-test3/../demo-test3_fullPeass/demo-test3/src/main/resources/META-INF/kieker.monitoring.properties'
+12:29:26.013 [main] INFO  kieker.monitoring.core.controller.TCPController:79 - Could not parse port for the TCPController, deactivating this option. Received string was: 
+Aug. 24, 2021 12:29:26 NACHM. de.dagere.kopeme.kieker.writer.ChangeableFolderWriter <init>
 INFORMATION: Init..
-10:30:05.242 [main] DEBUG kieker.monitoring.core.controller.WriterController:258 - Initializing Writer Controller
-10:30:05.243 [main] INFO  kieker.monitoring.core.controller.StateController:128 - Enabling monitoring
-10:30:05.243 [Thread-1] DEBUG kieker.monitoring.writer.MonitoringWriterThread:58 - kieker.monitoring.writer.MonitoringWriterThread is running.
+12:29:26.056 [main] DEBUG kieker.monitoring.core.controller.WriterController:258 - Initializing Writer Controller
+12:29:26.056 [main] INFO  kieker.monitoring.core.controller.StateController:128 - Enabling monitoring
+12:29:26.056 [Thread-1] DEBUG kieker.monitoring.writer.MonitoringWriterThread:58 - kieker.monitoring.writer.MonitoringWriterThread is running.
 Initializing class de.dagere.kopeme.kieker.writer.ChangeableFolderWriter
-10:30:05.253 [main] INFO  kieker.monitoring.core.controller.MonitoringController:172 - Current State of kieker.monitoring (1.15-SNAPSHOT) Status: 'enabled'
+12:29:26.063 [main] INFO  kieker.monitoring.core.controller.MonitoringController:172 - Current State of kieker.monitoring (1.15-SNAPSHOT) Status: 'enabled'
 	Name: 'KIEKER-KoPeMe'; Hostname: 'reichelt-desktop'; experimentID: '1'
 JMXController: JMX disabled
 TimeSource: 'kieker.monitoring.timer.SystemNanoTimer'
@@ -64,55 +64,47 @@ Writer: 'de.dagere.kopeme.kieker.writer.ChangeableFolderWriter'
 
 	Automatic assignment of logging timestamps: 'true'
 Sampling Controller: Periodic Sensor available: Poolsize: '0'; Scheduled Tasks: '0'
-10:30:05.255 [main] INFO  kieker.monitoring.core.registry.ControlFlowRegistry:49 - First threadId will be 4625337554797854720
-10:30:05.257 [main] DEBUG de.dagere.kopeme.junit.rule.TestRunnables:82 - Klasse: class de.test.CalleeTest
-10:30:05.260 [main] DEBUG de.dagere.kopeme.parsing.BuildtoolProjectNameReader:52 - Directory: /home/reichelt/nvme/workspaces/dissworkspace/permanent/peass-ci/work/workspace/demo-test3_fullPeass/demo-test3/.
-Aug. 24, 2021 10:30:05 VORM. de.dagere.kopeme.kieker.writer.ChangeableFolderWriter setFolder
-INFORMATION: Writing to: /home/reichelt/nvme/workspaces/dissworkspace/permanent/peass-ci/work/workspace/demo-test3/../demo-test3_fullPeass/demo-test3_peass/measurementsTemp/de.test/demo-project/de.test.CalleeTest/1629793805259/onlyCallMethod1 1458091526
-Aug. 24, 2021 10:30:05 VORM. de.dagere.kopeme.kieker.writer.ChangeableFolderWriter setFolder
+12:29:26.064 [main] INFO  kieker.monitoring.core.registry.ControlFlowRegistry:49 - First threadId will be 5556878990221770752
+12:29:26.065 [main] DEBUG de.dagere.kopeme.junit.rule.TestRunnables:82 - Klasse: class de.test.CalleeTest
+12:29:26.068 [main] DEBUG de.dagere.kopeme.parsing.BuildtoolProjectNameReader:52 - Directory: /home/reichelt/nvme/workspaces/dissworkspace/permanent/peass-ci/work/workspace/demo-test3_fullPeass/demo-test3/.
+Aug. 24, 2021 12:29:26 NACHM. de.dagere.kopeme.kieker.writer.ChangeableFolderWriter setFolder
+INFORMATION: Writing to: /home/reichelt/nvme/workspaces/dissworkspace/permanent/peass-ci/work/workspace/demo-test3/../demo-test3_fullPeass/demo-test3_peass/measurementsTemp/de.test/demo-project/de.test.CalleeTest/1629800966067/onlyCallMethod1 1458091526
+Aug. 24, 2021 12:29:26 NACHM. de.dagere.kopeme.kieker.writer.ChangeableFolderWriter setFolder
 INFORMATION: New writer 768776793 created; old writer 1458091526
-Aug. 24, 2021 10:30:05 VORM. de.dagere.kopeme.kieker.writer.ChangeableFolderWriter addRecordsToNewWriter
+Aug. 24, 2021 12:29:26 NACHM. de.dagere.kopeme.kieker.writer.ChangeableFolderWriter addRecordsToNewWriter
 INFORMATION: Adding registry record: KiekerMetadataRecord: version = 1.15-SNAPSHOT, controllerName = KIEKER-KoPeMe, hostname = reichelt-desktop, experimentId = 1, debugMode = false, timeOffset = 0, timeUnit = NANOSECONDS, numberOfRecords = 0, 
-Aug. 24, 2021 10:30:05 VORM. de.dagere.kopeme.kieker.writer.ChangeableFolderWriter setFolder
+Aug. 24, 2021 12:29:26 NACHM. de.dagere.kopeme.kieker.writer.ChangeableFolderWriter setFolder
 INFORMATION: Change writing to: 768776793
-10:30:05.276 [main] INFO  kieker.monitoring.core.controller.StateController:128 - Enabling monitoring
-10:30:05.277 [main] DEBUG de.dagere.kopeme.kieker.KoPeMeKiekerSupport:46 - Kieker-Monitoring successfully enabled
-10:30:05.281 [main] DEBUG de.dagere.kopeme.TimeBoundExecution:100 - Waiting: 300000
-10:30:05.294 [timebound-0] DEBUG de.dagere.kopeme.junit.rule.KoPeMeBasicStatement:125 - Executing 1 execution 
-10:30:05.331 [timebound-0] DEBUG de.dagere.kopeme.junit.rule.KoPeMeBasicStatement:152 - Executions: 1
-Aug. 24, 2021 10:30:05 VORM. de.dagere.kopeme.datacollection.tempfile.ResultTempWriter finalizeCollection
-INFORMATION: Flushing to /home/reichelt/nvme/workspaces/dissworkspace/permanent/peass-ci/work/workspace/demo-test3/../demo-test3_fullPeass/demo-test3_peass/temp/kopeme-9291525923302774215.tmp finished
-10:30:05.346 [timebound-0] DEBUG de.dagere.kopeme.datacollection.tempfile.WrittenResultReader:48 - Count of executions: 1  Values: 1
-10:30:05.348 [timebound-0] INFO  de.dagere.kopeme.datastorage.XMLDataStorer:152 - Storing data to: /home/reichelt/nvme/workspaces/dissworkspace/permanent/peass-ci/work/workspace/demo-test3/../demo-test3_fullPeass/demo-test3_peass/measurementsTemp/de.test/demo-project/de.test.CalleeTest/onlyCallMethod1.xml
-10:30:05.459 [timebound-0] INFO  de.dagere.kopeme.PerformanceTestUtils:90 - Execution Time: 13243.323 milliseconds
-10:30:05.467 [timebound-0] INFO  de.dagere.kopeme.datastorage.XMLDataStorer:152 - Storing data to: /home/reichelt/nvme/workspaces/dissworkspace/permanent/peass-ci/work/workspace/demo-test3/../demo-test3_fullPeass/demo-test3_peass/measurementsTemp/de.test/demo-project/de.test.CalleeTest/onlyCallMethod1.xml
-10:30:05.470 [main] DEBUG de.dagere.kopeme.TimeBoundExecution:107 - KoPeMe-Test METHOD. Kieker: true Threads: 0
-10:30:05.470 [main] DEBUG de.dagere.kopeme.kieker.KoPeMeKiekerSupport:76 - Disabling Monitoring..
-10:30:05.471 [main] INFO  kieker.monitoring.core.controller.StateController:143 - Disabling monitoring
-10:30:05.472 [main] DEBUG kieker.monitoring.core.controller.WriterController:267 - Shutting down Writer Controller
-10:30:05.472 [main] DEBUG de.dagere.kopeme.kieker.KoPeMeKiekerSupport:107 - Waiting for Thread-End: Thread[Thread-1,5,main]
-Aug. 24, 2021 10:30:05 VORM. de.dagere.kopeme.kieker.writer.ChangeableFolderWriter onTerminating
+12:29:26.082 [main] INFO  kieker.monitoring.core.controller.StateController:128 - Enabling monitoring
+12:29:26.083 [main] DEBUG de.dagere.kopeme.kieker.KoPeMeKiekerSupport:46 - Kieker-Monitoring successfully enabled
+12:29:26.086 [main] DEBUG de.dagere.kopeme.TimeBoundExecution:100 - Waiting: 300000
+12:29:26.101 [timebound-0] DEBUG de.dagere.kopeme.junit.rule.KoPeMeBasicStatement:125 - Executing 1 execution 
+12:29:26.140 [timebound-0] DEBUG de.dagere.kopeme.junit.rule.KoPeMeBasicStatement:152 - Executions: 1
+Aug. 24, 2021 12:29:26 NACHM. de.dagere.kopeme.datacollection.tempfile.ResultTempWriter finalizeCollection
+INFORMATION: Flushing to /home/reichelt/nvme/workspaces/dissworkspace/permanent/peass-ci/work/workspace/demo-test3/../demo-test3_fullPeass/demo-test3_peass/temp/kopeme-683217552789797748.tmp finished
+12:29:26.154 [timebound-0] DEBUG de.dagere.kopeme.datacollection.tempfile.WrittenResultReader:48 - Count of executions: 1  Values: 1
+12:29:26.156 [timebound-0] INFO  de.dagere.kopeme.datastorage.XMLDataStorer:152 - Storing data to: /home/reichelt/nvme/workspaces/dissworkspace/permanent/peass-ci/work/workspace/demo-test3/../demo-test3_fullPeass/demo-test3_peass/measurementsTemp/de.test/demo-project/de.test.CalleeTest/onlyCallMethod1.xml
+12:29:26.253 [timebound-0] INFO  de.dagere.kopeme.PerformanceTestUtils:90 - Execution Time: 13049.491 milliseconds
+12:29:26.263 [timebound-0] INFO  de.dagere.kopeme.datastorage.XMLDataStorer:152 - Storing data to: /home/reichelt/nvme/workspaces/dissworkspace/permanent/peass-ci/work/workspace/demo-test3/../demo-test3_fullPeass/demo-test3_peass/measurementsTemp/de.test/demo-project/de.test.CalleeTest/onlyCallMethod1.xml
+12:29:26.266 [main] DEBUG de.dagere.kopeme.TimeBoundExecution:107 - KoPeMe-Test METHOD. Kieker: true Threads: 0
+12:29:26.266 [main] DEBUG de.dagere.kopeme.kieker.KoPeMeKiekerSupport:76 - Disabling Monitoring..
+12:29:26.266 [main] INFO  kieker.monitoring.core.controller.StateController:143 - Disabling monitoring
+12:29:26.267 [main] DEBUG kieker.monitoring.core.controller.WriterController:267 - Shutting down Writer Controller
+12:29:26.267 [main] DEBUG de.dagere.kopeme.kieker.KoPeMeKiekerSupport:107 - Waiting for Thread-End: Thread[Thread-1,5,main]
+Aug. 24, 2021 12:29:26 NACHM. de.dagere.kopeme.kieker.writer.ChangeableFolderWriter onTerminating
 INFORMATION: Terminating writing
-10:30:05.473 [Thread-1] DEBUG kieker.monitoring.writer.MonitoringWriterThread:75 - kieker.monitoring.writer.MonitoringWriterThread has finished.
-10:30:05.473 [main] DEBUG de.dagere.kopeme.kieker.KoPeMeKiekerSupport:110 - Waiting for Thread-End: Thread[Thread-1,5,], Thread alive: false
-10:30:05.473 [main] DEBUG de.dagere.kopeme.kieker.KoPeMeKiekerSupport:112 - Writing finished, Thread alive: false
-10:30:05.473 [main] DEBUG kieker.monitoring.core.configuration.ConfigurationFactory:59 - Searching for JVM argument 'kieker.monitoring.configuration' ...
-10:30:05.474 [main] INFO  kieker.monitoring.core.configuration.ConfigurationFactory:67 - Loading configuration from JVM-specified location: '/home/reichelt/nvme/workspaces/dissworkspace/permanent/peass-ci/work/workspace/demo-test3/../demo-test3_fullPeass/demo-test3/src/main/resources/META-INF/kieker.monitoring.properties'
-Aug. 24, 2021 10:30:05 VORM. de.dagere.kopeme.kieker.writer.ChangeableFolderWriter <init>
+12:29:26.268 [Thread-1] DEBUG kieker.monitoring.writer.MonitoringWriterThread:75 - kieker.monitoring.writer.MonitoringWriterThread has finished.
+12:29:26.268 [main] DEBUG de.dagere.kopeme.kieker.KoPeMeKiekerSupport:110 - Waiting for Thread-End: Thread[Thread-1,5,], Thread alive: false
+12:29:26.268 [main] DEBUG de.dagere.kopeme.kieker.KoPeMeKiekerSupport:112 - Writing finished, Thread alive: false
+12:29:26.268 [main] DEBUG kieker.monitoring.core.configuration.ConfigurationFactory:59 - Searching for JVM argument 'kieker.monitoring.configuration' ...
+12:29:26.269 [main] INFO  kieker.monitoring.core.configuration.ConfigurationFactory:67 - Loading configuration from JVM-specified location: '/home/reichelt/nvme/workspaces/dissworkspace/permanent/peass-ci/work/workspace/demo-test3/../demo-test3_fullPeass/demo-test3/src/main/resources/META-INF/kieker.monitoring.properties'
+Aug. 24, 2021 12:29:26 NACHM. de.dagere.kopeme.kieker.writer.ChangeableFolderWriter <init>
 INFORMATION: Init..
-10:30:05.477 [main] DEBUG kieker.monitoring.core.controller.WriterController:258 - Initializing Writer Controller
-10:30:05.478 [main] INFO  de.dagere.kopeme.junit.rule.KoPeMeStandardRuleStatement:69 - Test de.test.CalleeTest beendet
-10:30:05.478 [Thread-3] DEBUG kieker.monitoring.writer.MonitoringWriterThread:58 - kieker.monitoring.writer.MonitoringWriterThread is running.
+12:29:26.272 [main] DEBUG kieker.monitoring.core.controller.WriterController:258 - Initializing Writer Controller
+12:29:26.272 [main] INFO  de.dagere.kopeme.junit.rule.KoPeMeStandardRuleStatement:69 - Test de.test.CalleeTest beendet
+12:29:26.272 [Thread-3] DEBUG kieker.monitoring.writer.MonitoringWriterThread:58 - kieker.monitoring.writer.MonitoringWriterThread is running.
 Initializing class de.dagere.kopeme.kieker.writer.ChangeableFolderWriter
-[[1;34mINFO[m] [1;32mTests run: [0;1;32m1[m, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.627 s - in de.test.[1mCalleeTest[m
-10:30:05.516 [Thread-2] INFO  kieker.monitoring.core.controller.MonitoringController:153 - ShutdownHook notifies controller to initiate shutdown.
-10:30:05.517 [Thread-2] INFO  kieker.monitoring.core.controller.MonitoringController:250 - Terminating monitoring...
-10:30:05.517 [Thread-2] INFO  kieker.monitoring.core.controller.MonitoringController:199 - Shutting down Monitoring Controller (KIEKER-KoPeMe)
-10:30:05.517 [Thread-2] DEBUG kieker.monitoring.core.controller.ProbeController:168 - Shutting down Probe Controller
-10:30:05.517 [Thread-2] DEBUG kieker.monitoring.core.controller.TimeSourceController:59 - Shutting down TimeSource Controller
-10:30:05.517 [Thread-2] DEBUG kieker.monitoring.core.controller.WriterController:267 - Shutting down Writer Controller
-10:30:05.517 [Thread-2] DEBUG kieker.monitoring.core.controller.SamplingController:70 - Shutting down Sampling Controller
-10:30:05.517 [Thread-2] DEBUG kieker.monitoring.core.controller.StateController:77 - Shutting down State Controller
+[[1;34mINFO[m] [1;32mTests run: [0;1;32m1[m, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.589 s - in de.test.[1mCalleeTest[m
 [[1;34mINFO[m] 
 [[1;34mINFO[m] Results:
 [[1;34mINFO[m] 
@@ -121,6 +113,6 @@ Initializing class de.dagere.kopeme.kieker.writer.ChangeableFolderWriter
 [[1;34mINFO[m] [1m------------------------------------------------------------------------[m
 [[1;34mINFO[m] [1;32mBUILD SUCCESS[m
 [[1;34mINFO[m] [1m------------------------------------------------------------------------[m
-[[1;34mINFO[m] Total time:  2.617 s
-[[1;34mINFO[m] Finished at: 2021-08-24T10:30:05+02:00
+[[1;34mINFO[m] Total time:  2.668 s
+[[1;34mINFO[m] Finished at: 2021-08-24T12:29:26+02:00
 [[1;34mINFO[m] [1m------------------------------------------------------------------------[m

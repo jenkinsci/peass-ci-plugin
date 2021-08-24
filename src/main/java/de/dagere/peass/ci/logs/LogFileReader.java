@@ -1,6 +1,7 @@
 package de.dagere.peass.ci.logs;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -16,6 +17,7 @@ import org.apache.logging.log4j.Logger;
 
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.rca.RCALevel;
+import de.dagere.peass.ci.logs.rts.RTSLogData;
 import de.dagere.peass.config.MeasurementConfiguration;
 import de.dagere.peass.dependency.CauseSearchFolders;
 import de.dagere.peass.dependency.PeassFolders;
@@ -50,8 +52,22 @@ public class LogFileReader {
       }
    }
 
-   public Map<TestCase, LogFiles> getRtsVmRuns() {
-      return null;
+   public Map<TestCase, RTSLogData> getRtsVmRuns() {
+      Map<TestCase, RTSLogData> files = new LinkedHashMap<>();
+      File versionFolder = new File(visualizationFolders.getPeassFolders().getDependencyLogFolder(), measurementConfig.getVersion());
+      for (File testClazzFolder : versionFolder.listFiles((FileFilter) new WildcardFileFilter("log_*"))) {
+         for (File methodFile : testClazzFolder.listFiles()) {
+            if (!methodFile.isDirectory()) {
+               File cleanFile = new File(testClazzFolder, "clean" + File.separator + methodFile.getName());
+               RTSLogData data = new RTSLogData(measurementConfig.getVersion(), methodFile, cleanFile);
+               String clazz = testClazzFolder.getName().substring("log_".length());
+               String method = methodFile.getName().substring(0, methodFile.getName().length() - ".txt".length());
+               TestCase test = new TestCase(clazz + "#" + method);
+               files.put(test, data);
+            }
+         }
+      }
+      return files;
    }
 
    public Map<TestCase, List<LogFiles>> readAllTestcases(final ProjectStatistics statistics) {

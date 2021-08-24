@@ -10,6 +10,7 @@
 			<j:forEach var="run" items="${it.getProcessSuccessRuns().entrySet()}">
 	          <a href="../processSuccessRun_${run.getKey()}">${run.getKey()}</a><br />
 			</j:forEach>
+			
 			<h2>Trace Creation Runs</h2>
 		</l:main-panel>
 	</l:layout>

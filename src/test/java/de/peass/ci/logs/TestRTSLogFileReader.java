@@ -16,9 +16,11 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.LogFileReader;
+import de.dagere.peass.ci.logs.rts.RTSLogData;
 import de.dagere.peass.config.MeasurementConfiguration;
 import de.dagere.peass.dependency.PeassFolders;
 import de.dagere.peass.dependency.ResultsFolders;
+import de.dagere.peass.dependency.analysis.data.TestCase;
 
 public class TestRTSLogFileReader {
 
@@ -57,6 +59,14 @@ public class TestRTSLogFileReader {
       Assert.assertEquals(1, testcases.size());
       File testRunningFile = testcases.get("a23e385264c31def8dcda86c3cf64faa698c62d8");
       Assert.assertTrue(testRunningFile.exists());
+      
+      Map<TestCase, RTSLogData> rtsVmRuns = reader.getRtsVmRuns();
+      Assert.assertEquals(2, rtsVmRuns.size());
+      
+      File dataFile1 = rtsVmRuns.get(new TestCase("de.test.CalleeTest#onlyCallMethod1")).getMethodFile();
+      Assert.assertTrue(dataFile1.exists());
+      File dataFile2 = rtsVmRuns.get(new TestCase("de.test.CalleeTest#onlyCallMethod2")).getMethodFile();
+      Assert.assertTrue(dataFile2.exists());
 
       String rtsLog = reader.getRTSLog();
       Assert.assertEquals("This is a rts log test", rtsLog);
