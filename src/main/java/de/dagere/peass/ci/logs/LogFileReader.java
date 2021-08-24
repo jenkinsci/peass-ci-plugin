@@ -52,9 +52,9 @@ public class LogFileReader {
       }
    }
 
-   public Map<TestCase, RTSLogData> getRtsVmRuns() {
+   public Map<TestCase, RTSLogData> getRtsVmRuns(final String version) {
       Map<TestCase, RTSLogData> files = new LinkedHashMap<>();
-      File versionFolder = new File(visualizationFolders.getPeassFolders().getDependencyLogFolder(), measurementConfig.getVersion());
+      File versionFolder = new File(visualizationFolders.getPeassFolders().getDependencyLogFolder(), version);
       for (File testClazzFolder : versionFolder.listFiles((FileFilter) new WildcardFileFilter("log_*"))) {
          for (File methodFile : testClazzFolder.listFiles()) {
             if (!methodFile.isDirectory()) {

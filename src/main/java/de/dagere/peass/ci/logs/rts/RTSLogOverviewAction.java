@@ -8,24 +8,30 @@ import hudson.model.Run;
 import jenkins.model.RunAction2;
 
 public class RTSLogOverviewAction implements RunAction2 {
-   
+
    private transient Run<?, ?> run;
    private Map<String, File> processSuccessRuns;
    private Map<TestCase, RTSLogData> vmRuns;
-   
-   public RTSLogOverviewAction(final Map<String, File> processSuccessRuns, final Map<TestCase, RTSLogData> vmRuns) {
+   private Map<TestCase, RTSLogData> predecessorVmRuns;
+
+   public RTSLogOverviewAction(final Map<String, File> processSuccessRuns, final Map<TestCase, RTSLogData> vmRuns, final Map<TestCase, RTSLogData> predecessorVmRuns) {
       this.processSuccessRuns = processSuccessRuns;
       this.vmRuns = vmRuns;
+      this.predecessorVmRuns = predecessorVmRuns;
    }
 
    public Map<String, File> getProcessSuccessRuns() {
       return processSuccessRuns;
    }
-   
+
    public Map<TestCase, RTSLogData> getVmRuns() {
       return vmRuns;
    }
-   
+
+   public Map<TestCase, RTSLogData> getPredecessorVmRuns() {
+      return predecessorVmRuns;
+   }
+
    @Override
    public String getIconFileName() {
       return "notepad.png";
@@ -40,7 +46,7 @@ public class RTSLogOverviewAction implements RunAction2 {
    public String getUrlName() {
       return "rtsLogOverview";
    }
-   
+
    @Override
    public void onAttached(final Run<?, ?> run) {
       this.run = run;

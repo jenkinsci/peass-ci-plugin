@@ -107,7 +107,7 @@ public class LocalPeassProcessManager {
       createPureMeasurementVisualization(run, dataFolder, measurements);
 
       if (peassConfig.isDisplayLogs()) {
-         logActionCreator.createActions(statistics);
+         logActionCreator.createMeasurementActions(statistics);
       }
 
       return changes;
