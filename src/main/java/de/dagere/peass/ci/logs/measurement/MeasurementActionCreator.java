@@ -27,14 +27,20 @@ public class MeasurementActionCreator {
    }
 
    public void createMeasurementActions(final ProjectStatistics statistics) throws IOException {
+      createOverallLogAction();
+      
       Map<TestCase, List<LogFiles>> logFiles = reader.readAllTestcases(statistics);
       createLogActions(run, logFiles);
 
-      String measureLog = reader.getMeasureLog();
-      run.addAction(new InternalLogAction("measurementLog", "Measurement Log", measureLog));
-
       LogOverviewAction logOverviewAction = new LogOverviewAction(logFiles, measurementConfig.getVersion().substring(0, 6), measurementConfig.getVersionOld().substring(0, 6));
       run.addAction(logOverviewAction);
+   }
+
+   private void createOverallLogAction() {
+      if (measurementConfig.isRedirectSubprocessOutputToFile()) {
+         String measureLog = reader.getMeasureLog();
+         run.addAction(new InternalLogAction("measurementLog", "Measurement Log", measureLog));
+      }
    }
 
    private void createLogActions(final Run<?, ?> run, final Map<TestCase, List<LogFiles>> logFiles) throws IOException {

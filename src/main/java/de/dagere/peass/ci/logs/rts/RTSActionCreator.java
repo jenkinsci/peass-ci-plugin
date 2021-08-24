@@ -42,8 +42,10 @@ public class RTSActionCreator {
    }
 
    private void createOverallLogAction() {
-      String rtsLog = reader.getRTSLog();
-      run.addAction(new InternalLogAction("rtsLog", "Regression Test Selection Log", rtsLog));
+      if (measurementConfig.isRedirectSubprocessOutputToFile()) {
+         String rtsLog = reader.getRTSLog();
+         run.addAction(new InternalLogAction("rtsLog", "Regression Test Selection Log", rtsLog));
+      }
    }
 
    private Map<String, File> createProcessSuccessRunsActions() throws IOException {

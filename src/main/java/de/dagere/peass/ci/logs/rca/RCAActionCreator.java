@@ -26,14 +26,20 @@ public class RCAActionCreator {
    }
 
    public void createRCAActions() throws IOException {
-      String rcaLog = reader.getRCALog();
-      run.addAction(new InternalLogAction("rcaLog", "RCA Log", rcaLog));
+      createOverallActionLog();
 
       Map<TestCase, List<RCALevel>> testLevelMap = createRCALogActions(reader);
 
       RCALogOverviewAction rcaOverviewAction = new RCALogOverviewAction(testLevelMap, measurementConfig.getVersion().substring(0, 6),
             measurementConfig.getVersionOld().substring(0, 6));
       run.addAction(rcaOverviewAction);
+   }
+
+   private void createOverallActionLog() {
+      if (measurementConfig.isRedirectSubprocessOutputToFile()) {
+         String rcaLog = reader.getRCALog();
+         run.addAction(new InternalLogAction("rcaLog", "RCA Log", rcaLog));
+      }
    }
 
    private Map<TestCase, List<RCALevel>> createRCALogActions(final LogFileReader reader) throws IOException {
