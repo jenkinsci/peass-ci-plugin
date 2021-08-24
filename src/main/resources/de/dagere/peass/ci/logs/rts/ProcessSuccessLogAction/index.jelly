@@ -1,0 +1,12 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout">
+	<l:layout title="Process Success Log Action">
+		<l:main-panel>
+
+			<h1>Process Success Run Version: ${it.version}</h1>
+			<pre>${it.log}</pre>			
+			
+
+		</l:main-panel>
+	</l:layout>
+</j:jelly> 

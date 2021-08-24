@@ -5,6 +5,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +34,24 @@ public class LogFileReader {
    public LogFileReader(final VisualizationFolderManager visualizationFolders, final MeasurementConfiguration measurementConfig) {
       this.visualizationFolders = visualizationFolders;
       this.measurementConfig = measurementConfig;
+   }
+
+   public Map<String, File> findProcessSuccessRuns() {
+      Map<String, File> processSuccessTestRuns = new LinkedHashMap<>();
+      addVersionRun(processSuccessTestRuns, measurementConfig.getVersion());
+      addVersionRun(processSuccessTestRuns, measurementConfig.getVersionOld());
+      return processSuccessTestRuns;
+   }
+
+   private void addVersionRun(final Map<String, File> processSuccessTestRuns, final String checkSuccessRunVersion) {
+      File candidate = new File(visualizationFolders.getPeassFolders().getDependencyLogFolder(), checkSuccessRunVersion + File.separator + "testRunning.log");
+      if (candidate.exists()) {
+         processSuccessTestRuns.put(checkSuccessRunVersion, candidate);
+      }
+   }
+
+   public Map<TestCase, LogFiles> getRtsVmRuns() {
+      return null;
    }
 
    public Map<TestCase, List<LogFiles>> readAllTestcases(final ProjectStatistics statistics) {

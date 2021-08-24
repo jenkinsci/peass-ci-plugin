@@ -15,6 +15,7 @@ import de.dagere.peass.ci.logs.measurement.LogOverviewAction;
 import de.dagere.peass.ci.logs.rca.RCALevel;
 import de.dagere.peass.ci.logs.rca.RCALogAction;
 import de.dagere.peass.ci.logs.rca.RCALogOverviewAction;
+import de.dagere.peass.ci.logs.rts.ProcessSuccessLogAction;
 import de.dagere.peass.ci.logs.rts.RTSLogOverviewAction;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.measurement.analysis.ProjectStatistics;
@@ -33,11 +34,19 @@ public class LogActionCreator {
       reader = new LogFileReader(visualizationFolders, peassConfig.getMeasurementConfig());
    }
    
-   public void createRTSActions() {
+   public void createRTSActions() throws IOException {
       String rtsLog = reader.getRTSLog();
       run.addAction(new InternalLogAction("rtsLog", "Regression Test Selection Log", rtsLog));
       
-      RTSLogOverviewAction overviewAction = new RTSLogOverviewAction();
+      Map<String, File> processSuccessRuns = reader.findProcessSuccessRuns();
+      for (Map.Entry<String, File> processSuccessRun : processSuccessRuns.entrySet()) {
+         String logData = FileUtils.readFileToString(processSuccessRun.getValue(), StandardCharsets.UTF_8);
+         run.addAction(new ProcessSuccessLogAction("processSuccessRun_" + processSuccessRun.getKey(), logData, processSuccessRun.getKey()));
+      }
+      
+      Map<TestCase, LogFiles> rtsVmRuns = reader.getRtsVmRuns();
+      
+      RTSLogOverviewAction overviewAction = new RTSLogOverviewAction(processSuccessRuns, rtsVmRuns);
       run.addAction(overviewAction);
    }
 

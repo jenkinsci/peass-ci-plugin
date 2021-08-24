@@ -80,7 +80,7 @@ public class LocalPeassProcessManager {
       listener.getLogger().println("Copied " + count + " files from " + remotePeassFolder + " to " + localWorkspace.getAbsolutePath());
    }
 
-   public void visualizeRTSResults(final Run<?, ?> run) {
+   public void visualizeRTSResults(final Run<?, ?> run) throws IOException {
       RTSVisualizationCreator rtsVisualizationCreator = new RTSVisualizationCreator(results, peassConfig);
       rtsVisualizationCreator.visualize(run);
       if (peassConfig.isDisplayRTSLogs()) {
