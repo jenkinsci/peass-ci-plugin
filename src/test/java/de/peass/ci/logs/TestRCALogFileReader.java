@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -62,6 +64,7 @@ public class TestRCALogFileReader {
       Map<TestCase, List<RCALevel>> rcaTestcases = reader.getRCATestcases();
       List<RCALevel> levels = rcaTestcases.get(test);
       Assert.assertEquals(1, levels.size());
+      MatcherAssert.assertThat(levels.get(0).getLogFiles(), Matchers.hasSize(3));
 
       String rtsLog = reader.getRCALog();
       Assert.assertEquals("This is a rca log test", rtsLog);
