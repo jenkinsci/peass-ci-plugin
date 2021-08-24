@@ -41,7 +41,7 @@ public class LogOverviewAction implements RunAction2 {
 
    @Override
    public String getDisplayName() {
-      return "Performance Measurement Overview";
+      return "Performance Measurement Log Overview";
    }
 
    @Override

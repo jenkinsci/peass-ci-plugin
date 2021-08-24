@@ -39,7 +39,7 @@ public class RTSLogOverviewAction implements RunAction2 {
 
    @Override
    public String getDisplayName() {
-      return "RTS Log Overview";
+      return "Regression Test Selection Log Overview";
    }
 
    @Override

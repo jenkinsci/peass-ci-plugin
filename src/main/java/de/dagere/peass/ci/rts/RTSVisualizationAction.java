@@ -47,7 +47,7 @@ public class RTSVisualizationAction implements RunAction2 {
 
    @Override
    public String getDisplayName() {
-      return "Regression Test Results";
+      return "Regression Test Selection Results";
    }
 
    @Override
