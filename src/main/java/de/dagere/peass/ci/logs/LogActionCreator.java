@@ -11,6 +11,7 @@ import org.apache.commons.io.FileUtils;
 import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.rca.RCALevel;
+import de.dagere.peass.ci.logs.rca.RCALogAction;
 import de.dagere.peass.ci.logs.rca.RCALogOverviewAction;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.measurement.analysis.ProjectStatistics;
@@ -57,15 +58,34 @@ public class LogActionCreator {
       }
    }
    
-   public void createRCAActions(final File localWorkspace) {
+   public void createRCAActions(final File localWorkspace) throws IOException {
       VisualizationFolderManager visualizationFolders = new VisualizationFolderManager(localWorkspace, run);
       LogFileReader reader = new LogFileReader(visualizationFolders, peassConfig.getMeasurementConfig());
       String rcaLog = reader.getRCALog();
       run.addAction(new InternalLogAction("rcaLog", "RCA Log", rcaLog));
       
-      Map<TestCase, List<RCALevel>> testLevelMap = reader.getRCATestcases();
+      Map<TestCase, List<RCALevel>> testLevelMap = createRCALogActions(reader);
       
       RCALogOverviewAction rcaOverviewAction = new RCALogOverviewAction(testLevelMap, peassConfig.getMeasurementConfig().getVersion().substring(0,6), peassConfig.getMeasurementConfig().getVersionOld().substring(0,6));
       run.addAction(rcaOverviewAction);
+   }
+
+   private Map<TestCase, List<RCALevel>> createRCALogActions(final LogFileReader reader) throws IOException {
+      Map<TestCase, List<RCALevel>> testLevelMap = reader.getRCATestcases();
+      for (Map.Entry<TestCase, List<RCALevel>> testcase : testLevelMap.entrySet()) {
+         int levelId = 0;
+         for (RCALevel level : testcase.getValue()) {
+            int vmId = 0;
+            for (LogFiles files : level.getLogFiles()) {
+               String logData = FileUtils.readFileToString(files.getCurrent(), StandardCharsets.UTF_8);
+               run.addAction(new RCALogAction(testcase.getKey(), vmId, levelId, peassConfig.getMeasurementConfig().getVersion(), logData));
+               String logDataOld = FileUtils.readFileToString(files.getPredecessor(), StandardCharsets.UTF_8);
+               run.addAction(new RCALogAction(testcase.getKey(), vmId, levelId, peassConfig.getMeasurementConfig().getVersionOld(), logDataOld));
+               vmId++;
+            }
+            levelId++;
+         }
+      }
+      return testLevelMap;
    }
 }

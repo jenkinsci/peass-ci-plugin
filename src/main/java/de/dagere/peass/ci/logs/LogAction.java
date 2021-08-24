@@ -14,7 +14,11 @@ public class LogAction extends InvisibleAction {
    private final String logData;
 
    public LogAction(final TestCase test, final int vmId, final String version, final String logData) {
-      this.displayName = "measurelog_" + test.toString().replace("#", "_") + "_" + vmId + "_" + version.substring(0, 6);
+      this("measurelog_" + test.toString().replace("#", "_") + "_" + vmId + "_" + version.substring(0, 6), test, vmId, version, logData);
+   }
+
+   protected LogAction(final String displayName, final TestCase test, final int vmId, final String version, final String logData) {
+      this.displayName = displayName;
       this.test = test;
       this.vmId = vmId;
       this.version = version;
