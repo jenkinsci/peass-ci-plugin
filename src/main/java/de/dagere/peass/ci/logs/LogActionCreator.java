@@ -10,6 +10,8 @@ import org.apache.commons.io.FileUtils;
 
 import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
+import de.dagere.peass.ci.logs.measurement.LogAction;
+import de.dagere.peass.ci.logs.measurement.LogOverviewAction;
 import de.dagere.peass.ci.logs.rca.RCALevel;
 import de.dagere.peass.ci.logs.rca.RCALogAction;
 import de.dagere.peass.ci.logs.rca.RCALogOverviewAction;

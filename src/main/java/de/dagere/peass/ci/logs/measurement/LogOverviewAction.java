@@ -1,9 +1,10 @@
-package de.dagere.peass.ci.logs;
+package de.dagere.peass.ci.logs.measurement;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.dagere.peass.ci.logs.LogFiles;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import hudson.model.Run;
 import jenkins.model.RunAction2;

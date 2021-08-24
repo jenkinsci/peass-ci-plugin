@@ -1,4 +1,4 @@
-package de.dagere.peass.ci.logs;
+package de.dagere.peass.ci.logs.measurement;
 
 import java.io.IOException;
 
