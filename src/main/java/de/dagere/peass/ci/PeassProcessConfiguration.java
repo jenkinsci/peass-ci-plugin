@@ -14,15 +14,18 @@ public class PeassProcessConfiguration implements Serializable {
    private final DependencyConfig dependencyConfig;
    private final EnvironmentVariables envVars;
 
+
+   private final boolean displayRTSLogs;
    private final boolean displayLogs;
    private final boolean displayRCALogs;
 
    public PeassProcessConfiguration(final boolean updateSnapshotDependencies, final MeasurementConfiguration measurementConfig, final DependencyConfig dependencyConfig, final EnvironmentVariables envVars,
-         final boolean displayLogs, final boolean displayRCALogs) {
+         final boolean displayRTSLogs, final boolean displayLogs, final boolean displayRCALogs) {
       this.updateSnapshotDependencies = updateSnapshotDependencies;
       this.measurementConfig = measurementConfig;
       this.dependencyConfig = dependencyConfig;
       this.envVars = envVars;
+      this.displayRTSLogs = displayRTSLogs;
       this.displayLogs = displayLogs;
       this.displayRCALogs = displayRCALogs;
    }
@@ -43,6 +46,10 @@ public class PeassProcessConfiguration implements Serializable {
       return envVars;
    }
 
+   public boolean isDisplayRTSLogs() {
+      return displayRTSLogs;
+   }
+   
    public boolean isDisplayLogs() {
       return displayLogs;
    }

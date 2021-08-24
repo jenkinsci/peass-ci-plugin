@@ -1,0 +1,11 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout">
+	<l:layout title="Regression Test Selection Log Overview">
+		<l:main-panel>
+
+			<h1>Regression Test Selection Log Overview</h1>
+			<a href="../rtsLog">Peass Regression Test Selection Log</a><br />
+
+		</l:main-panel>
+	</l:layout>
+</j:jelly> 

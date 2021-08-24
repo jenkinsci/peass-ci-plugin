@@ -62,6 +62,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private boolean showStart = false;
 
    private int versionDiff = 1;
+   private boolean displayRTSLogs = false;
    private boolean displayLogs = false;
    private boolean displayRCALogs = false;
    private boolean generateCoverageSelection = true;
@@ -145,8 +146,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       }
 
       DependencyConfig dependencyConfig = new DependencyConfig(1, false, true, generateCoverageSelection);
-      PeassProcessConfiguration peassConfig = new PeassProcessConfiguration(updateSnapshotDependencies, configWithRealGitVersions, dependencyConfig, peassEnv, displayLogs,
-            displayRCALogs);
+      PeassProcessConfiguration peassConfig = new PeassProcessConfiguration(updateSnapshotDependencies, configWithRealGitVersions, dependencyConfig, peassEnv,
+            displayRTSLogs, displayLogs, displayRCALogs);
       return peassConfig;
    }
 
@@ -301,6 +302,16 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public void setVersionDiff(final int versionDiff) {
       this.versionDiff = versionDiff;
    }
+   
+   public boolean isDisplayRTSLogs() {
+      return displayRTSLogs;
+   }
+
+   @DataBoundSetter
+   public void setDisplayRTSLogs(final boolean displayRTSLogs) {
+      this.displayRTSLogs = displayRTSLogs;
+   }
+
 
    public boolean isDisplayLogs() {
       return displayLogs;
@@ -468,7 +479,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    }
 
    @DataBoundSetter
-   public void setMeasureJMH(boolean measureJMH) {
+   public void setMeasureJMH(final boolean measureJMH) {
       this.measureJMH = measureJMH;
    }
 

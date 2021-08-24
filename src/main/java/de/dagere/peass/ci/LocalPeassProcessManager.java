@@ -56,7 +56,7 @@ public class LocalPeassProcessManager {
       this.localWorkspace = localWorkspace;
       this.listener = listener;
       this.results = new ResultsFolders(localWorkspace, run.getParent().getFullDisplayName());
-      this.logActionCreator = new LogActionCreator(peassConfig, run);
+      this.logActionCreator = new LogActionCreator(peassConfig, run, localWorkspace);
    }
 
    public Set<TestCase> rts() throws IOException, InterruptedException {
@@ -81,7 +81,11 @@ public class LocalPeassProcessManager {
    }
 
    public void visualizeRTSResults(final Run<?, ?> run) {
-      new RTSVisualizationCreator(results, peassConfig).visualize(run);
+      RTSVisualizationCreator rtsVisualizationCreator = new RTSVisualizationCreator(results, peassConfig);
+      rtsVisualizationCreator.visualize(run);
+      if (peassConfig.isDisplayRTSLogs()) {
+         logActionCreator.createRTSActions();
+      }
    }
 
    public ProjectChanges visualizeMeasurementData(final Run<?, ?> run)
@@ -103,7 +107,7 @@ public class LocalPeassProcessManager {
       createPureMeasurementVisualization(run, dataFolder, measurements);
 
       if (peassConfig.isDisplayLogs()) {
-         logActionCreator.createActions(localWorkspace, statistics);
+         logActionCreator.createActions(statistics);
       }
 
       return changes;
@@ -155,7 +159,7 @@ public class LocalPeassProcessManager {
       rcaVisualizer.visualizeRCA();
       
       if (peassConfig.isDisplayRCALogs()) {
-         logActionCreator.createRCAActions(localWorkspace);
+         logActionCreator.createRCAActions();
       }
    }
 

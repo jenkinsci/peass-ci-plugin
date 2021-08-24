@@ -15,6 +15,7 @@ import de.dagere.peass.ci.logs.measurement.LogOverviewAction;
 import de.dagere.peass.ci.logs.rca.RCALevel;
 import de.dagere.peass.ci.logs.rca.RCALogAction;
 import de.dagere.peass.ci.logs.rca.RCALogOverviewAction;
+import de.dagere.peass.ci.logs.rts.RTSLogOverviewAction;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.measurement.analysis.ProjectStatistics;
 import hudson.model.Run;
@@ -23,21 +24,26 @@ public class LogActionCreator {
    
    private final PeassProcessConfiguration peassConfig;
    private final Run<?, ?> run;
+   private final LogFileReader reader;
    
-   public LogActionCreator(final PeassProcessConfiguration peassConfig, final Run<?, ?> run) {
+   public LogActionCreator(final PeassProcessConfiguration peassConfig, final Run<?, ?> run, final File localWorkspace) {
       this.peassConfig = peassConfig;
       this.run = run;
-   }
-
-   public void createActions(final File localWorkspace, final ProjectStatistics statistics) throws IOException {
       VisualizationFolderManager visualizationFolders = new VisualizationFolderManager(localWorkspace, run);
-      LogFileReader reader = new LogFileReader(visualizationFolders, peassConfig.getMeasurementConfig());
-      
-      Map<TestCase, List<LogFiles>> logFiles = reader.readAllTestcases(statistics);
-      createLogActions(run, logFiles);
-      
+      reader = new LogFileReader(visualizationFolders, peassConfig.getMeasurementConfig());
+   }
+   
+   public void createRTSActions() {
       String rtsLog = reader.getRTSLog();
       run.addAction(new InternalLogAction("rtsLog", "Regression Test Selection Log", rtsLog));
+      
+      RTSLogOverviewAction overviewAction = new RTSLogOverviewAction();
+      run.addAction(overviewAction);
+   }
+
+   public void createActions(final ProjectStatistics statistics) throws IOException {
+      Map<TestCase, List<LogFiles>> logFiles = reader.readAllTestcases(statistics);
+      createLogActions(run, logFiles);
       
       String measureLog = reader.getMeasureLog();
       run.addAction(new InternalLogAction("measurementLog", "Measurement Log", measureLog));
@@ -60,9 +66,7 @@ public class LogActionCreator {
       }
    }
    
-   public void createRCAActions(final File localWorkspace) throws IOException {
-      VisualizationFolderManager visualizationFolders = new VisualizationFolderManager(localWorkspace, run);
-      LogFileReader reader = new LogFileReader(visualizationFolders, peassConfig.getMeasurementConfig());
+   public void createRCAActions() throws IOException {
       String rcaLog = reader.getRCALog();
       run.addAction(new InternalLogAction("rcaLog", "RCA Log", rcaLog));
       
