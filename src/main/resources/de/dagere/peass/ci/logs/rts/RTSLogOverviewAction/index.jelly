@@ -12,6 +12,9 @@
 			</j:forEach>
 			
 			<h2>Trace Creation Runs</h2>
+			<j:forEach var="run" items="${it.getVmRuns().entrySet()}">
+	          <a href="../rtsLog_${run.getKey().getLinkUsable()}_${run.getValue().getVersion()}">Testcase: ${run.getKey()} Version: ${run.getValue().getVersion()}</a><br />
+			</j:forEach>
 		</l:main-panel>
 	</l:layout>
 </j:jelly> 

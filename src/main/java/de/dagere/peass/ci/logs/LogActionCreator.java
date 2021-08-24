@@ -16,6 +16,7 @@ import de.dagere.peass.ci.logs.rca.RCALevel;
 import de.dagere.peass.ci.logs.rca.RCALogAction;
 import de.dagere.peass.ci.logs.rca.RCALogOverviewAction;
 import de.dagere.peass.ci.logs.rts.ProcessSuccessLogAction;
+import de.dagere.peass.ci.logs.rts.RTSLogAction;
 import de.dagere.peass.ci.logs.rts.RTSLogData;
 import de.dagere.peass.ci.logs.rts.RTSLogOverviewAction;
 import de.dagere.peass.dependency.analysis.data.TestCase;
@@ -46,6 +47,12 @@ public class LogActionCreator {
       }
       
       Map<TestCase, RTSLogData> rtsVmRuns = reader.getRtsVmRuns();
+      for (Map.Entry<TestCase, RTSLogData> rtsLogData : rtsVmRuns.entrySet()) {
+         String methodLogData = FileUtils.readFileToString(rtsLogData.getValue().getMethodFile(), StandardCharsets.UTF_8);
+         String cleanLogData = FileUtils.readFileToString(rtsLogData.getValue().getCleanFile(), StandardCharsets.UTF_8);
+         RTSLogAction logAction = new RTSLogAction(rtsLogData.getValue().getVersion(), rtsLogData.getKey(), cleanLogData, methodLogData);
+         run.addAction(logAction);
+      }
       
       RTSLogOverviewAction overviewAction = new RTSLogOverviewAction(processSuccessRuns, rtsVmRuns);
       run.addAction(overviewAction);
