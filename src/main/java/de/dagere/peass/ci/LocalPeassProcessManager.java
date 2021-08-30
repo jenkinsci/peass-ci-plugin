@@ -37,6 +37,7 @@ import hudson.FilePath;
 import hudson.model.Result;
 import hudson.model.Run;
 import hudson.model.TaskListener;
+import hudson.util.DirScanner;
 
 public class LocalPeassProcessManager {
 
@@ -76,7 +77,8 @@ public class LocalPeassProcessManager {
       String remotePeassPath = ContinuousFolderUtil.getLocalFolder(new File(workspace.getRemote())).getPath();
       listener.getLogger().println("Remote Peass path: " + remotePeassPath);
       FilePath remotePeassFolder = new FilePath(workspace.getChannel(), remotePeassPath);
-      int count = remotePeassFolder.copyRecursiveTo(new FilePath(localWorkspace));
+      DirScanner.Glob dirScanner = new DirScanner.Glob("**/*,**/.git/**", "", false);
+      int count = remotePeassFolder.copyRecursiveTo(dirScanner, new FilePath(localWorkspace), "Copy including git folder");
       listener.getLogger().println("Copied " + count + " files from " + remotePeassFolder + " to " + localWorkspace.getAbsolutePath());
    }
 
