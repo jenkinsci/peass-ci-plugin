@@ -9,12 +9,16 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.ServletException;
+import javax.xml.bind.JAXBException;
 
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
 import org.kohsuke.stapler.QueryParameter;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import de.dagere.peass.analysis.changes.ProjectChanges;
@@ -106,34 +110,40 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
          try (JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
             PeassProcessConfiguration peassConfig = buildConfiguration(workspace, env, listener);
-            final LocalPeassProcessManager processManager = new LocalPeassProcessManager(peassConfig, workspace, localWorkspace, listener, run);
-
-            Set<TestCase> tests = processManager.rts();
-            if (tests == null) {
-               run.setResult(Result.FAILURE);
-               return;
-            }
-
-            processManager.copyFromRemote();
-            processManager.visualizeRTSResults(run);
-
-            boolean worked = processManager.measure(tests);
-            if (!worked) {
-               run.setResult(Result.FAILURE);
-               return;
-            }
-
-            processManager.copyFromRemote();
-            ProjectChanges changes = processManager.visualizeMeasurementData(run);
-
-            if (executeRCA) {
-               processManager.rca(run, changes, measurementMode);
-            }
+            runAllSteps(run, workspace, listener, localWorkspace, peassConfig);
          } catch (Throwable e) {
             e.printStackTrace(listener.getLogger());
             e.printStackTrace();
             run.setResult(Result.FAILURE);
          }
+      }
+   }
+
+   private void runAllSteps(final Run<?, ?> run, final FilePath workspace, final TaskListener listener, final File localWorkspace, final PeassProcessConfiguration peassConfig)
+         throws IOException, InterruptedException, JAXBException, JsonParseException, JsonMappingException, JsonGenerationException, Exception {
+      final LocalPeassProcessManager processManager = new LocalPeassProcessManager(peassConfig, workspace, localWorkspace, listener, run);
+
+      Set<TestCase> tests = processManager.rts();
+      if (tests == null) {
+         run.setResult(Result.FAILURE);
+         return;
+      }
+      processManager.visualizeRTSResults(run);
+
+      boolean worked = processManager.measure(tests);
+      if (!worked) {
+         run.setResult(Result.FAILURE);
+         return;
+      }
+      ProjectChanges changes = processManager.visualizeMeasurementResults(run);
+
+      if (executeRCA) {
+         boolean rcaWorked = processManager.rca(changes, measurementMode);
+         if (!rcaWorked) {
+            run.setResult(Result.FAILURE);
+            return;
+         }
+         processManager.visualizeRCAResults(run, changes);
       }
    }
 

@@ -34,7 +34,6 @@ import de.dagere.peass.measurement.rca.CauseSearcherConfig;
 import de.dagere.peass.measurement.rca.RCAStrategy;
 import de.dagere.peass.utils.Constants;
 import hudson.FilePath;
-import hudson.model.Result;
 import hudson.model.Run;
 import hudson.model.TaskListener;
 import hudson.util.DirScanner;
@@ -63,6 +62,7 @@ public class LocalPeassProcessManager {
    public Set<TestCase> rts() throws IOException, InterruptedException {
       RemoteRTS rts = new RemoteRTS(peassConfig, listener);
       Set<TestCase> tests = workspace.act(rts);
+      copyFromRemote();
       return tests;
    }
 
@@ -70,7 +70,17 @@ public class LocalPeassProcessManager {
       final RemoteMeasurer remotePerformer = new RemoteMeasurer(peassConfig, listener, tests);
       boolean worked = workspace.act(remotePerformer);
       listener.getLogger().println("Measurement worked: " + worked);
+      copyFromRemote();
       return worked;
+   }
+   
+   public boolean rca(final ProjectChanges changes, final RCAStrategy rcaStrategy) throws IOException, InterruptedException, Exception {
+      final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(null, true, true, 0.01, false, true, rcaStrategy, 1);
+
+      RemoteRCA remoteRCAExecutor = new RemoteRCA(peassConfig, causeSearcherConfig, changes, listener);
+      boolean rcaWorked = workspace.act(remoteRCAExecutor);
+      copyFromRemote();
+      return rcaWorked;
    }
 
    public void copyFromRemote() throws IOException, InterruptedException {
@@ -90,7 +100,7 @@ public class LocalPeassProcessManager {
       }
    }
 
-   public ProjectChanges visualizeMeasurementData(final Run<?, ?> run)
+   public ProjectChanges visualizeMeasurementResults(final Run<?, ?> run)
          throws JAXBException, IOException, JsonParseException, JsonMappingException, JsonGenerationException {
       File dataFolder = results.getVersionFullResultsFolder(peassConfig.getMeasurementConfig().getVersion(), peassConfig.getMeasurementConfig().getVersionOld());
       final HistogramReader histogramReader = new HistogramReader(peassConfig.getMeasurementConfig(), dataFolder);
@@ -113,6 +123,16 @@ public class LocalPeassProcessManager {
       }
 
       return changes;
+   }
+   
+   public void visualizeRCAResults(final Run<?, ?> run, final ProjectChanges changes) throws Exception, IOException {
+      VisualizationFolderManager visualizationFolders = new VisualizationFolderManager(localWorkspace, run);
+      final RCAVisualizer rcaVisualizer = new RCAVisualizer(peassConfig.getMeasurementConfig(), visualizationFolders, changes, run);
+      rcaVisualizer.visualizeRCA();
+      
+      if (peassConfig.isDisplayRCALogs()) {
+         logActionCreator.createRCAActions();
+      }
    }
 
    private void createPureMeasurementVisualization(final Run<?, ?> run, final File dataFolder, final Map<String, HistogramValues> measurements) {
@@ -143,26 +163,4 @@ public class LocalPeassProcessManager {
       }
       return statistics;
    }
-
-   public void rca(final Run<?, ?> run, final ProjectChanges changes, final RCAStrategy rcaStrategy) throws IOException, InterruptedException, Exception {
-      final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(null, true, true, 0.01, false, true, rcaStrategy, 1);
-
-      RemoteRCA remoteRCAExecutor = new RemoteRCA(peassConfig, causeSearcherConfig, changes, listener);
-      boolean rcaWorked = workspace.act(remoteRCAExecutor);
-      if (!rcaWorked) {
-         run.setResult(Result.FAILURE);
-         return;
-      }
-
-      copyFromRemote();
-
-      VisualizationFolderManager visualizationFolders = new VisualizationFolderManager(localWorkspace, run);
-      final RCAVisualizer rcaVisualizer = new RCAVisualizer(peassConfig.getMeasurementConfig(), visualizationFolders, changes, run);
-      rcaVisualizer.visualizeRCA();
-      
-      if (peassConfig.isDisplayRCALogs()) {
-         logActionCreator.createRCAActions();
-      }
-   }
-
 }
