@@ -52,25 +52,40 @@ public class RemoteRCA implements FileCallable<Boolean>, Serializable {
       final File localFolder = ContinuousFolderUtil.getLocalFolder(workspaceFolder);
       ResultsFolders resultsFolder = new ResultsFolders(localFolder, workspaceFolder.getName());
       final File logFile = resultsFolder.getRCALogFile(measurementConfig.getVersion(), measurementConfig.getVersionOld());
-      listener.getLogger().println("Executing root cause analysis - Log goes to " + logFile.getAbsolutePath());
-      try (LogRedirector director = new LogRedirector(logFile)) {
-         final File projectFolderLocal = new File(localFolder, workspaceFolder.getName());
-         File propertyFolder = resultsFolder.getPropertiesFolder();
-         causeConfig.setPropertyFolder(propertyFolder);
-         listener.getLogger().println("Setting property folder: " + propertyFolder.getAbsolutePath());
-         final RCAExecutor rcaExecutor = new RCAExecutor(measurementConfig, projectFolderLocal, changes, causeConfig, env);
-         rcaExecutor.executeRCAs();
-         return true;
-      } catch (XmlPullParserException | AnalysisConfigurationException | ViewNotFoundException | JAXBException e) {
-         File test = new File(workspaceFolder, "error.txt"); // Workaround, since error redirection on Jenkins agents currently does not work
-         PrintStream writer = new PrintStream(test, "UTF-8");
-         e.printStackTrace(writer);
-         writer.flush();
-         listener.getLogger().println("Exception thrown");
-         e.printStackTrace(listener.getLogger());
-         e.printStackTrace();
-         return false;
+      if (measurementConfig.isRedirectSubprocessOutputToFile()) {
+         listener.getLogger().println("Executing root cause analysis - Log goes to " + logFile.getAbsolutePath());
+         try (LogRedirector director = new LogRedirector(logFile)) {
+            executeRCA(workspaceFolder, localFolder, resultsFolder);
+            return true;
+         } catch (XmlPullParserException | AnalysisConfigurationException | ViewNotFoundException | JAXBException e) {
+            File test = new File(workspaceFolder, "error.txt"); // Workaround, since error redirection on Jenkins agents currently does not work
+            PrintStream writer = new PrintStream(test, "UTF-8");
+            e.printStackTrace(writer);
+            writer.flush();
+            listener.getLogger().println("Exception thrown");
+            e.printStackTrace(listener.getLogger());
+            e.printStackTrace();
+            return false;
+         }
+      } else {
+         try {
+            executeRCA(workspaceFolder, localFolder, resultsFolder);
+            return true;
+         } catch (IOException | InterruptedException | XmlPullParserException | AnalysisConfigurationException | ViewNotFoundException | JAXBException e) {
+            e.printStackTrace();
+            return false;
+         }
       }
+   }
+
+   private void executeRCA(final File workspaceFolder, final File localFolder, final ResultsFolders resultsFolder)
+         throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException, JAXBException {
+      final File projectFolderLocal = new File(localFolder, workspaceFolder.getName());
+      File propertyFolder = resultsFolder.getPropertiesFolder();
+      causeConfig.setPropertyFolder(propertyFolder);
+      listener.getLogger().println("Setting property folder: " + propertyFolder.getAbsolutePath());
+      final RCAExecutor rcaExecutor = new RCAExecutor(measurementConfig, projectFolderLocal, changes, causeConfig, env);
+      rcaExecutor.executeRCAs();
    }
 
 }

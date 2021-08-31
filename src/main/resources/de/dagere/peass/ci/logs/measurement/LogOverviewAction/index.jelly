@@ -4,7 +4,6 @@
 		<l:main-panel>
 
 			<h1>Performance Measurement Logs Overview</h1>
-			<a href="../rtsLog">Peass Regression Test Selection Log</a><br />
 			<a href="../measurementLog">Peass Measurement Execution Log</a><br />
 			<j:forEach var="testcase" items="${it.getLogFiles().entrySet()}" >
 				<b>Test Case: ${testcase.getKey()}</b>

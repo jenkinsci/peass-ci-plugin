@@ -8,8 +8,10 @@ import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 
 import hudson.FilePath;
 import hudson.model.Action;
+import hudson.model.FreeStyleProject;
 import hudson.model.Job;
 import hudson.model.Project;
+import hudson.model.TopLevelItem;
 import jenkins.model.Jenkins;
 
 public class CleanTrulyAction implements Action {
@@ -28,23 +30,12 @@ public class CleanTrulyAction implements Action {
 
             if (project instanceof WorkflowJob) {
                WorkflowJob job = (WorkflowJob) project;
-               Jenkins jenkinsInstance = Jenkins.getInstanceOrNull();
-               if (jenkinsInstance != null) {
-                  FilePath path = jenkinsInstance.getWorkspaceFor(job);
-                  if (path == null) {
-                     return "There exists no workspace for job " + job.toString();
-                  }
-                  boolean cleaningWorked = path.act(new CleanCallable());
-                  if (cleaningWorked) {
-                     return "Cleaning succeeded";
-                  } else {
-                     return "Some error appeared during cleanup, please check Jenkins server logs";
-                  }
-               } else {
-                  return "Jenkins was not available";
-               }
+               return tryCleaning(job);
+            } else if (project instanceof FreeStyleProject) {
+               FreeStyleProject job = (FreeStyleProject) project;
+               return tryCleaning(job);
             } else {
-               return "Full cleaning currently imposible";
+               return "Full cleaning currently imposible, not implemented for job type: " + project.getClass();
             }
          } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -52,6 +43,24 @@ public class CleanTrulyAction implements Action {
          }
       } else {
          return "Unexpected project type";
+      }
+   }
+
+   private String tryCleaning(final TopLevelItem job) throws IOException, InterruptedException {
+      Jenkins jenkinsInstance = Jenkins.getInstanceOrNull();
+      if (jenkinsInstance != null) {
+         FilePath path = jenkinsInstance.getWorkspaceFor(job);
+         if (path == null) {
+            return "There exists no workspace for job " + job.toString();
+         }
+         boolean cleaningWorked = path.act(new CleanCallable());
+         if (cleaningWorked) {
+            return "Cleaning succeeded";
+         } else {
+            return "Some error appeared during cleanup, please check Jenkins server logs";
+         }
+      } else {
+         return "Jenkins was not available";
       }
    }
 

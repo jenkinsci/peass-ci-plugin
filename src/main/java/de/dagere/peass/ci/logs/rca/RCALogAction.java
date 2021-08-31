@@ -1,6 +1,6 @@
 package de.dagere.peass.ci.logs.rca;
 
-import de.dagere.peass.ci.logs.LogAction;
+import de.dagere.peass.ci.logs.measurement.LogAction;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 
 public class RCALogAction extends LogAction {

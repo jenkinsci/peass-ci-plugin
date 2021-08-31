@@ -1,0 +1,13 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout">
+	<l:layout title="Regression Test Selection VM Run">
+		<l:main-panel>
+
+			<h1>Regression Test Selection VM Run: ${it.version} ${it.testcase}</h1>
+			<h2>Cleaning Log</h2>
+			<pre>${it.cleanLog}</pre>	
+			<h2>Regular Execution Log</h2>
+			<pre>${it.log}</pre>			
+		</l:main-panel>
+	</l:layout>
+</j:jelly> 

@@ -1,0 +1,26 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout">
+	<l:layout title="Regression Test Selection Log Overview">
+		<l:main-panel>
+
+			<h1>Regression Test Selection Log Overview</h1>
+			<a href="../rtsLog">Peass Regression Test Selection Log</a><br />
+			
+			<h2>Process Success Runs</h2>
+			<j:forEach var="run" items="${it.getProcessSuccessRuns().entrySet()}">
+	          <a href="../processSuccessRun_${run.getKey()}">${run.getKey()}</a><br />
+			</j:forEach>
+			
+			<h2>Trace Creation Runs</h2>
+			<j:forEach var="run" items="${it.getVmRuns().entrySet()}">
+	          Testcase: ${run.getKey()} <br />
+	            <a href="../rtsLog_${run.getKey().getLinkUsable()}_${run.getValue().getVersion()}">Version: ${run.getValue().getVersion()}</a><br />
+	          <j:if test='${it.getPredecessorVmRuns().get(run.getKey()) != null}'>
+	            <a href="../rtsLog_${run.getKey().getLinkUsable()}_${it.getPredecessorVmRuns().get(run.getKey()).getVersion()}">Version: ${it.getPredecessorVmRuns().get(run.getKey()).getVersion()}</a>
+	            <br />
+	          </j:if>
+	          <br />
+			</j:forEach>
+		</l:main-panel>
+	</l:layout>
+</j:jelly> 

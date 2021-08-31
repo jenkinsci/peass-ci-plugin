@@ -66,6 +66,10 @@
                  description="${%useGCDescr}">
             <f:checkbox />
         </f:entry>
+        <f:entry title="${%measureJMH}" field="measureJMH"
+                 description="${%measureJMHDescr}">
+            <f:checkbox />
+        </f:entry>
         <f:entry title="${%redirectToNull}" field="redirectToNull"
                  description="${%redirectToNullDescr}">
             <f:checkbox />
@@ -94,12 +98,16 @@
                  description="${%redirectSubprocessOutputToFileDescr}">
             <f:checkbox />
         </f:entry>
+        <f:entry title="${%displayRTSLogs}" field="displayRTSLogs"
+                 description="${%displayRTSLogsDescr}">
+            <f:checkbox />
+        </f:entry>
         <f:entry title="${%displayLogs}" field="displayLogs"
                  description="${%displayLogsDescr}">
             <f:checkbox />
         </f:entry>
-        <f:entry title="${%displayLogsRCA}" field="displayLogsRCA"
-                 description="${%displayLogsRCADescr}">
+        <f:entry title="${%displayRCALogs}" field="displayRCALogs"
+                 description="${%displayRCALogsDescr}">
             <f:checkbox />
         </f:entry>
     </f:advanced>

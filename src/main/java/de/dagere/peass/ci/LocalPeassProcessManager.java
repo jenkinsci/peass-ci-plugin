@@ -37,6 +37,7 @@ import hudson.FilePath;
 import hudson.model.Result;
 import hudson.model.Run;
 import hudson.model.TaskListener;
+import hudson.util.DirScanner;
 
 public class LocalPeassProcessManager {
 
@@ -56,7 +57,7 @@ public class LocalPeassProcessManager {
       this.localWorkspace = localWorkspace;
       this.listener = listener;
       this.results = new ResultsFolders(localWorkspace, run.getParent().getFullDisplayName());
-      this.logActionCreator = new LogActionCreator(peassConfig, run);
+      this.logActionCreator = new LogActionCreator(peassConfig, run, localWorkspace);
    }
 
    public Set<TestCase> rts() throws IOException, InterruptedException {
@@ -76,12 +77,17 @@ public class LocalPeassProcessManager {
       String remotePeassPath = ContinuousFolderUtil.getLocalFolder(new File(workspace.getRemote())).getPath();
       listener.getLogger().println("Remote Peass path: " + remotePeassPath);
       FilePath remotePeassFolder = new FilePath(workspace.getChannel(), remotePeassPath);
-      int count = remotePeassFolder.copyRecursiveTo(new FilePath(localWorkspace));
+      DirScanner.Glob dirScanner = new DirScanner.Glob("**/*,**/.git/**", "", false);
+      int count = remotePeassFolder.copyRecursiveTo(dirScanner, new FilePath(localWorkspace), "Copy including git folder");
       listener.getLogger().println("Copied " + count + " files from " + remotePeassFolder + " to " + localWorkspace.getAbsolutePath());
    }
 
-   public void visualizeRTSResults(final Run<?, ?> run) {
-      new RTSVisualizationCreator(results, peassConfig).visualize(run);
+   public void visualizeRTSResults(final Run<?, ?> run) throws IOException {
+      RTSVisualizationCreator rtsVisualizationCreator = new RTSVisualizationCreator(results, peassConfig);
+      rtsVisualizationCreator.visualize(run);
+      if (peassConfig.isDisplayRTSLogs()) {
+         logActionCreator.createRTSActions();
+      }
    }
 
    public ProjectChanges visualizeMeasurementData(final Run<?, ?> run)
@@ -103,7 +109,7 @@ public class LocalPeassProcessManager {
       createPureMeasurementVisualization(run, dataFolder, measurements);
 
       if (peassConfig.isDisplayLogs()) {
-         logActionCreator.createActions(localWorkspace, statistics);
+         logActionCreator.createMeasurementActions(statistics);
       }
 
       return changes;
@@ -155,7 +161,7 @@ public class LocalPeassProcessManager {
       rcaVisualizer.visualizeRCA();
       
       if (peassConfig.isDisplayRCALogs()) {
-         logActionCreator.createRCAActions(localWorkspace);
+         logActionCreator.createRCAActions();
       }
    }
 

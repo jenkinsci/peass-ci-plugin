@@ -62,10 +62,12 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private boolean showStart = false;
 
    private int versionDiff = 1;
+   private boolean displayRTSLogs = false;
    private boolean displayLogs = false;
    private boolean displayRCALogs = false;
    private boolean generateCoverageSelection = true;
    private boolean useGC;
+   private boolean measureJMH;
 
    private String includes = "";
    private String properties = "";
@@ -76,11 +78,11 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private boolean executeBeforeClassInMeasurement = false;
 
    private boolean updateSnapshotDependencies = true;
-   
+
    private boolean useSourceInstrumentation = true;
    private boolean useSampling = true;
    private boolean createDefaultConstructor = true;
-   
+
    private boolean redirectSubprocessOutputToFile = true;
 
    @DataBoundConstructor
@@ -105,16 +107,16 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          try (JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
             PeassProcessConfiguration peassConfig = buildConfiguration(workspace, env, listener);
             final LocalPeassProcessManager processManager = new LocalPeassProcessManager(peassConfig, workspace, localWorkspace, listener, run);
-            
+
             Set<TestCase> tests = processManager.rts();
             if (tests == null) {
                run.setResult(Result.FAILURE);
                return;
             }
-            
+
             processManager.copyFromRemote();
             processManager.visualizeRTSResults(run);
-            
+
             boolean worked = processManager.measure(tests);
             if (!worked) {
                run.setResult(Result.FAILURE);
@@ -144,7 +146,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       }
 
       DependencyConfig dependencyConfig = new DependencyConfig(1, false, true, generateCoverageSelection);
-      PeassProcessConfiguration peassConfig = new PeassProcessConfiguration(updateSnapshotDependencies, configWithRealGitVersions, dependencyConfig, peassEnv, displayLogs, displayRCALogs);
+      PeassProcessConfiguration peassConfig = new PeassProcessConfiguration(updateSnapshotDependencies, configWithRealGitVersions, dependencyConfig, peassEnv,
+            displayRTSLogs, displayLogs, displayRCALogs);
       return peassConfig;
    }
 
@@ -161,6 +164,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       listener.getLogger().println("Current Job: " + getJobName(run));
       listener.getLogger().println("Local workspace " + workspace.toString() + " Run dir: " + run.getRootDir() + " Local workspace: " + localWorkspace);
       listener.getLogger().println("VMs: " + VMs + " Iterations: " + iterations + " Warmup: " + warmup + " Repetitions: " + repetitions);
+      listener.getLogger().println("measureJMH: " + measureJMH);
       listener.getLogger().println("Includes: " + includes + " RCA: " + executeRCA);
       listener.getLogger().println("Strategy: " + measurementMode + " Source Instrumentation: " + useSourceInstrumentation + " Sampling: " + useSampling);
       listener.getLogger().println("Create default constructor: " + createDefaultConstructor);
@@ -201,6 +205,10 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       } else {
          System.out.println("executeparallel is false");
       }
+      if (measureJMH) {
+         config.getExecutionConfig().setTestTransformer("de.dagere.peass.dependency.jmh.JmhTestTransformer");
+         config.getExecutionConfig().setTestExecutor("de.dagere.peass.dependency.jmh.JmhTestExecutor");
+      }
       if (useSourceInstrumentation) {
          config.setUseSourceInstrumentation(true);
          config.setUseSelectiveInstrumentation(true);
@@ -223,7 +231,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       config.setIncludes(getIncludeList());
 
       config.setRedirectSubprocessOutputToFile(redirectSubprocessOutputToFile);
-      
+
       if (testGoal != null && !"".equals(testGoal)) {
          config.setTestGoal(testGoal);
       }
@@ -294,6 +302,16 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public void setVersionDiff(final int versionDiff) {
       this.versionDiff = versionDiff;
    }
+   
+   public boolean isDisplayRTSLogs() {
+      return displayRTSLogs;
+   }
+
+   @DataBoundSetter
+   public void setDisplayRTSLogs(final boolean displayRTSLogs) {
+      this.displayRTSLogs = displayRTSLogs;
+   }
+
 
    public boolean isDisplayLogs() {
       return displayLogs;
@@ -316,12 +334,12 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public boolean isRedirectSubprocessOutputToFile() {
       return redirectSubprocessOutputToFile;
    }
-   
+
    @DataBoundSetter
    public void setGenerateCoverageSelection(final boolean generateCoverageSelection) {
       this.generateCoverageSelection = generateCoverageSelection;
    }
-   
+
    public boolean isGenerateCoverageSelection() {
       return generateCoverageSelection;
    }
@@ -454,6 +472,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    @DataBoundSetter
    public void setShowStart(final boolean showStart) {
       this.showStart = showStart;
+   }
+
+   public boolean isMeasureJMH() {
+      return measureJMH;
+   }
+
+   @DataBoundSetter
+   public void setMeasureJMH(final boolean measureJMH) {
+      this.measureJMH = measureJMH;
    }
 
    @Symbol("measure")
