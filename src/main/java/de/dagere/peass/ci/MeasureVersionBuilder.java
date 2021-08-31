@@ -65,6 +65,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private boolean redirectToNull = true;
    private boolean showStart = false;
 
+   private boolean nightlyBuild = true;
    private int versionDiff = 1;
    private boolean displayRTSLogs = false;
    private boolean displayLogs = false;
@@ -147,7 +148,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       }
    }
 
-   private PeassProcessConfiguration buildConfiguration(final FilePath workspace, final EnvVars env, final TaskListener listener) throws IOException, InterruptedException {
+   private PeassProcessConfiguration buildConfiguration(final FilePath workspace, final EnvVars env, final TaskListener listener)
+         throws IOException, InterruptedException {
       final MeasurementConfiguration configWithRealGitVersions = generateMeasurementConfig(workspace, listener);
 
       EnvironmentVariables peassEnv = new EnvironmentVariables(properties);
@@ -161,7 +163,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       return peassConfig;
    }
 
-   private MeasurementConfiguration generateMeasurementConfig(final FilePath workspace, final TaskListener listener) throws IOException, InterruptedException {
+   private MeasurementConfiguration generateMeasurementConfig(final FilePath workspace, final TaskListener listener)
+         throws IOException, InterruptedException {
       final MeasurementConfiguration measurementConfig = getMeasurementConfig();
       System.out.println("Startig RemoteVersionReader");
       final RemoteVersionReader remoteVersionReader = new RemoteVersionReader(measurementConfig, listener);
@@ -195,7 +198,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       return includeList;
    }
 
-   private MeasurementConfiguration getMeasurementConfig() {
+   public MeasurementConfiguration getMeasurementConfig() throws JsonParseException, JsonMappingException, IOException {
       if (significanceLevel == 0.0) {
          significanceLevel = 0.01;
       }
@@ -235,8 +238,13 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       if (versionDiff <= 0) {
          throw new RuntimeException("The version difference should be at least 1, but was " + versionDiff);
       }
+      if (nightlyBuild && versionDiff != 1) {
+         throw new RuntimeException("If nightly build is set, do not set versionDiff! nightlyBuild will automatically select the last tested version.");
+      }
+
       config.setVersion("HEAD");
-      config.setVersionOld("HEAD~" + versionDiff);
+      final String oldVersion = getOldVersion();
+      config.setVersionOld(oldVersion);
 
       config.setIncludes(getIncludeList());
 
@@ -248,6 +256,16 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
       System.out.println("Building, iterations: " + iterations + " test goal: " + testGoal);
       return config;
+   }
+
+   private String getOldVersion() throws IOException, JsonParseException, JsonMappingException {
+      final String oldVersion;
+      if (nightlyBuild) {
+         oldVersion = null;
+      } else {
+         oldVersion = "HEAD~" + versionDiff;
+      }
+      return oldVersion;
    }
 
    public int getVMs() {
@@ -304,6 +322,14 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       this.significanceLevel = significanceLevel;
    }
 
+   public boolean isNightlyBuild() {
+      return nightlyBuild;
+   }
+
+   public void setNightlyBuild(final boolean nightlyBuild) {
+      this.nightlyBuild = nightlyBuild;
+   }
+
    public int getVersionDiff() {
       return versionDiff;
    }
@@ -312,7 +338,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public void setVersionDiff(final int versionDiff) {
       this.versionDiff = versionDiff;
    }
-   
+
    public boolean isDisplayRTSLogs() {
       return displayRTSLogs;
    }
@@ -321,7 +347,6 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public void setDisplayRTSLogs(final boolean displayRTSLogs) {
       this.displayRTSLogs = displayRTSLogs;
    }
-
 
    public boolean isDisplayLogs() {
       return displayLogs;
