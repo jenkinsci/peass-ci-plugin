@@ -23,6 +23,7 @@ import de.dagere.peass.ci.helper.RCAVisualizer;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.LogActionCreator;
 import de.dagere.peass.ci.persistence.TrendFileUtil;
+import de.dagere.peass.ci.remote.RTSResult;
 import de.dagere.peass.ci.remote.RemoteMeasurer;
 import de.dagere.peass.ci.remote.RemoteRCA;
 import de.dagere.peass.ci.remote.RemoteRTS;
@@ -61,9 +62,10 @@ public class LocalPeassProcessManager {
 
    public Set<TestCase> rts() throws IOException, InterruptedException {
       RemoteRTS rts = new RemoteRTS(peassConfig, listener);
-      Set<TestCase> tests = workspace.act(rts);
+      RTSResult result = workspace.act(rts);
+      peassConfig.getMeasurementConfig().setVersionOld(result.getVersionOld());
       copyFromRemote();
-      return tests;
+      return result.getTests();
    }
 
    public boolean measure(final Set<TestCase> tests) throws IOException, InterruptedException {
@@ -73,7 +75,7 @@ public class LocalPeassProcessManager {
       copyFromRemote();
       return worked;
    }
-   
+
    public boolean rca(final ProjectChanges changes, final RCAStrategy rcaStrategy) throws IOException, InterruptedException, Exception {
       final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(null, true, true, 0.01, false, true, rcaStrategy, 1);
 
@@ -124,12 +126,12 @@ public class LocalPeassProcessManager {
 
       return changes;
    }
-   
+
    public void visualizeRCAResults(final Run<?, ?> run, final ProjectChanges changes) throws Exception, IOException {
       VisualizationFolderManager visualizationFolders = new VisualizationFolderManager(localWorkspace, run);
       final RCAVisualizer rcaVisualizer = new RCAVisualizer(peassConfig.getMeasurementConfig(), visualizationFolders, changes, run);
       rcaVisualizer.visualizeRCA();
-      
+
       if (peassConfig.isDisplayRCALogs()) {
          logActionCreator.createRCAActions();
       }
