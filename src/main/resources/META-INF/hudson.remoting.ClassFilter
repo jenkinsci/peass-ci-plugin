@@ -1,6 +1,7 @@
 de.dagere.peass.config.MeasurementConfiguration
 de.dagere.peass.config.ExecutionConfig
 de.dagere.peass.config.DependencyConfig
+de.dagere.peass.config.KiekerConfiguration
 de.dagere.peass.config.StatisticsConfiguration
 de.dagere.peass.analysis.changes.ProjectChanges
 de.dagere.peass.dependencyprocessors.VersionComparator
