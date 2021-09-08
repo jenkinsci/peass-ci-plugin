@@ -7,7 +7,7 @@
 				Clean Peass Measurements
 			</h1>
 
-			This will delete all regression test selection, measurement and root cause analysis results. Are you sure you want to proceed?
+			This will delete <b>all</b> regression test selection, measurement and root cause analysis results. Are you sure you want to proceed?
 			
 			<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 			<script type="text/javascript">
@@ -19,7 +19,7 @@
 			  
 			</script>
 			
-			<a href='#' onClick='cleanCache();'>Yes</a>
+			<a href='#' class='yui-button yui-submit-button submit-button primary' onClick='cleanCache();'>Yes</a>
 			<div id="result">
 			
 			</div>
