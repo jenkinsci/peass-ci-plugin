@@ -111,13 +111,30 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
          try (JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
             PeassProcessConfiguration peassConfig = buildConfiguration(workspace, env, listener);
-            runAllSteps(run, workspace, listener, localWorkspace, peassConfig);
+            boolean versionIsUsable = checkVersion(run, listener, peassConfig);
+            if (versionIsUsable) {
+               runAllSteps(run, workspace, listener, localWorkspace, peassConfig);
+            }
          } catch (Throwable e) {
             e.printStackTrace(listener.getLogger());
             e.printStackTrace();
             run.setResult(Result.FAILURE);
          }
       }
+   }
+
+   private boolean checkVersion(final Run<?, ?> run, final TaskListener listener, final PeassProcessConfiguration peassConfig) {
+      boolean versionIsUsable;
+      String version = peassConfig.getMeasurementConfig().getVersion();
+      String versionOld = peassConfig.getMeasurementConfig().getVersionOld();
+      if (version.equals(versionOld)){
+         listener.getLogger().print("Version " + version + " equals " + versionOld + "; please check your configuration");
+         run.setResult(Result.FAILURE);
+         versionIsUsable = false;
+      }else {
+         versionIsUsable = true;
+      }
+      return versionIsUsable;
    }
 
    private void runAllSteps(final Run<?, ?> run, final FilePath workspace, final TaskListener listener, final File localWorkspace, final PeassProcessConfiguration peassConfig)
@@ -169,7 +186,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       System.out.println("Startig RemoteVersionReader");
       final RemoteVersionReader remoteVersionReader = new RemoteVersionReader(measurementConfig, listener);
       final MeasurementConfiguration configWithRealGitVersions = workspace.act(remoteVersionReader);
-      listener.getLogger().println("Read version: " + configWithRealGitVersions.getVersion());
+      listener.getLogger().println("Read version: " + configWithRealGitVersions.getVersion() + " " + configWithRealGitVersions.getVersionOld());
       return configWithRealGitVersions;
    }
 
