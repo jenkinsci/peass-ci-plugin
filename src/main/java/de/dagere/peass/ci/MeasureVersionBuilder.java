@@ -127,11 +127,11 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       boolean versionIsUsable;
       String version = peassConfig.getMeasurementConfig().getVersion();
       String versionOld = peassConfig.getMeasurementConfig().getVersionOld();
-      if (version.equals(versionOld)){
+      if (version.equals(versionOld)) {
          listener.getLogger().print("Version " + version + " equals " + versionOld + "; please check your configuration");
          run.setResult(Result.FAILURE);
          versionIsUsable = false;
-      }else {
+      } else {
          versionIsUsable = true;
       }
       return versionIsUsable;
@@ -148,6 +148,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       }
       processManager.visualizeRTSResults(run);
 
+      if (tests.size() > 0) {
+         measure(run, processManager, tests);
+      } else {
+         listener.getLogger().println("No tests selected; no measurement executed");
+      }
+   }
+
+   private void measure(final Run<?, ?> run, final LocalPeassProcessManager processManager, final Set<TestCase> tests)
+         throws IOException, InterruptedException, JAXBException, JsonParseException, JsonMappingException, JsonGenerationException, Exception {
       boolean worked = processManager.measure(tests);
       if (!worked) {
          run.setResult(Result.FAILURE);
