@@ -67,7 +67,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
    private boolean nightlyBuild = true;
    private int versionDiff = 1;
-   private boolean displayRTSLogs = false;
+   private boolean displayRTSLogs = true;
    private boolean displayLogs = false;
    private boolean displayRCALogs = false;
    private boolean generateCoverageSelection = true;
@@ -127,11 +127,14 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       boolean versionIsUsable;
       String version = peassConfig.getMeasurementConfig().getVersion();
       String versionOld = peassConfig.getMeasurementConfig().getVersionOld();
-      if (version.equals(versionOld)){
+      if (version.equals(versionOld)) {
          listener.getLogger().print("Version " + version + " equals " + versionOld + "; please check your configuration");
          run.setResult(Result.FAILURE);
          versionIsUsable = false;
-      }else {
+      } else if (versionOld == null) {
+         versionIsUsable = false;
+         listener.getLogger().print("Peass was not able to identify to running version");
+      } else {
          versionIsUsable = true;
       }
       return versionIsUsable;
