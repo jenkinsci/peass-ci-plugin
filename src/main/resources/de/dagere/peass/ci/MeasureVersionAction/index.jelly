@@ -1,5 +1,5 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:st="jelly:stapler">
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout" >
     <l:layout title="Performance Measurement"> 
         <l:side-panel> 
             <st:include page="sidepanel.jelly" it="${it.run}" optional="true" /> 

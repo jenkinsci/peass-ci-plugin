@@ -1,6 +1,6 @@
 package de.dagere.peass.ci.logs;
 
-import hudson.model.InvisibleAction;
+import de.dagere.peass.ci.VisibleAction;
 
 /**
  * Presents logs of Peass processes, i.e. regression test selection, measurement and root cause analysis
@@ -8,7 +8,7 @@ import hudson.model.InvisibleAction;
  * @author dagere
  *
  */
-public class InternalLogAction extends InvisibleAction {
+public class InternalLogAction extends VisibleAction {
    
    private final String displayName;
    private final String title;
@@ -31,5 +31,15 @@ public class InternalLogAction extends InvisibleAction {
 
    public String getText() {
       return text;
+   }
+
+   @Override
+   public String getIconFileName() {
+      return null;
+   }
+
+   @Override
+   public String getDisplayName() {
+      return null;
    }
 }

@@ -3,13 +3,11 @@ package de.dagere.peass.ci.logs.rca;
 import java.util.List;
 import java.util.Map;
 
+import de.dagere.peass.ci.VisibleAction;
 import de.dagere.peass.dependency.analysis.data.TestCase;
-import hudson.model.Run;
-import jenkins.model.RunAction2;
 
-public class RCALogOverviewAction implements RunAction2 {
+public class RCALogOverviewAction extends VisibleAction {
    
-   private transient Run<?, ?> run;
    private final Map<TestCase, List<RCALevel>> testLevelMap;
    private String version;
    private String versionOld;
@@ -39,7 +37,6 @@ public class RCALogOverviewAction implements RunAction2 {
 
    @Override
    public String getDisplayName() {
-      // TODO Auto-generated method stub
       return "Root Cause Analysis Log Overview";
    }
 
@@ -47,15 +44,4 @@ public class RCALogOverviewAction implements RunAction2 {
    public String getUrlName() {
       return "rcaLogOverview";
    }
-
-   @Override
-   public void onAttached(final Run<?, ?> run) {
-      this.run = run;
-   }
-
-   @Override
-   public void onLoad(final Run<?, ?> run) {
-      this.run = run;
-   }
-
 }

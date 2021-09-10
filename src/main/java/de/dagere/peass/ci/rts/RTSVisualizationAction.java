@@ -3,12 +3,11 @@ package de.dagere.peass.ci.rts;
 import java.util.List;
 import java.util.Map;
 
+import de.dagere.peass.ci.VisibleAction;
 import de.dagere.peass.config.DependencyConfig;
 import de.dagere.peass.dependency.traces.coverage.CoverageSelectionVersion;
-import hudson.model.Run;
-import jenkins.model.RunAction2;
 
-public class RTSVisualizationAction implements RunAction2 {
+public class RTSVisualizationAction extends VisibleAction {
 
    private final DependencyConfig config;
    private final Map<String, List<String>> staticSelection;
@@ -53,15 +52,5 @@ public class RTSVisualizationAction implements RunAction2 {
    @Override
    public String getUrlName() {
       return "rtsResults";
-   }
-
-   @Override
-   public void onAttached(final Run<?, ?> run) {
-      
-   }
-
-   @Override
-   public void onLoad(final Run<?, ?> run) {
-
    }
 }

@@ -15,14 +15,10 @@ import de.dagere.peass.config.MeasurementConfiguration;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.measurement.analysis.ProjectStatistics;
 import de.dagere.peass.measurement.analysis.statistics.TestcaseStatistic;
-import hudson.model.Run;
-import jenkins.model.RunAction2;
 
-public class MeasureVersionAction implements RunAction2 {
+public class MeasureVersionAction extends VisibleAction {
 
    private static final Logger LOG = LogManager.getLogger(MeasureVersionAction.class);
-
-   private transient Run<?, ?> run;
 
    private MeasurementConfiguration config;
    private Changes changes;
@@ -94,20 +90,6 @@ public class MeasureVersionAction implements RunAction2 {
 
    public String getReducedName(final String name) {
       return name.substring(prefix.length() + 1);
-   }
-
-   @Override
-   public void onAttached(final Run<?, ?> run) {
-      this.run = run;
-   }
-
-   @Override
-   public void onLoad(final Run<?, ?> run) {
-      this.run = run;
-   }
-
-   public Run<?, ?> getRun() {
-      return run;
    }
 
    public double round(final double value) {

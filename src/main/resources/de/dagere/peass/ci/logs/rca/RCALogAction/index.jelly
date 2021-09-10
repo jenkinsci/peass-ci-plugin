@@ -1,6 +1,9 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout">
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout" >
 	<l:layout title="RCA Log">
+		 <l:side-panel> 
+            <st:include page="sidepanel.jelly" it="${it.run}" optional="true" /> 
+        </l:side-panel>
 		<l:main-panel>
 			<h1>RCA Log ${it.test} VM: ${it.getVmId()} Level: ${it.level} Version: ${it.version}</h1>
 			<pre>

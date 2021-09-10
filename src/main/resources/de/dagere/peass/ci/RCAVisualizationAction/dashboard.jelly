@@ -1,5 +1,8 @@
 <?jelly escape-by-default='false'?>
 <j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:st="jelly:stapler">
+	<l:side-panel> 
+            <st:include page="sidepanel.jelly" it="${it.run}" optional="true" /> 
+   </l:side-panel>
 	<l:layout title="RCA Dashboard"> 
 	    <style>
 		.part{

@@ -8,9 +8,7 @@ import java.nio.charset.StandardCharsets;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
-import hudson.model.InvisibleAction;
-
-public class MeasurementVisualizationAction extends InvisibleAction {
+public class MeasurementVisualizationAction extends VisibleAction {
 
    private String displayName;
    private final File jsFile;
@@ -34,5 +32,15 @@ public class MeasurementVisualizationAction extends InvisibleAction {
    public String getDataJS() throws IOException {
       final String content = FileUtils.readFileToString(jsFile, StandardCharsets.UTF_8);
       return content;
+   }
+
+   @Override
+   public String getIconFileName() {
+      return null;
+   }
+
+   @Override
+   public String getDisplayName() {
+      return null;
    }
 }
