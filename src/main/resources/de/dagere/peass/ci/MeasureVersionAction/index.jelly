@@ -5,7 +5,17 @@
             <st:include page="sidepanel.jelly" it="${it.run}" optional="true" /> 
         </l:side-panel>
         <l:main-panel>
-            <h1>Performance Measurement Results</h1> 
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+            <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css"/>
+  		    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  		    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+            <h1>Performance Measurement Results
+            <a href='#' onClick='$( "#dialogGeneral" ).dialog( "open" );'><i class="fa fa-question-circle" title='Display Help' style="font-size:24px" ></i></a>
+      			<div id="dialogGeneral" title="Help Values">Peass-CI shows calculated execution durations of one repetition. The real measured value is the displayed value multiplied by repetitions.</div>
+      			<script>
+				$( "#dialogGeneral" ).dialog({ autoOpen: false });
+				</script>
+            </h1> 
             Performance measurement was executed with the following configuration:<br/>           
             VMs: ${it.config.vms} 
             Iterations: ${it.config.iterations} 
@@ -50,7 +60,18 @@
       				<tr><td>Mean</td><td>${it.round(currentStatistic.getMeanOld()/it.config.repetitions/1000)} $&#x00B5;s </td><td>${it.round(currentStatistic.getMeanCurrent()/it.config.repetitions/1000)} $&#x00B5;s</td></tr>
       				<tr><td>Deviation</td><td>${it.round(currentStatistic.deviationOld/it.config.repetitions/1000)}</td><td>${it.round(currentStatistic.deviationCurrent/it.config.repetitions/1000)}</td></tr>
       			</table> 
-      			VMs: ${currentStatistic.getVMs()} T=${it.round(currentStatistic.tvalue)}<br/>
+      			VMs: ${currentStatistic.getVMs()}<br /> 
+      			T=${it.round(currentStatistic.tvalue)}
+      			
+      			<a href='#' onClick='$( "#dialogTValue" ).dialog( "open" );'><i class="fa fa-question-circle" title='Display Help'></i></a>
+      			<br/>
+      			<div id="dialogTValue" title="Help T-Value">The t-Value indicates whether we can assume that a performance changed. 
+      			An absolute value of more 2.750 indicates a performance change with significance 99% if 30 VMs are executed.      			
+      			Selected values are available <a href="https://en.wikipedia.org/wiki/Student%27s_t-distribution#Table_of_selected_values" target="parent">here</a>.</div>
+      			<script>
+				$( "#dialogTValue" ).dialog({ autoOpen: false });
+				</script>
+      			
 				<a href="../measurement_${it.getReducedName(testcase.getKey().replace('#', '_'))}/?call=overall&amp;ess=-1" target="parent">Inspect Measurement</a>
               	</td></tr>
               </table>
