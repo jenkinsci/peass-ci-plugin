@@ -41,6 +41,7 @@ public class DefaultMeasurementVisualizer {
 
    public void visualizeMeasurements() {
       String longestPrefix = RCAVisualizer.getLongestPrefix(measurements.keySet());
+      LOG.debug("Prefix: {} Keys: {}", longestPrefix, measurements.keySet());
       
       File detailResultsFolder = new File(dataFolder, "measurements");
       

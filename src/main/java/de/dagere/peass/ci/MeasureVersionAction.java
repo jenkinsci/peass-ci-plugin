@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import de.dagere.peass.analysis.changes.Change;
 import de.dagere.peass.analysis.changes.Changes;
 import de.dagere.peass.ci.helper.HistogramValues;
@@ -17,8 +20,10 @@ import jenkins.model.RunAction2;
 
 public class MeasureVersionAction implements RunAction2 {
 
+   private static final Logger LOG = LogManager.getLogger(MeasureVersionAction.class);
+
    private transient Run<?, ?> run;
-   
+
    private MeasurementConfiguration config;
    private Changes changes;
    private ProjectStatistics statistics;
@@ -33,7 +38,8 @@ public class MeasureVersionAction implements RunAction2 {
       for (Entry<String, List<Change>> change : changes.getTestcaseChanges().entrySet()) {
          System.out.println(change.getKey());
       }
-      prefix = RCAVisualizer.getLongestPrefix(changes.getTestcaseChanges().keySet());
+      prefix = RCAVisualizer.getLongestPrefix(measurements.keySet());
+      LOG.debug("Prefix: {} Keys: {}", prefix, measurements.keySet());
    }
 
    @Override
@@ -62,7 +68,7 @@ public class MeasureVersionAction implements RunAction2 {
    public Changes getChanges() {
       return changes;
    }
-   
+
    public boolean testIsChanged(final String testcase) {
       boolean isChanged = false;
       for (Entry<String, List<Change>> changeEntry : changes.getTestcaseChanges().entrySet()) {
@@ -75,19 +81,19 @@ public class MeasureVersionAction implements RunAction2 {
       }
       return isChanged;
    }
-   
+
    public Map<String, HistogramValues> getMeasurements() {
       return measurements;
    }
-   
+
    public TestcaseStatistic getTestcaseStatistic(final String testcase) {
       Entry<String, Map<TestCase, TestcaseStatistic>> testcaseStatisticEntry = statistics.getStatistics().entrySet().iterator().next();
       Map<TestCase, TestcaseStatistic> testcaseStatistic = testcaseStatisticEntry.getValue();
       return testcaseStatistic.get(new TestCase(testcase));
    }
-   
+
    public String getReducedName(final String name) {
-      return name.substring(prefix.length()+1);
+      return name.substring(prefix.length() + 1);
    }
 
    @Override
@@ -103,8 +109,8 @@ public class MeasureVersionAction implements RunAction2 {
    public Run<?, ?> getRun() {
       return run;
    }
-   
+
    public double round(final double value) {
-      return Math.round(value*100)/100d;
+      return Math.round(value * 100) / 100d;
    }
 }
