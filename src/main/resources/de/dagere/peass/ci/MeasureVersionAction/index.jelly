@@ -61,13 +61,16 @@
       				<tr><td>Deviation</td><td>${it.round(currentStatistic.deviationOld/it.config.repetitions/1000)}</td><td>${it.round(currentStatistic.deviationCurrent/it.config.repetitions/1000)}</td></tr>
       			</table> 
       			VMs: ${currentStatistic.getVMs()}<br /> 
-      			T=${it.round(currentStatistic.tvalue)}
-      			
+      			T=${it.round(currentStatistic.tvalue)} (
+      			<j:if test="${it.abs(currentStatistic.tvalue) &gt; it.getCriticalTValue()}">Significant Performance Change </j:if>
+      			<j:if test="${it.abs(currentStatistic.tvalue) &lt; it.getCriticalTValue()}">No Significant Performance change </j:if>
       			<a href='#' onClick='$( "#dialogTValue" ).dialog( "open" );'><i class="fa fa-question-circle" title='Display Help'></i></a>
+      			)
       			<br/>
       			<div id="dialogTValue" title="Help T-Value">The t-Value indicates whether we can assume that a performance changed. 
-      			An absolute value of more 2.750 indicates a performance change with significance 99% if 30 VMs are executed.      			
+      			For your configured type 1 error of <b>${it.config.statisticsConfig.type1error}</b> (= ${(1-it.config.statisticsConfig.type1error)*100}% significance level) and <b>${it.config.vms}</b> VMs, the absolute t-value needs to be above the critical t-value <b>${it.round(it.getCriticalTValue())}</b> to indicate a performance change. <br/>
       			Selected values are available <a href="https://en.wikipedia.org/wiki/Student%27s_t-distribution#Table_of_selected_values" target="parent">here</a>.</div>
+      			
       			<script>
 				$( "#dialogTValue" ).dialog({ autoOpen: false });
 				</script>

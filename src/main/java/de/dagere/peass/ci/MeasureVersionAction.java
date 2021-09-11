@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.math3.distribution.TDistribution;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -80,6 +81,14 @@ public class MeasureVersionAction extends VisibleAction {
 
    public Map<String, HistogramValues> getMeasurements() {
       return measurements;
+   }
+
+   public double getCriticalTValue() {
+      return new TDistribution(config.getVms() * 2 - 1).inverseCumulativeProbability(1 - config.getType1error());
+   }
+   
+   public double abs(final double value) {
+      return Math.abs(value);
    }
 
    public TestcaseStatistic getTestcaseStatistic(final String testcase) {
