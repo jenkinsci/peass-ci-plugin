@@ -16,13 +16,27 @@
 				$( "#dialogGeneral" ).dialog({ autoOpen: false });
 				</script>
             </h1> 
-            Performance measurement was executed with the following configuration:<br/>           
-            VMs: ${it.config.vms} 
-            Iterations: ${it.config.iterations} 
-            Warmup: ${it.config.warmup}
-            Repetitions: ${it.config.repetitions}
-            <br /><br />
-            <h2>Changes</h2>
+            <a href="#" onClick="$('#configuration').toggle();">Configuration</a>
+            <div id="configuration" style="display:none">
+              Performance measurement was executed with the following configuration:<br/>           
+              <table>
+              <tr><td>VMs </td><td> ${it.config.vms} </td></tr>
+              <tr><td>Iterations</td><td> ${it.config.iterations} </td></tr>
+              <tr><td>Warmup</td><td> ${it.config.warmup}</td></tr>
+              <tr><td>Repetitions</td><td> ${it.config.repetitions}</td></tr>
+              </table>
+            </div>
+            
+            
+            <h2>Changes
+            <a href='#' onClick='$( "#dialogChanges" ).dialog( "open" );'><i class="fa fa-question-circle" title='Display Help' style="font-size:24px" ></i></a>
+            </h2>
+            <div id="dialogChanges" title="Changes">This section contains all test cases which had a performance change based on the configured type 1 error.  
+      			For your configured type 1 error of <b>${it.config.statisticsConfig.type1error}</b> (= ${(1-it.config.statisticsConfig.type1error)*100}% significance level) and <b>${it.config.vms}</b> VMs, the absolute t-value needs to be above the critical t-value <b>${it.round(it.getCriticalTValue())}</b> to indicate a performance change. <br/>
+      			Selected values are available <a href="https://en.wikipedia.org/wiki/Student%27s_t-distribution#Table_of_selected_values" target="parent">here</a>.</div>
+            <script>
+				$( "#dialogChanges" ).dialog({ autoOpen: false });
+			</script>
             
               Version: ${it.getConfig().getVersion()}<br />
               <table>
@@ -37,7 +51,17 @@
                   </table></td></tr>
                 </j:forEach>
               </table>
-            <h2>Measurements</h2>
+              
+              
+            <h2>Measurements
+            <a href='#' onClick='$( "#dialogMeasurements" ).dialog( "open" );'><i class="fa fa-question-circle" title='Display Help' style="font-size:24px" ></i></a>
+            </h2>
+            <div id="dialogMeasurements" title="Measurements">This section contains all measurement values regardless of a performance changes was detected. 
+      			If this section shows high deviation, you should consider increasing warmup, iteration or repetition count. If this does not work, consider re-writing your test workload - some of your workloads might not be suitable for performance measurement.
+      			</div>
+            <script>
+				$( "#dialogMeasurements" ).dialog({ autoOpen: false });
+			</script>
             <script type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js"/>
             <j:forEach var="testcase" items="${it.measurements.entrySet()}">
               Testcase: 
