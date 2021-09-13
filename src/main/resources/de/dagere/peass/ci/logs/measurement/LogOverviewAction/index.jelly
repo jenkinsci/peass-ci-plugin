@@ -12,13 +12,15 @@
 				<b>Test Case: ${testcase.getKey()}</b>
 				VMs: ${testcase.getValue().size()}
 				<table>
-				<tr><th>VM-Id</th><th>Predecessor</th><th>Version</th></tr>
+				<tr><th>VM-Id</th><th>Predecessor</th><th>End Time</th><th>Version</th><th>End Time</th></tr>
 				<j:set var="vmid" value="0"/>
 				<j:forEach var="logFilePair" items="${testcase.getValue()}">
 			    	<tr>
 			    		<td>${vmid}</td>
 			    		<td><a href="../measurelog_${testcase.getKey().getLinkUsable()}_${vmid}_${it.versionOld}">${it.versionOld}</a></td>
+			    		<td>${logFilePair.getEndDatePredecessor()}</td>
 			    		<td><a href="../measurelog_${testcase.getKey().getLinkUsable()}_${vmid}_${it.version}">${it.version}</a></td>
+			    		<td>${logFilePair.getEndDateCurrent()}</td>
 			    	</tr>
 			    	<j:set var="vmid" value="${vmid+1}"/>
 				</j:forEach>
