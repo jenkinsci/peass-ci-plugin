@@ -11,15 +11,15 @@
 			
 			<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 			<script type="text/javascript">
-			  function cleanCache() {
-			    $.get("../cleanTruly", function ( data ){
+			  function cleanAll() {
+			    $.get("../cleanAll", function ( data ){
 			      document.getElementById("result").innerHTML=data;
 			    });
 			  }
 			  
 			</script>
 			
-			<a href='#' class='yui-button yui-submit-button submit-button primary' onClick='cleanCache();'>Yes</a>
+			<a href='#' class='yui-button yui-submit-button submit-button primary' onClick='cleanAll();'>Yes</a>
 			<div id="result">
 			
 			</div>
