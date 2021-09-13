@@ -76,7 +76,7 @@ public class CleanAllAction implements Action {
 
    @Override
    public String getUrlName() {
-      return "cleanTruly";
+      return "cleanAll";
    }
 
 }
