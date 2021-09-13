@@ -35,10 +35,15 @@ public class LogFileReader {
 
    private final VisualizationFolderManager visualizationFolders;
    private final MeasurementConfiguration measurementConfig;
+   private boolean logsExisting = false;
 
    public LogFileReader(final VisualizationFolderManager visualizationFolders, final MeasurementConfiguration measurementConfig) {
       this.visualizationFolders = visualizationFolders;
       this.measurementConfig = measurementConfig;
+   }
+   
+   public boolean isLogsExisting() {
+      return logsExisting;
    }
 
    public Map<String, File> findProcessSuccessRuns() {
@@ -51,6 +56,7 @@ public class LogFileReader {
    private void addVersionRun(final Map<String, File> processSuccessTestRuns, final String checkSuccessRunVersion) {
       File candidate = new File(visualizationFolders.getPeassFolders().getDependencyLogFolder(), checkSuccessRunVersion + File.separator + "testRunning.log");
       if (candidate.exists()) {
+         logsExisting = true;
          processSuccessTestRuns.put(checkSuccessRunVersion, candidate);
       }
    }
@@ -58,15 +64,18 @@ public class LogFileReader {
    public Map<TestCase, RTSLogData> getRtsVmRuns(final String version) {
       Map<TestCase, RTSLogData> files = new LinkedHashMap<>();
       File versionFolder = new File(visualizationFolders.getPeassFolders().getDependencyLogFolder(), version);
-      for (File testClazzFolder : versionFolder.listFiles((FileFilter) new WildcardFileFilter("log_*"))) {
-         for (File methodFile : testClazzFolder.listFiles()) {
-            if (!methodFile.isDirectory()) {
-               File cleanFile = new File(testClazzFolder, "clean" + File.separator + methodFile.getName());
-               RTSLogData data = new RTSLogData(version, methodFile, cleanFile);
-               String clazz = testClazzFolder.getName().substring("log_".length());
-               String method = methodFile.getName().substring(0, methodFile.getName().length() - ".txt".length());
-               TestCase test = new TestCase(clazz + "#" + method);
-               files.put(test, data);
+      if (versionFolder.exists()) {
+         logsExisting = true;
+         for (File testClazzFolder : versionFolder.listFiles((FileFilter) new WildcardFileFilter("log_*"))) {
+            for (File methodFile : testClazzFolder.listFiles()) {
+               if (!methodFile.isDirectory()) {
+                  File cleanFile = new File(testClazzFolder, "clean" + File.separator + methodFile.getName());
+                  RTSLogData data = new RTSLogData(version, methodFile, cleanFile);
+                  String clazz = testClazzFolder.getName().substring("log_".length());
+                  String method = methodFile.getName().substring(0, methodFile.getName().length() - ".txt".length());
+                  TestCase test = new TestCase(clazz + "#" + method);
+                  files.put(test, data);
+               }
             }
          }
       }
@@ -165,7 +174,7 @@ public class LogFileReader {
       return testcases;
    }
 
-   private void readRCATestcase(CauseSearchFolders causeFolders, Map<TestCase, List<RCALevel>> testcases, File jsonFileName)
+   private void readRCATestcase(final CauseSearchFolders causeFolders, final Map<TestCase, List<RCALevel>> testcases, final File jsonFileName)
          throws IOException, JsonParseException, JsonMappingException {
       CauseSearchData data = Constants.OBJECTMAPPER.readValue(jsonFileName, CauseSearchData.class);
       TestCase test = new TestCase(data.getTestcase());

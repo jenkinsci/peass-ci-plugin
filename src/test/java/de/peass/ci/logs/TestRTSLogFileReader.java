@@ -60,6 +60,8 @@ public class TestRTSLogFileReader {
       File testRunningFile = testcases.get("a23e385264c31def8dcda86c3cf64faa698c62d8");
       Assert.assertTrue(testRunningFile.exists());
 
+      Assert.assertTrue(reader.isLogsExisting());
+      
       Map<TestCase, RTSLogData> rtsVmRuns = reader.getRtsVmRuns("a23e385264c31def8dcda86c3cf64faa698c62d8");
       Assert.assertEquals(2, rtsVmRuns.size());
 
