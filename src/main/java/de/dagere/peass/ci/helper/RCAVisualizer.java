@@ -2,6 +2,7 @@ package de.dagere.peass.ci.helper;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -76,7 +77,9 @@ public class RCAVisualizer {
 
                LOG.info("Adding: " + rcaDestFile + " " + name);
                final String displayName = name.substring(longestPrefix.length() + 1);
-               run.addAction(new RCAVisualizationAction(displayName, rcaDestFile));
+               
+               final String content = FileUtils.readFileToString(rcaDestFile, StandardCharsets.UTF_8);
+               run.addAction(new RCAVisualizationAction(displayName, content));
             } else {
                LOG.error("An error occured: " + jsFile.getAbsolutePath() + " not found");
             }

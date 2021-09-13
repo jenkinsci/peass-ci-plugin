@@ -1,21 +1,19 @@
 package de.dagere.peass.ci;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 public class MeasurementVisualizationAction extends VisibleAction {
 
    private String displayName;
-   private final File jsFile;
+   private final String jsData;
 
-   public MeasurementVisualizationAction(final String displayName, final File jsFile) {
+   public MeasurementVisualizationAction(final String displayName, final String jsData) {
       this.displayName = displayName;
-      this.jsFile = jsFile;
+      this.jsData = jsData;
    }
 
    @Override
@@ -30,8 +28,7 @@ public class MeasurementVisualizationAction extends VisibleAction {
    }
 
    public String getDataJS() throws IOException {
-      final String content = FileUtils.readFileToString(jsFile, StandardCharsets.UTF_8);
-      return content;
+      return jsData;
    }
 
    @Override

@@ -1,25 +1,19 @@
 package de.dagere.peass.ci;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
-import hudson.model.Run;
-import jenkins.model.RunAction2;
+public class RCAVisualizationAction extends VisibleAction {
 
-public class RCAVisualizationAction implements RunAction2 {
-
-   private transient Run<?, ?> run;
    private String displayName;
-   private final File jsFile;
+   private final String jsData;
    
-   public RCAVisualizationAction(final String displayName, final File jsFile) {
+   public RCAVisualizationAction(final String displayName, final String jsData) {
       this.displayName = displayName;
-      this.jsFile = jsFile;
+      this.jsData = jsData;
    }
    
    @Override
@@ -44,22 +38,7 @@ public class RCAVisualizationAction implements RunAction2 {
    }
    
    public String getDataJS() throws IOException {
-      final String content = FileUtils.readFileToString(jsFile, StandardCharsets.UTF_8);
-      return content;
+      return jsData;
+      
    }
-   
-   @Override
-   public void onAttached(final Run<?, ?> run) {
-      this.run = run;
-   }
-
-   @Override
-   public void onLoad(final Run<?, ?> run) {
-      this.run = run;
-   }
-   
-   public Run<?, ?> getRun() {
-      return run;
-   }
-
 }
