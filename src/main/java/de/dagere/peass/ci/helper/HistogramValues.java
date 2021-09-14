@@ -12,6 +12,11 @@ public class HistogramValues {
       this.valuesBefore = valuesBefore.stream().mapToDouble(i -> i).toArray();
    }
 
+   public HistogramValues(final double[] valuesCurrent, final double[] valuesBefore) {
+      this.valuesCurrent = valuesCurrent;
+      this.valuesBefore = valuesBefore;
+   }
+
    public String getValuesCurrentReadable() {
       return Arrays.toString(valuesCurrent);
    }

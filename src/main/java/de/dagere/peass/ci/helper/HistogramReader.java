@@ -2,8 +2,7 @@ package de.dagere.peass.ci.helper;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -11,10 +10,11 @@ import javax.xml.bind.JAXBException;
 
 import de.dagere.kopeme.datastorage.XMLDataLoader;
 import de.dagere.kopeme.generated.Kopemedata;
-import de.dagere.kopeme.generated.Result;
 import de.dagere.kopeme.generated.TestcaseType;
 import de.dagere.kopeme.generated.TestcaseType.Datacollector.Chunk;
 import de.dagere.peass.config.MeasurementConfiguration;
+import de.dagere.peass.measurement.analysis.MultipleVMTestUtil;
+import de.dagere.peass.measurement.analysis.ResultLoader;
 import io.jenkins.cli.shaded.org.apache.commons.io.filefilter.WildcardFileFilter;
 
 public class HistogramReader {
@@ -22,6 +22,7 @@ public class HistogramReader {
 
    private final MeasurementConfiguration measurementConfig;
    private final File fullResultsFolder;
+   private Map<String, MeasurementConfiguration> updatedConfigurations = new HashMap<>();
 
    public HistogramReader(final MeasurementConfiguration measurementConfig, final File fullResultsFolder) {
       this.measurementConfig = measurementConfig;
@@ -38,33 +39,37 @@ public class HistogramReader {
          }
 
          for (File xmlResultFile : xmlFiles) {
+            
             Kopemedata data = XMLDataLoader.loadData(xmlResultFile);
             // This assumes measurements are only executed once; if this is not the case, the matching result would need to be searched
             final TestcaseType testcase = data.getTestcases().getTestcase().get(0);
-            final HistogramValues values = getHistogramValues(testcase);
+            Chunk chunk = testcase.getDatacollector().get(0).getChunk().get(0);
+            
+            MeasurementConfiguration currentConfig = new MeasurementConfiguration(measurementConfig);
+            currentConfig.setIterations((int) MultipleVMTestUtil.getMinIterationCount(chunk.getResult()));
+            currentConfig.setRepetitions((int) MultipleVMTestUtil.getMinRepetitionCount(chunk.getResult()));
+            
+            if (currentConfig.getIterations() != measurementConfig.getIterations() ||
+                  currentConfig.getRepetitions() != measurementConfig.getRepetitions()) {
+               updatedConfigurations.put(data.getTestcases().getClazz() + "#" + testcase.getName(), currentConfig);
+            }
+            
+            ResultLoader loader = new ResultLoader(currentConfig, null, null, 0);
+            loader.loadChunk(chunk);
+
+            HistogramValues values = new HistogramValues(loader.getValsAfter(), loader.getValsBefore());
+            
             measurements.put(data.getTestcases().getClazz() + "#" + testcase.getName(), values);
          }
       }
       return measurements;
    }
-
-   private HistogramValues getHistogramValues(final TestcaseType testcase) {
-      Chunk chunk = testcase.getDatacollector().get(0).getChunk().get(0);
-
-      final List<Double> current = new LinkedList<>();
-      final List<Double> old = new LinkedList<>();
-
-      for (Result result : chunk.getResult()) {
-         final double singleRepetitionValue = result.getValue() / result.getRepetitions() / MIKRO;
-         if (result.getVersion().getGitversion().equals(measurementConfig.getVersion())) {
-            current.add(singleRepetitionValue);
-         }
-         if (result.getVersion().getGitversion().equals(measurementConfig.getVersionOld())) {
-            old.add(singleRepetitionValue);
-         }
-
-      }
-      HistogramValues values = new HistogramValues(current, old);
-      return values;
+   
+   public boolean measurementConfigurationUpdated() {
+      return !updatedConfigurations.isEmpty();
+   }
+   
+   public Map<String, MeasurementConfiguration> getChangedMeasurementConfiguration(){
+      return updatedConfigurations;
    }
 }
