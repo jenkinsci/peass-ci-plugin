@@ -63,7 +63,7 @@ public class TestHistogramReader {
       
       Assert.assertTrue(reader.measurementConfigurationUpdated());
       
-      MeasurementConfiguration updatedConfig = reader.getChangedMeasurementConfiguration().get("de.test.CalleeTest#onlyCallMethod2");
+      MeasurementConfiguration updatedConfig = reader.getUpdatedConfigurations().get("de.test.CalleeTest#onlyCallMethod2");
       Assert.assertEquals(updatedConfig.getIterations(), 3);
       Assert.assertEquals(updatedConfig.getRepetitions(), 200);
    }

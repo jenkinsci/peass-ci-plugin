@@ -26,12 +26,14 @@ public class MeasureVersionAction extends VisibleAction {
    private ProjectStatistics statistics;
    private Map<String, HistogramValues> measurements;
    private String prefix;
+   private Map<String, MeasurementConfiguration> updatedConfigurations;
 
-   public MeasureVersionAction(final MeasurementConfiguration config, final Changes changes, final ProjectStatistics statistics, final Map<String, HistogramValues> measurements) {
+   public MeasureVersionAction(final MeasurementConfiguration config, final Changes changes, final ProjectStatistics statistics, final Map<String, HistogramValues> measurements, final Map<String, MeasurementConfiguration> updatedConfigurations) {
       this.config = config;
       this.changes = changes;
       this.statistics = statistics;
       this.measurements = measurements;
+      this.updatedConfigurations = updatedConfigurations;
       for (Entry<String, List<Change>> change : changes.getTestcaseChanges().entrySet()) {
          System.out.println(change.getKey());
       }
@@ -56,6 +58,14 @@ public class MeasureVersionAction extends VisibleAction {
 
    public MeasurementConfiguration getConfig() {
       return config;
+   }
+   
+   public boolean hasUpdatedConfigurations() {
+      return !updatedConfigurations.isEmpty();
+   }
+   
+   public Map<String, MeasurementConfiguration> getUpdatedConfigurations() {
+      return updatedConfigurations;
    }
 
    public ProjectStatistics getStatistics() {

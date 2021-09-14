@@ -16,7 +16,7 @@
 				$( "#dialogGeneral" ).dialog({ autoOpen: false });
 				</script>
             </h1> 
-            <a href="#" onClick="$('#configuration').toggle();">Configuration</a>
+            <a href="#" onClick="$('#configuration').toggle();">Configuration</a> 
             <div id="configuration" style="display:none">
               Performance measurement was executed with the following configuration:<br/>           
               <table>
@@ -26,7 +26,15 @@
               <tr><td>Repetitions</td><td> ${it.config.repetitions}</td></tr>
               </table>
             </div>
-            
+            <j:if test="${it.hasUpdatedConfigurations()}">
+              ${AMP} <a href='#' onClick='$( "#dialogUpdates" ).dialog( "open" );' style="font-size:24px; color: red;">
+                <i class="fa fa-exclamation-triangle" title="Configuration has changed"></i>
+              </a>
+              <div id="dialogUpdates" title="Configuration Updates">To meet the time given by the timeout, the measurement configuration has been updated for at least one testcase.</div>
+      			<script>
+				$( "#dialogUpdates" ).dialog({ autoOpen: false });
+				</script>
+            </j:if>
             
             <h2>Changes
             <a href='#' onClick='$( "#dialogChanges" ).dialog( "open" );'><i class="fa fa-question-circle" title='Display Help' style="font-size:24px" ></i></a>
@@ -98,6 +106,30 @@
       			<script>
 				$( "#dialogTValue" ).dialog({ autoOpen: false });
 				</script>
+				
+				<j:if test="${it.getUpdatedConfigurations().containsKey(testcase.getKey())}">
+                  
+                  <div id="dialogUpdates${testcase.getKey().replace('#','_')}" title="Configuration Updates">
+                    <i class="fa fa-exclamation-triangle" title="Configuration has changed" style="color: red"></i> To meet the time given by the timeout, the measurement configuration has been updated for this testcase:
+                    <table>
+                    <tr>
+                      <td>Iterations</td>
+                      <td> ${it.getUpdatedConfigurations().get(testcase.getKey()).iterations}</td>
+                      <td>(Original: ${it.config.iterations})</td>
+                    </tr>
+                    <tr>
+                      <td>Warmup</td>
+                      <td> ${it.getUpdatedConfigurations().get(testcase.getKey()).warmup}</td>
+                      <td>(Original: ${it.config.warmup})</td>
+                    </tr>
+                    <tr>
+                      <td>Repetitions</td>
+                      <td> ${it.getUpdatedConfigurations().get(testcase.getKey()).repetitions}</td>
+                      <td>(Original: ${it.config.repetitions})</td>
+                    </tr>
+                    </table>
+                  </div>
+                </j:if>
       			
 				<a href="../measurement_${it.getReducedName(testcase.getKey().replace('#', '_'))}/?call=overall&amp;ess=-1" target="parent">Inspect Measurement</a>
               	</td></tr>

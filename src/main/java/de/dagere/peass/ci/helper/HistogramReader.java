@@ -44,8 +44,12 @@ public class HistogramReader {
       }
       return measurements;
    }
+   
+   public Map<String, MeasurementConfiguration> getUpdatedConfigurations() {
+      return updatedConfigurations;
+   }
 
-   private void readFile(final Map<String, HistogramValues> measurements, File xmlResultFile) throws JAXBException {
+   private void readFile(final Map<String, HistogramValues> measurements, final File xmlResultFile) throws JAXBException {
       Kopemedata data = XMLDataLoader.loadData(xmlResultFile);
       // This assumes measurements are only executed once; if this is not the case, the matching result would need to be searched
       final TestcaseType testcase = data.getTestcases().getTestcase().get(0);
@@ -81,9 +85,5 @@ public class HistogramReader {
    
    public boolean measurementConfigurationUpdated() {
       return !updatedConfigurations.isEmpty();
-   }
-   
-   public Map<String, MeasurementConfiguration> getChangedMeasurementConfiguration(){
-      return updatedConfigurations;
    }
 }

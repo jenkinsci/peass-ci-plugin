@@ -115,7 +115,7 @@ public class LocalPeassProcessManager {
       TrendFileUtil.persistTrend(run, localWorkspace, statistics);
 
       Changes versionChanges = changes.getVersion(peassConfig.getMeasurementConfig().getVersion());
-      final MeasureVersionAction action = new MeasureVersionAction(peassConfig.getMeasurementConfig(), versionChanges, statistics, measurements);
+      final MeasureVersionAction action = new MeasureVersionAction(peassConfig.getMeasurementConfig(), versionChanges, statistics, measurements, histogramReader.getUpdatedConfigurations());
       run.addAction(action);
 
       createPureMeasurementVisualization(run, dataFolder, measurements);
