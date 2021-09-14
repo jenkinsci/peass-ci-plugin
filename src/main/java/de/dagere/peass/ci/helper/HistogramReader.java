@@ -39,30 +39,40 @@ public class HistogramReader {
          }
 
          for (File xmlResultFile : xmlFiles) {
-            
             Kopemedata data = XMLDataLoader.loadData(xmlResultFile);
             // This assumes measurements are only executed once; if this is not the case, the matching result would need to be searched
             final TestcaseType testcase = data.getTestcases().getTestcase().get(0);
             Chunk chunk = testcase.getDatacollector().get(0).getChunk().get(0);
+            String testcaseKey = data.getTestcases().getClazz() + "#" + testcase.getName();
             
-            MeasurementConfiguration currentConfig = new MeasurementConfiguration(measurementConfig);
-            currentConfig.setIterations((int) MultipleVMTestUtil.getMinIterationCount(chunk.getResult()));
-            currentConfig.setRepetitions((int) MultipleVMTestUtil.getMinRepetitionCount(chunk.getResult()));
+            MeasurementConfiguration currentConfig = getUpdatedConfiguration(testcaseKey, testcase, chunk);
             
-            if (currentConfig.getIterations() != measurementConfig.getIterations() ||
-                  currentConfig.getRepetitions() != measurementConfig.getRepetitions()) {
-               updatedConfigurations.put(data.getTestcases().getClazz() + "#" + testcase.getName(), currentConfig);
-            }
-            
-            ResultLoader loader = new ResultLoader(currentConfig, null, null, 0);
-            loader.loadChunk(chunk);
-
-            HistogramValues values = new HistogramValues(loader.getValsAfter(), loader.getValsBefore());
-            
-            measurements.put(data.getTestcases().getClazz() + "#" + testcase.getName(), values);
+            HistogramValues values = loadResults(chunk, currentConfig);
+           
+            measurements.put(testcaseKey, values);
          }
       }
       return measurements;
+   }
+
+   private HistogramValues loadResults(final Chunk chunk, final MeasurementConfiguration currentConfig) {
+      ResultLoader loader = new ResultLoader(currentConfig, null, null, 0);
+      loader.loadChunk(chunk);
+
+      HistogramValues values = new HistogramValues(loader.getValsAfter(), loader.getValsBefore());
+      return values;
+   }
+
+   private MeasurementConfiguration getUpdatedConfiguration(final String testcaseKey, final TestcaseType testcase, final Chunk chunk) {
+      MeasurementConfiguration currentConfig = new MeasurementConfiguration(measurementConfig);
+      currentConfig.setIterations((int) MultipleVMTestUtil.getMinIterationCount(chunk.getResult()));
+      currentConfig.setRepetitions((int) MultipleVMTestUtil.getMinRepetitionCount(chunk.getResult()));
+      
+      if (currentConfig.getIterations() != measurementConfig.getIterations() ||
+            currentConfig.getRepetitions() != measurementConfig.getRepetitions()) {
+         updatedConfigurations.put(testcaseKey, currentConfig);
+      }
+      return currentConfig;
    }
    
    public boolean measurementConfigurationUpdated() {
