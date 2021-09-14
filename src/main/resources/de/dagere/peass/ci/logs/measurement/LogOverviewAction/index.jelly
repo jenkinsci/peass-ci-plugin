@@ -5,7 +5,8 @@
             <st:include page="sidepanel.jelly" it="${it.run}" optional="true" /> 
         </l:side-panel>
 		<l:main-panel>
-
+		    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+			
 			<h1>Performance Measurement Logs Overview</h1>
 			<a href="../measurementLog">Peass Measurement Execution Log</a><br />
 			<j:forEach var="testcase" items="${it.getLogFiles().entrySet()}" >
@@ -17,9 +18,23 @@
 				<j:forEach var="logFilePair" items="${testcase.getValue()}">
 			    	<tr>
 			    		<td>${vmid}</td>
-			    		<td><a href="../measurelog_${testcase.getKey().getLinkUsable()}_${vmid}_${it.versionOld}">${it.versionOld}</a></td>
+			    		<td>
+			    		  <a href="../measurelog_${testcase.getKey().getLinkUsable()}_${vmid}_${it.versionOld}">${it.versionOld}</a>
+			    		  <j:if test="${!logFilePair.isPredecessorSuccess()}">
+			    		    <i class="fa fa-exclamation-triangle" 
+			    		      title="This run did not correctly produce measurement results. Checking it for timeout or exceptions might lead to further insights." 
+			    		      style="color: red"></i>
+			    		  </j:if>
+			    		</td>
 			    		<td>${logFilePair.getEndDatePredecessor()}</td>
-			    		<td><a href="../measurelog_${testcase.getKey().getLinkUsable()}_${vmid}_${it.version}">${it.version}</a></td>
+			    		<td>
+			    		  <a href="../measurelog_${testcase.getKey().getLinkUsable()}_${vmid}_${it.version}">${it.version}</a>
+			    		  <j:if test="${!logFilePair.isCurrentSuccess()}">
+			    		    <i class="fa fa-exclamation-triangle" 
+			    		      title="This run did not correctly produce measurement results. Checking it for timeout or exceptions might lead to further insights." 
+			    		      style="color: red"></i>
+			    		  </j:if>
+			    		</td>
 			    		<td>${logFilePair.getEndDateCurrent()}</td>
 			    	</tr>
 			    	<j:set var="vmid" value="${vmid+1}"/>
