@@ -39,20 +39,24 @@ public class HistogramReader {
          }
 
          for (File xmlResultFile : xmlFiles) {
-            Kopemedata data = XMLDataLoader.loadData(xmlResultFile);
-            // This assumes measurements are only executed once; if this is not the case, the matching result would need to be searched
-            final TestcaseType testcase = data.getTestcases().getTestcase().get(0);
-            Chunk chunk = testcase.getDatacollector().get(0).getChunk().get(0);
-            String testcaseKey = data.getTestcases().getClazz() + "#" + testcase.getName();
-            
-            MeasurementConfiguration currentConfig = getUpdatedConfiguration(testcaseKey, testcase, chunk);
-            
-            HistogramValues values = loadResults(chunk, currentConfig);
-           
-            measurements.put(testcaseKey, values);
+            readFile(measurements, xmlResultFile);
          }
       }
       return measurements;
+   }
+
+   private void readFile(final Map<String, HistogramValues> measurements, File xmlResultFile) throws JAXBException {
+      Kopemedata data = XMLDataLoader.loadData(xmlResultFile);
+      // This assumes measurements are only executed once; if this is not the case, the matching result would need to be searched
+      final TestcaseType testcase = data.getTestcases().getTestcase().get(0);
+      Chunk chunk = testcase.getDatacollector().get(0).getChunk().get(0);
+      String testcaseKey = data.getTestcases().getClazz() + "#" + testcase.getName();
+      
+      MeasurementConfiguration currentConfig = getUpdatedConfiguration(testcaseKey, testcase, chunk);
+      
+      HistogramValues values = loadResults(chunk, currentConfig);
+        
+      measurements.put(testcaseKey, values);
    }
 
    private HistogramValues loadResults(final Chunk chunk, final MeasurementConfiguration currentConfig) {
