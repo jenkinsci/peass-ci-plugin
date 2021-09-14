@@ -8,7 +8,7 @@
                         <value>2219819.0</value>
                         <deviation>0.0</deviation>
                         <warmup>0</warmup>
-                        <iterations>1</iterations>
+                        <iterations>4</iterations>
                         <repetitions>2</repetitions>
                         <version>
                             <gitversion>e80d8a1bf747d1f70dc52260616b36cac9e44561</gitversion>
@@ -20,7 +20,7 @@
                         <value>4.0449198E7</value>
                         <deviation>0.0</deviation>
                         <warmup>0</warmup>
-                        <iterations>1</iterations>
+                        <iterations>4</iterations>
                         <repetitions>2</repetitions>
                         <version>
                             <gitversion>b02c92af73e3297be617f4c973a7a63fb603565b</gitversion>
@@ -32,7 +32,7 @@
                         <value>2199813.0</value>
                         <deviation>0.0</deviation>
                         <warmup>0</warmup>
-                        <iterations>1</iterations>
+                        <iterations>4</iterations>
                         <repetitions>2</repetitions>
                         <version>
                             <gitversion>e80d8a1bf747d1f70dc52260616b36cac9e44561</gitversion>
@@ -44,7 +44,7 @@
                         <value>4.0277088E7</value>
                         <deviation>0.0</deviation>
                         <warmup>0</warmup>
-                        <iterations>1</iterations>
+                        <iterations>4</iterations>
                         <repetitions>2</repetitions>
                         <version>
                             <gitversion>b02c92af73e3297be617f4c973a7a63fb603565b</gitversion>

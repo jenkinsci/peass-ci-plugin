@@ -19,7 +19,8 @@ public class TestHistogramReader {
       MeasurementConfiguration measurementConfig = new MeasurementConfiguration(2);
       measurementConfig.setVersion("b02c92af73e3297be617f4c973a7a63fb603565b");
       measurementConfig.setVersionOld("e80d8a1bf747d1f70dc52260616b36cac9e44561");
-      measurementConfig.setIterations(1);
+      measurementConfig.setWarmup(2);
+      measurementConfig.setIterations(2);
       measurementConfig.setRepetitions(2);
       
       HistogramReader reader = new HistogramReader(measurementConfig, new File("src/test/resources/demo-results/histogram/b02c92af73e3297be617f4c973a7a63fb603565b"));
@@ -27,8 +28,8 @@ public class TestHistogramReader {
       
       System.out.println(measurements.keySet());
       
-      Assert.assertEquals(measurements.get("de.test.CalleeTest#onlyCallMethod1").getValuesBeforeReadable().split(",").length, 2);
-      Assert.assertEquals(measurements.get("de.test.CalleeTest#onlyCallMethod1").getValuesBeforeReadable().split(",").length, 2);
+      Assert.assertEquals(2, measurements.get("de.test.CalleeTest#onlyCallMethod1").getValuesBeforeReadable().split(",").length);
+      Assert.assertEquals(2, measurements.get("de.test.CalleeTest#onlyCallMethod1").getValuesCurrentReadable().split(",").length);
       
       Assert.assertFalse(reader.measurementConfigurationUpdated());
    }
@@ -57,6 +58,7 @@ public class TestHistogramReader {
       Map<String, HistogramValues> measurements = reader.readMeasurements();
       
       System.out.println(measurements);
+      System.out.println(measurements.get("de.test.CalleeTest#onlyCallMethod2").getValuesBeforeReadable());
       
       Assert.assertEquals(measurements.get("de.test.CalleeTest#onlyCallMethod2").getValuesBeforeReadable().split(",").length, 2);
       Assert.assertEquals(measurements.get("de.test.CalleeTest#onlyCallMethod2").getValuesCurrentReadable().split(",").length, 2);
@@ -64,7 +66,7 @@ public class TestHistogramReader {
       Assert.assertTrue(reader.measurementConfigurationUpdated());
       
       MeasurementConfiguration updatedConfig = reader.getUpdatedConfigurations().get("de.test.CalleeTest#onlyCallMethod2");
-      Assert.assertEquals(updatedConfig.getIterations(), 3);
+      Assert.assertEquals(updatedConfig.getIterations(), 2);
       Assert.assertEquals(updatedConfig.getRepetitions(), 200);
    }
 }

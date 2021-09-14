@@ -73,10 +73,15 @@ public class HistogramReader {
 
    private MeasurementConfiguration getUpdatedConfiguration(final String testcaseKey, final TestcaseType testcase, final Chunk chunk) {
       MeasurementConfiguration currentConfig = new MeasurementConfiguration(measurementConfig);
-      currentConfig.setIterations((int) MultipleVMTestUtil.getMinIterationCount(chunk.getResult()));
+      int iterations = (int) MultipleVMTestUtil.getMinIterationCount(chunk.getResult());
+      if (iterations != currentConfig.getAllIterations()) {
+         currentConfig.setIterations((int) Math.ceil(iterations/2d));
+         currentConfig.setWarmup(iterations/2);
+      }
+      
       currentConfig.setRepetitions((int) MultipleVMTestUtil.getMinRepetitionCount(chunk.getResult()));
       
-      if (currentConfig.getIterations() != measurementConfig.getIterations() ||
+      if (currentConfig.getAllIterations() != measurementConfig.getAllIterations() ||
             currentConfig.getRepetitions() != measurementConfig.getRepetitions()) {
          updatedConfigurations.put(testcaseKey, currentConfig);
       }
