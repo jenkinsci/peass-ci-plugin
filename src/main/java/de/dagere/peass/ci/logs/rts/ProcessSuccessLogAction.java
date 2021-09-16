@@ -1,8 +1,8 @@
 package de.dagere.peass.ci.logs.rts;
 
-import hudson.model.InvisibleAction;
+import de.dagere.peass.ci.VisibleAction;
 
-public class ProcessSuccessLogAction extends InvisibleAction {
+public class ProcessSuccessLogAction extends VisibleAction {
    private final String displayName;
    private final String log;
    private final String version;
@@ -24,6 +24,16 @@ public class ProcessSuccessLogAction extends InvisibleAction {
 
    public String getVersion() {
       return version;
+   }
+
+   @Override
+   public String getIconFileName() {
+      return null;
+   }
+
+   @Override
+   public String getDisplayName() {
+      return null;
    }
 
 }

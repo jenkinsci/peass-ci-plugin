@@ -34,8 +34,10 @@ public class RemoteVersionReader implements FileCallable<MeasurementConfiguratio
       try (JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
          final String version = GitUtils.getName("HEAD", workspaceFolder);
          measurementConfig.setVersion(version);
-         final String versionOld = GitUtils.getName(measurementConfig.getVersionOld(), workspaceFolder);
-         measurementConfig.setVersionOld(versionOld);
+         if (measurementConfig.getVersionOld() != null) {
+            final String versionOld = GitUtils.getName(measurementConfig.getVersionOld(), workspaceFolder);
+            measurementConfig.setVersionOld(versionOld);
+         }
          return measurementConfig;
       } catch (Throwable e) {
          e.printStackTrace(listener.getLogger());

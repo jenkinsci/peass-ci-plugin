@@ -17,7 +17,7 @@ import hudson.FilePath.FileCallable;
 import hudson.model.TaskListener;
 import hudson.remoting.VirtualChannel;
 
-public class RemoteRTS implements FileCallable<Set<TestCase>> {
+public class RemoteRTS implements FileCallable<RTSResult> {
    private static final Logger LOG = LogManager.getLogger(RemoteRTS.class);
    
    private final PeassProcessConfiguration peassConfig;
@@ -36,7 +36,7 @@ public class RemoteRTS implements FileCallable<Set<TestCase>> {
    }
 
    @Override
-   public Set<TestCase> invoke(final File workspaceFolder, final VirtualChannel channel) throws IOException, InterruptedException {
+   public RTSResult invoke(final File workspaceFolder, final VirtualChannel channel) throws IOException, InterruptedException {
       try (final JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
          LOG.info("Starting remote invocation, VMs: " + peassConfig.getMeasurementConfig().getVms());
 
@@ -52,7 +52,8 @@ public class RemoteRTS implements FileCallable<Set<TestCase>> {
                peassConfig.getDependencyConfig(), 
                peassConfig.getEnvVars());
          Set<TestCase> tests = executor.executeRTS();
-         return tests;
+         RTSResult result = new RTSResult(tests, executor.getVersionOld());
+         return result;
       } catch (Throwable e) {
          File test = new File(workspaceFolder, "error.txt"); // Workaround, since error redirection on Jenkins agents currently does not work
          PrintStream writer = new PrintStream(test, "UTF-8");

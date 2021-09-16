@@ -4,27 +4,36 @@
 		<l:main-panel>
 
 			<h1>
-				Clean Peass Measurements
+				Clean Peass Results
 			</h1>
 
-			This will delete all regression test selection, measurement and root cause analysis results. Are you sure you want to proceed?
-			
+			After cleaning Peass, <b>no restoring will be possible</b>. Do you realy want to clean results?
+						
 			<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 			<script type="text/javascript">
-			  function cleanCache() {
-			    $.get("../cleanTruly", function ( data ){
+			  function cleanAll() {
+			    $.get("../cleanAll", function ( data ){
+			      document.getElementById("result").innerHTML=data;
+			    });
+			  }
+			  
+			  function cleanMeasurements() {
+			    $.get("../cleanMeasurements", function ( data ){
 			      document.getElementById("result").innerHTML=data;
 			    });
 			  }
 			  
 			</script>
+			<br />
+			<a href='#' class='yui-button yui-submit-button submit-button primary' onClick='cleanAll();'>Clean all</a>
 			
-			<a href='#' onClick='cleanCache();'>Yes</a>
+			<a href='#' class='yui-button yui-submit-button submit-button primary' onClick='cleanMeasurements();'>Clean only measurement</a>
+			<br />
+			(This will not remove your old runs, but for new runs, the data will be deleted and measurement and/or regression test selection needs to be re-executed).
+			
 			<div id="result">
 			
 			</div>
-			
-
 		</l:main-panel>
 	</l:layout>
 </j:jelly> 

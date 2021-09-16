@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import de.dagere.peass.ci.logs.InternalLogAction;
 import de.dagere.peass.ci.logs.LogFileReader;
@@ -16,6 +18,9 @@ import de.dagere.peass.measurement.analysis.ProjectStatistics;
 import hudson.model.Run;
 
 public class MeasurementActionCreator {
+   
+   private static final Logger LOG = LogManager.getLogger(MeasurementActionCreator.class);
+   
    private final LogFileReader reader;
    private final Run<?, ?> run;
    private final MeasurementConfiguration measurementConfig;
@@ -45,6 +50,7 @@ public class MeasurementActionCreator {
 
    private void createLogActions(final Run<?, ?> run, final Map<TestCase, List<LogFiles>> logFiles) throws IOException {
       for (Map.Entry<TestCase, List<LogFiles>> entry : logFiles.entrySet()) {
+         LOG.debug("Creating {} log actions for {}", entry.getValue().size(), entry.getKey());
          TestCase testcase = entry.getKey();
          int vmId = 0;
          for (LogFiles files : entry.getValue()) {

@@ -46,6 +46,10 @@
            description="${%testGoalDescr}">
             <f:textbox  default=""/>
         </f:entry>
+        <f:entry title="${%nightlyBuild}" field="nightlyBuild"
+                 description="${%nightlyBuildDescr}">
+            <f:checkbox />
+        </f:entry>
         <f:entry title="${%versionDiff}" field="versionDiff"
                  description="${%versionDiffDescr}">
             <f:textbox default="1" />
@@ -100,15 +104,15 @@
         </f:entry>
         <f:entry title="${%displayRTSLogs}" field="displayRTSLogs"
                  description="${%displayRTSLogsDescr}">
-            <f:checkbox />
+            <f:checkbox default="true"/>
         </f:entry>
         <f:entry title="${%displayLogs}" field="displayLogs"
                  description="${%displayLogsDescr}">
-            <f:checkbox />
+            <f:checkbox default="true"/>
         </f:entry>
         <f:entry title="${%displayRCALogs}" field="displayRCALogs"
                  description="${%displayRCALogsDescr}">
-            <f:checkbox />
+            <f:checkbox default="true"/>
         </f:entry>
     </f:advanced>
 </j:jelly>

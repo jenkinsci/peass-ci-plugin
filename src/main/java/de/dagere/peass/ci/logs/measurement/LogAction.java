@@ -2,10 +2,10 @@ package de.dagere.peass.ci.logs.measurement;
 
 import java.io.IOException;
 
+import de.dagere.peass.ci.VisibleAction;
 import de.dagere.peass.dependency.analysis.data.TestCase;
-import hudson.model.InvisibleAction;
 
-public class LogAction extends InvisibleAction {
+public class LogAction extends VisibleAction {
    
    protected final String displayName;
    private final TestCase test;
@@ -48,5 +48,15 @@ public class LogAction extends InvisibleAction {
 
    public String getLog() throws IOException {
       return logData;
+   }
+
+   @Override
+   public String getIconFileName() {
+      return null;
+   }
+
+   @Override
+   public String getDisplayName() {
+      return null;
    }
 }

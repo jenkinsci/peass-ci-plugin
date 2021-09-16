@@ -1,18 +1,50 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:st="jelly:stapler">
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout" >
     <l:layout title="Performance Measurement"> 
         <l:side-panel> 
             <st:include page="sidepanel.jelly" it="${it.run}" optional="true" /> 
         </l:side-panel>
         <l:main-panel>
-            <h1>Performance Measurement Results</h1> 
-            Performance measurement was executed with the following configuration:<br/>           
-            VMs: ${it.config.vms} 
-            Iterations: ${it.config.iterations} 
-            Warmup: ${it.config.warmup}
-            Repetitions: ${it.config.repetitions}
-            <br /><br />
-            <h2>Changes</h2>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+            <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css"/>
+  		    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  		    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+            <h1>Performance Measurement Results
+            <a href='#' onClick='$( "#dialogGeneral" ).dialog( "open" );'><i class="fa fa-question-circle" title='Display Help' style="font-size:24px" ></i></a>
+      			<div id="dialogGeneral" title="Help Values">Peass-CI shows calculated execution durations of one repetition. The real measured value is the displayed value multiplied by repetitions.</div>
+      			<script>
+				$( "#dialogGeneral" ).dialog({ autoOpen: false });
+				</script>
+            </h1> 
+            <a href="#" onClick="$('#configuration').toggle();">Configuration</a> 
+            <div id="configuration" style="display:none">
+              Performance measurement was executed with the following configuration:<br/>           
+              <table>
+              <tr><td>VMs </td><td> ${it.config.vms} </td></tr>
+              <tr><td>Iterations</td><td> ${it.config.iterations} </td></tr>
+              <tr><td>Warmup</td><td> ${it.config.warmup}</td></tr>
+              <tr><td>Repetitions</td><td> ${it.config.repetitions}</td></tr>
+              </table>
+            </div>
+            <j:if test="${it.hasUpdatedConfigurations()}">
+              ${AMP} <a href='#' onClick='$( "#dialogUpdates" ).dialog( "open" );' style="font-size:24px; color: red;">
+                <i class="fa fa-exclamation-triangle" title="Configuration has changed"></i>
+              </a>
+              <div id="dialogUpdates" title="Configuration Updates">To meet the time given by the timeout, the measurement configuration has been updated for at least one testcase.</div>
+      			<script>
+				$( "#dialogUpdates" ).dialog({ autoOpen: false });
+				</script>
+            </j:if>
+            
+            <h2>Changes
+            <a href='#' onClick='$( "#dialogChanges" ).dialog( "open" );'><i class="fa fa-question-circle" title='Display Help' style="font-size:24px" ></i></a>
+            </h2>
+            <div id="dialogChanges" title="Changes">This section contains all test cases which had a performance change based on the configured type 1 error.  
+      			For your configured type 1 error of <b>${it.config.statisticsConfig.type1error}</b> (= ${(1-it.config.statisticsConfig.type1error)*100}% significance level) and <b>${it.config.vms}</b> VMs, the absolute t-value needs to be above the critical t-value <b>${it.round(it.getCriticalTValue())}</b> to indicate a performance change. <br/>
+      			Selected values are available <a href="https://en.wikipedia.org/wiki/Student%27s_t-distribution#Table_of_selected_values" target="parent">here</a>.</div>
+            <script>
+				$( "#dialogChanges" ).dialog({ autoOpen: false });
+			</script>
             
               Version: ${it.getConfig().getVersion()}<br />
               <table>
@@ -27,7 +59,17 @@
                   </table></td></tr>
                 </j:forEach>
               </table>
-            <h2>Measurements</h2>
+              
+              
+            <h2>Measurements
+            <a href='#' onClick='$( "#dialogMeasurements" ).dialog( "open" );'><i class="fa fa-question-circle" title='Display Help' style="font-size:24px" ></i></a>
+            </h2>
+            <div id="dialogMeasurements" title="Measurements">This section contains all measurement values regardless of a performance changes was detected. 
+      			If this section shows high deviation, you should consider increasing warmup, iteration or repetition count. If this does not work, consider re-writing your test workload - some of your workloads might not be suitable for performance measurement.
+      			</div>
+            <script>
+				$( "#dialogMeasurements" ).dialog({ autoOpen: false });
+			</script>
             <script type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js"/>
             <j:forEach var="testcase" items="${it.measurements.entrySet()}">
               Testcase: 
@@ -47,10 +89,70 @@
               	<table>
               	    <j:set var="currentStatistic" value="${it.getTestcaseStatistic(testcase.getKey())}" /> 
               		<tr><th>Property</th><th>Predecessor</th><th>Current</th></tr>
-      				<tr><td>Mean</td><td>${it.round(currentStatistic.getMeanOld()/it.config.repetitions/1000)} $&#x00B5;s </td><td>${it.round(currentStatistic.getMeanCurrent()/it.config.repetitions/1000)} $&#x00B5;s</td></tr>
-      				<tr><td>Deviation</td><td>${it.round(currentStatistic.deviationOld/it.config.repetitions/1000)}</td><td>${it.round(currentStatistic.deviationCurrent/it.config.repetitions/1000)}</td></tr>
+      				<tr><td>Mean</td><td>${it.round(currentStatistic.getMeanOld()/1000)} $&#x00B5;s </td><td>${it.round(currentStatistic.getMeanCurrent()/1000)} $&#x00B5;s</td></tr>
+      				<tr><td>Deviation</td><td>${it.round(currentStatistic.deviationOld/1000)}</td><td>${it.round(currentStatistic.deviationCurrent/1000)}</td></tr>
       			</table> 
-      			VMs: ${currentStatistic.getVMs()} T=${it.round(currentStatistic.tvalue)}<br/>
+      			VMs: ${currentStatistic.getVMs()}<br /> 
+      			T=${it.round(currentStatistic.tvalue)} (
+      			<j:if test="${it.abs(currentStatistic.tvalue) &gt; it.getCriticalTValue()}">Significant Performance Change </j:if>
+      			<j:if test="${it.abs(currentStatistic.tvalue) &lt; it.getCriticalTValue()}">No Significant Performance change </j:if>
+      			<a href='#' onClick='$( "#dialogTValue" ).dialog( "open" );'><i class="fa fa-question-circle" title='Display Help'></i></a>
+      			)
+      			<br/>
+      			<div id="dialogTValue" title="Help T-Value">The t-Value indicates whether we can assume that a performance changed. 
+      			For your configured type 1 error of <b>${it.config.statisticsConfig.type1error}</b> (= ${(1-it.config.statisticsConfig.type1error)*100}% significance level) and <b>${it.config.vms}</b> VMs, the absolute t-value needs to be above the critical t-value <b>${it.round(it.getCriticalTValue())}</b> to indicate a performance change. <br/>
+      			Selected values are available <a href="https://en.wikipedia.org/wiki/Student%27s_t-distribution#Table_of_selected_values" target="parent">here</a>.</div>
+      			
+      			<script>
+				$( "#dialogTValue" ).dialog({ autoOpen: false });
+				</script>
+				
+				<j:if test="${it.getUpdatedConfigurations().containsKey(testcase.getKey())}">
+                  <br /><br />
+                  <div id="dialogUpdates${testcase.getKey().replace('#','_')}" title="Configuration Updates">
+                    <i class="fa fa-exclamation-triangle" title="Configuration has changed" style="color: red"></i> To meet the time given by the timeout, the measurement configuration has been updated for this testcase:
+                    <table>
+                    <tr>
+                      <td>Iterations</td>
+                      <td>
+                        <j:if test="${it.getUpdatedConfigurations().get(testcase.getKey()).iterations != it.config.iterations}">
+                          <b>${it.getUpdatedConfigurations().get(testcase.getKey()).iterations}</b>
+                        </j:if>
+                        <j:if test="${it.getUpdatedConfigurations().get(testcase.getKey()).iterations == it.config.iterations}">
+                          ${it.getUpdatedConfigurations().get(testcase.getKey()).iterations}
+                        </j:if>
+                       </td>
+                      <td>(Original: ${it.config.iterations})</td>
+                    </tr>
+                    <tr>
+                      <td>Warmup</td>
+                     <td>
+                        <j:if test="${it.getUpdatedConfigurations().get(testcase.getKey()).warmup != it.config.warmup}">
+                          <b>${it.getUpdatedConfigurations().get(testcase.getKey()).warmup}</b>
+                        </j:if>
+                        <j:if test="${it.getUpdatedConfigurations().get(testcase.getKey()).warmup == it.config.warmup}">
+                          ${it.getUpdatedConfigurations().get(testcase.getKey()).warmup}
+                        </j:if>
+                       </td>
+                      <td>(Original: ${it.config.warmup})</td>
+                    </tr>
+                    <tr>
+                      <td>Repetitions</td>
+                      <td>
+                        <j:if test="${it.getUpdatedConfigurations().get(testcase.getKey()).repetitions != it.config.repetitions}">
+                          <b>${it.getUpdatedConfigurations().get(testcase.getKey()).repetitions}</b>
+                        </j:if>
+                        <j:if test="${it.getUpdatedConfigurations().get(testcase.getKey()).repetitions == it.config.repetitions}">
+                          ${it.getUpdatedConfigurations().get(testcase.getKey()).repetitions}
+                        </j:if>
+                       </td>
+                      <td>(Original: ${it.config.repetitions})</td>
+                    </tr>
+                    </table>
+                  </div>
+                  <br />
+                </j:if>
+      			
 				<a href="../measurement_${it.getReducedName(testcase.getKey().replace('#', '_'))}/?call=overall&amp;ess=-1" target="parent">Inspect Measurement</a>
               	</td></tr>
               </table>

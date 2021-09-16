@@ -26,14 +26,16 @@ public class RTSActionCreator {
    }
 
    public void createRTSActions() throws IOException {
-      createOverallLogAction();
+      if (reader.isLogsExisting()) {
+         createOverallLogAction();
 
-      Map<String, File> processSuccessRuns = createProcessSuccessRunsActions();
+         Map<String, File> processSuccessRuns = createProcessSuccessRunsActions();
 
-      Map<TestCase, RTSLogData> rtsVmRuns = createVersionRTSData(measurementConfig.getVersion());
-      Map<TestCase, RTSLogData> rtsVmRunsPredecessor = createVersionRTSData(measurementConfig.getVersionOld());
+         Map<TestCase, RTSLogData> rtsVmRuns = createVersionRTSData(measurementConfig.getVersion());
+         Map<TestCase, RTSLogData> rtsVmRunsPredecessor = createVersionRTSData(measurementConfig.getVersionOld());
 
-      createOverviewAction(processSuccessRuns, rtsVmRuns, rtsVmRunsPredecessor);
+         createOverviewAction(processSuccessRuns, rtsVmRuns, rtsVmRunsPredecessor);
+      }
    }
 
    private void createOverviewAction(final Map<String, File> processSuccessRuns, final Map<TestCase, RTSLogData> rtsVmRuns, final Map<TestCase, RTSLogData> rtsVmRunsPredecessor) {

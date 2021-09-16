@@ -9,12 +9,16 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.ServletException;
+import javax.xml.bind.JAXBException;
 
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
 import org.kohsuke.stapler.QueryParameter;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import de.dagere.peass.analysis.changes.ProjectChanges;
@@ -61,10 +65,11 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private boolean redirectToNull = true;
    private boolean showStart = false;
 
+   private boolean nightlyBuild = true;
    private int versionDiff = 1;
-   private boolean displayRTSLogs = false;
-   private boolean displayLogs = false;
-   private boolean displayRCALogs = false;
+   private boolean displayRTSLogs = true;
+   private boolean displayLogs = true;
+   private boolean displayRCALogs = true;
    private boolean generateCoverageSelection = true;
    private boolean useGC;
    private boolean measureJMH;
@@ -106,28 +111,9 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
          try (JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
             PeassProcessConfiguration peassConfig = buildConfiguration(workspace, env, listener);
-            final LocalPeassProcessManager processManager = new LocalPeassProcessManager(peassConfig, workspace, localWorkspace, listener, run);
-
-            Set<TestCase> tests = processManager.rts();
-            if (tests == null) {
-               run.setResult(Result.FAILURE);
-               return;
-            }
-
-            processManager.copyFromRemote();
-            processManager.visualizeRTSResults(run);
-
-            boolean worked = processManager.measure(tests);
-            if (!worked) {
-               run.setResult(Result.FAILURE);
-               return;
-            }
-
-            processManager.copyFromRemote();
-            ProjectChanges changes = processManager.visualizeMeasurementData(run);
-
-            if (executeRCA) {
-               processManager.rca(run, changes, measurementMode);
+            boolean versionIsUsable = checkVersion(run, listener, peassConfig);
+            if (versionIsUsable) {
+               runAllSteps(run, workspace, listener, localWorkspace, peassConfig);
             }
          } catch (Throwable e) {
             e.printStackTrace(listener.getLogger());
@@ -137,7 +123,59 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       }
    }
 
-   private PeassProcessConfiguration buildConfiguration(final FilePath workspace, final EnvVars env, final TaskListener listener) throws IOException, InterruptedException {
+   private boolean checkVersion(final Run<?, ?> run, final TaskListener listener, final PeassProcessConfiguration peassConfig) {
+      boolean versionIsUsable;
+      String version = peassConfig.getMeasurementConfig().getVersion();
+      String versionOld = peassConfig.getMeasurementConfig().getVersionOld();
+      if (version.equals(versionOld)) {
+         listener.getLogger().print("Version " + version + " equals " + versionOld + "; please check your configuration");
+         run.setResult(Result.FAILURE);
+         versionIsUsable = false;
+      } else {
+         versionIsUsable = true;
+      }
+      return versionIsUsable;
+   }
+
+   private void runAllSteps(final Run<?, ?> run, final FilePath workspace, final TaskListener listener, final File localWorkspace, final PeassProcessConfiguration peassConfig)
+         throws IOException, InterruptedException, JAXBException, JsonParseException, JsonMappingException, JsonGenerationException, Exception {
+      final LocalPeassProcessManager processManager = new LocalPeassProcessManager(peassConfig, workspace, localWorkspace, listener, run);
+
+      Set<TestCase> tests = processManager.rts();
+      if (tests == null) {
+         run.setResult(Result.FAILURE);
+         return;
+      }
+      processManager.visualizeRTSResults(run);
+
+      if (tests.size() > 0) {
+         measure(run, processManager, tests);
+      } else {
+         listener.getLogger().println("No tests selected; no measurement executed");
+      }
+   }
+
+   private void measure(final Run<?, ?> run, final LocalPeassProcessManager processManager, final Set<TestCase> tests)
+         throws IOException, InterruptedException, JAXBException, JsonParseException, JsonMappingException, JsonGenerationException, Exception {
+      boolean worked = processManager.measure(tests);
+      if (!worked) {
+         run.setResult(Result.FAILURE);
+         return;
+      }
+      ProjectChanges changes = processManager.visualizeMeasurementResults(run);
+
+      if (executeRCA) {
+         boolean rcaWorked = processManager.rca(changes, measurementMode);
+         if (!rcaWorked) {
+            run.setResult(Result.FAILURE);
+            return;
+         }
+         processManager.visualizeRCAResults(run, changes);
+      }
+   }
+
+   private PeassProcessConfiguration buildConfiguration(final FilePath workspace, final EnvVars env, final TaskListener listener)
+         throws IOException, InterruptedException {
       final MeasurementConfiguration configWithRealGitVersions = generateMeasurementConfig(workspace, listener);
 
       EnvironmentVariables peassEnv = new EnvironmentVariables(properties);
@@ -151,12 +189,13 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       return peassConfig;
    }
 
-   private MeasurementConfiguration generateMeasurementConfig(final FilePath workspace, final TaskListener listener) throws IOException, InterruptedException {
+   private MeasurementConfiguration generateMeasurementConfig(final FilePath workspace, final TaskListener listener)
+         throws IOException, InterruptedException {
       final MeasurementConfiguration measurementConfig = getMeasurementConfig();
       System.out.println("Startig RemoteVersionReader");
       final RemoteVersionReader remoteVersionReader = new RemoteVersionReader(measurementConfig, listener);
       final MeasurementConfiguration configWithRealGitVersions = workspace.act(remoteVersionReader);
-      listener.getLogger().println("Read version: " + configWithRealGitVersions.getVersion());
+      listener.getLogger().println("Read version: " + configWithRealGitVersions.getVersion() + " " + configWithRealGitVersions.getVersionOld());
       return configWithRealGitVersions;
    }
 
@@ -185,7 +224,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       return includeList;
    }
 
-   private MeasurementConfiguration getMeasurementConfig() {
+   public MeasurementConfiguration getMeasurementConfig() throws JsonParseException, JsonMappingException, IOException {
       if (significanceLevel == 0.0) {
          significanceLevel = 0.01;
       }
@@ -225,8 +264,13 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       if (versionDiff <= 0) {
          throw new RuntimeException("The version difference should be at least 1, but was " + versionDiff);
       }
+      if (nightlyBuild && versionDiff != 1) {
+         throw new RuntimeException("If nightly build is set, do not set versionDiff! nightlyBuild will automatically select the last tested version.");
+      }
+
       config.setVersion("HEAD");
-      config.setVersionOld("HEAD~" + versionDiff);
+      final String oldVersion = getOldVersion();
+      config.setVersionOld(oldVersion);
 
       config.setIncludes(getIncludeList());
 
@@ -238,6 +282,16 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
       System.out.println("Building, iterations: " + iterations + " test goal: " + testGoal);
       return config;
+   }
+
+   private String getOldVersion() throws IOException, JsonParseException, JsonMappingException {
+      final String oldVersion;
+      if (nightlyBuild) {
+         oldVersion = null;
+      } else {
+         oldVersion = "HEAD~" + versionDiff;
+      }
+      return oldVersion;
    }
 
    public int getVMs() {
@@ -294,6 +348,14 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       this.significanceLevel = significanceLevel;
    }
 
+   public boolean isNightlyBuild() {
+      return nightlyBuild;
+   }
+
+   public void setNightlyBuild(final boolean nightlyBuild) {
+      this.nightlyBuild = nightlyBuild;
+   }
+
    public int getVersionDiff() {
       return versionDiff;
    }
@@ -302,7 +364,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public void setVersionDiff(final int versionDiff) {
       this.versionDiff = versionDiff;
    }
-   
+
    public boolean isDisplayRTSLogs() {
       return displayRTSLogs;
    }
@@ -311,7 +373,6 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public void setDisplayRTSLogs(final boolean displayRTSLogs) {
       this.displayRTSLogs = displayRTSLogs;
    }
-
 
    public boolean isDisplayLogs() {
       return displayLogs;

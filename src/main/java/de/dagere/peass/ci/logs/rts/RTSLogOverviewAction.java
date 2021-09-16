@@ -3,13 +3,11 @@ package de.dagere.peass.ci.logs.rts;
 import java.io.File;
 import java.util.Map;
 
+import de.dagere.peass.ci.VisibleAction;
 import de.dagere.peass.dependency.analysis.data.TestCase;
-import hudson.model.Run;
-import jenkins.model.RunAction2;
 
-public class RTSLogOverviewAction implements RunAction2 {
-
-   private transient Run<?, ?> run;
+public class RTSLogOverviewAction extends VisibleAction {
+   
    private Map<String, File> processSuccessRuns;
    private Map<TestCase, RTSLogData> vmRuns;
    private Map<TestCase, RTSLogData> predecessorVmRuns;
@@ -47,13 +45,5 @@ public class RTSLogOverviewAction implements RunAction2 {
       return "rtsLogOverview";
    }
 
-   @Override
-   public void onAttached(final Run<?, ?> run) {
-      this.run = run;
-   }
-
-   @Override
-   public void onLoad(final Run<?, ?> run) {
-      this.run = run;
-   }
+   
 }

@@ -1,6 +1,9 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout">
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout" >
 	<l:layout title="Performance Measurement Log">
+		 <l:side-panel> 
+            <st:include page="sidepanel.jelly" it="${it.run}" optional="true" /> 
+        </l:side-panel>
 		<l:main-panel>
 			<h1>Performance Measurement Log ${it.test} VM: ${it.getVmId()} Version: ${it.version}</h1>
 			<pre>

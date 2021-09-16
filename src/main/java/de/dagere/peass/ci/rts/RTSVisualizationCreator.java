@@ -42,8 +42,7 @@ public class RTSVisualizationCreator {
 
    public void visualize(final Run<?, ?> run) {
       try {
-         Map<String, List<String>> changesList = new LinkedHashMap<String, List<String>>();
-         readStaticSelection(run, changesList);
+         Map<String, List<String>> changesList =  readStaticSelection(run);
 
          List<String> traceSelectedTests = readDynamicSelection(run);
          CoverageSelectionVersion coverageSelectedTests = readCoverageSelection(run);
@@ -78,8 +77,10 @@ public class RTSVisualizationCreator {
          ExecutionData executions = Constants.OBJECTMAPPER.readValue(executionfile, ExecutionData.class);
          TestSet tests = executions.getVersions().get(peassConfig.getMeasurementConfig().getVersion());
 
-         for (TestCase test : tests.getTests()) {
-            selectedTests.add(test.getExecutable());
+         if (tests != null) {
+            for (TestCase test : tests.getTests()) {
+               selectedTests.add(test.getExecutable());
+            }
          }
       } else {
          LOG.info("File {} was not found, RTS execution info might be incomplete", executionfile.getAbsoluteFile());
@@ -100,21 +101,32 @@ public class RTSVisualizationCreator {
       return null;
    }
 
-   private void readStaticSelection(final Run<?, ?> run, final Map<String, List<String>> changesList) throws IOException, JsonParseException, JsonMappingException {
+   private Map<String, List<String>> readStaticSelection(final Run<?, ?> run) throws IOException, JsonParseException, JsonMappingException {
+      Map<String, List<String>> changesList = new LinkedHashMap<String, List<String>>();
       File dependencyfile = localWorkspace.getDependencyFile();
       if (dependencyfile.exists()) {
          Dependencies dependencies = Constants.OBJECTMAPPER.readValue(dependencyfile, Dependencies.class);
          Version version = dependencies.getVersions().get(peassConfig.getMeasurementConfig().getVersion());
 
-         for (Map.Entry<ChangedEntity, TestSet> entry : version.getChangedClazzes().entrySet()) {
-            List<String> tests = new LinkedList<>();
-            for (TestCase test : entry.getValue().getTests()) {
-               tests.add(test.getExecutable());
-            }
-            changesList.put(entry.getKey().toString(), tests);
+         if (version != null) {
+            addVersionDataToChangeliste(changesList, version);
+         } else {
+            LOG.info("No change has been detected in " + peassConfig.getMeasurementConfig().getVersion());
          }
+
       } else {
          LOG.error("File {} was not found, RTS selection seems to not have worked at all");
+      }
+      return changesList;
+   }
+
+   private void addVersionDataToChangeliste(final Map<String, List<String>> changesList, final Version version) {
+      for (Map.Entry<ChangedEntity, TestSet> entry : version.getChangedClazzes().entrySet()) {
+         List<String> tests = new LinkedList<>();
+         for (TestCase test : entry.getValue().getTests()) {
+            tests.add(test.getExecutable());
+         }
+         changesList.put(entry.getKey().toString(), tests);
       }
    }
 }

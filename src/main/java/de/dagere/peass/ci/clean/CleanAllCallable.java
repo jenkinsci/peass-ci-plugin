@@ -9,7 +9,7 @@ import org.jenkinsci.remoting.RoleChecker;
 import hudson.FilePath.FileCallable;
 import hudson.remoting.VirtualChannel;
 
-public class CleanCallable implements FileCallable<Boolean> {
+public class CleanAllCallable implements FileCallable<Boolean> {
    private static final long serialVersionUID = 3804971173610549315L;
 
    @Override

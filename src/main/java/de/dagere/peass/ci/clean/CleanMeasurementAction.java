@@ -14,11 +14,11 @@ import hudson.model.Project;
 import hudson.model.TopLevelItem;
 import jenkins.model.Jenkins;
 
-public class CleanTrulyAction implements Action {
+public class CleanMeasurementAction implements Action {
 
    private Job<?, ?> project;
 
-   public CleanTrulyAction(final Job<?, ?> project) {
+   public CleanMeasurementAction(final Job<?, ?> project) {
       this.project = project;
    }
 
@@ -53,7 +53,7 @@ public class CleanTrulyAction implements Action {
          if (path == null) {
             return "There exists no workspace for job " + job.toString();
          }
-         boolean cleaningWorked = path.act(new CleanCallable());
+         boolean cleaningWorked = path.act(new CleanMeasurementCallable());
          if (cleaningWorked) {
             return "Cleaning succeeded";
          } else {
@@ -71,12 +71,12 @@ public class CleanTrulyAction implements Action {
 
    @Override
    public String getDisplayName() {
-      return "Clean Peass-CI Cache";
+      return "Clean Peass-CI Measurement Cache";
    }
 
    @Override
    public String getUrlName() {
-      return "cleanTruly";
+      return "cleanMeasurements";
    }
 
 }

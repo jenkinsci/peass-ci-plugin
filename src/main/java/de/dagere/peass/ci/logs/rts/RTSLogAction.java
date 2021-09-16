@@ -1,9 +1,9 @@
 package de.dagere.peass.ci.logs.rts;
 
+import de.dagere.peass.ci.VisibleAction;
 import de.dagere.peass.dependency.analysis.data.TestCase;
-import hudson.model.InvisibleAction;
 
-public class RTSLogAction extends InvisibleAction {
+public class RTSLogAction extends VisibleAction {
    private final String version;
    private final TestCase testcase;
    private final String cleanLog;
@@ -35,6 +35,16 @@ public class RTSLogAction extends InvisibleAction {
 
    public String getLog() {
       return log;
+   }
+
+   @Override
+   public String getIconFileName() {
+      return null;
+   }
+
+   @Override
+   public String getDisplayName() {
+      return null;
    }
 
 }

@@ -5,10 +5,12 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -41,6 +43,7 @@ public class DefaultMeasurementVisualizer {
 
    public void visualizeMeasurements() {
       String longestPrefix = RCAVisualizer.getLongestPrefix(measurements.keySet());
+      LOG.debug("Prefix: {} Keys: {}", longestPrefix, measurements.keySet());
       
       File detailResultsFolder = new File(dataFolder, "measurements");
       
@@ -64,7 +67,8 @@ public class DefaultMeasurementVisualizer {
             
             String name = testcase.getExecutable().replace("#", "_").substring(longestPrefix.length() + 1);
             
-            run.addAction(new MeasurementVisualizationAction("measurement_" + name, testcaseVisualizationFile));
+            final String content = FileUtils.readFileToString(testcaseVisualizationFile, StandardCharsets.UTF_8);
+            run.addAction(new MeasurementVisualizationAction("measurement_" + name, content));
          } catch (JAXBException e) {
             e.printStackTrace();
          } catch (IOException e) {
