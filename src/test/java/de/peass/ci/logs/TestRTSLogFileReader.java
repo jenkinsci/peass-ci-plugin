@@ -15,7 +15,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
-import de.dagere.peass.ci.logs.LogFileReader;
+import de.dagere.peass.ci.logs.RTSLogFileReader;
 import de.dagere.peass.ci.logs.rts.RTSLogData;
 import de.dagere.peass.config.MeasurementConfiguration;
 import de.dagere.peass.dependency.PeassFolders;
@@ -53,7 +53,7 @@ public class TestRTSLogFileReader {
       VisualizationFolderManager visualizationFolders = Mockito.mock(VisualizationFolderManager.class);
       Mockito.when(visualizationFolders.getPeassFolders()).thenReturn(new PeassFolders(testFolder));
       Mockito.when(visualizationFolders.getResultsFolders()).thenReturn(new ResultsFolders(localFolder, "demo-vis2"));
-      LogFileReader reader = new LogFileReader(visualizationFolders, peassDemoConfig);
+      RTSLogFileReader reader = new RTSLogFileReader(visualizationFolders, peassDemoConfig);
       Map<String, File> testcases = reader.findProcessSuccessRuns();
 
       Assert.assertEquals(1, testcases.size());
