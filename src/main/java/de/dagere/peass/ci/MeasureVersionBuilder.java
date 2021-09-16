@@ -352,6 +352,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       return nightlyBuild;
    }
 
+   @DataBoundSetter
    public void setNightlyBuild(final boolean nightlyBuild) {
       this.nightlyBuild = nightlyBuild;
    }
