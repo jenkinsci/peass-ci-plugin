@@ -6,6 +6,7 @@ import java.io.IOException;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.hamcrest.core.IsNull;
+import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -50,5 +51,25 @@ public class MeasureVersionBuilderConfigCreationTest {
       
       MatcherAssert.assertThat(measurementConfig.getVersion(), Matchers.equalTo("HEAD"));
       MatcherAssert.assertThat(measurementConfig.getVersionOld(), IsNull.nullValue());
+   }
+   
+   @Test
+   public void testConfigCreationIncludeError() throws JsonParseException, JsonMappingException, IOException {
+      MeasureVersionBuilder builder = new MeasureVersionBuilder();
+      builder.setIncludes("package.MyClass2#*;package.MyClass");
+      
+      Assert.assertThrows(RuntimeException.class, () -> {
+         MeasurementConfiguration measurementConfig = builder.getMeasurementConfig();
+      });
+   }
+   
+   @Test
+   public void testConfigCreationIncludeRegular() throws JsonParseException, JsonMappingException, IOException {
+      MeasureVersionBuilder builder = new MeasureVersionBuilder();
+      builder.setIncludes("package.MyClass#*");
+
+      MeasurementConfiguration measurementConfig = builder.getMeasurementConfig();
+      Assert.assertEquals("package.MyClass#*", measurementConfig.getIncludes().get(0));
+      
    }
 }
