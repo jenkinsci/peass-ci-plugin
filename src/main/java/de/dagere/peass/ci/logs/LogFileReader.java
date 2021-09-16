@@ -40,6 +40,9 @@ public class LogFileReader {
    public LogFileReader(final VisualizationFolderManager visualizationFolders, final MeasurementConfiguration measurementConfig) {
       this.visualizationFolders = visualizationFolders;
       this.measurementConfig = measurementConfig;
+      
+      File rtsLogOverviewFile = visualizationFolders.getResultsFolders().getDependencyLogFile(measurementConfig.getVersion(), measurementConfig.getVersionOld());
+      logsExisting = rtsLogOverviewFile.exists();
    }
    
    public boolean isLogsExisting() {

@@ -63,9 +63,17 @@ public class LocalPeassProcessManager {
    public Set<TestCase> rts() throws IOException, InterruptedException {
       RemoteRTS rts = new RemoteRTS(peassConfig, listener);
       RTSResult result = workspace.act(rts);
-      peassConfig.getMeasurementConfig().setVersionOld(result.getVersionOld());
       copyFromRemote();
-      return result.getTests();
+      if (peassConfig.isDisplayRTSLogs()) {
+         logActionCreator.createRTSActions();
+      }
+      if (result != null) {
+         peassConfig.getMeasurementConfig().setVersionOld(result.getVersionOld());
+         return result.getTests();
+      } else {
+         return null;
+      }
+
    }
 
    public boolean measure(final Set<TestCase> tests) throws IOException, InterruptedException {
@@ -97,9 +105,6 @@ public class LocalPeassProcessManager {
    public void visualizeRTSResults(final Run<?, ?> run) throws IOException {
       RTSVisualizationCreator rtsVisualizationCreator = new RTSVisualizationCreator(results, peassConfig);
       rtsVisualizationCreator.visualize(run);
-      if (peassConfig.isDisplayRTSLogs()) {
-         logActionCreator.createRTSActions();
-      }
    }
 
    public ProjectChanges visualizeMeasurementResults(final Run<?, ?> run)
@@ -115,7 +120,8 @@ public class LocalPeassProcessManager {
       TrendFileUtil.persistTrend(run, localWorkspace, statistics);
 
       Changes versionChanges = changes.getVersion(peassConfig.getMeasurementConfig().getVersion());
-      final MeasureVersionAction action = new MeasureVersionAction(peassConfig.getMeasurementConfig(), versionChanges, statistics, measurements, histogramReader.getUpdatedConfigurations());
+      final MeasureVersionAction action = new MeasureVersionAction(peassConfig.getMeasurementConfig(), versionChanges, statistics, measurements,
+            histogramReader.getUpdatedConfigurations());
       run.addAction(action);
 
       createPureMeasurementVisualization(run, dataFolder, measurements);
