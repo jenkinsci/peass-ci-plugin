@@ -1,5 +1,6 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout" xmlns:x="jelly:xml">
+
   <h2>
     ${%measurements}
     <a href='#' onClick='jq$( "#dialogMeasurements" ).dialog( "open" );'>
@@ -40,19 +41,43 @@
             </j:if>
             <tr>
               <th></th>
-              <th colspan="2">Warmup Removed</th>
-              <th colspan="2">Full Measurement</th>
+              <th colspan="2">
+                Warmup Removed
+                <br />
+                (<a href="#" onClick="jq$('.noWarmup').toggle();">Show non-warmed up values</a>)
+              </th>
+              <th colspan="2" class="noWarmup">Full Measurement</th>
             </tr>
             <tr>
               <th>Property</th>
-              <th>Predecessor Version</th>
-              <th>Current Version</th>
-              <th>Predecessor Version</th>
-              <th>Current Version</th>
+              <th>
+                Predecessor
+                <br />
+                Version
+              </th>
+              <th>
+                Current
+                <br />
+                Version
+              </th>
+              <th class="noWarmup">
+                Predecessor
+                <br />
+                Version
+              </th>
+              <th class="noWarmup">
+                Current
+                <br />
+                Version
+              </th>
             </tr>
             <tr>
               <td>
-                <i>${%mean}<br />${%measured}</i>
+                <i>
+                  ${%mean}
+                  <br />
+                  ${%measured}
+                </i>
               </td>
               <td>
                 <i>${it.round(currentStatistic.getMeanOld()/1000)} $&#x00B5;s</i>
@@ -61,17 +86,21 @@
                 <i>${it.round(currentStatistic.getMeanCurrent()/1000)}
                   $&#x00B5;s</i>
               </td>
-              <td>
+              <td class="noWarmup">
                 <i>${it.round(noWarmupStatistic.getMeanOld()*currentRepetitions)} $&#x00B5;s</i>
               </td>
-              <td>
+              <td class="noWarmup">
                 <i>${it.round(noWarmupStatistic.getMeanCurrent()*currentRepetitions)}
                   $&#x00B5;s</i>
               </td>
             </tr>
             <tr>
               <td>
-                <i>${%standardDeviation}<br />${%measured}</i>
+                <i>
+                  ${%standardDeviation}
+                  <br />
+                  ${%measured}
+                </i>
               </td>
               <td>
                 <i>${it.round(currentStatistic.deviationOld/1000)}</i>
@@ -79,10 +108,10 @@
               <td>
                 <i>${it.round(currentStatistic.deviationCurrent/1000)}</i>
               </td>
-              <td>
+              <td class="noWarmup">
                 <i>${it.round(noWarmupStatistic.deviationOld*currentRepetitions)}</i>
               </td>
-              <td>
+              <td class="noWarmup">
                 <i>${it.round(noWarmupStatistic.deviationCurrent*currentRepetitions)}</i>
               </td>
             </tr>
@@ -100,11 +129,11 @@
                 ${it.round(currentStatistic.getMeanCurrent()/currentRepetitions/1000)}
                 $&#x00B5;s
               </td>
-              <td>
+              <td class="noWarmup">
                 ${it.round(noWarmupStatistic.getMeanOld())}
                 $&#x00B5;s
               </td>
-              <td>
+              <td class="noWarmup">
                 ${it.round(noWarmupStatistic.getMeanCurrent())}
                 $&#x00B5;s
               </td>
@@ -121,23 +150,36 @@
               <td>
                 ${it.round(currentStatistic.deviationCurrent/currentRepetitions/1000)}
               </td>
-              <td>
+              <td class="noWarmup">
                 ${it.round(noWarmupStatistic.deviationOld)}
               </td>
-              <td>
+              <td class="noWarmup">
                 ${it.round(noWarmupStatistic.deviationCurrent)}
               </td>
             </tr>
+            <tr>
+              <td>T-Wert</td>
+              <td colspan="2">
+                T=${it.round(currentStatistic.tvalue)} (
+                <j:if test="${it.abs(currentStatistic.tvalue) &gt; it.getCriticalTValue()}">${%significantChange} ${AMP} </j:if>
+                <j:if test="${it.abs(currentStatistic.tvalue) &lt; it.getCriticalTValue()}">${%noSignificantChange} ${AMP} </j:if>
+                <a href='#' onClick='jq$( "#dialogTValue" ).dialog( "open" );'>
+                  <i class="fa fa-question-circle" title='${%helpTValueTitle}'></i>
+                </a>
+                )
+              </td>
+              <td colspan="2" class="noWarmup">
+                T=${it.round(noWarmupStatistic.tvalue)}
+              </td>
+            </tr>
           </table>
+          <script>
+            jq$(('.noWarmup')).hide();
+          </script>
           VMs: ${currentStatistic.getVMs()}
           <br />
-          T=${it.round(currentStatistic.tvalue)} (
-          <j:if test="${it.abs(currentStatistic.tvalue) &gt; it.getCriticalTValue()}">${%significantChange} ${AMP} </j:if>
-          <j:if test="${it.abs(currentStatistic.tvalue) &lt; it.getCriticalTValue()}">${%noSignificantChange} ${AMP} </j:if>
-          <a href='#' onClick='jq$( "#dialogTValue" ).dialog( "open" );'>
-            <i class="fa fa-question-circle" title='${%helpTValueTitle}'></i>
-          </a>
-          )
+
+
           <br />
           <div id="dialogTValue" title="${%helpTValueTitle}">
             ${%helpTValueStart}
