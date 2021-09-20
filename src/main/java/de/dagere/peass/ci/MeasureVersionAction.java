@@ -24,14 +24,16 @@ public class MeasureVersionAction extends VisibleAction {
    private MeasurementConfiguration config;
    private Changes changes;
    private ProjectStatistics statistics;
+   private final Map<String, TestcaseStatistic> noWarmupStatistics;
    private Map<String, HistogramValues> measurements;
    private String prefix;
    private Map<String, MeasurementConfiguration> updatedConfigurations;
 
-   public MeasureVersionAction(final MeasurementConfiguration config, final Changes changes, final ProjectStatistics statistics, final Map<String, HistogramValues> measurements, final Map<String, MeasurementConfiguration> updatedConfigurations) {
+   public MeasureVersionAction(final MeasurementConfiguration config, final Changes changes, final ProjectStatistics statistics, final Map<String, TestcaseStatistic> noWarmupStatistics, final Map<String, HistogramValues> measurements, final Map<String, MeasurementConfiguration> updatedConfigurations) {
       this.config = config;
       this.changes = changes;
       this.statistics = statistics;
+      this.noWarmupStatistics = noWarmupStatistics;
       this.measurements = measurements;
       this.updatedConfigurations = updatedConfigurations;
       for (Entry<String, List<Change>> change : changes.getTestcaseChanges().entrySet()) {
@@ -105,6 +107,10 @@ public class MeasureVersionAction extends VisibleAction {
       Entry<String, Map<TestCase, TestcaseStatistic>> testcaseStatisticEntry = statistics.getStatistics().entrySet().iterator().next();
       Map<TestCase, TestcaseStatistic> testcaseStatistic = testcaseStatisticEntry.getValue();
       return testcaseStatistic.get(new TestCase(testcase));
+   }
+   
+   public TestcaseStatistic getNoWarmupStatistic(final String testcase) {
+      return noWarmupStatistics.get(testcase);
    }
 
    public String getReducedName(final String name) {

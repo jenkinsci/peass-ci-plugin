@@ -6,7 +6,9 @@ import java.io.FileFilter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.bind.JAXBException;
 
@@ -18,6 +20,7 @@ import de.dagere.kopeme.datastorage.XMLDataLoader;
 import de.dagere.kopeme.generated.Kopemedata;
 import de.dagere.peass.ci.MeasurementVisualizationAction;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.measurement.analysis.statistics.TestcaseStatistic;
 import de.dagere.peass.utils.Constants;
 import de.dagere.peass.visualization.GraphNode;
 import de.dagere.peass.visualization.KoPeMeTreeConverter;
@@ -31,19 +34,20 @@ public class DefaultMeasurementVisualizer {
    private final String version;
    private final Run<?, ?> run;
    private final VisualizationFolderManager visualizationFolders;
-   Map<String, HistogramValues> measurements;
+   private final Set<String> tests;
+   private final Map<String, TestcaseStatistic> noWarmupStatistics = new HashMap<>();
 
-   public DefaultMeasurementVisualizer(final File dataFolder, final String version, final Run<?, ?> run, final VisualizationFolderManager visualizationFolders, final Map<String, HistogramValues> measurements) {
+   public DefaultMeasurementVisualizer(final File dataFolder, final String version, final Run<?, ?> run, final VisualizationFolderManager visualizationFolders, final Set<String> tests) {
       this.dataFolder = dataFolder;
       this.version = version;
       this.run = run;
       this.visualizationFolders = visualizationFolders;
-      this.measurements = measurements;
+      this.tests = tests;
    }
 
    public void visualizeMeasurements() {
-      String longestPrefix = RCAVisualizer.getLongestPrefix(measurements.keySet());
-      LOG.debug("Prefix: {} Keys: {}", longestPrefix, measurements.keySet());
+      String longestPrefix = RCAVisualizer.getLongestPrefix(tests);
+      LOG.debug("Prefix: {} Keys: {}", longestPrefix, tests);
       
       File detailResultsFolder = new File(dataFolder, "measurements");
       
@@ -55,13 +59,7 @@ public class DefaultMeasurementVisualizer {
             TestCase testcase = new TestCase(data.getTestcases(), "");
             
             KoPeMeTreeConverter treeConverter = new KoPeMeTreeConverter(detailResultsFolder, version, testcase);
-            GraphNode kopemeDataNode = treeConverter.getData();
-            
-            File versionVisualizationFolder = new File(visualizationFolders.getVisualizationFolder(), version);
-            File kopemeVisualizationFolder = new File(versionVisualizationFolder, "pure_kopeme");
-            kopemeVisualizationFolder.mkdirs();
-            File testcaseVisualizationFile = new File(kopemeVisualizationFolder, testcase.getClazz() + "_" + testcase.getMethod() + ".json");
-            writeDataJS(testcaseVisualizationFile, kopemeDataNode);
+            File testcaseVisualizationFile = generateJSFile(testcase, treeConverter);
             
             LOG.debug("Adding action: " + testcase.getExecutable());
             
@@ -75,7 +73,25 @@ public class DefaultMeasurementVisualizer {
             e.printStackTrace();
          }
       }
+   }
+   
+   public Map<String, TestcaseStatistic> getNoWarmupStatistics() {
+      return noWarmupStatistics;
+   }
+
+   private File generateJSFile(final TestCase testcase, final KoPeMeTreeConverter treeConverter) throws IOException {
+      GraphNode kopemeDataNode = treeConverter.getData();
       
+
+      LOG.info("Statistic: {}", kopemeDataNode.getStatistic());
+      noWarmupStatistics.put(testcase.getExecutable(), kopemeDataNode.getStatistic());
+      
+      File versionVisualizationFolder = new File(visualizationFolders.getVisualizationFolder(), version);
+      File kopemeVisualizationFolder = new File(versionVisualizationFolder, "pure_kopeme");
+      kopemeVisualizationFolder.mkdirs();
+      File testcaseVisualizationFile = new File(kopemeVisualizationFolder, testcase.getClazz() + "_" + testcase.getMethod() + ".json");
+      writeDataJS(testcaseVisualizationFile, kopemeDataNode);
+      return testcaseVisualizationFile;
    }
    
    private void writeDataJS(final File destFile, final GraphNode kopemeDataNode) throws IOException {

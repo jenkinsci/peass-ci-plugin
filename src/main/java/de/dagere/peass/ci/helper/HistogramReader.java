@@ -18,7 +18,6 @@ import de.dagere.peass.measurement.analysis.ResultLoader;
 import io.jenkins.cli.shaded.org.apache.commons.io.filefilter.WildcardFileFilter;
 
 public class HistogramReader {
-   private static final int MIKRO = 1000;
 
    private final MeasurementConfiguration measurementConfig;
    private final File fullResultsFolder;
