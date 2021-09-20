@@ -9,14 +9,15 @@
             <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css"/>
   		    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   		    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  		    <script> jq$ = jQuery.noConflict();</script>
             <h1>${%resultsTitle}
-            <a href='#' onClick='$( "#dialogGeneral" ).dialog( "open" );'><i class="fa fa-question-circle" title='Display Help' style="font-size:24px" ></i></a>
+            <a href='#' onClick='jq$( "#dialogGeneral" ).dialog( "open" );'><i class="fa fa-question-circle" title='Display Help' style="font-size:24px" ></i></a>
       			<div id="dialogGeneral" title="${%helpValues}">${%repetitionHint}</div>
       			<script>
-				$( "#dialogGeneral" ).dialog({ autoOpen: false });
+				jq$( "#dialogGeneral" ).dialog({ autoOpen: false });
 				</script>
             </h1> 
-            <a href="#" onClick="$('#configuration').toggle();">${%configuration}</a> 
+            <a href="#" onClick="jq$('#configuration').toggle();">${%configuration}</a> 
             <div id="configuration" style="display:none">
               ${%configurationText}<br/>           
               <table>
@@ -27,23 +28,23 @@
               </table>
             </div>
             <j:if test="${it.hasUpdatedConfigurations()}">
-              ${AMP} <a href='#' onClick='$( "#dialogUpdates" ).dialog( "open" );' style="font-size:24px; color: red;">
+              ${AMP} <a href='#' onClick='jq$( "#dialogUpdates" ).dialog( "open" );' style="font-size:24px; color: red;">
                 <i class="fa fa-exclamation-triangle" title="Configuration has changed"></i>
               </a>
               <div id="dialogUpdates" title="${%updatedConfigurationTitle}">${%changedConfigurationHint}</div>
       			<script>
-				$( "#dialogUpdates" ).dialog({ autoOpen: false });
+				jq$( "#dialogUpdates" ).dialog({ autoOpen: false });
 				</script>
             </j:if>
             
             <h2>${%changes}
-            <a href='#' onClick='$( "#dialogChanges" ).dialog( "open" );'><i class="fa fa-question-circle" title='Display Help' style="font-size:24px" ></i></a>
+            <a href='#' onClick='jq$( "#dialogChanges" ).dialog( "open" );'><i class="fa fa-question-circle" title='Display Help' style="font-size:24px" ></i></a>
             </h2>
             <div id="dialogChanges" title="Changes">This section contains all test cases which had a performance change based on the configured type 1 error.  
       			For your configured type 1 error of <b>${it.config.statisticsConfig.type1error}</b> (= ${(1-it.config.statisticsConfig.type1error)*100}% significance level) and <b>${it.config.vms}</b> VMs, the absolute t-value needs to be above the critical t-value <b>${it.round(it.getCriticalTValue())}</b> to indicate a performance change. <br/>
       			Selected values are available <a href="https://en.wikipedia.org/wiki/Student%27s_t-distribution#Table_of_selected_values" target="parent">here</a>.</div>
             <script>
-				$( "#dialogChanges" ).dialog({ autoOpen: false });
+				jq$( "#dialogChanges" ).dialog({ autoOpen: false });
 			</script>
             
               Version: ${it.getConfig().getVersion()}<br />
@@ -62,12 +63,12 @@
               
               
             <h2>${%measurements}
-            <a href='#' onClick='$( "#dialogMeasurements" ).dialog( "open" );'><i class="fa fa-question-circle" title='Display Help' style="font-size:24px" ></i></a>
+            <a href='#' onClick='jq$( "#dialogMeasurements" ).dialog( "open" );'><i class="fa fa-question-circle" title='Display Help' style="font-size:24px" ></i></a>
             </h2>
             <div id="dialogMeasurements" title="${%measurements}">${%measurementsHint}
       			</div>
             <script>
-				$( "#dialogMeasurements" ).dialog({ autoOpen: false });
+				jq$( "#dialogMeasurements" ).dialog({ autoOpen: false });
 			</script>
             <script type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js"/>
             <j:forEach var="testcase" items="${it.measurements.entrySet()}">
@@ -119,7 +120,7 @@
       			T=${it.round(currentStatistic.tvalue)} (
       			<j:if test="${it.abs(currentStatistic.tvalue) &gt; it.getCriticalTValue()}">${%significantChange} ${AMP} </j:if>
       			<j:if test="${it.abs(currentStatistic.tvalue) &lt; it.getCriticalTValue()}">${%noSignificantChange} ${AMP} </j:if>
-      			<a href='#' onClick='$( "#dialogTValue" ).dialog( "open" );'><i class="fa fa-question-circle" title='${%helpTValueTitle}'></i></a>
+      			<a href='#' onClick='jq$( "#dialogTValue" ).dialog( "open" );'><i class="fa fa-question-circle" title='${%helpTValueTitle}'></i></a>
       			)
       			<br/>
       			<div id="dialogTValue" title="${%helpTValueTitle}">${%helpTValueStart}
@@ -132,7 +133,7 @@
       			</div>
       			
       			<script>
-				$( "#dialogTValue" ).dialog({ autoOpen: false });
+				jq$( "#dialogTValue" ).dialog({ autoOpen: false });
 				</script>
 				
 				<j:if test="${it.getUpdatedConfigurations().containsKey(testcase.getKey())}">
