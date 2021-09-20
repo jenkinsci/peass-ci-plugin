@@ -2,6 +2,7 @@ package de.dagere.peass.ci.helper;
 
 import java.util.Arrays;
 
+import de.dagere.peass.config.MeasurementConfiguration;
 import de.dagere.peass.visualization.KoPeMeTreeConverter;
 
 public class HistogramValues {
@@ -11,9 +12,9 @@ public class HistogramValues {
    /**
     * Creates histogram values, assuming parameters are in nanoseconds
     */
-   public HistogramValues(final double[] valuesCurrent, final double[] valuesBefore) {
-      this.valuesCurrent = Arrays.stream(valuesCurrent).map(value -> value / KoPeMeTreeConverter.NANO_TO_MICRO).toArray();
-      this.valuesBefore = Arrays.stream(valuesBefore).map(value -> value / KoPeMeTreeConverter.NANO_TO_MICRO).toArray();
+   public HistogramValues(final double[] valuesCurrent, final double[] valuesBefore, final MeasurementConfiguration currentConfig) {
+      this.valuesCurrent = Arrays.stream(valuesCurrent).map(value -> value / currentConfig.getRepetitions() / KoPeMeTreeConverter.NANO_TO_MICRO).toArray();
+      this.valuesBefore = Arrays.stream(valuesBefore).map(value -> value / currentConfig.getRepetitions() / KoPeMeTreeConverter.NANO_TO_MICRO).toArray();
    }
 
    /**
