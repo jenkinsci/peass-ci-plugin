@@ -1,0 +1,167 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout" xmlns:x="jelly:xml">
+  <h2>
+    ${%measurements}
+    <a href='#' onClick='jq$( "#dialogMeasurements" ).dialog( "open" );'>
+      <i class="fa fa-question-circle" title='Display Help' style="font-size:24px"></i>
+    </a>
+  </h2>
+  <div id="dialogMeasurements" title="${%measurements}">${%measurementsHint}
+  </div>
+  <script>
+    jq$( "#dialogMeasurements" ).dialog({ autoOpen: false });
+  </script>
+  <script type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js" />
+  <j:forEach var="testcase" items="${it.measurements.entrySet()}">
+    ${%testcase}:
+    <j:if test="${it.testIsChanged(testcase.getKey())}">
+      <a href="../${it.getReducedName(testcase.getKey().replace('#', '_'))}">${testcase.getKey()}</a>
+    </j:if>
+    <j:if test="${!it.testIsChanged(testcase.getKey())}">
+      ${testcase.getKey()}
+    </j:if>
+    <br />
+    <table>
+      <tr>
+        <td>
+          <div style='width: 600px; height: 300px; background-color: #BBBBBB; border: 2px solid blue; border-radius: 1em 1em 1em 1em; padding: 1em;'
+            id='histogramm_${testcase.getKey()}'>
+          </div>
+        </td>
+        <td>
+          <table>
+            <j:set var="currentStatistic" value="${it.getTestcaseStatistic(testcase.getKey())}" />
+            <j:if test="${it.getUpdatedConfigurations().get(testcase.getKey()).repetitions != it.config.repetitions}">
+              <j:set var="currentRepetitions" value="${it.getUpdatedConfigurations().get(testcase.getKey()).repetitions}" />
+            </j:if>
+            <j:if test="${it.getUpdatedConfigurations().get(testcase.getKey()) == null}">
+              <j:set var="currentRepetitions" value="${it.config.repetitions}" />
+            </j:if>
+            <tr>
+              <th>Property</th>
+              <th>Predecessor</th>
+              <th>Current</th>
+            </tr>
+            <tr>
+              <td>${%mean}</td>
+              <td>${it.round(currentStatistic.getMeanOld()/1000)} $&#x00B5;s
+              </td>
+              <td>${it.round(currentStatistic.getMeanCurrent()/1000)}
+                $&#x00B5;s</td>
+            </tr>
+            <tr>
+              <td>${%standardDeviation}</td>
+              <td>${it.round(currentStatistic.deviationOld/1000)}</td>
+              <td>${it.round(currentStatistic.deviationCurrent/1000)}</td>
+            </tr>
+            <tr>
+              <td>
+                <i>${%mean} ${%perRepetition}</i>
+              </td>
+              <td>
+                <i>${it.round(currentStatistic.getMeanOld()/currentRepetitions/1000)}
+                  $&#x00B5;s </i>
+              </td>
+              <td>
+                <i>${it.round(currentStatistic.getMeanCurrent()/currentRepetitions/1000)}
+                  $&#x00B5;s</i>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <i>Deviation ${%perRepetition}</i>
+              </td>
+              <td>
+                <i>${it.round(currentStatistic.deviationOld/currentRepetitions/1000)}
+                </i>
+              </td>
+              <td>
+                <i>${it.round(currentStatistic.deviationCurrent/currentRepetitions/1000)}
+                </i>
+              </td>
+            </tr>
+          </table>
+          VMs: ${currentStatistic.getVMs()}
+          <br />
+          T=${it.round(currentStatistic.tvalue)} (
+          <j:if test="${it.abs(currentStatistic.tvalue) &gt; it.getCriticalTValue()}">${%significantChange} ${AMP} </j:if>
+          <j:if test="${it.abs(currentStatistic.tvalue) &lt; it.getCriticalTValue()}">${%noSignificantChange} ${AMP} </j:if>
+          <a href='#' onClick='jq$( "#dialogTValue" ).dialog( "open" );'>
+            <i class="fa fa-question-circle" title='${%helpTValueTitle}'></i>
+          </a>
+          )
+          <br />
+          <div id="dialogTValue" title="${%helpTValueTitle}">
+            ${%helpTValueStart}
+            <b>${it.config.statisticsConfig.type1error}</b>
+            (= ${(1-it.config.statisticsConfig.type1error)*100}%
+            ${%helpTValueSignificance}
+            <b>${it.config.vms}</b>
+            ${%helpTValueMiddle}
+            <b>${it.round(it.getCriticalTValue())}</b>
+            ${%helpTValueEnd}
+          </div>
+
+          <script>
+            jq$( "#dialogTValue" ).dialog({ autoOpen: false });
+          </script>
+
+          <j:if test="${it.getUpdatedConfigurations().containsKey(testcase.getKey())}">
+            <br />
+            <br />
+            <div id="dialogUpdates${testcase.getKey().replace('#','_')}" title="Configuration Updates">
+              <i class="fa fa-exclamation-triangle" title="Configuration has changed" style="color: red"></i>
+              ${%changedConfigurationHint}
+              <table>
+                <tr>
+                  <td>${%iterations}</td>
+                  <td>
+                    <j:if test="${it.getUpdatedConfigurations().get(testcase.getKey()).iterations != it.config.iterations}">
+                      <b>${it.getUpdatedConfigurations().get(testcase.getKey()).iterations}
+                      </b>
+                    </j:if>
+                    <j:if test="${it.getUpdatedConfigurations().get(testcase.getKey()).iterations == it.config.iterations}">
+                      ${it.getUpdatedConfigurations().get(testcase.getKey()).iterations}
+                    </j:if>
+                  </td>
+                  <td>(Original: ${it.config.iterations})</td>
+                </tr>
+                <tr>
+                  <td>${%warmup}</td>
+                  <td>
+                    <j:if test="${it.getUpdatedConfigurations().get(testcase.getKey()).warmup != it.config.warmup}">
+                      <b>${it.getUpdatedConfigurations().get(testcase.getKey()).warmup}
+                      </b>
+                    </j:if>
+                    <j:if test="${it.getUpdatedConfigurations().get(testcase.getKey()).warmup == it.config.warmup}">
+                      ${it.getUpdatedConfigurations().get(testcase.getKey()).warmup}
+                    </j:if>
+                  </td>
+                  <td>(Original: ${it.config.warmup})</td>
+                </tr>
+                <tr>
+                  <td>${%repetitions}</td>
+                  <td>
+                    <j:if test="${it.getUpdatedConfigurations().get(testcase.getKey()).repetitions != it.config.repetitions}">
+                      <b>${it.getUpdatedConfigurations().get(testcase.getKey()).repetitions}
+                      </b>
+                    </j:if>
+                    <j:if test="${it.getUpdatedConfigurations().get(testcase.getKey()).repetitions == it.config.repetitions}">
+                      ${it.getUpdatedConfigurations().get(testcase.getKey()).repetitions}
+                    </j:if>
+                  </td>
+                  <td>(Original: ${it.config.repetitions})</td>
+                </tr>
+              </table>
+            </div>
+            <br />
+          </j:if>
+
+          <a href="../measurement_${it.getReducedName(testcase.getKey().replace('#', '_'))}/?call=overall&amp;ess=-1" target="parent">
+            ${%inspectMeasurement}
+          </a>
+        </td>
+      </tr>
+    </table>
+  </j:forEach>
+</j:jelly>
