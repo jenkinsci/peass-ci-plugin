@@ -24,9 +24,9 @@ public class TestMeasureVersionAction {
       measurements.put("de.package.ClassA#method2", null);
       measurements.put("de.package.ClassB#method2", null);
       measurements.put("de.package.otherpackage.ClassC#method2", null);
-      
+
       MeasureVersionAction action = new MeasureVersionAction(new MeasurementConfiguration(5), changes.getVersion("1"), new ProjectStatistics(),
-            measurements, new HashMap<>());
+            new HashMap<>(), measurements, new HashMap<>());
 
       Assert.assertEquals("ClassA", action.getReducedName("de.package.ClassA"));
       Assert.assertEquals("otherpackage.ClassC", action.getReducedName("de.package.otherpackage.ClassC"));
@@ -46,8 +46,8 @@ public class TestMeasureVersionAction {
       final ProjectChanges changes = getChanges();
 
       MeasureVersionAction action = new MeasureVersionAction(new MeasurementConfiguration(5), changes.getVersion("1"), new ProjectStatistics(),
-            new HashMap<String, HistogramValues>(), new HashMap<>());
-      
+            new HashMap<>(), new HashMap<>(), new HashMap<>());
+
       Assert.assertTrue(action.testIsChanged("de.package.ClassA#method1"));
       Assert.assertTrue(action.testIsChanged("de.package.ClassA#method2"));
       Assert.assertTrue(action.testIsChanged("de.package.ClassB#method2"));

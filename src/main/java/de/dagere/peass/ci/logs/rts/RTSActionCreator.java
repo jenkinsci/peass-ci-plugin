@@ -8,18 +8,18 @@ import java.util.Map;
 import org.apache.commons.io.FileUtils;
 
 import de.dagere.peass.ci.logs.InternalLogAction;
-import de.dagere.peass.ci.logs.LogFileReader;
+import de.dagere.peass.ci.logs.RTSLogFileReader;
 import de.dagere.peass.config.MeasurementConfiguration;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import hudson.model.Run;
 
 public class RTSActionCreator {
 
-   private final LogFileReader reader;
+   private final RTSLogFileReader reader;
    private final Run<?, ?> run;
    private final MeasurementConfiguration measurementConfig;
 
-   public RTSActionCreator(final LogFileReader reader, final Run<?, ?> run, final MeasurementConfiguration measurementConfig) {
+   public RTSActionCreator(final RTSLogFileReader reader, final Run<?, ?> run, final MeasurementConfiguration measurementConfig) {
       this.reader = reader;
       this.run = run;
       this.measurementConfig = measurementConfig;

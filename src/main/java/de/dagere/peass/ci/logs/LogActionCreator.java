@@ -16,16 +16,18 @@ public class LogActionCreator {
    private final PeassProcessConfiguration peassConfig;
    private final Run<?, ?> run;
    private final LogFileReader reader;
+   private final VisualizationFolderManager visualizationFolders;
    
    public LogActionCreator(final PeassProcessConfiguration peassConfig, final Run<?, ?> run, final File localWorkspace) {
       this.peassConfig = peassConfig;
       this.run = run;
-      VisualizationFolderManager visualizationFolders = new VisualizationFolderManager(localWorkspace, run);
+      visualizationFolders = new VisualizationFolderManager(localWorkspace, run);
       reader = new LogFileReader(visualizationFolders, peassConfig.getMeasurementConfig());
    }
    
    public void createRTSActions() throws IOException {
-      RTSActionCreator rtsActionCreator = new RTSActionCreator(reader, run, peassConfig.getMeasurementConfig());
+      RTSLogFileReader rtsReader = new RTSLogFileReader(visualizationFolders, peassConfig.getMeasurementConfig());
+      RTSActionCreator rtsActionCreator = new RTSActionCreator(rtsReader, run, peassConfig.getMeasurementConfig());
       rtsActionCreator.createRTSActions();
    }
 

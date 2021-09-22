@@ -1,22 +1,26 @@
 package de.dagere.peass.ci.helper;
 
 import java.util.Arrays;
-import java.util.List;
+
+import de.dagere.peass.config.MeasurementConfiguration;
+import de.dagere.peass.visualization.KoPeMeTreeConverter;
 
 public class HistogramValues {
    private final double[] valuesCurrent;
    private final double[] valuesBefore;
-   
-   public HistogramValues(final List<Double> valuesCurrent, final List<Double> valuesBefore) {
-      this.valuesCurrent = valuesCurrent.stream().mapToDouble(i -> i).toArray();
-      this.valuesBefore = valuesBefore.stream().mapToDouble(i -> i).toArray();
+
+   /**
+    * Creates histogram values, assuming parameters are in nanoseconds
+    */
+   public HistogramValues(final double[] valuesCurrent, final double[] valuesBefore, final MeasurementConfiguration currentConfig) {
+      this.valuesCurrent = Arrays.stream(valuesCurrent).map(value -> value / currentConfig.getRepetitions() / KoPeMeTreeConverter.NANO_TO_MICRO).toArray();
+      this.valuesBefore = Arrays.stream(valuesBefore).map(value -> value / currentConfig.getRepetitions() / KoPeMeTreeConverter.NANO_TO_MICRO).toArray();
    }
 
-   public HistogramValues(final double[] valuesCurrent, final double[] valuesBefore) {
-      this.valuesCurrent = valuesCurrent;
-      this.valuesBefore = valuesBefore;
-   }
-
+   /**
+    * Returns a javascript visualizable value array in mikroseconds
+    * @return A javascript visualizable value array in mikroseconds
+    */
    public String getValuesCurrentReadable() {
       return Arrays.toString(valuesCurrent);
    }

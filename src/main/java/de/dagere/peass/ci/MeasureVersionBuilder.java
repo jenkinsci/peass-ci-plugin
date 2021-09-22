@@ -214,12 +214,21 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    }
 
    private List<String> getIncludeList() {
+      String errorMessage = "";
       List<String> includeList = new LinkedList<>();
       if (includes != null && includes.trim().length() > 0) {
          final String nonSpaceIncludes = includes.replaceAll(" ", "");
          for (String include : nonSpaceIncludes.split(";")) {
             includeList.add(include);
+            if (!include.contains("#")) {
+               errorMessage+= "Include " + include + " does not contain #; this will not match any method. ";
+            }
          }
+      }
+      if (errorMessage.length() > 0) {
+         throw new RuntimeException("Please always add includes in the form package.Class#method, and if you want to include all methods package.Class#*. "
+               + " The following includes contained problems: "
+               + errorMessage);
       }
       return includeList;
    }
@@ -352,6 +361,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       return nightlyBuild;
    }
 
+   @DataBoundSetter
    public void setNightlyBuild(final boolean nightlyBuild) {
       this.nightlyBuild = nightlyBuild;
    }
