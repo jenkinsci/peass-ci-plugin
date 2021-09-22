@@ -35,8 +35,7 @@ jobs:
         restore-keys: ${{ matrix.java }}-m2
     - name: Build Peass (Current dependent project version)
       run: |
-         echo "REF: $GITHUB_REF"
-         branch=${GITHUB_REF##*/}
+         branch=develop
          cd /home/runner/work/ && git clone -b $branch https://github.com/DaGeRe/peass.git && cd peass && echo "Branch: $branch" && git rev-parse HEAD && ./mvnw clean install -DskipTests
     - name: Build with Maven
       run: | 
