@@ -61,22 +61,27 @@ public class LogFileReader {
    }
 
    private void tryLocalLogFolderVMIds(final TestCase testcase, final List<LogFiles> currentFiles, final File logFolder, final PeassFolders folders) {
-      LOG.debug("Log folder: {} {}", logFolder, logFolder.listFiles());
-      int tryIndex = 0;
-      String filenameSuffix = "log_" + testcase.getClazz() + File.separator + testcase.getMethod() + ".txt";
-      File predecessorFile = new File(logFolder, "vm_" + tryIndex + "_" + measurementConfig.getVersionOld() + File.separator + filenameSuffix);
-      LOG.debug("Trying whether {} exists", predecessorFile, predecessorFile.exists());
-      while (predecessorFile.exists()) {
-         CorrectRunChecker checker = new CorrectRunChecker(testcase, tryIndex, measurementConfig, visualizationFolders);
-
-         File currentFile = new File(logFolder, "vm_" + tryIndex + "_" + measurementConfig.getVersion() + File.separator + filenameSuffix);
-         LogFiles vmidLogFile = new LogFiles(predecessorFile, currentFile, checker.isPredecessorRunning(), checker.isCurrentRunning());
-         currentFiles.add(vmidLogFile);
-
-         tryIndex++;
-         predecessorFile = new File(logFolder, "vm_" + tryIndex + "_" + measurementConfig.getVersionOld() + File.separator + filenameSuffix);
+      if (logFolder != null && logFolder.exists() && logFolder.isDirectory()) {
+         LOG.debug("Log folder: {} {}", logFolder, logFolder.listFiles());
+         int tryIndex = 0;
+         String filenameSuffix = "log_" + testcase.getClazz() + File.separator + testcase.getMethod() + ".txt";
+         File predecessorFile = new File(logFolder, "vm_" + tryIndex + "_" + measurementConfig.getVersionOld() + File.separator + filenameSuffix);
          LOG.debug("Trying whether {} exists", predecessorFile, predecessorFile.exists());
+         while (predecessorFile.exists()) {
+            CorrectRunChecker checker = new CorrectRunChecker(testcase, tryIndex, measurementConfig, visualizationFolders);
+
+            File currentFile = new File(logFolder, "vm_" + tryIndex + "_" + measurementConfig.getVersion() + File.separator + filenameSuffix);
+            LogFiles vmidLogFile = new LogFiles(predecessorFile, currentFile, checker.isPredecessorRunning(), checker.isCurrentRunning());
+            currentFiles.add(vmidLogFile);
+
+            tryIndex++;
+            predecessorFile = new File(logFolder, "vm_" + tryIndex + "_" + measurementConfig.getVersionOld() + File.separator + filenameSuffix);
+            LOG.debug("Trying whether {} exists", predecessorFile, predecessorFile.exists());
+         }
+      }else {
+         LOG.error("Log folder {} missing", logFolder);
       }
+      
    }
 
    public String getMeasureLog() {

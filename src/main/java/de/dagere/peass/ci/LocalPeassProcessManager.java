@@ -2,6 +2,7 @@ package de.dagere.peass.ci;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 
@@ -99,6 +100,7 @@ public class LocalPeassProcessManager {
 
    public void copyFromRemote() throws IOException, InterruptedException {
       String remotePeassPath = ContinuousFolderUtil.getLocalFolder(new File(workspace.getRemote())).getPath();
+      listener.getLogger().print(Arrays.toString( new RuntimeException().getStackTrace()));
       listener.getLogger().println("Remote Peass path: " + remotePeassPath);
       FilePath remotePeassFolder = new FilePath(workspace.getChannel(), remotePeassPath);
       DirScanner.Glob dirScanner = new DirScanner.Glob("**/*,**/.git/**", "", false);
