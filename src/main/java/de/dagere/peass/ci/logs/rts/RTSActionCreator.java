@@ -6,6 +6,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import de.dagere.peass.ci.logs.InternalLogAction;
 import de.dagere.peass.ci.logs.RTSLogFileReader;
@@ -14,6 +16,8 @@ import de.dagere.peass.dependency.analysis.data.TestCase;
 import hudson.model.Run;
 
 public class RTSActionCreator {
+
+   private static final Logger LOG = LogManager.getLogger(RTSActionCreator.class);
 
    private final RTSLogFileReader reader;
    private final Run<?, ?> run;
@@ -35,6 +39,8 @@ public class RTSActionCreator {
          Map<TestCase, RTSLogData> rtsVmRunsPredecessor = createVersionRTSData(measurementConfig.getVersionOld());
 
          createOverviewAction(processSuccessRuns, rtsVmRuns, rtsVmRunsPredecessor);
+      } else {
+         LOG.info("No RTS Actions existing; not creating regression test selection actions.");
       }
    }
 
