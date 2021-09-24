@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
@@ -34,7 +35,8 @@ public class MeasurementActionCreator {
    public void createMeasurementActions(final ProjectStatistics statistics) throws IOException {
       createOverallLogAction();
       
-      Map<TestCase, List<LogFiles>> logFiles = reader.readAllTestcases(statistics);
+      Set<TestCase> tests = statistics.getStatistics().get(measurementConfig.getVersion()).keySet();
+      Map<TestCase, List<LogFiles>> logFiles = reader.readAllTestcases(tests);
       createLogActions(run, logFiles);
 
       LogOverviewAction logOverviewAction = new LogOverviewAction(logFiles, measurementConfig.getVersion().substring(0, 6), measurementConfig.getVersionOld().substring(0, 6));

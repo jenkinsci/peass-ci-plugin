@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
@@ -22,7 +23,6 @@ import de.dagere.peass.config.MeasurementConfiguration;
 import de.dagere.peass.dependency.CauseSearchFolders;
 import de.dagere.peass.dependency.PeassFolders;
 import de.dagere.peass.dependency.analysis.data.TestCase;
-import de.dagere.peass.measurement.analysis.ProjectStatistics;
 import de.dagere.peass.measurement.rca.data.CauseSearchData;
 import de.dagere.peass.utils.Constants;
 import io.jenkins.cli.shaded.org.apache.commons.io.filefilter.WildcardFileFilter;
@@ -39,9 +39,9 @@ public class LogFileReader {
       
    }
 
-   public Map<TestCase, List<LogFiles>> readAllTestcases(final ProjectStatistics statistics) {
+   public Map<TestCase, List<LogFiles>> readAllTestcases(final Set<TestCase> tests) {
       Map<TestCase, List<LogFiles>> logFiles = new HashMap<>();
-      for (TestCase testcase : statistics.getStatistics().get(measurementConfig.getVersion()).keySet()) {
+      for (TestCase testcase : tests) {
          readTestcase(visualizationFolders.getPeassFolders(), logFiles, testcase);
       }
       return logFiles;
