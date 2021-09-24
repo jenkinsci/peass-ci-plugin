@@ -27,15 +27,15 @@ public class RTSLogFileReader {
    public RTSLogFileReader(final VisualizationFolderManager visualizationFolders, final MeasurementConfiguration measurementConfig) {
       this.visualizationFolders = visualizationFolders;
       this.measurementConfig = measurementConfig;
-      
+
       File rtsLogOverviewFile = visualizationFolders.getResultsFolders().getDependencyLogFile(measurementConfig.getVersion(), measurementConfig.getVersionOld());
       logsExisting = rtsLogOverviewFile.exists();
    }
-   
+
    public boolean isLogsExisting() {
       return logsExisting;
    }
-   
+
    public Map<TestCase, RTSLogData> getRtsVmRuns(final String version) {
       Map<TestCase, RTSLogData> files = new LinkedHashMap<>();
       File versionFolder = new File(visualizationFolders.getPeassFolders().getDependencyLogFolder(), version);
@@ -53,10 +53,12 @@ public class RTSLogFileReader {
                }
             }
          }
+      } else {
+         LOG.info("Expected rts version folder {} did not exist", versionFolder);
       }
       return files;
    }
-   
+
    public String getRTSLog() {
       File rtsLogFile = visualizationFolders.getResultsFolders().getDependencyLogFile(measurementConfig.getVersion(), measurementConfig.getVersionOld());
       try {
@@ -68,19 +70,21 @@ public class RTSLogFileReader {
          return "RTS log not readable";
       }
    }
-   
+
    public Map<String, File> findProcessSuccessRuns() {
       Map<String, File> processSuccessTestRuns = new LinkedHashMap<>();
       addVersionRun(processSuccessTestRuns, measurementConfig.getVersion());
       addVersionRun(processSuccessTestRuns, measurementConfig.getVersionOld());
       return processSuccessTestRuns;
    }
-   
+
    private void addVersionRun(final Map<String, File> processSuccessTestRuns, final String checkSuccessRunVersion) {
       File candidate = new File(visualizationFolders.getPeassFolders().getDependencyLogFolder(), checkSuccessRunVersion + File.separator + "testRunning.log");
       if (candidate.exists()) {
          logsExisting = true;
          processSuccessTestRuns.put(checkSuccessRunVersion, candidate);
+      } else {
+         LOG.info("RTS version result {} did not exist", candidate);
       }
    }
 }
