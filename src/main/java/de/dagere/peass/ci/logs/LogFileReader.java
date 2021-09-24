@@ -36,7 +36,7 @@ public class LogFileReader {
    public LogFileReader(final VisualizationFolderManager visualizationFolders, final MeasurementConfiguration measurementConfig) {
       this.visualizationFolders = visualizationFolders;
       this.measurementConfig = measurementConfig;
-      
+
    }
 
    public Map<TestCase, List<LogFiles>> readAllTestcases(final Set<TestCase> tests) {
@@ -68,7 +68,7 @@ public class LogFileReader {
       LOG.debug("Trying whether {} exists", predecessorFile, predecessorFile.exists());
       while (predecessorFile.exists()) {
          CorrectRunChecker checker = new CorrectRunChecker(testcase, tryIndex, measurementConfig, visualizationFolders);
-         
+
          File currentFile = new File(logFolder, "vm_" + tryIndex + "_" + measurementConfig.getVersion() + File.separator + filenameSuffix);
          LogFiles vmidLogFile = new LogFiles(predecessorFile, currentFile, checker.isPredecessorRunning(), checker.isCurrentRunning());
          currentFiles.add(vmidLogFile);
@@ -82,9 +82,13 @@ public class LogFileReader {
    public String getMeasureLog() {
       File measureLogFile = visualizationFolders.getResultsFolders().getMeasurementLogFile(measurementConfig.getVersion(), measurementConfig.getVersionOld());
       try {
-         LOG.debug("Reading {}", measureLogFile.getAbsolutePath());
-         String rtsLog = FileUtils.readFileToString(measureLogFile, StandardCharsets.UTF_8);
-         return rtsLog;
+         if (measureLogFile.exists()) {
+            LOG.debug("Reading {}", measureLogFile.getAbsolutePath());
+            String rtsLog = FileUtils.readFileToString(measureLogFile, StandardCharsets.UTF_8);
+            return rtsLog;
+         } else {
+            return "Measurement log not readable; file " + measureLogFile.getAbsolutePath() + " did not exist";
+         }
       } catch (IOException e) {
          e.printStackTrace();
          return "Measurement log not readable";
