@@ -42,14 +42,15 @@ public class RTSVisualizationCreator {
 
    public void visualize(final Run<?, ?> run) {
       try {
-         Map<String, List<String>> changesList =  readStaticSelection(run);
+         Map<String, List<String>> changesList = readStaticSelection(run);
 
          List<String> traceSelectedTests = readDynamicSelection(run);
          CoverageSelectionVersion coverageSelectedTests = readCoverageSelection(run);
 
          System.out.println("Selected: " + traceSelectedTests + " Coverage: " + coverageSelectedTests);
 
-         RTSVisualizationAction rtsVisualizationAction = new RTSVisualizationAction(peassConfig.getDependencyConfig(), changesList, traceSelectedTests, coverageSelectedTests);
+         RTSVisualizationAction rtsVisualizationAction = new RTSVisualizationAction(peassConfig.getDependencyConfig(), changesList, traceSelectedTests, coverageSelectedTests,
+               peassConfig.getMeasurementConfig().getVersion(), peassConfig.getMeasurementConfig().getVersionOld());
          run.addAction(rtsVisualizationAction);
 
          for (String traceSelectedTest : traceSelectedTests) {

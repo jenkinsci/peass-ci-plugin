@@ -22,7 +22,7 @@ public class RTSLogFileReader {
 
    private final VisualizationFolderManager visualizationFolders;
    private final MeasurementConfiguration measurementConfig;
-   private boolean logsExisting = false;
+   private final boolean logsExisting;
 
    public RTSLogFileReader(final VisualizationFolderManager visualizationFolders, final MeasurementConfiguration measurementConfig) {
       this.visualizationFolders = visualizationFolders;
@@ -41,7 +41,6 @@ public class RTSLogFileReader {
       Map<TestCase, RTSLogData> files = new LinkedHashMap<>();
       File versionFolder = new File(visualizationFolders.getPeassFolders().getDependencyLogFolder(), version);
       if (versionFolder.exists()) {
-         logsExisting = true;
          for (File testClazzFolder : versionFolder.listFiles((FileFilter) new WildcardFileFilter("log_*"))) {
             for (File methodFile : testClazzFolder.listFiles()) {
                if (!methodFile.isDirectory()) {
@@ -82,7 +81,6 @@ public class RTSLogFileReader {
    private void addVersionRun(final Map<String, File> processSuccessTestRuns, final String checkSuccessRunVersion) {
       File candidate = new File(visualizationFolders.getPeassFolders().getDependencyLogFolder(), checkSuccessRunVersion + File.separator + "testRunning.log");
       if (candidate.exists()) {
-         logsExisting = true;
          processSuccessTestRuns.put(checkSuccessRunVersion, candidate);
       } else {
          LOG.info("RTS version result {} did not exist", candidate);

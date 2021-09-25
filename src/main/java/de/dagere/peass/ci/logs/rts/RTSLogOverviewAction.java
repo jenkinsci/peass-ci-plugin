@@ -11,11 +11,15 @@ public class RTSLogOverviewAction extends VisibleAction {
    private Map<String, File> processSuccessRuns;
    private Map<TestCase, RTSLogData> vmRuns;
    private Map<TestCase, RTSLogData> predecessorVmRuns;
+   private String version, versionOld;
 
-   public RTSLogOverviewAction(final Map<String, File> processSuccessRuns, final Map<TestCase, RTSLogData> vmRuns, final Map<TestCase, RTSLogData> predecessorVmRuns) {
+   public RTSLogOverviewAction(final Map<String, File> processSuccessRuns, final Map<TestCase, RTSLogData> vmRuns, final Map<TestCase, RTSLogData> predecessorVmRuns,
+         final String version, final String versionOld) {
       this.processSuccessRuns = processSuccessRuns;
       this.vmRuns = vmRuns;
       this.predecessorVmRuns = predecessorVmRuns;
+      this.version = version;
+      this.versionOld = versionOld;
    }
 
    public Map<String, File> getProcessSuccessRuns() {
@@ -28,6 +32,14 @@ public class RTSLogOverviewAction extends VisibleAction {
 
    public Map<TestCase, RTSLogData> getPredecessorVmRuns() {
       return predecessorVmRuns;
+   }
+   
+   public String getVersion() {
+      return version;
+   }
+   
+   public String getVersionOld() {
+      return versionOld;
    }
 
    @Override

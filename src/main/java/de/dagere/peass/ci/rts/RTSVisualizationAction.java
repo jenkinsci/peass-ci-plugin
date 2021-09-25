@@ -12,15 +12,19 @@ public class RTSVisualizationAction extends VisibleAction {
    private final DependencyConfig config;
    private final Map<String, List<String>> staticSelection;
    private final List<String> dynamicSelection;
+   private final String version, versionOld;
    
    //TODO Display count of calls for each test
    private final CoverageSelectionVersion coverageSelection;
 
-   public RTSVisualizationAction(final DependencyConfig config, final Map<String, List<String>> staticSelection, final List<String> dynamicSelection, final CoverageSelectionVersion coverageSelection) {
+   public RTSVisualizationAction(final DependencyConfig config, final Map<String, List<String>> staticSelection, final List<String> dynamicSelection, final CoverageSelectionVersion coverageSelection,
+         final String version, final String versionOld) {
       this.config = config;
       this.staticSelection = staticSelection;
       this.dynamicSelection = dynamicSelection;
       this.coverageSelection = coverageSelection;
+      this.version = version;
+      this.versionOld = versionOld;
    }
    
    public DependencyConfig getConfig() {
@@ -38,6 +42,15 @@ public class RTSVisualizationAction extends VisibleAction {
    public CoverageSelectionVersion getCoveragebasedSelection() {
       return coverageSelection;
    }
+   
+   public String getVersion() {
+      return version;
+   }
+   
+   public String getVersionOld() {
+      return versionOld;
+   }
+
 
    @Override
    public String getIconFileName() {

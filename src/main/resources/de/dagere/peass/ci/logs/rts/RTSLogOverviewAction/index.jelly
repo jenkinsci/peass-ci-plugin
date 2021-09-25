@@ -7,6 +7,7 @@
 		<l:main-panel>
 
 			<h1>Regression Test Selection Log Overview</h1>
+            Version: ${it.getVersion()} Old Version: ${it.getVersionOld()}
 			<a href="../rtsLog">Peass Regression Test Selection Log</a><br />
 			
 			<h2>Process Success Runs</h2>
