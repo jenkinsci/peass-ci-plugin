@@ -18,6 +18,8 @@ import hudson.model.TaskListener;
 import hudson.remoting.VirtualChannel;
 
 public class RemoteRTS implements FileCallable<RTSResult> {
+   private static final long serialVersionUID = -837869375735980083L;
+
    private static final Logger LOG = LogManager.getLogger(RemoteRTS.class);
    
    private final PeassProcessConfiguration peassConfig;
