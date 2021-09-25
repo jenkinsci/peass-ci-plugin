@@ -121,10 +121,10 @@ public class RTSLogFileReader {
    private void addVersionRun(final Map<String, File> processSuccessTestRuns, final String checkSuccessRunVersion) {
       File candidate = visualizationFolders.getPeassFolders().getDependencyLogSuccessRunFile(checkSuccessRunVersion);
       if (candidate.exists()) {
-         LOG.info("RTS process success run {} exists", candidate);
+         LOG.info("RTS process success run {} exists", candidate.getAbsolutePath());
          processSuccessTestRuns.put(checkSuccessRunVersion, candidate);
       } else {
-         LOG.info("RTS process success run {} did not exist", candidate);
+         LOG.info("RTS process success run {} did not exist", candidate.getAbsolutePath());
       }
    }
 }
