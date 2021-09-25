@@ -29,6 +29,7 @@ public class RTSLogFileReader {
       this.measurementConfig = measurementConfig;
 
       File rtsLogOverviewFile = visualizationFolders.getResultsFolders().getDependencyLogFile(measurementConfig.getVersion(), measurementConfig.getVersionOld());
+      LOG.info("RTS log overview file: {}", rtsLogOverviewFile);
       logsExisting = rtsLogOverviewFile.exists();
    }
 
