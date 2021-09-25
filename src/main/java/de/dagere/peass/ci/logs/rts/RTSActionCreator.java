@@ -69,6 +69,7 @@ public class RTSActionCreator {
 
    private Map<TestCase, RTSLogData> createVersionRTSData(final String version) throws IOException {
       Map<TestCase, RTSLogData> rtsVmRuns = reader.getRtsVmRuns(version);
+      LOG.info("RTS Runs: {}", rtsVmRuns.size());
       for (Map.Entry<TestCase, RTSLogData> rtsLogData : rtsVmRuns.entrySet()) {
          String methodLogData = getLogData(rtsLogData.getValue().getMethodFile());
          String cleanLogData = getLogData(rtsLogData.getValue().getCleanFile());

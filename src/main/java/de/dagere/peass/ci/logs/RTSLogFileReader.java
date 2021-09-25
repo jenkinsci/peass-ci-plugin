@@ -33,7 +33,7 @@ public class RTSLogFileReader {
       this.measurementConfig = measurementConfig;
 
       File rtsLogOverviewFile = visualizationFolders.getResultsFolders().getDependencyLogFile(measurementConfig.getVersion(), measurementConfig.getVersionOld());
-      LOG.info("RTS log overview file: {}", rtsLogOverviewFile);
+      LOG.info("RTS log overview file: {} Exists: {}", rtsLogOverviewFile, rtsLogOverviewFile.exists());
       logsExisting = rtsLogOverviewFile.exists();
 
       versionRunWasSuccess = isVersionRunSuccess(visualizationFolders, measurementConfig);
@@ -77,7 +77,7 @@ public class RTSLogFileReader {
          for (File testClazzFolder : versionFolder.listFiles((FileFilter) new WildcardFileFilter("log_*"))) {
             LOG.debug("Looking for method files in {}", testClazzFolder.getAbsolutePath());
             for (File methodFile : testClazzFolder.listFiles()) {
-               LOG.debug("Looing for method log file in {}", methodFile.getAbsolutePath());
+               LOG.debug("Looking for method log file in {}", methodFile.getAbsolutePath());
                if (!methodFile.isDirectory()) {
                   addMethodLog(version, files, testClazzFolder, methodFile);
                }
@@ -96,6 +96,7 @@ public class RTSLogFileReader {
       String method = methodFile.getName().substring(0, methodFile.getName().length() - ".txt".length());
       TestCase test = new TestCase(clazz + "#" + method);
       files.put(test, data);
+      LOG.debug("Adding log: {}" + test);
    }
 
    public String getRTSLog() {
