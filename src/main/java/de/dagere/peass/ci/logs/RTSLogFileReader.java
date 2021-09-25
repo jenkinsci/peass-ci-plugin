@@ -42,14 +42,11 @@ public class RTSLogFileReader {
       File versionFolder = new File(visualizationFolders.getPeassFolders().getDependencyLogFolder(), version);
       if (versionFolder.exists()) {
          for (File testClazzFolder : versionFolder.listFiles((FileFilter) new WildcardFileFilter("log_*"))) {
+            LOG.debug("Looking for method files in {}", testClazzFolder.getAbsolutePath());
             for (File methodFile : testClazzFolder.listFiles()) {
+               LOG.debug("Looing for method log file in {}", methodFile.getAbsolutePath());
                if (!methodFile.isDirectory()) {
-                  File cleanFile = new File(testClazzFolder, "clean" + File.separator + methodFile.getName());
-                  RTSLogData data = new RTSLogData(version, methodFile, cleanFile);
-                  String clazz = testClazzFolder.getName().substring("log_".length());
-                  String method = methodFile.getName().substring(0, methodFile.getName().length() - ".txt".length());
-                  TestCase test = new TestCase(clazz + "#" + method);
-                  files.put(test, data);
+                  addMethodLog(version, files, testClazzFolder, methodFile);
                }
             }
          }
@@ -57,6 +54,15 @@ public class RTSLogFileReader {
          LOG.info("Expected rts version folder {} did not exist", versionFolder);
       }
       return files;
+   }
+
+   private void addMethodLog(final String version, final Map<TestCase, RTSLogData> files, final File testClazzFolder, final File methodFile) {
+      File cleanFile = new File(testClazzFolder, "clean" + File.separator + methodFile.getName());
+      RTSLogData data = new RTSLogData(version, methodFile, cleanFile);
+      String clazz = testClazzFolder.getName().substring("log_".length());
+      String method = methodFile.getName().substring(0, methodFile.getName().length() - ".txt".length());
+      TestCase test = new TestCase(clazz + "#" + method);
+      files.put(test, data);
    }
 
    public String getRTSLog() {
