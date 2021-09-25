@@ -96,7 +96,7 @@ public class RTSLogFileReader {
       String method = methodFile.getName().substring(0, methodFile.getName().length() - ".txt".length());
       TestCase test = new TestCase(clazz + "#" + method);
       files.put(test, data);
-      LOG.debug("Adding log: {}" + test);
+      LOG.debug("Adding log: {}", test);
    }
 
    public String getRTSLog() {
@@ -119,7 +119,7 @@ public class RTSLogFileReader {
    }
 
    private void addVersionRun(final Map<String, File> processSuccessTestRuns, final String checkSuccessRunVersion) {
-      File candidate = new File(visualizationFolders.getPeassFolders().getDependencyLogFolder(), checkSuccessRunVersion + File.separator + "testRunning.log");
+      File candidate = visualizationFolders.getPeassFolders().getDependencyLogSuccessRunFile(checkSuccessRunVersion);
       if (candidate.exists()) {
          processSuccessTestRuns.put(checkSuccessRunVersion, candidate);
       } else {
