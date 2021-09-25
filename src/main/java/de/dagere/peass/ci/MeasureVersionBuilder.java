@@ -84,6 +84,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private boolean executeBeforeClassInMeasurement = false;
 
    private boolean updateSnapshotDependencies = true;
+   private boolean removeSnapshots = false;
 
    private boolean useSourceInstrumentation = true;
    private boolean useSampling = true;
@@ -248,6 +249,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       config.setExecuteBeforeClassInMeasurement(executeBeforeClassInMeasurement);
       config.setRedirectToNull(redirectToNull);
       config.setShowStart(showStart);
+      config.setRemoveSnapshots(removeSnapshots);
       if (executeParallel) {
          System.out.println("Measuring parallel");
          config.setMeasurementStrategy(MeasurementStrategy.PARALLEL);
@@ -539,6 +541,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    @DataBoundSetter
    public void setUpdateSnapshotDependencies(final boolean updateSnapshotDependencies) {
       this.updateSnapshotDependencies = updateSnapshotDependencies;
+   }
+
+   public boolean isRemoveSnapshots() {
+      return removeSnapshots;
+   }
+
+   @DataBoundSetter
+   public void setRemoveSnapshots(final boolean removeSnapshots) {
+      this.removeSnapshots = removeSnapshots;
    }
 
    public boolean isRedirectToNull() {
