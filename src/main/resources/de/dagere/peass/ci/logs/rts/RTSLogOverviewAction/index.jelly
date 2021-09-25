@@ -5,6 +5,7 @@
             <st:include page="sidepanel.jelly" it="${it.run}" optional="true" /> 
         </l:side-panel>
 		<l:main-panel>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
 
 			<h1>Regression Test Selection Log Overview</h1>
             Version: ${it.getVersion()} Old Version: ${it.getVersionOld()} <br />
@@ -14,6 +15,11 @@
 			<j:forEach var="run" items="${it.getProcessSuccessRuns().entrySet()}">
 	          <a href="../processSuccessRun_${run.getKey()}">${run.getKey()}</a><br />
 			</j:forEach>
+            <j:if test="${!it.isSuccess}">
+              <i class="fa fa-exclamation-triangle" 
+                title="This run was not successfull. Therefore, the regression test selection could not be finished." 
+                style="color: red"></i>
+            </j:if>
 			
 			<h2>Trace Creation Runs</h2>
 			<j:forEach var="run" items="${it.getVmRuns().entrySet()}">

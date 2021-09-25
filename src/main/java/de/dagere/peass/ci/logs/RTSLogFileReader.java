@@ -15,6 +15,9 @@ import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.rts.RTSLogData;
 import de.dagere.peass.config.MeasurementConfiguration;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.persistence.Dependencies;
+import de.dagere.peass.dependency.persistence.Version;
+import de.dagere.peass.utils.Constants;
 import io.jenkins.cli.shaded.org.apache.commons.io.filefilter.WildcardFileFilter;
 
 public class RTSLogFileReader {
@@ -23,6 +26,7 @@ public class RTSLogFileReader {
    private final VisualizationFolderManager visualizationFolders;
    private final MeasurementConfiguration measurementConfig;
    private final boolean logsExisting;
+   private final boolean versionRunWasSuccess;
 
    public RTSLogFileReader(final VisualizationFolderManager visualizationFolders, final MeasurementConfiguration measurementConfig) {
       this.visualizationFolders = visualizationFolders;
@@ -31,6 +35,35 @@ public class RTSLogFileReader {
       File rtsLogOverviewFile = visualizationFolders.getResultsFolders().getDependencyLogFile(measurementConfig.getVersion(), measurementConfig.getVersionOld());
       LOG.info("RTS log overview file: {}", rtsLogOverviewFile);
       logsExisting = rtsLogOverviewFile.exists();
+
+      versionRunWasSuccess = isVersionRunSuccess(visualizationFolders, measurementConfig);
+   }
+
+   private boolean isVersionRunSuccess(final VisualizationFolderManager visualizationFolders, final MeasurementConfiguration measurementConfig) {
+      boolean success;
+      File dependencyFile = visualizationFolders.getResultsFolders().getDependencyFile();
+      if (dependencyFile.exists()) {
+         try {
+            Dependencies dependencies = Constants.OBJECTMAPPER.readValue(dependencyFile, Dependencies.class);
+            Version version = dependencies.getVersions().get(measurementConfig.getVersion());
+            if (version != null) {
+               success = version.isRunning();
+            } else {
+               success = false;
+            }
+         } catch (IOException e) {
+            success = false;
+            e.printStackTrace();
+         }
+
+      } else {
+         success = false;
+      }
+      return success;
+   }
+   
+   public boolean isVersionRunWasSuccess() {
+      return versionRunWasSuccess;
    }
 
    public boolean isLogsExisting() {

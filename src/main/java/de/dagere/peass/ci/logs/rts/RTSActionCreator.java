@@ -61,7 +61,8 @@ public class RTSActionCreator {
       Map<String, File> processSuccessRuns = reader.findProcessSuccessRuns();
       for (Map.Entry<String, File> processSuccessRun : processSuccessRuns.entrySet()) {
          String logData = FileUtils.readFileToString(processSuccessRun.getValue(), StandardCharsets.UTF_8);
-         run.addAction(new ProcessSuccessLogAction("processSuccessRun_" + processSuccessRun.getKey(), logData, processSuccessRun.getKey()));
+         ProcessSuccessLogAction processSuccessAction = new ProcessSuccessLogAction("processSuccessRun_" + processSuccessRun.getKey(), logData, processSuccessRun.getKey(), reader.isVersionRunWasSuccess());
+         run.addAction(processSuccessAction);
       }
       return processSuccessRuns;
    }
