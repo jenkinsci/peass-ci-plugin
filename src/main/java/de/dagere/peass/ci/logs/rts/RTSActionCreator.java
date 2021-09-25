@@ -3,6 +3,7 @@ package de.dagere.peass.ci.logs.rts;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
@@ -22,6 +23,7 @@ public class RTSActionCreator {
    private final RTSLogFileReader reader;
    private final Run<?, ?> run;
    private final MeasurementConfiguration measurementConfig;
+   private Map<String, Boolean> processSuccessRunSucceeded = new HashMap<>();
 
    public RTSActionCreator(final RTSLogFileReader reader, final Run<?, ?> run, final MeasurementConfiguration measurementConfig) {
       this.reader = reader;
@@ -45,8 +47,8 @@ public class RTSActionCreator {
    }
 
    private void createOverviewAction(final Map<String, File> processSuccessRuns, final Map<TestCase, RTSLogData> rtsVmRuns, final Map<TestCase, RTSLogData> rtsVmRunsPredecessor) {
-      RTSLogOverviewAction overviewAction = new RTSLogOverviewAction(processSuccessRuns, rtsVmRuns, rtsVmRunsPredecessor, 
-            measurementConfig.getVersion(), measurementConfig.getVersionOld());
+      RTSLogOverviewAction overviewAction = new RTSLogOverviewAction(processSuccessRuns, rtsVmRuns, rtsVmRunsPredecessor,
+            processSuccessRunSucceeded, measurementConfig.getVersion(), measurementConfig.getVersionOld());
       run.addAction(overviewAction);
    }
 
@@ -61,7 +63,12 @@ public class RTSActionCreator {
       Map<String, File> processSuccessRuns = reader.findProcessSuccessRuns();
       for (Map.Entry<String, File> processSuccessRun : processSuccessRuns.entrySet()) {
          String logData = FileUtils.readFileToString(processSuccessRun.getValue(), StandardCharsets.UTF_8);
-         ProcessSuccessLogAction processSuccessAction = new ProcessSuccessLogAction("processSuccessRun_" + processSuccessRun.getKey(), logData, processSuccessRun.getKey(), reader.isVersionRunWasSuccess());
+         /**
+          * This is not exactly what is required here - if process sucess runs are realy executed for both versions (which currently does not happen by default), than the value
+          * should be obtained for both versions
+          */
+         processSuccessRunSucceeded.put(processSuccessRun.getKey(), reader.isVersionRunWasSuccess());
+         ProcessSuccessLogAction processSuccessAction = new ProcessSuccessLogAction("processSuccessRun_" + processSuccessRun.getKey(), logData, processSuccessRun.getKey());
          run.addAction(processSuccessAction);
       }
       return processSuccessRuns;

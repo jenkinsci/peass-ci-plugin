@@ -16,12 +16,12 @@
       <h2>Process Success Runs</h2>
       <j:forEach var="run" items="${it.getProcessSuccessRuns().entrySet()}">
         <a href="../processSuccessRun_${run.getKey()}">${run.getKey()}</a>
-        <br />
-      </j:forEach>
-      <j:if test="${!it.isSuccess()}">
+        <j:if test="${!it.getProcessSuccessRunSucceeded().get(run.getKey())}">
         <i class="fa fa-exclamation-triangle" title="This run was not successfull. Therefore, the regression test selection could not be finished."
           style="color: red"></i>
       </j:if>
+      </j:forEach>
+      
 
       <h2>Trace Creation Runs</h2>
       <j:if test="${it.getVmRuns().isEmpty()}">

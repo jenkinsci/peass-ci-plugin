@@ -7,17 +7,19 @@ import de.dagere.peass.ci.VisibleAction;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 
 public class RTSLogOverviewAction extends VisibleAction {
-   
+
    private Map<String, File> processSuccessRuns;
+   private Map<String, Boolean> processSuccessRunSucceeded;
    private Map<TestCase, RTSLogData> vmRuns;
    private Map<TestCase, RTSLogData> predecessorVmRuns;
    private String version, versionOld;
 
    public RTSLogOverviewAction(final Map<String, File> processSuccessRuns, final Map<TestCase, RTSLogData> vmRuns, final Map<TestCase, RTSLogData> predecessorVmRuns,
-         final String version, final String versionOld) {
+         final Map<String, Boolean> processSuccessRunSucceeded, final String version, final String versionOld) {
       this.processSuccessRuns = processSuccessRuns;
       this.vmRuns = vmRuns;
       this.predecessorVmRuns = predecessorVmRuns;
+      this.processSuccessRunSucceeded = processSuccessRunSucceeded;
       this.version = version;
       this.versionOld = versionOld;
    }
@@ -33,11 +35,15 @@ public class RTSLogOverviewAction extends VisibleAction {
    public Map<TestCase, RTSLogData> getPredecessorVmRuns() {
       return predecessorVmRuns;
    }
-   
+
+   public Map<String, Boolean> getProcessSuccessRunSucceeded() {
+      return processSuccessRunSucceeded;
+   }
+
    public String getVersion() {
       return version;
    }
-   
+
    public String getVersionOld() {
       return versionOld;
    }
@@ -57,5 +63,4 @@ public class RTSLogOverviewAction extends VisibleAction {
       return "rtsLogOverview";
    }
 
-   
 }
