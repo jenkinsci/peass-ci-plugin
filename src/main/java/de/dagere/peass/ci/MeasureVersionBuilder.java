@@ -194,7 +194,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private MeasurementConfiguration generateMeasurementConfig(final FilePath workspace, final TaskListener listener)
          throws IOException, InterruptedException {
       final MeasurementConfiguration measurementConfig = getMeasurementConfig();
-      System.out.println("Startig RemoteVersionReader");
+      listener.getLogger().println("Starting RemoteVersionReader");
       final RemoteVersionReader remoteVersionReader = new RemoteVersionReader(measurementConfig, listener);
       final MeasurementConfiguration configWithRealGitVersions = workspace.act(remoteVersionReader);
       listener.getLogger().println("Read version: " + configWithRealGitVersions.getVersion() + " " + configWithRealGitVersions.getVersionOld());
@@ -249,7 +249,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       config.setExecuteBeforeClassInMeasurement(executeBeforeClassInMeasurement);
       config.setRedirectToNull(redirectToNull);
       config.setShowStart(showStart);
-      config.setRemoveSnapshots(removeSnapshots);
+      config.getExecutionConfig().setRemoveSnapshots(removeSnapshots);
       if (executeParallel) {
          System.out.println("Measuring parallel");
          config.setMeasurementStrategy(MeasurementStrategy.PARALLEL);
