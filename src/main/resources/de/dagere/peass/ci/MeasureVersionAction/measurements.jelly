@@ -108,10 +108,6 @@
                 <i>${it.round(noWarmupStatistic.getMeanCurrent()*currentRepetitions)}
                   $&#x00B5;s</i>
               </td>
-              <td class="noWarmup">
-                <i>${it.round(noWarmupStatistic.getMeanCurrent()*currentRepetitions)}
-                  $&#x00B5;s</i>
-              </td>
             </tr>
             <tr>
               <td>
