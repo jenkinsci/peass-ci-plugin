@@ -81,7 +81,6 @@ public class DefaultMeasurementVisualizer {
 
    private File generateJSFile(final TestCase testcase, final KoPeMeTreeConverter treeConverter) throws IOException {
       GraphNode kopemeDataNode = treeConverter.getData();
-      
 
       LOG.info("Statistic: {}", kopemeDataNode.getStatistic());
       noWarmupStatistics.put(testcase.getExecutable(), kopemeDataNode.getStatistic());

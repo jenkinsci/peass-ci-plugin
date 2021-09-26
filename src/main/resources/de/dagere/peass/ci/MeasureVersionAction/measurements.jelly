@@ -44,7 +44,9 @@
               <th colspan="2">
                 Warmup Removed
                 <br />
-                (<a href="#" onClick="jq$('.noWarmup').toggle();">Show non-warmed up values</a>)
+                (
+                <a href="#" onClick="jq$('.noWarmup').toggle();">Show non-warmed up values</a>
+                )
               </th>
               <th colspan="2" class="noWarmup">Full Measurement</th>
             </tr>
@@ -80,14 +82,31 @@
                 </i>
               </td>
               <td>
-                <i>${it.round(currentStatistic.getMeanOld()/1000)} $&#x00B5;s</i>
+                <i>
+                  <j:if test="${currentStatistic.getMeanOld() &gt; 1000}">
+                    ${it.round(currentStatistic.getMeanOld()/1000)} $&#x00B5;s
+                  </j:if>
+                  <j:if test="${currentStatistic.getMeanOld() &lt; 1000}">
+                    ${it.round(currentStatistic.getMeanOld())} ns
+                  </j:if>
+                </i>
               </td>
               <td>
-                <i>${it.round(currentStatistic.getMeanCurrent()/1000)}
-                  $&#x00B5;s</i>
+                <i>
+                  <j:if test="${currentStatistic.getMeanOld() &gt; 1000}">
+                    ${it.round(currentStatistic.getMeanCurrent()/1000)} $&#x00B5;s
+                  </j:if>
+                  <j:if test="${currentStatistic.getMeanOld() &lt; 1000}">
+                    ${it.round(currentStatistic.getMeanCurrent())} ns
+                  </j:if>
+                </i>
               </td>
               <td class="noWarmup">
                 <i>${it.round(noWarmupStatistic.getMeanOld()*currentRepetitions)} $&#x00B5;s</i>
+              </td>
+              <td class="noWarmup">
+                <i>${it.round(noWarmupStatistic.getMeanCurrent()*currentRepetitions)}
+                  $&#x00B5;s</i>
               </td>
               <td class="noWarmup">
                 <i>${it.round(noWarmupStatistic.getMeanCurrent()*currentRepetitions)}
@@ -103,10 +122,24 @@
                 </i>
               </td>
               <td>
-                <i>${it.round(currentStatistic.deviationOld/1000)}</i>
+                <i>
+                  <j:if test="${currentStatistic.getMeanOld() &gt; 1000}">
+                    ${it.round(currentStatistic.deviationOld/1000)}
+                  </j:if>
+                  <j:if test="${currentStatistic.getMeanOld() &lt; 1000}">
+                    ${it.round(currentStatistic.deviationOld)}
+                  </j:if>
+                </i>
               </td>
               <td>
-                <i>${it.round(currentStatistic.deviationCurrent/1000)}</i>
+                <i>
+                  <j:if test="${currentStatistic.getMeanOld() &gt; 1000}">
+                    ${it.round(currentStatistic.deviationCurrent/1000)}
+                  </j:if>
+                  <j:if test="${currentStatistic.getMeanOld() &lt; 1000}">
+                    ${it.round(currentStatistic.deviationCurrent)}
+                  </j:if>
+                </i>
               </td>
               <td class="noWarmup">
                 <i>${it.round(noWarmupStatistic.deviationOld*currentRepetitions)}</i>
@@ -115,48 +148,51 @@
                 <i>${it.round(noWarmupStatistic.deviationCurrent*currentRepetitions)}</i>
               </td>
             </tr>
-            <tr>
-              <td>
-                ${%mean}
-                <br />
-                ${%perRepetition}
-              </td>
-              <td>
-                ${it.round(currentStatistic.getMeanOld()/currentRepetitions/1000)}
-                $&#x00B5;s
-              </td>
-              <td>
-                ${it.round(currentStatistic.getMeanCurrent()/currentRepetitions/1000)}
-                $&#x00B5;s
-              </td>
-              <td class="noWarmup">
-                ${it.round(noWarmupStatistic.getMeanOld())}
-                $&#x00B5;s
-              </td>
-              <td class="noWarmup">
-                ${it.round(noWarmupStatistic.getMeanCurrent())}
-                $&#x00B5;s
-              </td>
-            </tr>
-            <tr>
-              <td>
-                ${%standardDeviation}
-                <br />
-                ${%perRepetition}
-              </td>
-              <td>
-                ${it.round(currentStatistic.deviationOld/currentRepetitions/1000)}
-              </td>
-              <td>
-                ${it.round(currentStatistic.deviationCurrent/currentRepetitions/1000)}
-              </td>
-              <td class="noWarmup">
-                ${it.round(noWarmupStatistic.deviationOld)}
-              </td>
-              <td class="noWarmup">
-                ${it.round(noWarmupStatistic.deviationCurrent)}
-              </td>
-            </tr>
+            <j:if test="${!it.config.getExecutionConfig().getTestExecutor().endsWith('JmhTestExecutor')}">
+
+              <tr>
+                <td>
+                  ${%mean}
+                  <br />
+                  ${%perRepetition}
+                </td>
+                <td>
+                  ${it.round(currentStatistic.getMeanOld()/currentRepetitions/1000)}
+                  $&#x00B5;s
+                </td>
+                <td>
+                  ${it.round(currentStatistic.getMeanCurrent()/currentRepetitions/1000)}
+                  $&#x00B5;s
+                </td>
+                <td class="noWarmup">
+                  ${it.round(noWarmupStatistic.getMeanOld())}
+                  $&#x00B5;s
+                </td>
+                <td class="noWarmup">
+                  ${it.round(noWarmupStatistic.getMeanCurrent())}
+                  $&#x00B5;s
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  ${%standardDeviation}
+                  <br />
+                  ${%perRepetition}
+                </td>
+                <td>
+                  ${it.round(currentStatistic.deviationOld/currentRepetitions/1000)}
+                </td>
+                <td>
+                  ${it.round(currentStatistic.deviationCurrent/currentRepetitions/1000)}
+                </td>
+                <td class="noWarmup">
+                  ${it.round(noWarmupStatistic.deviationOld)}
+                </td>
+                <td class="noWarmup">
+                  ${it.round(noWarmupStatistic.deviationCurrent)}
+                </td>
+              </tr>
+            </j:if>
             <tr>
               <td>T-Wert</td>
               <td colspan="2">
@@ -172,6 +208,7 @@
                 T=${it.round(noWarmupStatistic.tvalue)}
               </td>
             </tr>
+
           </table>
           <script>
             jq$(('.noWarmup')).hide();

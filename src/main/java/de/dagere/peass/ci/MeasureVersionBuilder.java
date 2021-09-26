@@ -70,7 +70,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private boolean displayRTSLogs = true;
    private boolean displayLogs = true;
    private boolean displayRCALogs = true;
-   private boolean generateCoverageSelection = true;
+   private boolean generateCoverageSelection = false;
    private boolean useGC;
    private boolean measureJMH;
 
