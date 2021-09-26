@@ -148,8 +148,8 @@
                 <i>${it.round(noWarmupStatistic.deviationCurrent*currentRepetitions)}</i>
               </td>
             </tr>
+            
             <j:if test="${!it.config.getExecutionConfig().getTestExecutor().endsWith('JmhTestExecutor')}">
-
               <tr>
                 <td>
                   ${%mean}
