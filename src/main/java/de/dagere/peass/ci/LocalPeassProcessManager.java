@@ -83,11 +83,11 @@ public class LocalPeassProcessManager {
    public boolean measure(final Set<TestCase> tests) throws IOException, InterruptedException {
       final RemoteMeasurer remotePerformer = new RemoteMeasurer(peassConfig, listener, tests);
       boolean worked = workspace.act(remotePerformer);
+      listener.getLogger().println("Measurement worked: " + worked);
+      copyFromRemote();
       if (peassConfig.isDisplayLogs()) {
          logActionCreator.createMeasurementActions(tests);
       }
-      listener.getLogger().println("Measurement worked: " + worked);
-      copyFromRemote();
       return worked;
    }
 
