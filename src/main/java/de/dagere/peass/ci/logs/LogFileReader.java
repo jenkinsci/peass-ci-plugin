@@ -120,6 +120,7 @@ public class LogFileReader {
          for (File testcaseName : versionTreeFolder.listFiles()) {
             for (File jsonFileName : testcaseName.listFiles((FilenameFilter) new WildcardFileFilter("*.json"))) {
                try {
+                  LOG.debug("Loading: {}", jsonFileName.getAbsolutePath());
                   readRCATestcase(causeFolders, testcases, jsonFileName);
                } catch (IOException e) {
                   e.printStackTrace();
