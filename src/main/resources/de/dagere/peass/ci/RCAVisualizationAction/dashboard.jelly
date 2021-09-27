@@ -17,17 +17,18 @@
 			<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 			<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jstat@latest/dist/jstat.min.js"></script>
 			<script type="text/javascript" src="${rootURL}/plugin/peass-ci/js/jsGraphSource.js"></script>
+			<script> jq$ = jQuery.noConflict();</script>
 			
-			<div  class='part' style='float:left; width:45%; height: 47%'>
+			<div  class='part' style='float:left; width:47%; height: 40%'>
 				<div id='overallHistogram' style="width:95%; height: 90%">
     			</div>
 			</div>
-			<div class='part' style='float:right; width:45%; height: 47%'>
+			<div class='part' style='float:right; width:47%; height: 40%'>
 				<div id='selectedHistogram' style="width:95%; height: 95%">
     			</div>
 			</div>
-			<div id='selection' class='part' style='float:left; width:45%; height: 47%'>
-			  <div id='selectionTable' style='float:left; width: 45%; height: 95%'>
+			<div id='selection' class='part' style='float:left; width:47%; height: 47%'>
+			  <div id='selectionTable' style='float:left; width: 47%; height: 95%'>
 			  Available VMs:
 			  <table style="height: 90%; width: 300px;">
 			  	<tr><td>Predecessor</td><td>Current</td></tr>
@@ -47,14 +48,14 @@
 			  
 			  </div>
 			</div>
-			<div id='graphs' style='float: right; width: 45%; height: 47%'>
-				<div  class='part' style='width: 95%; height:47%;' >
-					<div id='graphPredecessor' style="width:95%; height: 95%">
+			<div id='graphs' style='float: right; width: 47%; height: 49%'>
+				<div  class='part' style='width: 100%; height:49%;' >
+					<div id='graphPredecessor' style="width:99%; height: 99%">
 					
 					</div>
 				</div>
-				<div class='part' style='width: 95%; height:47%;' >
-				    <div id='graphCurrent' style="width:95%; height: 95%">
+				<div class='part' style='width: 100%; height:49%;' >
+				    <div id='graphCurrent' style="width:99%; height: 99%">
 					
 					</div>
 				</div>

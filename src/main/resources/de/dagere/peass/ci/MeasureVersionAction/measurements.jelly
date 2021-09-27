@@ -44,9 +44,9 @@
               <th colspan="2">
                 Warmup Removed
                 <br />
-                (
-                <a href="#" onClick="jq$('.noWarmup').toggle();">Show non-warmed up values</a>
-                )
+                <j:if test="${!it.config.getExecutionConfig().getTestExecutor().endsWith('JmhTestExecutor')}">
+                  (<a href="#" onClick="jq$('.noWarmup').toggle();">Show non-warmed up values</a>)
+                </j:if>
               </th>
               <th colspan="2" class="noWarmup">Full Measurement</th>
             </tr>
