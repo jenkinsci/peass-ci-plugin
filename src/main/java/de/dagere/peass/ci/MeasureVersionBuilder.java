@@ -85,6 +85,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
    private boolean updateSnapshotDependencies = true;
    private boolean removeSnapshots = false;
+   private boolean excludeLog4j = false;
 
    private boolean useSourceInstrumentation = true;
    private boolean useSampling = true;
@@ -250,6 +251,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       config.setRedirectToNull(redirectToNull);
       config.setShowStart(showStart);
       config.getExecutionConfig().setRemoveSnapshots(removeSnapshots);
+      config.getExecutionConfig().setExcludeLog4j(excludeLog4j);
       if (executeParallel) {
          System.out.println("Measuring parallel");
          config.setMeasurementStrategy(MeasurementStrategy.PARALLEL);
