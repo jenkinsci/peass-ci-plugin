@@ -3,9 +3,7 @@ package de.dagere.peass.ci.helper;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +14,8 @@ import javax.xml.bind.JAXBException;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import com.google.common.io.Files;
 
 import de.dagere.kopeme.datastorage.XMLDataLoader;
 import de.dagere.kopeme.generated.Kopemedata;
@@ -101,7 +101,7 @@ public class DefaultMeasurementVisualizer {
    }
 
    private void writeDataJS(final File destFile, final GraphNode kopemeDataNode) throws IOException {
-      try (final BufferedWriter fileWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(destFile), "UTF-8"))) {
+      try (final BufferedWriter fileWriter = Files.newWriter(destFile, StandardCharsets.UTF_8)) {
          fileWriter.write("var treeData = {};\n\n");
          fileWriter.write("var kopemeData = [\n");
          fileWriter.write(Constants.OBJECTMAPPER.writeValueAsString(kopemeDataNode));
