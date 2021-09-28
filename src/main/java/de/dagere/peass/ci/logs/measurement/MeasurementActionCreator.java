@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
@@ -14,7 +15,6 @@ import de.dagere.peass.ci.logs.LogFileReader;
 import de.dagere.peass.ci.logs.LogFiles;
 import de.dagere.peass.config.MeasurementConfiguration;
 import de.dagere.peass.dependency.analysis.data.TestCase;
-import de.dagere.peass.measurement.analysis.ProjectStatistics;
 import hudson.model.Run;
 
 public class MeasurementActionCreator {
@@ -31,10 +31,10 @@ public class MeasurementActionCreator {
       this.measurementConfig = measurementConfig;
    }
 
-   public void createMeasurementActions(final ProjectStatistics statistics) throws IOException {
+   public void createMeasurementActions(final Set<TestCase> tests ) throws IOException {
       createOverallLogAction();
       
-      Map<TestCase, List<LogFiles>> logFiles = reader.readAllTestcases(statistics);
+      Map<TestCase, List<LogFiles>> logFiles = reader.readAllTestcases(tests);
       createLogActions(run, logFiles);
 
       LogOverviewAction logOverviewAction = new LogOverviewAction(logFiles, measurementConfig.getVersion().substring(0, 6), measurementConfig.getVersionOld().substring(0, 6));

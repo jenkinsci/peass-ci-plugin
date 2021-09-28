@@ -48,12 +48,7 @@ public class TestRTSLogFileReader {
 
    @Test
    public void testReading() throws JsonParseException, JsonMappingException, IOException {
-      MeasurementConfiguration peassDemoConfig = new MeasurementConfiguration(2, VERSION, VERSION_OLD);
-
-      VisualizationFolderManager visualizationFolders = Mockito.mock(VisualizationFolderManager.class);
-      Mockito.when(visualizationFolders.getPeassFolders()).thenReturn(new PeassFolders(testFolder));
-      Mockito.when(visualizationFolders.getResultsFolders()).thenReturn(new ResultsFolders(localFolder, "demo-vis2"));
-      RTSLogFileReader reader = new RTSLogFileReader(visualizationFolders, peassDemoConfig);
+      RTSLogFileReader reader = initializeReader();
       Map<String, File> testcases = reader.findProcessSuccessRuns();
 
       Assert.assertEquals(1, testcases.size());
@@ -76,6 +71,23 @@ public class TestRTSLogFileReader {
 
       String rtsLog = reader.getRTSLog();
       Assert.assertEquals("This is a rts log test", rtsLog);
+   }
 
+   private RTSLogFileReader initializeReader() {
+      MeasurementConfiguration peassDemoConfig = new MeasurementConfiguration(2, VERSION, VERSION_OLD);
+
+      VisualizationFolderManager visualizationFolders = Mockito.mock(VisualizationFolderManager.class);
+      Mockito.when(visualizationFolders.getPeassFolders()).thenReturn(new PeassFolders(testFolder));
+      Mockito.when(visualizationFolders.getResultsFolders()).thenReturn(new ResultsFolders(localFolder, "demo-vis2"));
+      RTSLogFileReader reader = new RTSLogFileReader(visualizationFolders, peassDemoConfig);
+      return reader;
+   }
+   
+   @Test
+   public void testReadingOnlyOverviewExists() throws IOException {
+      FileUtils.deleteDirectory(testFolder);
+      
+      RTSLogFileReader reader = initializeReader();
+      Assert.assertTrue(reader.isLogsExisting());
    }
 }

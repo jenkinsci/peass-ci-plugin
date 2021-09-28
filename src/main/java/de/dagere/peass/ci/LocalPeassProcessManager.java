@@ -2,6 +2,7 @@ package de.dagere.peass.ci;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 
@@ -65,11 +66,13 @@ public class LocalPeassProcessManager {
       RemoteRTS rts = new RemoteRTS(peassConfig, listener);
       RTSResult result = workspace.act(rts);
       copyFromRemote();
+      if (result != null) {
+         peassConfig.getMeasurementConfig().setVersionOld(result.getVersionOld());
+      }
       if (peassConfig.isDisplayRTSLogs()) {
          logActionCreator.createRTSActions();
       }
       if (result != null) {
-         peassConfig.getMeasurementConfig().setVersionOld(result.getVersionOld());
          return result.getTests();
       } else {
          return null;
@@ -82,6 +85,9 @@ public class LocalPeassProcessManager {
       boolean worked = workspace.act(remotePerformer);
       listener.getLogger().println("Measurement worked: " + worked);
       copyFromRemote();
+      if (peassConfig.isDisplayLogs()) {
+         logActionCreator.createMeasurementActions(tests);
+      }
       return worked;
    }
 
@@ -96,6 +102,7 @@ public class LocalPeassProcessManager {
 
    public void copyFromRemote() throws IOException, InterruptedException {
       String remotePeassPath = ContinuousFolderUtil.getLocalFolder(new File(workspace.getRemote())).getPath();
+      listener.getLogger().print(Arrays.toString( new RuntimeException().getStackTrace()));
       listener.getLogger().println("Remote Peass path: " + remotePeassPath);
       FilePath remotePeassFolder = new FilePath(workspace.getChannel(), remotePeassPath);
       DirScanner.Glob dirScanner = new DirScanner.Glob("**/*,**/.git/**", "", false);
@@ -127,10 +134,6 @@ public class LocalPeassProcessManager {
       final MeasureVersionAction action = new MeasureVersionAction(peassConfig.getMeasurementConfig(), versionChanges, statistics,
             noWarmupStatistics, measurements, histogramReader.getUpdatedConfigurations());
       run.addAction(action);
-
-      if (peassConfig.isDisplayLogs()) {
-         logActionCreator.createMeasurementActions(statistics);
-      }
 
       return changes;
    }

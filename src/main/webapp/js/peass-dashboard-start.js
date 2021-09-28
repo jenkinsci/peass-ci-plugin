@@ -228,6 +228,7 @@ function plotVMGraph(divName, node, ids, idsPredecessor, name) {
 	}
 
 	var layout = {
+		style: { height: "99%"},
 		title: { text: "VM-wise Iteration Durations " + name },
 		xaxis: { title: { text: "Iteration" } },
 		yaxis: {
@@ -259,7 +260,7 @@ function addOptionSelectbox(divName, id, values) {
 function visualizeGraph(divId, selectId) {
 	var ids = [];
 	var select = document.getElementById(selectId);
-	var selectedOptions = $('#' + selectId + ' :selected');
+	var selectedOptions = jq$('#' + selectId + ' :selected');
 	for (i = 0; i < selectedOptions.length; i++) {
 		var vmId = selectedOptions[i].value;
 		ids[i] = vmId;
@@ -274,7 +275,7 @@ function visualizeGraph(divId, selectId) {
 function getAverage(divId, vmValues, start, end) {
 	var averages = [];
 	var select = document.getElementById(divId);
-	var selectedOptions = $('#' + divId + ' :selected');
+	var selectedOptions = jq$('#' + divId + ' :selected');
 	for (i = 0; i < selectedOptions.length; i++) {
 		var selectedOption = selectedOptions[i];
 		var vmId = selectedOption.value;
@@ -372,6 +373,7 @@ function visualizeHistogram() {
 	};
 	var data = [version, predecessor];
 	var layout = {
+	        layout: {autosize: false, height: "200px"},
 		barmode: "overlay",
 		title: { text: "Histogramm" },
 		xaxis: { title: { text: "Duration / &#x00B5;s" } },

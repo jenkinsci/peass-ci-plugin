@@ -2,13 +2,14 @@ package de.dagere.peass.ci.logs;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 
 import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.measurement.MeasurementActionCreator;
 import de.dagere.peass.ci.logs.rca.RCAActionCreator;
 import de.dagere.peass.ci.logs.rts.RTSActionCreator;
-import de.dagere.peass.measurement.analysis.ProjectStatistics;
+import de.dagere.peass.dependency.analysis.data.TestCase;
 import hudson.model.Run;
 
 public class LogActionCreator {
@@ -31,9 +32,9 @@ public class LogActionCreator {
       rtsActionCreator.createRTSActions();
    }
 
-   public void createMeasurementActions(final ProjectStatistics statistics) throws IOException {
+   public void createMeasurementActions(final Set<TestCase> tests) throws IOException {
       MeasurementActionCreator measurementActionCreator = new MeasurementActionCreator(reader, run, peassConfig.getMeasurementConfig());
-      measurementActionCreator.createMeasurementActions(statistics);
+      measurementActionCreator.createMeasurementActions(tests);
    }
    
    public void createRCAActions() throws IOException {

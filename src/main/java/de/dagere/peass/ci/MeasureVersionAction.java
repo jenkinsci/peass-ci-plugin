@@ -29,7 +29,9 @@ public class MeasureVersionAction extends VisibleAction {
    private String prefix;
    private Map<String, MeasurementConfiguration> updatedConfigurations;
 
-   public MeasureVersionAction(final MeasurementConfiguration config, final Changes changes, final ProjectStatistics statistics, final Map<String, TestcaseStatistic> noWarmupStatistics, final Map<String, HistogramValues> measurements, final Map<String, MeasurementConfiguration> updatedConfigurations) {
+   public MeasureVersionAction(final MeasurementConfiguration config, final Changes changes, final ProjectStatistics statistics,
+         final Map<String, TestcaseStatistic> noWarmupStatistics, final Map<String, HistogramValues> measurements,
+         final Map<String, MeasurementConfiguration> updatedConfigurations) {
       this.config = config;
       this.changes = changes;
       this.statistics = statistics;
@@ -61,11 +63,11 @@ public class MeasureVersionAction extends VisibleAction {
    public MeasurementConfiguration getConfig() {
       return config;
    }
-   
+
    public boolean hasUpdatedConfigurations() {
       return !updatedConfigurations.isEmpty();
    }
-   
+
    public Map<String, MeasurementConfiguration> getUpdatedConfigurations() {
       return updatedConfigurations;
    }
@@ -98,7 +100,7 @@ public class MeasureVersionAction extends VisibleAction {
    public double getCriticalTValue() {
       return new TDistribution(config.getVms() * 2 - 1).inverseCumulativeProbability(1 - config.getType1error());
    }
-   
+
    public double abs(final double value) {
       return Math.abs(value);
    }
@@ -108,7 +110,7 @@ public class MeasureVersionAction extends VisibleAction {
       Map<TestCase, TestcaseStatistic> testcaseStatistic = testcaseStatisticEntry.getValue();
       return testcaseStatistic.get(new TestCase(testcase));
    }
-   
+
    public TestcaseStatistic getNoWarmupStatistic(final String testcase) {
       return noWarmupStatistics.get(testcase);
    }

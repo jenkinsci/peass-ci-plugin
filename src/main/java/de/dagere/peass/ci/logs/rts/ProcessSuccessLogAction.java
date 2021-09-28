@@ -12,7 +12,7 @@ public class ProcessSuccessLogAction extends VisibleAction {
       this.log = log;
       this.version = version;
    }
-   
+
    @Override
    public String getUrlName() {
       return displayName.replace("#", "_");

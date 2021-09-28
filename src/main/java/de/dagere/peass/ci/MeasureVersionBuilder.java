@@ -70,19 +70,22 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private boolean displayRTSLogs = true;
    private boolean displayLogs = true;
    private boolean displayRCALogs = true;
-   private boolean generateCoverageSelection = true;
+   private boolean generateCoverageSelection = false;
    private boolean useGC;
    private boolean measureJMH;
 
    private String includes = "";
    private String properties = "";
    private String testGoal = "test";
+   private String pl = "";
    private boolean executeRCA = true;
    private RCAStrategy measurementMode = RCAStrategy.LEVELWISE;
    private boolean executeParallel = false;
    private boolean executeBeforeClassInMeasurement = false;
 
    private boolean updateSnapshotDependencies = true;
+   private boolean removeSnapshots = false;
+   private boolean excludeLog4j = false;
 
    private boolean useSourceInstrumentation = true;
    private boolean useSampling = true;
@@ -192,7 +195,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private MeasurementConfiguration generateMeasurementConfig(final FilePath workspace, final TaskListener listener)
          throws IOException, InterruptedException {
       final MeasurementConfiguration measurementConfig = getMeasurementConfig();
-      System.out.println("Startig RemoteVersionReader");
+      listener.getLogger().println("Starting RemoteVersionReader");
       final RemoteVersionReader remoteVersionReader = new RemoteVersionReader(measurementConfig, listener);
       final MeasurementConfiguration configWithRealGitVersions = workspace.act(remoteVersionReader);
       listener.getLogger().println("Read version: " + configWithRealGitVersions.getVersion() + " " + configWithRealGitVersions.getVersionOld());
@@ -214,21 +217,23 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    }
 
    private List<String> getIncludeList() {
-      String errorMessage = "";
+      StringBuilder errorMessageBuilder = new StringBuilder();
       List<String> includeList = new LinkedList<>();
       if (includes != null && includes.trim().length() > 0) {
          final String nonSpaceIncludes = includes.replaceAll(" ", "");
          for (String include : nonSpaceIncludes.split(";")) {
             includeList.add(include);
             if (!include.contains("#")) {
-               errorMessage+= "Include " + include + " does not contain #; this will not match any method. ";
+               errorMessageBuilder.append("Include ")
+                     .append(include)
+                     .append(" does not contain #; this will not match any method. ");
             }
          }
       }
-      if (errorMessage.length() > 0) {
+      if (errorMessageBuilder.length() > 0) {
          throw new RuntimeException("Please always add includes in the form package.Class#method, and if you want to include all methods package.Class#*. "
                + " The following includes contained problems: "
-               + errorMessage);
+               + errorMessageBuilder);
       }
       return includeList;
    }
@@ -247,6 +252,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       config.setExecuteBeforeClassInMeasurement(executeBeforeClassInMeasurement);
       config.setRedirectToNull(redirectToNull);
       config.setShowStart(showStart);
+      config.getExecutionConfig().setRemoveSnapshots(removeSnapshots);
+      config.getExecutionConfig().setExcludeLog4j(excludeLog4j);
       if (executeParallel) {
          System.out.println("Measuring parallel");
          config.setMeasurementStrategy(MeasurementStrategy.PARALLEL);
@@ -287,6 +294,10 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
       if (testGoal != null && !"".equals(testGoal)) {
          config.setTestGoal(testGoal);
+      }
+
+      if (pl != null && !"".equals(pl)) {
+         config.getExecutionConfig().setPl(pl);
       }
 
       System.out.println("Building, iterations: " + iterations + " test goal: " + testGoal);
@@ -460,6 +471,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       this.testGoal = testGoal;
    }
 
+   public String getPl() {
+      return pl;
+   }
+
+   @DataBoundSetter
+   public void setPl(final String pl) {
+      this.pl = pl;
+   }
+
    @DataBoundSetter
    public void setExecuteRCA(final boolean executeRCA) {
       this.executeRCA = executeRCA;
@@ -525,6 +545,24 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    @DataBoundSetter
    public void setUpdateSnapshotDependencies(final boolean updateSnapshotDependencies) {
       this.updateSnapshotDependencies = updateSnapshotDependencies;
+   }
+
+   public boolean isRemoveSnapshots() {
+      return removeSnapshots;
+   }
+
+   @DataBoundSetter
+   public void setRemoveSnapshots(final boolean removeSnapshots) {
+      this.removeSnapshots = removeSnapshots;
+   }
+
+   public boolean isExcludeLog4j() {
+      return excludeLog4j;
+   }
+
+   @DataBoundSetter
+   public void setExcludeLog4j(final boolean excludeLog4j) {
+      this.excludeLog4j = excludeLog4j;
    }
 
    public boolean isRedirectToNull() {

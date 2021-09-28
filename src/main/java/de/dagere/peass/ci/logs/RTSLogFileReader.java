@@ -15,6 +15,9 @@ import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.rts.RTSLogData;
 import de.dagere.peass.config.MeasurementConfiguration;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.persistence.Dependencies;
+import de.dagere.peass.dependency.persistence.Version;
+import de.dagere.peass.utils.Constants;
 import io.jenkins.cli.shaded.org.apache.commons.io.filefilter.WildcardFileFilter;
 
 public class RTSLogFileReader {
@@ -22,41 +25,84 @@ public class RTSLogFileReader {
 
    private final VisualizationFolderManager visualizationFolders;
    private final MeasurementConfiguration measurementConfig;
-   private boolean logsExisting = false;
+   private final boolean logsExisting;
+   private final boolean versionRunWasSuccess;
 
    public RTSLogFileReader(final VisualizationFolderManager visualizationFolders, final MeasurementConfiguration measurementConfig) {
       this.visualizationFolders = visualizationFolders;
       this.measurementConfig = measurementConfig;
-      
+
       File rtsLogOverviewFile = visualizationFolders.getResultsFolders().getDependencyLogFile(measurementConfig.getVersion(), measurementConfig.getVersionOld());
+      LOG.info("RTS log overview file: {} Exists: {}", rtsLogOverviewFile, rtsLogOverviewFile.exists());
       logsExisting = rtsLogOverviewFile.exists();
+
+      versionRunWasSuccess = isVersionRunSuccess(visualizationFolders, measurementConfig);
    }
-   
+
+   private boolean isVersionRunSuccess(final VisualizationFolderManager visualizationFolders, final MeasurementConfiguration measurementConfig) {
+      boolean success;
+      File dependencyFile = visualizationFolders.getResultsFolders().getDependencyFile();
+      if (dependencyFile.exists()) {
+         try {
+            Dependencies dependencies = Constants.OBJECTMAPPER.readValue(dependencyFile, Dependencies.class);
+            Version version = dependencies.getVersions().get(measurementConfig.getVersion());
+            if (version != null) {
+               success = version.isRunning();
+            } else {
+               success = false;
+            }
+         } catch (IOException e) {
+            success = false;
+            e.printStackTrace();
+         }
+
+      } else {
+         success = false;
+      }
+      return success;
+   }
+
+   public boolean isVersionRunWasSuccess() {
+      return versionRunWasSuccess;
+   }
+
    public boolean isLogsExisting() {
       return logsExisting;
    }
-   
+
    public Map<TestCase, RTSLogData> getRtsVmRuns(final String version) {
       Map<TestCase, RTSLogData> files = new LinkedHashMap<>();
       File versionFolder = new File(visualizationFolders.getPeassFolders().getDependencyLogFolder(), version);
-      if (versionFolder.exists()) {
-         logsExisting = true;
-         for (File testClazzFolder : versionFolder.listFiles((FileFilter) new WildcardFileFilter("log_*"))) {
-            for (File methodFile : testClazzFolder.listFiles()) {
-               if (!methodFile.isDirectory()) {
-                  File cleanFile = new File(testClazzFolder, "clean" + File.separator + methodFile.getName());
-                  RTSLogData data = new RTSLogData(version, methodFile, cleanFile);
-                  String clazz = testClazzFolder.getName().substring("log_".length());
-                  String method = methodFile.getName().substring(0, methodFile.getName().length() - ".txt".length());
-                  TestCase test = new TestCase(clazz + "#" + method);
-                  files.put(test, data);
+      File[] versionFiles = versionFolder.listFiles((FileFilter) new WildcardFileFilter("log_*"));
+      if (versionFiles != null) {
+         for (File testClazzFolder : versionFiles) {
+            LOG.debug("Looking for method files in {}", testClazzFolder.getAbsolutePath());
+            File[] testClazzFiles = testClazzFolder.listFiles();
+            if (testClazzFiles != null) {
+               for (File methodFile : testClazzFiles) {
+                  LOG.debug("Looking for method log file in {}", methodFile.getAbsolutePath());
+                  if (!methodFile.isDirectory()) {
+                     addMethodLog(version, files, testClazzFolder, methodFile);
+                  }
                }
             }
          }
+      } else {
+         LOG.info("Expected rts version folder {} did not exist", versionFolder);
       }
       return files;
    }
-   
+
+   private void addMethodLog(final String version, final Map<TestCase, RTSLogData> files, final File testClazzFolder, final File methodFile) {
+      File cleanFile = new File(testClazzFolder, "clean" + File.separator + methodFile.getName());
+      RTSLogData data = new RTSLogData(version, methodFile, cleanFile);
+      String clazz = testClazzFolder.getName().substring("log_".length());
+      String method = methodFile.getName().substring(0, methodFile.getName().length() - ".txt".length());
+      TestCase test = new TestCase(clazz + "#" + method);
+      files.put(test, data);
+      LOG.debug("Adding log: {}", test);
+   }
+
    public String getRTSLog() {
       File rtsLogFile = visualizationFolders.getResultsFolders().getDependencyLogFile(measurementConfig.getVersion(), measurementConfig.getVersionOld());
       try {
@@ -68,19 +114,21 @@ public class RTSLogFileReader {
          return "RTS log not readable";
       }
    }
-   
+
    public Map<String, File> findProcessSuccessRuns() {
       Map<String, File> processSuccessTestRuns = new LinkedHashMap<>();
       addVersionRun(processSuccessTestRuns, measurementConfig.getVersion());
       addVersionRun(processSuccessTestRuns, measurementConfig.getVersionOld());
       return processSuccessTestRuns;
    }
-   
+
    private void addVersionRun(final Map<String, File> processSuccessTestRuns, final String checkSuccessRunVersion) {
-      File candidate = new File(visualizationFolders.getPeassFolders().getDependencyLogFolder(), checkSuccessRunVersion + File.separator + "testRunning.log");
+      File candidate = visualizationFolders.getPeassFolders().getDependencyLogSuccessRunFile(checkSuccessRunVersion);
       if (candidate.exists()) {
-         logsExisting = true;
+         LOG.info("RTS process success run {} exists", candidate.getAbsolutePath());
          processSuccessTestRuns.put(checkSuccessRunVersion, candidate);
+      } else {
+         LOG.info("RTS process success run {} did not exist", candidate.getAbsolutePath());
       }
    }
 }

@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.Date;
 
 public class LogFiles {
-   
+
    /**
     * Attention! This class is used by the frontend, but file data are not accessible after a restart of Jenkins
     */
@@ -13,7 +13,7 @@ public class LogFiles {
 
    private final Date endDatePredecessor;
    private final Date endDateCurrent;
-   
+
    private final boolean predecessorSuccess;
    private final boolean currentSuccess;
 
@@ -35,11 +35,13 @@ public class LogFiles {
    }
 
    public Date getEndDateCurrent() {
-      return endDateCurrent;
+      // Just to meet spotbugs requirements - does not make sense
+      return (Date) endDateCurrent.clone();
    }
 
    public Date getEndDatePredecessor() {
-      return endDatePredecessor;
+      // Just to meet spotbugs requirements - does not make sense
+      return (Date) endDatePredecessor.clone();
    }
 
    public boolean isPredecessorSuccess() {

@@ -19,6 +19,8 @@
                 <tr><td>doNotUpdateDependencies</td><td>${it.config.doNotUpdateDependencies}</td></tr>
                 <tr><td>generateViews</td><td>${it.config.generateViews}</td></tr>
                 <tr><td>generateCoverageSelection</td><td>${it.config.generateCoverageSelection}</td></tr>
+                <tr><td>Version</td><td>${it.getVersion()}</td></tr>
+                <tr><td>Old Version</td><td>${it.getVersionOld()}</td></tr>
               </table>
             </div>
             

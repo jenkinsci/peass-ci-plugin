@@ -46,6 +46,10 @@
            description="${%testGoalDescr}">
             <f:textbox  default=""/>
         </f:entry>
+        <f:entry title="${%pl}" field="pl"
+           description="${%plDescr}">
+            <f:textbox  default=""/>
+        </f:entry>
         <f:entry title="${%nightlyBuild}" field="nightlyBuild"
                  description="${%nightlyBuildDescr}">
             <f:checkbox />
@@ -56,6 +60,14 @@
         </f:entry>
         <f:entry title="${%updateSnapshotDependencies}" field="updateSnapshotDependencies"
                  description="${%updateSnapshotDependenciesDescr}">
+            <f:checkbox />
+        </f:entry>
+        <f:entry title="${%removeSnapshots}" field="removeSnapshots"
+                 description="${%removeSnapshotsDescr}">
+            <f:checkbox />
+        </f:entry>
+        <f:entry title="${%excludeLog4j}" field="excludeLog4j"
+                 description="${%excludeLog4jDescr}">
             <f:checkbox />
         </f:entry>
         <f:entry title="${%useSourceInstrumentation}" field="useSourceInstrumentation"

@@ -15,6 +15,11 @@ import de.dagere.peass.config.MeasurementConfiguration;
 import de.dagere.peass.dependency.PeassFolders;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 
+/**
+ * Checks wether a measurement run is correct by checking the XML result files
+ * @author reichelt
+ *
+ */
 public class CorrectRunChecker {
 
    private static final Logger LOG = LogManager.getLogger(CorrectRunChecker.class);

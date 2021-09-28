@@ -64,7 +64,7 @@ public class TestLogFileReader {
       Mockito.when(visualizationFolders.getResultsFolders()).thenReturn(new ResultsFolders(localFolder, "demo-vis2"));
       LogFileReader reader = new LogFileReader(visualizationFolders, peassDemoConfig);
       ProjectStatistics statistics = Constants.OBJECTMAPPER.readValue(new File("src/test/resources/demo-results-logs/statistics.json"), ProjectStatistics.class);
-      Map<TestCase, List<LogFiles>> testcases = reader.readAllTestcases(statistics);
+      Map<TestCase, List<LogFiles>> testcases = reader.readAllTestcases(statistics.getStatistics().get(VERSION).keySet());
 
       Assert.assertEquals(1, testcases.size());
       TestCase test = new TestCase("de.test.CalleeTest#onlyCallMethod2");
@@ -84,7 +84,7 @@ public class TestLogFileReader {
       Mockito.when(visualizationFolders.getResultsFolders()).thenReturn(new ResultsFolders(localFolder, "demo-vis2"));
       LogFileReader reader = new LogFileReader(visualizationFolders, peassDemoConfig);
       ProjectStatistics statistics = Constants.OBJECTMAPPER.readValue(new File("src/test/resources/demo-results-logs/statistics.json"), ProjectStatistics.class);
-      Map<TestCase, List<LogFiles>> testcases = reader.readAllTestcases(statistics);
+      Map<TestCase, List<LogFiles>> testcases = reader.readAllTestcases(statistics.getStatistics().get(VERSION).keySet());
 
       Assert.assertEquals(1, testcases.size());
       TestCase test = new TestCase("de.test.CalleeTest#onlyCallMethod2");
