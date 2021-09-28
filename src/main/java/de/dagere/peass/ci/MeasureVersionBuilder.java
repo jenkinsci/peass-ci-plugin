@@ -553,6 +553,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public void setRemoveSnapshots(final boolean removeSnapshots) {
       this.removeSnapshots = removeSnapshots;
    }
+   
+   public boolean isExcludeLog4j() {
+      return excludeLog4j;
+   }
+   
+   @DataBoundSetter
+   public void setExcludeLog4j(final boolean excludeLog4j) {
+      this.excludeLog4j = excludeLog4j;
+   }
 
    public boolean isRedirectToNull() {
       return redirectToNull;
