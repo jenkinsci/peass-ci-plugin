@@ -3,8 +3,9 @@ package de.dagere.peass.ci.helper;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +30,7 @@ import io.jenkins.cli.shaded.org.apache.commons.io.filefilter.WildcardFileFilter
 
 public class DefaultMeasurementVisualizer {
    private static final Logger LOG = LogManager.getLogger(DefaultMeasurementVisualizer.class);
-   
+
    private final File dataFolder;
    private final String version;
    private final Run<?, ?> run;
@@ -37,7 +38,8 @@ public class DefaultMeasurementVisualizer {
    private final Set<String> tests;
    private final Map<String, TestcaseStatistic> noWarmupStatistics = new HashMap<>();
 
-   public DefaultMeasurementVisualizer(final File dataFolder, final String version, final Run<?, ?> run, final VisualizationFolderManager visualizationFolders, final Set<String> tests) {
+   public DefaultMeasurementVisualizer(final File dataFolder, final String version, final Run<?, ?> run, final VisualizationFolderManager visualizationFolders,
+         final Set<String> tests) {
       this.dataFolder = dataFolder;
       this.version = version;
       this.run = run;
@@ -48,33 +50,36 @@ public class DefaultMeasurementVisualizer {
    public void visualizeMeasurements() {
       String longestPrefix = RCAVisualizer.getLongestPrefix(tests);
       LOG.debug("Prefix: {} Keys: {}", longestPrefix, tests);
-      
+
       File detailResultsFolder = new File(dataFolder, "measurements");
-      
-      LOG.debug("Searching in {} Files: {}", dataFolder, dataFolder.listFiles((FileFilter) new WildcardFileFilter("*.xml")).length);
-      for (File testcaseFile : dataFolder.listFiles((FileFilter) new WildcardFileFilter("*.xml"))) {
-         try {
-            Kopemedata data = XMLDataLoader.loadData(testcaseFile);
-            
-            TestCase testcase = new TestCase(data.getTestcases(), "");
-            
-            KoPeMeTreeConverter treeConverter = new KoPeMeTreeConverter(detailResultsFolder, version, testcase);
-            File testcaseVisualizationFile = generateJSFile(testcase, treeConverter);
-            
-            LOG.debug("Adding action: " + testcase.getExecutable());
-            
-            String name = testcase.getExecutable().replace("#", "_").substring(longestPrefix.length() + 1);
-            
-            final String content = FileUtils.readFileToString(testcaseVisualizationFile, StandardCharsets.UTF_8);
-            run.addAction(new MeasurementVisualizationAction("measurement_" + name, content));
-         } catch (JAXBException e) {
-            e.printStackTrace();
-         } catch (IOException e) {
-            e.printStackTrace();
+
+      File[] files = dataFolder.listFiles((FileFilter) new WildcardFileFilter("*.xml"));
+      LOG.debug("Searching in {} Files: {}", dataFolder, files != null ? files.length : "no files");
+      if (files != null) {
+         for (File testcaseFile : files) {
+            try {
+               Kopemedata data = XMLDataLoader.loadData(testcaseFile);
+
+               TestCase testcase = new TestCase(data.getTestcases(), "");
+
+               KoPeMeTreeConverter treeConverter = new KoPeMeTreeConverter(detailResultsFolder, version, testcase);
+               File testcaseVisualizationFile = generateJSFile(testcase, treeConverter);
+
+               LOG.debug("Adding action: " + testcase.getExecutable());
+
+               String name = testcase.getExecutable().replace("#", "_").substring(longestPrefix.length() + 1);
+
+               final String content = FileUtils.readFileToString(testcaseVisualizationFile, StandardCharsets.UTF_8);
+               run.addAction(new MeasurementVisualizationAction("measurement_" + name, content));
+            } catch (JAXBException e) {
+               e.printStackTrace();
+            } catch (IOException e) {
+               e.printStackTrace();
+            }
          }
       }
    }
-   
+
    public Map<String, TestcaseStatistic> getNoWarmupStatistics() {
       return noWarmupStatistics;
    }
@@ -84,22 +89,24 @@ public class DefaultMeasurementVisualizer {
 
       LOG.info("Statistic: {}", kopemeDataNode.getStatistic());
       noWarmupStatistics.put(testcase.getExecutable(), kopemeDataNode.getStatistic());
-      
+
       File versionVisualizationFolder = new File(visualizationFolders.getVisualizationFolder(), version);
       File kopemeVisualizationFolder = new File(versionVisualizationFolder, "pure_kopeme");
-      kopemeVisualizationFolder.mkdirs();
+      if (!kopemeVisualizationFolder.mkdirs()) {
+         LOG.error("Creating file {} was not possibley", kopemeVisualizationFolder);
+      }
       File testcaseVisualizationFile = new File(kopemeVisualizationFolder, testcase.getClazz() + "_" + testcase.getMethod() + ".json");
       writeDataJS(testcaseVisualizationFile, kopemeDataNode);
       return testcaseVisualizationFile;
    }
-   
+
    private void writeDataJS(final File destFile, final GraphNode kopemeDataNode) throws IOException {
-      try (final BufferedWriter fileWriter = new BufferedWriter(new FileWriter(destFile))) {
+      try (final BufferedWriter fileWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(destFile), "UTF-8"))) {
          fileWriter.write("var treeData = {};\n\n");
          fileWriter.write("var kopemeData = [\n");
          fileWriter.write(Constants.OBJECTMAPPER.writeValueAsString(kopemeDataNode));
          fileWriter.write("];\n");
       }
-      
+
    }
 }

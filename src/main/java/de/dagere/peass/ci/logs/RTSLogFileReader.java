@@ -61,7 +61,7 @@ public class RTSLogFileReader {
       }
       return success;
    }
-   
+
    public boolean isVersionRunWasSuccess() {
       return versionRunWasSuccess;
    }
@@ -73,13 +73,17 @@ public class RTSLogFileReader {
    public Map<TestCase, RTSLogData> getRtsVmRuns(final String version) {
       Map<TestCase, RTSLogData> files = new LinkedHashMap<>();
       File versionFolder = new File(visualizationFolders.getPeassFolders().getDependencyLogFolder(), version);
-      if (versionFolder.exists()) {
-         for (File testClazzFolder : versionFolder.listFiles((FileFilter) new WildcardFileFilter("log_*"))) {
+      File[] versionFiles = versionFolder.listFiles((FileFilter) new WildcardFileFilter("log_*"));
+      if (versionFiles != null) {
+         for (File testClazzFolder : versionFiles) {
             LOG.debug("Looking for method files in {}", testClazzFolder.getAbsolutePath());
-            for (File methodFile : testClazzFolder.listFiles()) {
-               LOG.debug("Looking for method log file in {}", methodFile.getAbsolutePath());
-               if (!methodFile.isDirectory()) {
-                  addMethodLog(version, files, testClazzFolder, methodFile);
+            File[] testClazzFiles = testClazzFolder.listFiles();
+            if (testClazzFiles != null) {
+               for (File methodFile : testClazzFiles) {
+                  LOG.debug("Looking for method log file in {}", methodFile.getAbsolutePath());
+                  if (!methodFile.isDirectory()) {
+                     addMethodLog(version, files, testClazzFolder, methodFile);
+                  }
                }
             }
          }

@@ -78,10 +78,10 @@ public class LogFileReader {
             predecessorFile = new File(logFolder, "vm_" + tryIndex + "_" + measurementConfig.getVersionOld() + File.separator + filenameSuffix);
             LOG.debug("Trying whether {} exists", predecessorFile, predecessorFile.exists());
          }
-      }else {
+      } else {
          LOG.error("Log folder {} missing", logFolder);
       }
-      
+
    }
 
    public String getMeasureLog() {
@@ -116,14 +116,18 @@ public class LogFileReader {
       CauseSearchFolders causeFolders = visualizationFolders.getPeassRCAFolders();
       File versionTreeFolder = new File(causeFolders.getRcaTreeFolder(), measurementConfig.getVersion());
       Map<TestCase, List<RCALevel>> testcases = new HashMap<>();
-      if (versionTreeFolder.exists()) {
-         for (File testcaseName : versionTreeFolder.listFiles()) {
-            for (File jsonFileName : testcaseName.listFiles((FilenameFilter) new WildcardFileFilter("*.json"))) {
-               try {
-                  LOG.debug("Loading: {}", jsonFileName.getAbsolutePath());
-                  readRCATestcase(causeFolders, testcases, jsonFileName);
-               } catch (IOException e) {
-                  e.printStackTrace();
+      File[] versionFiles = versionTreeFolder.listFiles();
+      if (versionFiles != null) {
+         for (File testcaseName : versionFiles) {
+            File[] testcaseFiles = testcaseName.listFiles((FilenameFilter) new WildcardFileFilter("*.json"));
+            if (testcaseFiles != null) {
+               for (File jsonFileName : testcaseFiles) {
+                  try {
+                     LOG.debug("Loading: {}", jsonFileName.getAbsolutePath());
+                     readRCATestcase(causeFolders, testcases, jsonFileName);
+                  } catch (IOException e) {
+                     e.printStackTrace();
+                  }
                }
             }
          }

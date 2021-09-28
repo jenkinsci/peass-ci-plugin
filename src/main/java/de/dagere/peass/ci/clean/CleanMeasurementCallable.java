@@ -27,16 +27,8 @@ public class CleanMeasurementCallable implements FileCallable<Boolean> {
          File folder = new File(potentialSlaveWorkspace.getParentFile(), projectName + "_fullPeass");
          ResultsFolders resultsFolders = new ResultsFolders(folder, projectName);
 
-         System.out.println("Deleting " + resultsFolders.getChangeFile());
-         resultsFolders.getChangeFile().delete();
-         System.out.println("Deleting " + resultsFolders.getStatisticsFile());
-         resultsFolders.getStatisticsFile().delete();
-         System.out.println("Deleting " + resultsFolders.getRtsLogFolder());
-         resultsFolders.getRtsLogFolder().delete();
-         System.out.println("Deleting " + resultsFolders.getMeasurementLogFolder());
-         FileUtils.deleteDirectory(resultsFolders.getMeasurementLogFolder());
-         System.out.println("Deleting " + resultsFolders.getRCALogFolder());
-         FileUtils.deleteDirectory(resultsFolders.getRCALogFolder());
+         deleteResultFiles(resultsFolders);
+         deleteLogFolders(resultsFolders);
 
          PeassFolders folders = new PeassFolders(new File(folder, projectName));
          FileUtils.deleteDirectory(folders.getProjectFolder());
@@ -45,9 +37,12 @@ public class CleanMeasurementCallable implements FileCallable<Boolean> {
             FileUtils.deleteDirectory(folders.getPeassFolder());
          }
 
-         for (File oldMeasurementFolder : folder.listFiles((FileFilter) new WildcardFileFilter(ResultsFolders.MEASUREMENT_PREFIX + "*"))) {
-            System.out.println("Deleting: " + oldMeasurementFolder);
-            FileUtils.deleteDirectory(oldMeasurementFolder);
+         File[] measurementFolders = folder.listFiles((FileFilter) new WildcardFileFilter(ResultsFolders.MEASUREMENT_PREFIX + "*"));
+         if (measurementFolders != null) {
+            for (File oldMeasurementFolder : measurementFolders) {
+               System.out.println("Deleting: " + oldMeasurementFolder);
+               FileUtils.deleteDirectory(oldMeasurementFolder);
+            }
          }
 
          return true;
@@ -55,5 +50,25 @@ public class CleanMeasurementCallable implements FileCallable<Boolean> {
          e.printStackTrace();
          return false;
       }
+   }
+
+   private void deleteResultFiles(final ResultsFolders resultsFolders) {
+      System.out.println("Deleting " + resultsFolders.getChangeFile());
+      if (!resultsFolders.getChangeFile().delete()) {
+         System.err.println("Deletion not successfull");
+      }
+      System.out.println("Deleting " + resultsFolders.getStatisticsFile());
+      if (!resultsFolders.getStatisticsFile().delete()) {
+         System.err.println("Deletion not successfull");
+      }
+   }
+
+   private void deleteLogFolders(final ResultsFolders resultsFolders) throws IOException {
+      System.out.println("Deleting " + resultsFolders.getRtsLogFolder());
+      FileUtils.deleteDirectory(resultsFolders.getRtsLogFolder());
+      System.out.println("Deleting " + resultsFolders.getMeasurementLogFolder());
+      FileUtils.deleteDirectory(resultsFolders.getMeasurementLogFolder());
+      System.out.println("Deleting " + resultsFolders.getRCALogFolder());
+      FileUtils.deleteDirectory(resultsFolders.getRCALogFolder());
    }
 }
