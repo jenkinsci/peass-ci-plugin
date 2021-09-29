@@ -489,6 +489,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       return executeBeforeClassInMeasurement;
    }
 
+   @DataBoundSetter
    public void setExecuteBeforeClassInMeasurement(final boolean executeBeforeClassInMeasurement) {
       this.executeBeforeClassInMeasurement = executeBeforeClassInMeasurement;
    }
