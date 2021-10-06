@@ -2,10 +2,6 @@
   "measurementConfig" : {
     "timeout" : 300000,
     "vms" : 2,
-    "type1error" : 0.01,
-    "type2error" : 0.01,
-    "version" : "b02c92af73e3297be617f4c973a7a63fb603565b",
-    "versionOld" : "e80d8a1bf747d1f70dc52260616b36cac9e44561",
     "earlyStop" : false,
     "warmup" : 1,
     "iterations" : 2,
@@ -15,7 +11,15 @@
     "redirectToNull" : true,
     "useGC" : false,
     "kiekerAggregationInterval" : 5000,
-    "javaVersion" : "1.8.0_272"
+    "javaVersion" : "1.8.0_272",
+    "statisticsConfig" : {
+    	"type1error" : 0.01,
+        "type2error" : 0.01
+     },
+     "executionConfig" : {
+       "version" : "b02c92af73e3297be617f4c973a7a63fb603565b",
+       "versionOld" : "e80d8a1bf747d1f70dc52260616b36cac9e44561"
+     }
   },
   "causeConfig" : {
     "useAggregation" : true,
