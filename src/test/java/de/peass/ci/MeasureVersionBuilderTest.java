@@ -56,7 +56,7 @@ public class MeasureVersionBuilderTest {
       Assert.assertEquals(VMS, action.getConfig().getVms());
       Assert.assertEquals(REPETITIONS, action.getConfig().getRepetitions());
       Assert.assertEquals(WARMUP, action.getConfig().getWarmup());
-      Assert.assertEquals(0.05, action.getConfig().getType1error(), 0.01);
+      Assert.assertEquals(0.05, action.getConfig().getStatisticsConfig().getType1error(), 0.01);
    }
 
    private void initProjectFolder(final FreeStyleProject project) throws Exception, InterruptedException, IOException {

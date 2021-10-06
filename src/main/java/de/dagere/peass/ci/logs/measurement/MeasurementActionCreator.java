@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 import de.dagere.peass.ci.logs.InternalLogAction;
 import de.dagere.peass.ci.logs.LogFileReader;
 import de.dagere.peass.ci.logs.LogFiles;
+import de.dagere.peass.config.ExecutionConfig;
 import de.dagere.peass.config.MeasurementConfiguration;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import hudson.model.Run;
@@ -37,7 +38,8 @@ public class MeasurementActionCreator {
       Map<TestCase, List<LogFiles>> logFiles = reader.readAllTestcases(tests);
       createLogActions(run, logFiles);
 
-      LogOverviewAction logOverviewAction = new LogOverviewAction(logFiles, measurementConfig.getVersion().substring(0, 6), measurementConfig.getVersionOld().substring(0, 6));
+      ExecutionConfig executionConfig = measurementConfig.getExecutionConfig();
+      LogOverviewAction logOverviewAction = new LogOverviewAction(logFiles, executionConfig.getVersion().substring(0, 6), executionConfig.getVersionOld().substring(0, 6));
       run.addAction(logOverviewAction);
    }
 
@@ -55,9 +57,9 @@ public class MeasurementActionCreator {
          int vmId = 0;
          for (LogFiles files : entry.getValue()) {
             String logData = FileUtils.readFileToString(files.getCurrent(), StandardCharsets.UTF_8);
-            run.addAction(new LogAction(testcase, vmId, measurementConfig.getVersion(), logData));
+            run.addAction(new LogAction(testcase, vmId, measurementConfig.getExecutionConfig().getVersion(), logData));
             String logDataOld = FileUtils.readFileToString(files.getPredecessor(), StandardCharsets.UTF_8);
-            run.addAction(new LogAction(testcase, vmId, measurementConfig.getVersionOld(), logDataOld));
+            run.addAction(new LogAction(testcase, vmId, measurementConfig.getExecutionConfig().getVersionOld(), logDataOld));
             vmId++;
          }
       }

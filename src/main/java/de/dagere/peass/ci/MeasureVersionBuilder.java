@@ -128,8 +128,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
    private boolean checkVersion(final Run<?, ?> run, final TaskListener listener, final PeassProcessConfiguration peassConfig) {
       boolean versionIsUsable;
-      String version = peassConfig.getMeasurementConfig().getVersion();
-      String versionOld = peassConfig.getMeasurementConfig().getVersionOld();
+      String version = peassConfig.getMeasurementConfig().getExecutionConfig().getVersion();
+      String versionOld = peassConfig.getMeasurementConfig().getExecutionConfig().getVersionOld();
       if (version.equals(versionOld)) {
          listener.getLogger().print("Version " + version + " equals " + versionOld + "; please check your configuration");
          run.setResult(Result.FAILURE);
@@ -198,7 +198,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       listener.getLogger().println("Starting RemoteVersionReader");
       final RemoteVersionReader remoteVersionReader = new RemoteVersionReader(measurementConfig, listener);
       final MeasurementConfiguration configWithRealGitVersions = workspace.act(remoteVersionReader);
-      listener.getLogger().println("Read version: " + configWithRealGitVersions.getVersion() + " " + configWithRealGitVersions.getVersionOld());
+      listener.getLogger().println("Read version: " + configWithRealGitVersions.getExecutionConfig().getVersion() + " " + configWithRealGitVersions.getExecutionConfig().getVersionOld());
       return configWithRealGitVersions;
    }
 
@@ -270,7 +270,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          config.setUseCircularQueue(true);
          if (useSampling) {
             config.setUseSampling(true);
-            config.setRecord(AllowedKiekerRecord.REDUCED_OPERATIONEXECUTION);
+            config.setRecord(AllowedKiekerRecord.DURATION);
          }
       }
       if (useSampling && !useSourceInstrumentation) {
@@ -284,9 +284,9 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          throw new RuntimeException("If nightly build is set, do not set versionDiff! nightlyBuild will automatically select the last tested version.");
       }
 
-      config.setVersion("HEAD");
+      config.getExecutionConfig().setVersion("HEAD");
       final String oldVersion = getOldVersion();
-      config.setVersionOld(oldVersion);
+      config.getExecutionConfig().setVersionOld(oldVersion);
 
       config.setIncludes(getIncludeList());
 

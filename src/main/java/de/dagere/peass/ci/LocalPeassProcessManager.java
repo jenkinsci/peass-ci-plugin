@@ -67,7 +67,7 @@ public class LocalPeassProcessManager {
       RTSResult result = workspace.act(rts);
       copyFromRemote();
       if (result != null) {
-         peassConfig.getMeasurementConfig().setVersionOld(result.getVersionOld());
+         peassConfig.getMeasurementConfig().getExecutionConfig().setVersionOld(result.getVersionOld());
       }
       if (peassConfig.isDisplayRTSLogs()) {
          logActionCreator.createRTSActions();
@@ -129,7 +129,7 @@ public class LocalPeassProcessManager {
 
       Map<String, TestcaseStatistic> noWarmupStatistics = createPureMeasurementVisualization(run, dataFolder, measurements);
       
-      Changes versionChanges = changes.getVersion(peassConfig.getMeasurementConfig().getVersion());
+      Changes versionChanges = changes.getVersion(peassConfig.getMeasurementConfig().getExecutionConfig().getVersion());
       
       final MeasureVersionAction action = new MeasureVersionAction(peassConfig.getMeasurementConfig(), versionChanges, statistics,
             noWarmupStatistics, measurements, histogramReader.getUpdatedConfigurations());
@@ -150,7 +150,7 @@ public class LocalPeassProcessManager {
 
    private Map<String, TestcaseStatistic> createPureMeasurementVisualization(final Run<?, ?> run, final File dataFolder, final Map<String, HistogramValues> measurements) {
       VisualizationFolderManager visualizationFolders = new VisualizationFolderManager(localWorkspace, run);
-      DefaultMeasurementVisualizer visualizer = new DefaultMeasurementVisualizer(dataFolder, peassConfig.getMeasurementConfig().getVersion(), run, visualizationFolders,
+      DefaultMeasurementVisualizer visualizer = new DefaultMeasurementVisualizer(dataFolder, peassConfig.getMeasurementConfig().getExecutionConfig().getVersion(), run, visualizationFolders,
             measurements.keySet());
       visualizer.visualizeMeasurements();
       Map<String, TestcaseStatistic> noWarmupStatistics = visualizer.getNoWarmupStatistics();

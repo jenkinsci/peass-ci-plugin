@@ -30,8 +30,8 @@ public class RCAActionCreator {
 
       Map<TestCase, List<RCALevel>> testLevelMap = createRCALogActions(reader);
 
-      RCALogOverviewAction rcaOverviewAction = new RCALogOverviewAction(testLevelMap, measurementConfig.getVersion().substring(0, 6),
-            measurementConfig.getVersionOld().substring(0, 6));
+      RCALogOverviewAction rcaOverviewAction = new RCALogOverviewAction(testLevelMap, measurementConfig.getExecutionConfig().getVersion().substring(0, 6),
+            measurementConfig.getExecutionConfig().getVersionOld().substring(0, 6));
       run.addAction(rcaOverviewAction);
    }
 
@@ -50,9 +50,9 @@ public class RCAActionCreator {
             int vmId = 0;
             for (LogFiles files : level.getLogFiles()) {
                String logData = FileUtils.readFileToString(files.getCurrent(), StandardCharsets.UTF_8);
-               run.addAction(new RCALogAction(testcase.getKey(), vmId, levelId, measurementConfig.getVersion(), logData));
+               run.addAction(new RCALogAction(testcase.getKey(), vmId, levelId, measurementConfig.getExecutionConfig().getVersion(), logData));
                String logDataOld = FileUtils.readFileToString(files.getPredecessor(), StandardCharsets.UTF_8);
-               run.addAction(new RCALogAction(testcase.getKey(), vmId, levelId, measurementConfig.getVersionOld(), logDataOld));
+               run.addAction(new RCALogAction(testcase.getKey(), vmId, levelId, measurementConfig.getExecutionConfig().getVersionOld(), logDataOld));
                vmId++;
             }
             levelId++;

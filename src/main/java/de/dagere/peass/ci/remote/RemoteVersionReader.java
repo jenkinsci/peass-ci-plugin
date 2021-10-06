@@ -33,10 +33,10 @@ public class RemoteVersionReader implements FileCallable<MeasurementConfiguratio
    public MeasurementConfiguration invoke(final File workspaceFolder, final VirtualChannel channel) throws IOException, InterruptedException {
       try (JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
          final String version = GitUtils.getName("HEAD", workspaceFolder);
-         measurementConfig.setVersion(version);
-         if (measurementConfig.getVersionOld() != null) {
-            final String versionOld = GitUtils.getName(measurementConfig.getVersionOld(), workspaceFolder);
-            measurementConfig.setVersionOld(versionOld);
+         measurementConfig.getExecutionConfig().setVersion(version);
+         if (measurementConfig.getExecutionConfig().getVersionOld() != null) {
+            final String versionOld = GitUtils.getName(measurementConfig.getExecutionConfig().getVersionOld(), workspaceFolder);
+            measurementConfig.getExecutionConfig().setVersionOld(versionOld);
          }
          return measurementConfig;
       } catch (Throwable e) {
