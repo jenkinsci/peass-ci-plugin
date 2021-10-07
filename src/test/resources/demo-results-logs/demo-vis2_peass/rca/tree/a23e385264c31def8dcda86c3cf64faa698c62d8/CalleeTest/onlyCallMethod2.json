@@ -1,6 +1,5 @@
 {
   "measurementConfig" : {
-    "timeout" : 300000,
     "vms" : 10,
     "earlyStop" : false,
     "warmup" : 0,
@@ -11,16 +10,19 @@
     "executeBeforeClassInMeasurement" : false,
     "showStart" : false,
     "useKieker" : true,
-    "useSourceInstrumentation" : false,
-    "useSelectiveInstrumentation" : false,
-    "useSampling" : false,
-    "useCircularQueue" : false,
     "redirectToNull" : true,
     "saveAll" : true,
-    "kiekerAggregationInterval" : 5000,
     "javaVersion" : "11.0.11",
-    "record" : "OPERATIONEXECUTION",
     "measurementStrategy" : "SEQUENTIAL",
+    "kiekerConfig" : {
+      "useSourceInstrumentation" : false,
+      "useSelectiveInstrumentation" : false,
+      "useAggregation" : false,
+      "useCircularQueue" : false,
+      "kiekerAggregationInterval" : 5000,
+      "record" : "OPERATIONEXECUTION",
+      "enableAdaptiveMonitoring" : false
+    },
     "statisticsConfig" : {
       "type1error" : 0.01,
       "type2error" : 0.01,
@@ -42,7 +44,6 @@
     },
     "redirectSubprocessOutputToFile" : true,
     "testGoal" : "test",
-    "enableAdaptiveConfig" : false,
     "includes" : [ ]
   },
   "causeConfig" : {
