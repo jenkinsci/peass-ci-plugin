@@ -1,6 +1,5 @@
 {
   "measurementConfig" : {
-    "timeout" : 300000,
     "vms" : 2,
     "earlyStop" : false,
     "warmup" : 1,
@@ -17,6 +16,7 @@
         "type2error" : 0.01
      },
      "executionConfig" : {
+       "timeout" : 300000,
        "version" : "b02c92af73e3297be617f4c973a7a63fb603565b",
        "versionOld" : "e80d8a1bf747d1f70dc52260616b36cac9e44561"
      }
