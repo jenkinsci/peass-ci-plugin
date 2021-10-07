@@ -242,7 +242,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       if (significanceLevel == 0.0) {
          significanceLevel = 0.01;
       }
-      final MeasurementConfiguration config = new MeasurementConfiguration(timeout * 60 * 1000, VMs);
+      final MeasurementConfiguration config = new MeasurementConfiguration(VMs);
+      config.getExecutionConfig().setTimeout(timeout * 60 * 1000);
       config.getStatisticsConfig().setType1error(significanceLevel);
       config.setIterations(iterations);
       config.setWarmup(warmup);
@@ -266,12 +267,12 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          config.getExecutionConfig().setTestExecutor("de.dagere.peass.dependency.jmh.JmhTestExecutor");
       }
       if (useSourceInstrumentation) {
-         config.setUseSourceInstrumentation(true);
-         config.setUseSelectiveInstrumentation(true);
-         config.setUseCircularQueue(true);
+         config.getKiekerConfig().setUseSourceInstrumentation(true);
+         config.getKiekerConfig().setUseSelectiveInstrumentation(true);
+         config.getKiekerConfig().setUseCircularQueue(true);
          if (useSampling) {
-            config.setUseSampling(true);
-            config.setRecord(AllowedKiekerRecord.DURATION);
+            config.getKiekerConfig().setUseAggregation(true);
+            config.getKiekerConfig().setRecord(AllowedKiekerRecord.DURATION);
          }
       }
       if (useSampling && !useSourceInstrumentation) {
