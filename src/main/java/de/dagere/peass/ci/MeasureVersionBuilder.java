@@ -243,7 +243,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          significanceLevel = 0.01;
       }
       final MeasurementConfiguration config = new MeasurementConfiguration(VMs);
-      config.getExecutionConfig().setTimeout(timeout * 60 * 1000);
+      config.getExecutionConfig().setTimeout(timeout * 60l * 1000);
       config.getStatisticsConfig().setType1error(significanceLevel);
       config.setIterations(iterations);
       config.setWarmup(warmup);
