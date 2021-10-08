@@ -98,7 +98,7 @@ public class MeasureVersionAction extends VisibleAction {
    }
 
    public double getCriticalTValue() {
-      return new TDistribution(config.getVms() * 2 - 1).inverseCumulativeProbability(1 - config.getType1error());
+      return new TDistribution(config.getVms() * 2 - 1).inverseCumulativeProbability(1 - config.getStatisticsConfig().getType1error());
    }
 
    public double abs(final double value) {

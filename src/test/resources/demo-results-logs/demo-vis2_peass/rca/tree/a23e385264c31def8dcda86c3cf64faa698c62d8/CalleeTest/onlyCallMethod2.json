@@ -1,11 +1,6 @@
 {
   "measurementConfig" : {
-    "timeout" : 300000,
     "vms" : 10,
-    "type1error" : 0.01,
-    "type2error" : 0.01,
-    "version" : "a23e385264c31def8dcda86c3cf64faa698c62d8",
-    "versionOld" : "33ce17c04b5218c25c40137d4d09f40fbb3e4f0f",
     "earlyStop" : false,
     "warmup" : 0,
     "iterations" : 20,
@@ -15,16 +10,19 @@
     "executeBeforeClassInMeasurement" : false,
     "showStart" : false,
     "useKieker" : true,
-    "useSourceInstrumentation" : false,
-    "useSelectiveInstrumentation" : false,
-    "useSampling" : false,
-    "useCircularQueue" : false,
     "redirectToNull" : true,
     "saveAll" : true,
-    "kiekerAggregationInterval" : 5000,
     "javaVersion" : "11.0.11",
-    "record" : "OPERATIONEXECUTION",
     "measurementStrategy" : "SEQUENTIAL",
+    "kiekerConfig" : {
+      "useSourceInstrumentation" : false,
+      "useSelectiveInstrumentation" : false,
+      "useAggregation" : false,
+      "useCircularQueue" : false,
+      "kiekerAggregationInterval" : 5000,
+      "record" : "OPERATIONEXECUTION",
+      "enableAdaptiveMonitoring" : false
+    },
     "statisticsConfig" : {
       "type1error" : 0.01,
       "type2error" : 0.01,
@@ -46,7 +44,6 @@
     },
     "redirectSubprocessOutputToFile" : true,
     "testGoal" : "test",
-    "enableAdaptiveConfig" : false,
     "includes" : [ ]
   },
   "causeConfig" : {

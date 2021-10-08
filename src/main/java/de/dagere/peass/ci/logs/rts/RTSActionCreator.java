@@ -37,8 +37,8 @@ public class RTSActionCreator {
 
          Map<String, File> processSuccessRuns = createProcessSuccessRunsActions();
 
-         Map<TestCase, RTSLogData> rtsVmRuns = createVersionRTSData(measurementConfig.getVersion());
-         Map<TestCase, RTSLogData> rtsVmRunsPredecessor = createVersionRTSData(measurementConfig.getVersionOld());
+         Map<TestCase, RTSLogData> rtsVmRuns = createVersionRTSData(measurementConfig.getExecutionConfig().getVersion());
+         Map<TestCase, RTSLogData> rtsVmRunsPredecessor = createVersionRTSData(measurementConfig.getExecutionConfig().getVersionOld());
 
          createOverviewAction(processSuccessRuns, rtsVmRuns, rtsVmRunsPredecessor);
       } else {
@@ -48,7 +48,7 @@ public class RTSActionCreator {
 
    private void createOverviewAction(final Map<String, File> processSuccessRuns, final Map<TestCase, RTSLogData> rtsVmRuns, final Map<TestCase, RTSLogData> rtsVmRunsPredecessor) {
       RTSLogOverviewAction overviewAction = new RTSLogOverviewAction(processSuccessRuns, rtsVmRuns, rtsVmRunsPredecessor,
-            processSuccessRunSucceeded, measurementConfig.getVersion(), measurementConfig.getVersionOld());
+            processSuccessRunSucceeded, measurementConfig.getExecutionConfig().getVersion(), measurementConfig.getExecutionConfig().getVersionOld());
       run.addAction(overviewAction);
    }
 

@@ -128,8 +128,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
    private boolean checkVersion(final Run<?, ?> run, final TaskListener listener, final PeassProcessConfiguration peassConfig) {
       boolean versionIsUsable;
-      String version = peassConfig.getMeasurementConfig().getVersion();
-      String versionOld = peassConfig.getMeasurementConfig().getVersionOld();
+      String version = peassConfig.getMeasurementConfig().getExecutionConfig().getVersion();
+      String versionOld = peassConfig.getMeasurementConfig().getExecutionConfig().getVersionOld();
       if (version.equals(versionOld)) {
          listener.getLogger().print("Version " + version + " equals " + versionOld + "; please check your configuration");
          run.setResult(Result.FAILURE);
@@ -198,7 +198,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       listener.getLogger().println("Starting RemoteVersionReader");
       final RemoteVersionReader remoteVersionReader = new RemoteVersionReader(measurementConfig, listener);
       final MeasurementConfiguration configWithRealGitVersions = workspace.act(remoteVersionReader);
-      listener.getLogger().println("Read version: " + configWithRealGitVersions.getVersion() + " " + configWithRealGitVersions.getVersionOld());
+      listener.getLogger().println("Read version: " + configWithRealGitVersions.getExecutionConfig().getVersion() + " " + configWithRealGitVersions.getExecutionConfig().getVersionOld());
       return configWithRealGitVersions;
    }
 
@@ -242,7 +242,9 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       if (significanceLevel == 0.0) {
          significanceLevel = 0.01;
       }
-      final MeasurementConfiguration config = new MeasurementConfiguration(timeout * 60 * 1000, VMs, significanceLevel, 0.01);
+      final MeasurementConfiguration config = new MeasurementConfiguration(VMs);
+      config.getExecutionConfig().setTimeout(timeout * 60l * 1000);
+      config.getStatisticsConfig().setType1error(significanceLevel);
       config.setIterations(iterations);
       config.setWarmup(warmup);
       config.setRepetitions(repetitions);
@@ -265,12 +267,12 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          config.getExecutionConfig().setTestExecutor("de.dagere.peass.dependency.jmh.JmhTestExecutor");
       }
       if (useSourceInstrumentation) {
-         config.setUseSourceInstrumentation(true);
-         config.setUseSelectiveInstrumentation(true);
-         config.setUseCircularQueue(true);
+         config.getKiekerConfig().setUseSourceInstrumentation(true);
+         config.getKiekerConfig().setUseSelectiveInstrumentation(true);
+         config.getKiekerConfig().setUseCircularQueue(true);
          if (useSampling) {
-            config.setUseSampling(true);
-            config.setRecord(AllowedKiekerRecord.REDUCED_OPERATIONEXECUTION);
+            config.getKiekerConfig().setUseAggregation(true);
+            config.getKiekerConfig().setRecord(AllowedKiekerRecord.DURATION);
          }
       }
       if (useSampling && !useSourceInstrumentation) {
@@ -284,9 +286,9 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          throw new RuntimeException("If nightly build is set, do not set versionDiff! nightlyBuild will automatically select the last tested version.");
       }
 
-      config.setVersion("HEAD");
+      config.getExecutionConfig().setVersion("HEAD");
       final String oldVersion = getOldVersion();
-      config.setVersionOld(oldVersion);
+      config.getExecutionConfig().setVersionOld(oldVersion);
 
       config.setIncludes(getIncludeList());
 
@@ -489,6 +491,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       return executeBeforeClassInMeasurement;
    }
 
+   @DataBoundSetter
    public void setExecuteBeforeClassInMeasurement(final boolean executeBeforeClassInMeasurement) {
       this.executeBeforeClassInMeasurement = executeBeforeClassInMeasurement;
    }

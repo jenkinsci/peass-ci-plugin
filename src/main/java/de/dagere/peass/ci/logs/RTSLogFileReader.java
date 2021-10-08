@@ -32,7 +32,7 @@ public class RTSLogFileReader {
       this.visualizationFolders = visualizationFolders;
       this.measurementConfig = measurementConfig;
 
-      File rtsLogOverviewFile = visualizationFolders.getResultsFolders().getDependencyLogFile(measurementConfig.getVersion(), measurementConfig.getVersionOld());
+      File rtsLogOverviewFile = visualizationFolders.getResultsFolders().getDependencyLogFile(measurementConfig.getExecutionConfig().getVersion(), measurementConfig.getExecutionConfig().getVersionOld());
       LOG.info("RTS log overview file: {} Exists: {}", rtsLogOverviewFile, rtsLogOverviewFile.exists());
       logsExisting = rtsLogOverviewFile.exists();
 
@@ -45,7 +45,7 @@ public class RTSLogFileReader {
       if (dependencyFile.exists()) {
          try {
             Dependencies dependencies = Constants.OBJECTMAPPER.readValue(dependencyFile, Dependencies.class);
-            Version version = dependencies.getVersions().get(measurementConfig.getVersion());
+            Version version = dependencies.getVersions().get(measurementConfig.getExecutionConfig().getVersion());
             if (version != null) {
                success = version.isRunning();
             } else {
@@ -104,7 +104,7 @@ public class RTSLogFileReader {
    }
 
    public String getRTSLog() {
-      File rtsLogFile = visualizationFolders.getResultsFolders().getDependencyLogFile(measurementConfig.getVersion(), measurementConfig.getVersionOld());
+      File rtsLogFile = visualizationFolders.getResultsFolders().getDependencyLogFile(measurementConfig.getExecutionConfig().getVersion(), measurementConfig.getExecutionConfig().getVersionOld());
       try {
          LOG.debug("Reading {}", rtsLogFile.getAbsolutePath());
          String rtsLog = FileUtils.readFileToString(rtsLogFile, StandardCharsets.UTF_8);
@@ -117,8 +117,8 @@ public class RTSLogFileReader {
 
    public Map<String, File> findProcessSuccessRuns() {
       Map<String, File> processSuccessTestRuns = new LinkedHashMap<>();
-      addVersionRun(processSuccessTestRuns, measurementConfig.getVersion());
-      addVersionRun(processSuccessTestRuns, measurementConfig.getVersionOld());
+      addVersionRun(processSuccessTestRuns, measurementConfig.getExecutionConfig().getVersion());
+      addVersionRun(processSuccessTestRuns, measurementConfig.getExecutionConfig().getVersionOld());
       return processSuccessTestRuns;
    }
 

@@ -50,12 +50,12 @@ public class RTSVisualizationCreator {
          System.out.println("Selected: " + traceSelectedTests + " Coverage: " + coverageSelectedTests);
 
          RTSVisualizationAction rtsVisualizationAction = new RTSVisualizationAction(peassConfig.getDependencyConfig(), changesList, traceSelectedTests, coverageSelectedTests,
-               peassConfig.getMeasurementConfig().getVersion(), peassConfig.getMeasurementConfig().getVersionOld());
+               peassConfig.getMeasurementConfig().getExecutionConfig().getVersion(), peassConfig.getMeasurementConfig().getExecutionConfig().getVersionOld());
          run.addAction(rtsVisualizationAction);
 
          for (String traceSelectedTest : traceSelectedTests) {
             TestCase testcase = new TestCase(traceSelectedTest);
-            File traceFolder = localWorkspace.getVersionDiffFolder(peassConfig.getMeasurementConfig().getVersion());
+            File traceFolder = localWorkspace.getVersionDiffFolder(peassConfig.getMeasurementConfig().getExecutionConfig().getVersion());
             File traceFile = new File(traceFolder, testcase.getShortClazz() + "#" + testcase.getMethod() + ".txt");
             System.out.println("Trace file: " + traceFile.getAbsolutePath());
             String traceSource = "";
@@ -76,7 +76,7 @@ public class RTSVisualizationCreator {
       File executionfile = localWorkspace.getExecutionFile();
       if (executionfile.exists()) {
          ExecutionData executions = Constants.OBJECTMAPPER.readValue(executionfile, ExecutionData.class);
-         TestSet tests = executions.getVersions().get(peassConfig.getMeasurementConfig().getVersion());
+         TestSet tests = executions.getVersions().get(peassConfig.getMeasurementConfig().getExecutionConfig().getVersion());
 
          if (tests != null) {
             for (TestCase test : tests.getTests()) {
@@ -94,7 +94,7 @@ public class RTSVisualizationCreator {
       if (coverageInfoFile.exists()) {
          LOG.info("Reading {}", coverageInfoFile);
          CoverageSelectionInfo executions = Constants.OBJECTMAPPER.readValue(coverageInfoFile, CoverageSelectionInfo.class);
-         CoverageSelectionVersion currentVersion = executions.getVersions().get(peassConfig.getMeasurementConfig().getVersion());
+         CoverageSelectionVersion currentVersion = executions.getVersions().get(peassConfig.getMeasurementConfig().getExecutionConfig().getVersion());
          return currentVersion;
       } else {
          LOG.info("File {} was not found, RTS coverage based selection info might be incomplete", coverageInfoFile.getAbsoluteFile());
@@ -107,12 +107,12 @@ public class RTSVisualizationCreator {
       File dependencyfile = localWorkspace.getDependencyFile();
       if (dependencyfile.exists()) {
          Dependencies dependencies = Constants.OBJECTMAPPER.readValue(dependencyfile, Dependencies.class);
-         Version version = dependencies.getVersions().get(peassConfig.getMeasurementConfig().getVersion());
+         Version version = dependencies.getVersions().get(peassConfig.getMeasurementConfig().getExecutionConfig().getVersion());
 
          if (version != null) {
             addVersionDataToChangeliste(changesList, version);
          } else {
-            LOG.info("No change has been detected in " + peassConfig.getMeasurementConfig().getVersion());
+            LOG.info("No change has been detected in " + peassConfig.getMeasurementConfig().getExecutionConfig().getVersion());
          }
 
       } else {

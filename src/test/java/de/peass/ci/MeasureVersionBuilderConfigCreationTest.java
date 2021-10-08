@@ -27,8 +27,8 @@ public class MeasureVersionBuilderConfigCreationTest {
       builder.setNightlyBuild(false);
 
       MeasurementConfiguration measurementConfig = builder.getMeasurementConfig();
-      MatcherAssert.assertThat(measurementConfig.getVersion(), Matchers.equalTo("HEAD"));
-      MatcherAssert.assertThat(measurementConfig.getVersionOld(), Matchers.equalTo("HEAD~3"));
+      MatcherAssert.assertThat(measurementConfig.getExecutionConfig().getVersion(), Matchers.equalTo("HEAD"));
+      MatcherAssert.assertThat(measurementConfig.getExecutionConfig().getVersionOld(), Matchers.equalTo("HEAD~3"));
    }
 
    @Test
@@ -49,8 +49,8 @@ public class MeasureVersionBuilderConfigCreationTest {
 
       MeasurementConfiguration measurementConfig = builder.getMeasurementConfig();
       
-      MatcherAssert.assertThat(measurementConfig.getVersion(), Matchers.equalTo("HEAD"));
-      MatcherAssert.assertThat(measurementConfig.getVersionOld(), IsNull.nullValue());
+      MatcherAssert.assertThat(measurementConfig.getExecutionConfig().getVersion(), Matchers.equalTo("HEAD"));
+      MatcherAssert.assertThat(measurementConfig.getExecutionConfig().getVersionOld(), IsNull.nullValue());
    }
    
    @Test
