@@ -44,7 +44,7 @@ public class MeasurementActionCreator {
    }
 
    private void createOverallLogAction() {
-      if (measurementConfig.isRedirectSubprocessOutputToFile()) {
+      if (measurementConfig.getExecutionConfig().isRedirectSubprocessOutputToFile()) {
          String measureLog = reader.getMeasureLog();
          run.addAction(new InternalLogAction("measurementLog", "Measurement Log", measureLog));
       }

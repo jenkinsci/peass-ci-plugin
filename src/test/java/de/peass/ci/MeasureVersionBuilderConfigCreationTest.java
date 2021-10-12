@@ -69,7 +69,7 @@ public class MeasureVersionBuilderConfigCreationTest {
       builder.setIncludes("package.MyClass#*");
 
       MeasurementConfiguration measurementConfig = builder.getMeasurementConfig();
-      Assert.assertEquals("package.MyClass#*", measurementConfig.getIncludes().get(0));
+      Assert.assertEquals("package.MyClass#*", measurementConfig.getExecutionConfig().getIncludes().get(0));
       
    }
 }

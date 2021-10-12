@@ -290,12 +290,12 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       final String oldVersion = getOldVersion();
       config.getExecutionConfig().setVersionOld(oldVersion);
 
-      config.setIncludes(getIncludeList());
+      config.getExecutionConfig().setIncludes(getIncludeList());
 
-      config.setRedirectSubprocessOutputToFile(redirectSubprocessOutputToFile);
+      config.getExecutionConfig().setRedirectSubprocessOutputToFile(redirectSubprocessOutputToFile);
 
       if (testGoal != null && !"".equals(testGoal)) {
-         config.setTestGoal(testGoal);
+         config.getExecutionConfig().setTestGoal(testGoal);
       }
 
       if (pl != null && !"".equals(pl)) {

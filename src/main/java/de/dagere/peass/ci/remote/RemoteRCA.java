@@ -52,7 +52,7 @@ public class RemoteRCA implements FileCallable<Boolean>, Serializable {
       final File localFolder = ContinuousFolderUtil.getLocalFolder(workspaceFolder);
       ResultsFolders resultsFolder = new ResultsFolders(localFolder, workspaceFolder.getName());
       final File logFile = resultsFolder.getRCALogFile(measurementConfig.getExecutionConfig().getVersion(), measurementConfig.getExecutionConfig().getVersionOld());
-      if (measurementConfig.isRedirectSubprocessOutputToFile()) {
+      if (measurementConfig.getExecutionConfig().isRedirectSubprocessOutputToFile()) {
          listener.getLogger().println("Executing root cause analysis - Log goes to " + logFile.getAbsolutePath());
          try (LogRedirector director = new LogRedirector(logFile)) {
             executeRCA(workspaceFolder, localFolder, resultsFolder);

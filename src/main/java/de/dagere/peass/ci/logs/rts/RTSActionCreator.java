@@ -53,7 +53,7 @@ public class RTSActionCreator {
    }
 
    private void createOverallLogAction() {
-      if (measurementConfig.isRedirectSubprocessOutputToFile()) {
+      if (measurementConfig.getExecutionConfig().isRedirectSubprocessOutputToFile()) {
          String rtsLog = reader.getRTSLog();
          run.addAction(new InternalLogAction("rtsLog", "Regression Test Selection Log", rtsLog));
       }

@@ -114,7 +114,7 @@ public class SnapshotDependencyChecker {
    }
 
    private ProcessBuilder setRedirection(final File logFile, ProcessBuilder builder) throws InterruptedException, IOException {
-      if (measurementConfig.isRedirectSubprocessOutputToFile()) {
+      if (measurementConfig.getExecutionConfig().isRedirectSubprocessOutputToFile()) {
          LOG.debug("Log goes to {}", logFile.getAbsolutePath());
          builder = builder.redirectOutput(logFile)
                .redirectError(logFile);

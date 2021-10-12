@@ -36,7 +36,7 @@ public class RCAActionCreator {
    }
 
    private void createOverallActionLog() {
-      if (measurementConfig.isRedirectSubprocessOutputToFile()) {
+      if (measurementConfig.getExecutionConfig().isRedirectSubprocessOutputToFile()) {
          String rcaLog = reader.getRCALog();
          run.addAction(new InternalLogAction("rcaLog", "RCA Log", rcaLog));
       }
