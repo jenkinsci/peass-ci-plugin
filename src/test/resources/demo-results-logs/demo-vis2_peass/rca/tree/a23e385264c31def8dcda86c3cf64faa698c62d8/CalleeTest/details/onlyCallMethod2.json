@@ -41,10 +41,7 @@
       "useTieredCompilation" : false,
       "testTransformer" : "de.dagere.peass.testtransformation.JUnitTestTransformer",
       "testExecutor" : "default"
-    },
-    "redirectSubprocessOutputToFile" : true,
-    "testGoal" : "test",
-    "includes" : [ ]
+    }
   },
   "causeConfig" : {
     "useAggregation" : true,
