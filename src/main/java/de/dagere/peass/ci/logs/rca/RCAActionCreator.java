@@ -47,17 +47,29 @@ public class RCAActionCreator {
       for (Map.Entry<TestCase, List<RCALevel>> testcase : testLevelMap.entrySet()) {
          int levelId = 0;
          for (RCALevel level : testcase.getValue()) {
-            int vmId = 0;
-            for (LogFiles files : level.getLogFiles()) {
-               String logData = FileUtils.readFileToString(files.getCurrent(), StandardCharsets.UTF_8);
-               run.addAction(new RCALogAction(testcase.getKey(), vmId, levelId, measurementConfig.getExecutionConfig().getVersion(), logData));
-               String logDataOld = FileUtils.readFileToString(files.getPredecessor(), StandardCharsets.UTF_8);
-               run.addAction(new RCALogAction(testcase.getKey(), vmId, levelId, measurementConfig.getExecutionConfig().getVersionOld(), logDataOld));
-               vmId++;
-            }
+            createLevelLogAction(testcase, levelId, level);
             levelId++;
          }
       }
       return testLevelMap;
+   }
+
+   private void createLevelLogAction(Map.Entry<TestCase, List<RCALevel>> testcase, int levelId, RCALevel level) throws IOException {
+      int vmId = 0;
+      for (LogFiles files : level.getLogFiles()) {
+         createVMLogActions(testcase, levelId, vmId, files);
+         vmId++;
+      }
+   }
+
+   private void createVMLogActions(Map.Entry<TestCase, List<RCALevel>> testcase, int levelId, int vmId, LogFiles files) throws IOException {
+      if (files.getCurrent().exists()) {
+         String logData = FileUtils.readFileToString(files.getCurrent(), StandardCharsets.UTF_8);
+         run.addAction(new RCALogAction(testcase.getKey(), vmId, levelId, measurementConfig.getExecutionConfig().getVersion(), logData));
+      }
+      if (files.getPredecessor().exists()) {
+         String logDataOld = FileUtils.readFileToString(files.getPredecessor(), StandardCharsets.UTF_8);
+         run.addAction(new RCALogAction(testcase.getKey(), vmId, levelId, measurementConfig.getExecutionConfig().getVersionOld(), logDataOld));
+      }
    }
 }
