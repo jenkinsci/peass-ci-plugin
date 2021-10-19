@@ -1,5 +1,6 @@
 package de.dagere.peass.ci.logs.rca;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -54,7 +55,7 @@ public class RCAActionCreator {
       return testLevelMap;
    }
 
-   private void createLevelLogAction(Map.Entry<TestCase, List<RCALevel>> testcase, int levelId, RCALevel level) throws IOException {
+   private void createLevelLogAction(final Map.Entry<TestCase, List<RCALevel>> testcase, final int levelId, final RCALevel level) throws IOException {
       int vmId = 0;
       for (LogFiles files : level.getLogFiles()) {
          createVMLogActions(testcase, levelId, vmId, files);
@@ -62,14 +63,19 @@ public class RCAActionCreator {
       }
    }
 
-   private void createVMLogActions(Map.Entry<TestCase, List<RCALevel>> testcase, int levelId, int vmId, LogFiles files) throws IOException {
-      if (files.getCurrent().exists()) {
-         String logData = FileUtils.readFileToString(files.getCurrent(), StandardCharsets.UTF_8);
-         run.addAction(new RCALogAction(testcase.getKey(), vmId, levelId, measurementConfig.getExecutionConfig().getVersion(), logData));
+   private void createVMLogActions(final Map.Entry<TestCase, List<RCALevel>> testcase, final int levelId, final int vmId, final LogFiles files) throws IOException {
+      addLog(testcase, levelId, vmId, files.getCurrent(), measurementConfig.getExecutionConfig().getVersion());
+      addLog(testcase, levelId, vmId, files.getPredecessor(), measurementConfig.getExecutionConfig().getVersionOld());
+   }
+
+   private void addLog(final Map.Entry<TestCase, List<RCALevel>> testcase, final int levelId, final int vmId, final File logFile, final String version) throws IOException {
+      String logData;
+      if (logFile.exists()) {
+         logData = FileUtils.readFileToString(logFile, StandardCharsets.UTF_8);
+      } else {
+         logData = "Log file could not be found";
       }
-      if (files.getPredecessor().exists()) {
-         String logDataOld = FileUtils.readFileToString(files.getPredecessor(), StandardCharsets.UTF_8);
-         run.addAction(new RCALogAction(testcase.getKey(), vmId, levelId, measurementConfig.getExecutionConfig().getVersionOld(), logDataOld));
-      }
+      
+      run.addAction(new RCALogAction(testcase.getKey(), vmId, levelId, version, logData));
    }
 }
