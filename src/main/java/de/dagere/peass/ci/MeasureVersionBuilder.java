@@ -88,7 +88,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private boolean excludeLog4j = false;
 
    private boolean useSourceInstrumentation = true;
-   private boolean useSampling = true;
+   private boolean useAggregation = true;
    private boolean createDefaultConstructor = true;
 
    private boolean redirectSubprocessOutputToFile = true;
@@ -208,7 +208,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       listener.getLogger().println("VMs: " + VMs + " Iterations: " + iterations + " Warmup: " + warmup + " Repetitions: " + repetitions);
       listener.getLogger().println("measureJMH: " + measureJMH);
       listener.getLogger().println("Includes: " + includes + " RCA: " + executeRCA);
-      listener.getLogger().println("Strategy: " + measurementMode + " Source Instrumentation: " + useSourceInstrumentation + " Sampling: " + useSampling);
+      listener.getLogger().println("Strategy: " + measurementMode + " Source Instrumentation: " + useSourceInstrumentation + " Sampling: " + useAggregation);
       listener.getLogger().println("Create default constructor: " + createDefaultConstructor);
    }
 
@@ -270,12 +270,12 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          config.getKiekerConfig().setUseSourceInstrumentation(true);
          config.getKiekerConfig().setUseSelectiveInstrumentation(true);
          config.getKiekerConfig().setUseCircularQueue(true);
-         if (useSampling) {
+         if (useAggregation) {
             config.getKiekerConfig().setUseAggregation(true);
             config.getKiekerConfig().setRecord(AllowedKiekerRecord.DURATION);
          }
       }
-      if (useSampling && !useSourceInstrumentation) {
+      if (useAggregation && !useSourceInstrumentation) {
          throw new RuntimeException("Sampling may only be used with source instrumentation currently.");
       }
 
@@ -514,13 +514,13 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       this.useSourceInstrumentation = useSourceInstrumentation;
    }
 
-   public boolean isUseSampling() {
-      return useSampling;
+   public boolean isUseAggregation() {
+      return useAggregation;
    }
 
    @DataBoundSetter
-   public void setUseSampling(final boolean useSampling) {
-      this.useSampling = useSampling;
+   public void setUseAggregation(final boolean useAggregation) {
+      this.useAggregation = useAggregation;
    }
 
    public boolean isExecuteParallel() {

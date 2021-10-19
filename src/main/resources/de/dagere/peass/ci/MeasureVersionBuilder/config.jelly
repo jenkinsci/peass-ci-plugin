@@ -74,8 +74,8 @@
                  description="${%useSourceInstrumentationDescr}">
             <f:checkbox />
         </f:entry>
-        <f:entry title="${%useSampling}" field="useSampling"
-                 description="${%useSamplingDescr}">
+        <f:entry title="${%useAggregation}" field="useAggregation"
+                 description="${%useAggregationDescr}">
             <f:checkbox />
         </f:entry>
         <f:entry title="${%useGC}" field="useGC"
