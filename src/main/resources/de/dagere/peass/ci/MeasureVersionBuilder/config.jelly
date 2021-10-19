@@ -106,6 +106,10 @@
                  description="${%executeBeforeClassInMeasurementDescr}">
             <f:checkbox />
         </f:entry>
+        <f:entry title="onlyMeasureWorkload" field="onlyMeasureWorkload"
+                 description="${%onlyMeasureWorkloadDescr}">
+            <f:checkbox />
+        </f:entry>
         <f:entry title="${%significanceLevel}" field="significanceLevel"
            description="${%significanceLevelDescr}">
             <f:textbox  default="0.01"/>

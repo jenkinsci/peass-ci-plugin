@@ -82,6 +82,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private RCAStrategy measurementMode = RCAStrategy.LEVELWISE;
    private boolean executeParallel = false;
    private boolean executeBeforeClassInMeasurement = false;
+   private boolean onlyMeasureWorkload = false;
 
    private boolean updateSnapshotDependencies = true;
    private boolean removeSnapshots = false;
@@ -252,6 +253,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       config.setEarlyStop(false);
       config.getExecutionConfig().setCreateDefaultConstructor(createDefaultConstructor);
       config.setExecuteBeforeClassInMeasurement(executeBeforeClassInMeasurement);
+      config.setOnlyMeasureWorkload(onlyMeasureWorkload);
       config.setRedirectToNull(redirectToNull);
       config.setShowStart(showStart);
       config.getExecutionConfig().setRemoveSnapshots(removeSnapshots);
@@ -494,6 +496,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    @DataBoundSetter
    public void setExecuteBeforeClassInMeasurement(final boolean executeBeforeClassInMeasurement) {
       this.executeBeforeClassInMeasurement = executeBeforeClassInMeasurement;
+   }
+   
+   public boolean isOnlyMeasureWorkload() {
+      return onlyMeasureWorkload;
+   }
+   
+   @DataBoundSetter
+   public void setOnlyMeasureWorkload(final boolean onlyMeasureWorkload) {
+      this.onlyMeasureWorkload = onlyMeasureWorkload;
    }
 
    public RCAStrategy getMeasurementMode() {
