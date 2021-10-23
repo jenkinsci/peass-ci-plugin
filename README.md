@@ -49,3 +49,6 @@ For every change, you get a call tree:
 
 And in the call tree, you can view the measurements for individual call tree nodes and the source change of these nodes:
 ![Example Source Diff](graphs/demo3.png)
+
+# Known Problems
+- Peass only works if you use the latest version of JUnit, i.e. 4.13.x or 5.8.x. If you import an older version of JUnit (or it is imported by plugins you use, e.g. spring boot), please update your JUnit dependency.
