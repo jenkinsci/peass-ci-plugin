@@ -11,16 +11,16 @@ import org.apache.commons.io.FileUtils;
 import de.dagere.peass.ci.logs.InternalLogAction;
 import de.dagere.peass.ci.logs.LogFileReader;
 import de.dagere.peass.ci.logs.LogFiles;
-import de.dagere.peass.config.MeasurementConfiguration;
+import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import hudson.model.Run;
 
 public class RCAActionCreator {
    private final LogFileReader reader;
    private final Run<?, ?> run;
-   private final MeasurementConfiguration measurementConfig;
+   private final MeasurementConfig measurementConfig;
 
-   public RCAActionCreator(final LogFileReader reader, final Run<?, ?> run, final MeasurementConfiguration measurementConfig) {
+   public RCAActionCreator(final LogFileReader reader, final Run<?, ?> run, final MeasurementConfig measurementConfig) {
       this.reader = reader;
       this.run = run;
       this.measurementConfig = measurementConfig;

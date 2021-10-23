@@ -16,7 +16,6 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import de.dagere.peass.ci.PeassProcessConfiguration;
-import de.dagere.peass.dependency.ResultsFolders;
 import de.dagere.peass.dependency.analysis.data.ChangedEntity;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.analysis.data.TestSet;
@@ -25,6 +24,7 @@ import de.dagere.peass.dependency.persistence.ExecutionData;
 import de.dagere.peass.dependency.persistence.Version;
 import de.dagere.peass.dependency.traces.coverage.CoverageSelectionInfo;
 import de.dagere.peass.dependency.traces.coverage.CoverageSelectionVersion;
+import de.dagere.peass.folders.ResultsFolders;
 import de.dagere.peass.utils.Constants;
 import hudson.model.Run;
 

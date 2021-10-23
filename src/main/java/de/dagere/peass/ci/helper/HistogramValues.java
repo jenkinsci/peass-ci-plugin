@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
-import de.dagere.peass.config.MeasurementConfiguration;
+import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.visualization.KoPeMeTreeConverter;
 
 public class HistogramValues {
@@ -20,7 +20,7 @@ public class HistogramValues {
    /**
     * Creates histogram values, assuming parameters are in nanoseconds
     */
-   public HistogramValues(final double[] valuesCurrent, final double[] valuesBefore, final MeasurementConfiguration currentConfig) {
+   public HistogramValues(final double[] valuesCurrent, final double[] valuesBefore, final MeasurementConfig currentConfig) {
       double mean = new DescriptiveStatistics(valuesCurrent).getMean();
       int factor;
       if (mean < 1000) {

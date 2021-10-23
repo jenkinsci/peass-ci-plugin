@@ -19,12 +19,12 @@ import de.dagere.peass.analysis.changes.Change;
 import de.dagere.peass.analysis.changes.Changes;
 import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.ci.NonIncludedTestRemover;
-import de.dagere.peass.config.MeasurementConfiguration;
-import de.dagere.peass.dependency.CauseSearchFolders;
-import de.dagere.peass.dependency.PeassFolders;
+import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.execution.EnvironmentVariables;
 import de.dagere.peass.dependencyprocessors.ViewNotFoundException;
+import de.dagere.peass.folders.CauseSearchFolders;
+import de.dagere.peass.folders.PeassFolders;
 import de.dagere.peass.measurement.rca.CauseSearcherConfig;
 import de.dagere.peass.measurement.rca.data.CauseSearchData;
 import de.dagere.peass.measurement.rca.kieker.BothTreeReader;
@@ -36,13 +36,13 @@ public class RCAExecutor {
 
    private static final Logger LOG = LogManager.getLogger(RCAExecutor.class);
 
-   private final MeasurementConfiguration config;
+   private final MeasurementConfig config;
    private final File projectFolder;
    private final ProjectChanges changes;
    private final CauseSearcherConfig causeConfig;
    private final EnvironmentVariables env;
 
-   public RCAExecutor(final MeasurementConfiguration config, final File workspaceFolder, final ProjectChanges changes, final CauseSearcherConfig causeConfig,
+   public RCAExecutor(final MeasurementConfig config, final File workspaceFolder, final ProjectChanges changes, final CauseSearcherConfig causeConfig,
          final EnvironmentVariables env) {
       this.config = config;
       this.projectFolder = workspaceFolder;
@@ -61,7 +61,7 @@ public class RCAExecutor {
          LOG.info("At least one testcase was not successfully executed in the last build for the current version - executing RCA");
 //         saveOldPeassFolder();
 
-         MeasurementConfiguration currentConfig = new MeasurementConfiguration(config);
+         MeasurementConfig currentConfig = new MeasurementConfig(config);
 
          for (Entry<String, List<Change>> testcases : versionChanges.getTestcaseChanges().entrySet()) {
             for (Change change : testcases.getValue()) {
@@ -110,7 +110,7 @@ public class RCAExecutor {
       return needsRCA;
    }
 
-   private void analyseChange(final MeasurementConfiguration currentConfig, final TestCase testCase)
+   private void analyseChange(final MeasurementConfig currentConfig, final TestCase testCase)
          throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException, JAXBException {
       final File expectedResultFile = getExpectedRCAFile(testCase);
       LOG.info("Testing {}", expectedResultFile);
@@ -127,7 +127,7 @@ public class RCAExecutor {
       return expectedResultFile;
    }
 
-   private void executeRCA(final MeasurementConfiguration config, final TestCase testCase)
+   private void executeRCA(final MeasurementConfig config, final TestCase testCase)
          throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException, JAXBException {
       final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(testCase, causeConfig);
       config.setUseKieker(true);

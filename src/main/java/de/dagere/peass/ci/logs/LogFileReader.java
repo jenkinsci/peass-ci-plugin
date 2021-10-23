@@ -19,10 +19,10 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.rca.RCALevel;
-import de.dagere.peass.config.MeasurementConfiguration;
-import de.dagere.peass.dependency.CauseSearchFolders;
-import de.dagere.peass.dependency.PeassFolders;
+import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.folders.CauseSearchFolders;
+import de.dagere.peass.folders.PeassFolders;
 import de.dagere.peass.measurement.rca.data.CauseSearchData;
 import de.dagere.peass.utils.Constants;
 import io.jenkins.cli.shaded.org.apache.commons.io.filefilter.WildcardFileFilter;
@@ -31,9 +31,9 @@ public class LogFileReader {
    private static final Logger LOG = LogManager.getLogger(LogFileReader.class);
 
    private final VisualizationFolderManager visualizationFolders;
-   private final MeasurementConfiguration measurementConfig;
+   private final MeasurementConfig measurementConfig;
 
-   public LogFileReader(final VisualizationFolderManager visualizationFolders, final MeasurementConfiguration measurementConfig) {
+   public LogFileReader(final VisualizationFolderManager visualizationFolders, final MeasurementConfig measurementConfig) {
       this.visualizationFolders = visualizationFolders;
       this.measurementConfig = measurementConfig;
 

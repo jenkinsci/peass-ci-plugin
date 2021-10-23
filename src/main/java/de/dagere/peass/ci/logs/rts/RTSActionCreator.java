@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 import de.dagere.peass.ci.logs.InternalLogAction;
 import de.dagere.peass.ci.logs.RTSLogFileReader;
-import de.dagere.peass.config.MeasurementConfiguration;
+import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import hudson.model.Run;
 
@@ -22,10 +22,10 @@ public class RTSActionCreator {
 
    private final RTSLogFileReader reader;
    private final Run<?, ?> run;
-   private final MeasurementConfiguration measurementConfig;
+   private final MeasurementConfig measurementConfig;
    private Map<String, Boolean> processSuccessRunSucceeded = new HashMap<>();
 
-   public RTSActionCreator(final RTSLogFileReader reader, final Run<?, ?> run, final MeasurementConfiguration measurementConfig) {
+   public RTSActionCreator(final RTSLogFileReader reader, final Run<?, ?> run, final MeasurementConfig measurementConfig) {
       this.reader = reader;
       this.run = run;
       this.measurementConfig = measurementConfig;

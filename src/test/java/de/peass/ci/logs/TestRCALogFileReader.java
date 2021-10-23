@@ -20,11 +20,11 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.LogFileReader;
 import de.dagere.peass.ci.logs.rca.RCALevel;
-import de.dagere.peass.config.MeasurementConfiguration;
-import de.dagere.peass.dependency.CauseSearchFolders;
-import de.dagere.peass.dependency.PeassFolders;
-import de.dagere.peass.dependency.ResultsFolders;
+import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.folders.CauseSearchFolders;
+import de.dagere.peass.folders.PeassFolders;
+import de.dagere.peass.folders.ResultsFolders;
 
 public class TestRCALogFileReader {
 
@@ -52,7 +52,7 @@ public class TestRCALogFileReader {
 
    @Test
    public void testReading() throws JsonParseException, JsonMappingException, IOException {
-      MeasurementConfiguration peassDemoConfig = new MeasurementConfiguration(2, VERSION, VERSION_OLD);
+      MeasurementConfig peassDemoConfig = new MeasurementConfig(2, VERSION, VERSION_OLD);
 
       VisualizationFolderManager visualizationFolders = Mockito.mock(VisualizationFolderManager.class);
       Mockito.when(visualizationFolders.getPeassFolders()).thenReturn(new PeassFolders(testFolder));

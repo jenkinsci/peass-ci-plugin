@@ -2,9 +2,9 @@ package de.dagere.peass.ci.helper;
 
 import java.io.File;
 
-import de.dagere.peass.dependency.CauseSearchFolders;
-import de.dagere.peass.dependency.PeassFolders;
-import de.dagere.peass.dependency.ResultsFolders;
+import de.dagere.peass.folders.CauseSearchFolders;
+import de.dagere.peass.folders.PeassFolders;
+import de.dagere.peass.folders.ResultsFolders;
 import hudson.model.Run;
 
 public class VisualizationFolderManager {

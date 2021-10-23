@@ -9,7 +9,7 @@ import de.dagere.peass.analysis.changes.Change;
 import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.ci.MeasureVersionAction;
 import de.dagere.peass.ci.helper.HistogramValues;
-import de.dagere.peass.config.MeasurementConfiguration;
+import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.measurement.analysis.ProjectStatistics;
 
@@ -25,7 +25,7 @@ public class TestMeasureVersionAction {
       measurements.put("de.package.ClassB#method2", null);
       measurements.put("de.package.otherpackage.ClassC#method2", null);
 
-      MeasureVersionAction action = new MeasureVersionAction(new MeasurementConfiguration(5), changes.getVersion("1"), new ProjectStatistics(),
+      MeasureVersionAction action = new MeasureVersionAction(new MeasurementConfig(5), changes.getVersion("1"), new ProjectStatistics(),
             new HashMap<>(), measurements, new HashMap<>());
 
       Assert.assertEquals("ClassA", action.getReducedName("de.package.ClassA"));
@@ -45,7 +45,7 @@ public class TestMeasureVersionAction {
    public void testIsChanged() {
       final ProjectChanges changes = getChanges();
 
-      MeasureVersionAction action = new MeasureVersionAction(new MeasurementConfiguration(5), changes.getVersion("1"), new ProjectStatistics(),
+      MeasureVersionAction action = new MeasureVersionAction(new MeasurementConfig(5), changes.getVersion("1"), new ProjectStatistics(),
             new HashMap<>(), new HashMap<>(), new HashMap<>());
 
       Assert.assertTrue(action.testIsChanged("de.package.ClassA#method1"));

@@ -10,19 +10,19 @@ import java.nio.charset.StandardCharsets;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import de.dagere.peass.config.MeasurementConfiguration;
+import de.dagere.peass.config.MeasurementConfig;
 
 public class SnapshotDependencyChecker {
 
    private static final Logger LOG = LogManager.getLogger(SnapshotDependencyChecker.class);
    private static final String seperator = File.separator;
 
-   private final MeasurementConfiguration measurementConfig;
+   private final MeasurementConfig measurementConfig;
    private final File workspaceFolder;
    private final File kopemeFile, kiekerFile;
    private final PrintStream output;
 
-   public SnapshotDependencyChecker(final MeasurementConfiguration measurementConfig, final File workspaceFolder, final PrintStream output) {
+   public SnapshotDependencyChecker(final MeasurementConfig measurementConfig, final File workspaceFolder, final PrintStream output) {
       this.measurementConfig = measurementConfig;
       this.workspaceFolder = workspaceFolder;
       this.output = output;

@@ -16,7 +16,7 @@ import de.dagere.peass.analysis.changes.Change;
 import de.dagere.peass.analysis.changes.Changes;
 import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.ci.RCAVisualizationAction;
-import de.dagere.peass.config.MeasurementConfiguration;
+import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.visualization.VisualizeRCA;
 import hudson.model.Run;
 
@@ -24,12 +24,12 @@ public class RCAVisualizer {
 
    private static final Logger LOG = LogManager.getLogger(RCAVisualizer.class);
 
-   private final MeasurementConfiguration measurementConfig;
+   private final MeasurementConfig measurementConfig;
    private final VisualizationFolderManager visualizationFolders;
    private final ProjectChanges changes;
    private final Run<?, ?> run;
 
-   public RCAVisualizer(final MeasurementConfiguration measurementConfig, final VisualizationFolderManager visualizationFolders, final ProjectChanges changes, final Run<?, ?> run) {
+   public RCAVisualizer(final MeasurementConfig measurementConfig, final VisualizationFolderManager visualizationFolders, final ProjectChanges changes, final Run<?, ?> run) {
       this.measurementConfig = measurementConfig;
       this.visualizationFolders = visualizationFolders;
       this.changes = changes;

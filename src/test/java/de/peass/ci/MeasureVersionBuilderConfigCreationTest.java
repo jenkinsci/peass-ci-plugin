@@ -14,7 +14,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import de.dagere.peass.ci.MeasureVersionBuilder;
-import de.dagere.peass.config.MeasurementConfiguration;
+import de.dagere.peass.config.MeasurementConfig;
 
 public class MeasureVersionBuilderConfigCreationTest {
 
@@ -26,7 +26,7 @@ public class MeasureVersionBuilderConfigCreationTest {
       builder.setVersionDiff(3);
       builder.setNightlyBuild(false);
 
-      MeasurementConfiguration measurementConfig = builder.getMeasurementConfig();
+      MeasurementConfig measurementConfig = builder.getMeasurementConfig();
       MatcherAssert.assertThat(measurementConfig.getExecutionConfig().getVersion(), Matchers.equalTo("HEAD"));
       MatcherAssert.assertThat(measurementConfig.getExecutionConfig().getVersionOld(), Matchers.equalTo("HEAD~3"));
    }
@@ -38,7 +38,7 @@ public class MeasureVersionBuilderConfigCreationTest {
       builder.setVersionDiff(2);
 
       Assertions.assertThrows(RuntimeException.class, () -> {
-         MeasurementConfiguration measurementConfig = builder.getMeasurementConfig();
+         MeasurementConfig measurementConfig = builder.getMeasurementConfig();
       });
    }
 
@@ -47,7 +47,7 @@ public class MeasureVersionBuilderConfigCreationTest {
       MeasureVersionBuilder builder = new MeasureVersionBuilder();
       builder.setNightlyBuild(true);
 
-      MeasurementConfiguration measurementConfig = builder.getMeasurementConfig();
+      MeasurementConfig measurementConfig = builder.getMeasurementConfig();
       
       MatcherAssert.assertThat(measurementConfig.getExecutionConfig().getVersion(), Matchers.equalTo("HEAD"));
       MatcherAssert.assertThat(measurementConfig.getExecutionConfig().getVersionOld(), IsNull.nullValue());
@@ -59,7 +59,7 @@ public class MeasureVersionBuilderConfigCreationTest {
       builder.setIncludes("package.MyClass2#*;package.MyClass");
       
       Assert.assertThrows(RuntimeException.class, () -> {
-         MeasurementConfiguration measurementConfig = builder.getMeasurementConfig();
+         MeasurementConfig measurementConfig = builder.getMeasurementConfig();
       });
    }
    
@@ -68,7 +68,7 @@ public class MeasureVersionBuilderConfigCreationTest {
       MeasureVersionBuilder builder = new MeasureVersionBuilder();
       builder.setIncludes("package.MyClass#*");
 
-      MeasurementConfiguration measurementConfig = builder.getMeasurementConfig();
+      MeasurementConfig measurementConfig = builder.getMeasurementConfig();
       Assert.assertEquals("package.MyClass#*", measurementConfig.getExecutionConfig().getIncludes().get(0));
       
    }

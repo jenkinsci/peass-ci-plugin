@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import de.dagere.peass.ci.helper.HistogramReader;
 import de.dagere.peass.ci.helper.HistogramValues;
-import de.dagere.peass.config.MeasurementConfiguration;
+import de.dagere.peass.config.MeasurementConfig;
 
 public class TestHistogramReader {
    
@@ -18,7 +18,7 @@ public class TestHistogramReader {
    
    @Test
    public void testHistogramCreation() throws JAXBException {
-      MeasurementConfiguration measurementConfig = new MeasurementConfiguration(2);
+      MeasurementConfig measurementConfig = new MeasurementConfig(2);
       measurementConfig.getExecutionConfig().setVersion("b02c92af73e3297be617f4c973a7a63fb603565b");
       measurementConfig.getExecutionConfig().setVersionOld("e80d8a1bf747d1f70dc52260616b36cac9e44561");
       measurementConfig.setWarmup(2);
@@ -38,7 +38,7 @@ public class TestHistogramReader {
    
    @Test
    public void testEmptyHistogram() throws JAXBException {
-      MeasurementConfiguration measurementConfig = new MeasurementConfiguration(2);
+      MeasurementConfig measurementConfig = new MeasurementConfig(2);
       measurementConfig.getExecutionConfig().setVersion("e80d8a1bf747d1f70dc52260616b36cac9e44561");
       measurementConfig.getExecutionConfig().setVersionOld("e80d8a1bf747d1f70dc52260616b36cac9e44561~1");
       
@@ -52,7 +52,7 @@ public class TestHistogramReader {
    
    @Test
    public void testUpdatedConfiguration() throws JAXBException {
-      MeasurementConfiguration measurementConfig = new MeasurementConfiguration(2);
+      MeasurementConfig measurementConfig = new MeasurementConfig(2);
       measurementConfig.getExecutionConfig().setVersion("a23e385264c31def8dcda86c3cf64faa698c62d8");
       measurementConfig.getExecutionConfig().setVersionOld("33ce17c04b5218c25c40137d4d09f40fbb3e4f0f");
       
@@ -67,7 +67,7 @@ public class TestHistogramReader {
       
       Assert.assertTrue(reader.measurementConfigurationUpdated());
       
-      MeasurementConfiguration updatedConfig = reader.getUpdatedConfigurations().get("de.test.CalleeTest#onlyCallMethod2");
+      MeasurementConfig updatedConfig = reader.getUpdatedConfigurations().get("de.test.CalleeTest#onlyCallMethod2");
       Assert.assertEquals(updatedConfig.getIterations(), 2);
       Assert.assertEquals(updatedConfig.getRepetitions(), 200);
    }

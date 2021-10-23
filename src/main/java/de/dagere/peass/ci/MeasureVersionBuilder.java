@@ -25,7 +25,7 @@ import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.ci.persistence.TestcaseKeyDeserializer;
 import de.dagere.peass.ci.remote.RemoteVersionReader;
 import de.dagere.peass.config.DependencyConfig;
-import de.dagere.peass.config.MeasurementConfiguration;
+import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.config.MeasurementStrategy;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.execution.EnvironmentVariables;
@@ -180,7 +180,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
    private PeassProcessConfiguration buildConfiguration(final FilePath workspace, final EnvVars env, final TaskListener listener)
          throws IOException, InterruptedException {
-      final MeasurementConfiguration configWithRealGitVersions = generateMeasurementConfig(workspace, listener);
+      final MeasurementConfig configWithRealGitVersions = generateMeasurementConfig(workspace, listener);
 
       EnvironmentVariables peassEnv = new EnvironmentVariables(properties);
       for (Map.Entry<String, String> entry : env.entrySet()) {
@@ -193,12 +193,12 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       return peassConfig;
    }
 
-   private MeasurementConfiguration generateMeasurementConfig(final FilePath workspace, final TaskListener listener)
+   private MeasurementConfig generateMeasurementConfig(final FilePath workspace, final TaskListener listener)
          throws IOException, InterruptedException {
-      final MeasurementConfiguration measurementConfig = getMeasurementConfig();
+      final MeasurementConfig measurementConfig = getMeasurementConfig();
       listener.getLogger().println("Starting RemoteVersionReader");
       final RemoteVersionReader remoteVersionReader = new RemoteVersionReader(measurementConfig, listener);
-      final MeasurementConfiguration configWithRealGitVersions = workspace.act(remoteVersionReader);
+      final MeasurementConfig configWithRealGitVersions = workspace.act(remoteVersionReader);
       listener.getLogger().println("Read version: " + configWithRealGitVersions.getExecutionConfig().getVersion() + " " + configWithRealGitVersions.getExecutionConfig().getVersionOld());
       return configWithRealGitVersions;
    }
@@ -239,11 +239,11 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       return includeList;
    }
 
-   public MeasurementConfiguration getMeasurementConfig() throws JsonParseException, JsonMappingException, IOException {
+   public MeasurementConfig getMeasurementConfig() throws JsonParseException, JsonMappingException, IOException {
       if (significanceLevel == 0.0) {
          significanceLevel = 0.01;
       }
-      final MeasurementConfiguration config = new MeasurementConfiguration(VMs);
+      final MeasurementConfig config = new MeasurementConfig(VMs);
       config.getExecutionConfig().setTimeout(timeout * 60l * 1000);
       config.getStatisticsConfig().setType1error(significanceLevel);
       config.setIterations(iterations);

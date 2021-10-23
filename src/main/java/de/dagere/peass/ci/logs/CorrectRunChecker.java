@@ -11,9 +11,9 @@ import de.dagere.kopeme.datastorage.XMLDataLoader;
 import de.dagere.kopeme.generated.Kopemedata;
 import de.dagere.kopeme.generated.TestcaseType.Datacollector;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
-import de.dagere.peass.config.MeasurementConfiguration;
-import de.dagere.peass.dependency.PeassFolders;
+import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.folders.PeassFolders;
 
 /**
  * Checks wether a measurement run is correct by checking the XML result files
@@ -27,7 +27,7 @@ public class CorrectRunChecker {
    boolean currentRunning = false;
    boolean predecessorRunning = false;
 
-   public CorrectRunChecker(final TestCase testcase, final int vmId, final MeasurementConfiguration measurementConfig, final VisualizationFolderManager visualizationFolders) {
+   public CorrectRunChecker(final TestCase testcase, final int vmId, final MeasurementConfig measurementConfig, final VisualizationFolderManager visualizationFolders) {
       File basicResultFolder = visualizationFolders.getResultsFolders().getVersionFullResultsFolder(measurementConfig);
       File detailResultsFolder = new File(basicResultFolder, "measurements");
       

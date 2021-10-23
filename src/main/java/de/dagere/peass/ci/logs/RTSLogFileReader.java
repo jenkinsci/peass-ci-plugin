@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
 
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.rts.RTSLogData;
-import de.dagere.peass.config.MeasurementConfiguration;
+import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.persistence.Dependencies;
 import de.dagere.peass.dependency.persistence.Version;
@@ -24,11 +24,11 @@ public class RTSLogFileReader {
    private static final Logger LOG = LogManager.getLogger(RTSLogFileReader.class);
 
    private final VisualizationFolderManager visualizationFolders;
-   private final MeasurementConfiguration measurementConfig;
+   private final MeasurementConfig measurementConfig;
    private final boolean logsExisting;
    private final boolean versionRunWasSuccess;
 
-   public RTSLogFileReader(final VisualizationFolderManager visualizationFolders, final MeasurementConfiguration measurementConfig) {
+   public RTSLogFileReader(final VisualizationFolderManager visualizationFolders, final MeasurementConfig measurementConfig) {
       this.visualizationFolders = visualizationFolders;
       this.measurementConfig = measurementConfig;
 
@@ -39,7 +39,7 @@ public class RTSLogFileReader {
       versionRunWasSuccess = isVersionRunSuccess(visualizationFolders, measurementConfig);
    }
 
-   private boolean isVersionRunSuccess(final VisualizationFolderManager visualizationFolders, final MeasurementConfiguration measurementConfig) {
+   private boolean isVersionRunSuccess(final VisualizationFolderManager visualizationFolders, final MeasurementConfig measurementConfig) {
       boolean success;
       File dependencyFile = visualizationFolders.getResultsFolders().getDependencyFile();
       if (dependencyFile.exists()) {

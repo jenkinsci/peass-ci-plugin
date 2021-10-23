@@ -7,8 +7,8 @@ import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import org.jenkinsci.remoting.RoleChecker;
 
-import de.dagere.peass.dependency.PeassFolders;
-import de.dagere.peass.dependency.ResultsFolders;
+import de.dagere.peass.folders.PeassFolders;
+import de.dagere.peass.folders.ResultsFolders;
 import hudson.FilePath.FileCallable;
 import hudson.remoting.VirtualChannel;
 import io.jenkins.cli.shaded.org.apache.commons.io.filefilter.WildcardFileFilter;

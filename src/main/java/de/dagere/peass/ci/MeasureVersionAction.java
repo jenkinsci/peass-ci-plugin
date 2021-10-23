@@ -12,7 +12,7 @@ import de.dagere.peass.analysis.changes.Change;
 import de.dagere.peass.analysis.changes.Changes;
 import de.dagere.peass.ci.helper.HistogramValues;
 import de.dagere.peass.ci.helper.RCAVisualizer;
-import de.dagere.peass.config.MeasurementConfiguration;
+import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.measurement.analysis.ProjectStatistics;
 import de.dagere.peass.measurement.analysis.statistics.TestcaseStatistic;
@@ -21,17 +21,17 @@ public class MeasureVersionAction extends VisibleAction {
 
    private static final Logger LOG = LogManager.getLogger(MeasureVersionAction.class);
 
-   private MeasurementConfiguration config;
+   private MeasurementConfig config;
    private Changes changes;
    private ProjectStatistics statistics;
    private final Map<String, TestcaseStatistic> noWarmupStatistics;
    private Map<String, HistogramValues> measurements;
    private String prefix;
-   private Map<String, MeasurementConfiguration> updatedConfigurations;
+   private Map<String, MeasurementConfig> updatedConfigurations;
 
-   public MeasureVersionAction(final MeasurementConfiguration config, final Changes changes, final ProjectStatistics statistics,
+   public MeasureVersionAction(final MeasurementConfig config, final Changes changes, final ProjectStatistics statistics,
          final Map<String, TestcaseStatistic> noWarmupStatistics, final Map<String, HistogramValues> measurements,
-         final Map<String, MeasurementConfiguration> updatedConfigurations) {
+         final Map<String, MeasurementConfig> updatedConfigurations) {
       this.config = config;
       this.changes = changes;
       this.statistics = statistics;
@@ -60,7 +60,7 @@ public class MeasureVersionAction extends VisibleAction {
       return "measurement";
    }
 
-   public MeasurementConfiguration getConfig() {
+   public MeasurementConfig getConfig() {
       return config;
    }
 
@@ -68,7 +68,7 @@ public class MeasureVersionAction extends VisibleAction {
       return !updatedConfigurations.isEmpty();
    }
 
-   public Map<String, MeasurementConfiguration> getUpdatedConfigurations() {
+   public Map<String, MeasurementConfig> getUpdatedConfigurations() {
       return updatedConfigurations;
    }
 

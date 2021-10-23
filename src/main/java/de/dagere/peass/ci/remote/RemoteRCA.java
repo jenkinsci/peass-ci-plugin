@@ -15,10 +15,10 @@ import de.dagere.peass.ci.ContinuousFolderUtil;
 import de.dagere.peass.ci.LogRedirector;
 import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.ci.helper.RCAExecutor;
-import de.dagere.peass.config.MeasurementConfiguration;
-import de.dagere.peass.dependency.ResultsFolders;
+import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.execution.EnvironmentVariables;
 import de.dagere.peass.dependencyprocessors.ViewNotFoundException;
+import de.dagere.peass.folders.ResultsFolders;
 import de.dagere.peass.measurement.rca.CauseSearcherConfig;
 import hudson.FilePath.FileCallable;
 import hudson.model.TaskListener;
@@ -29,7 +29,7 @@ public class RemoteRCA implements FileCallable<Boolean>, Serializable {
 
    private static final long serialVersionUID = 5375409887559433077L;
 
-   private final MeasurementConfiguration measurementConfig;
+   private final MeasurementConfig measurementConfig;
    private final CauseSearcherConfig causeConfig;
    private final ProjectChanges changes;
    private final EnvironmentVariables env;

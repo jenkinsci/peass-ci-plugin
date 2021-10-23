@@ -17,10 +17,10 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.RTSLogFileReader;
 import de.dagere.peass.ci.logs.rts.RTSLogData;
-import de.dagere.peass.config.MeasurementConfiguration;
-import de.dagere.peass.dependency.PeassFolders;
-import de.dagere.peass.dependency.ResultsFolders;
+import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.folders.PeassFolders;
+import de.dagere.peass.folders.ResultsFolders;
 
 public class TestRTSLogFileReader {
 
@@ -74,7 +74,7 @@ public class TestRTSLogFileReader {
    }
 
    private RTSLogFileReader initializeReader() {
-      MeasurementConfiguration peassDemoConfig = new MeasurementConfiguration(2, VERSION, VERSION_OLD);
+      MeasurementConfig peassDemoConfig = new MeasurementConfig(2, VERSION, VERSION_OLD);
 
       VisualizationFolderManager visualizationFolders = Mockito.mock(VisualizationFolderManager.class);
       Mockito.when(visualizationFolders.getPeassFolders()).thenReturn(new PeassFolders(testFolder));

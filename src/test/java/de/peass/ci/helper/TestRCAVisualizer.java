@@ -17,8 +17,8 @@ import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.ci.RCAVisualizationAction;
 import de.dagere.peass.ci.helper.RCAVisualizer;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
-import de.dagere.peass.config.MeasurementConfiguration;
-import de.dagere.peass.dependency.CauseSearchFolders;
+import de.dagere.peass.config.MeasurementConfig;
+import de.dagere.peass.folders.CauseSearchFolders;
 import de.dagere.peass.utils.Constants;
 import hudson.model.Job;
 import hudson.model.Run;
@@ -39,7 +39,7 @@ public class TestRCAVisualizer {
       final Run run = mockRun(visualizationResultFolder);
 
       // Calls the RCAVisualizer, which should be tested
-      MeasurementConfiguration measurementConfig = new MeasurementConfiguration(2);
+      MeasurementConfig measurementConfig = new MeasurementConfig(2);
       measurementConfig.getExecutionConfig().setVersion("b02c92af73e3297be617f4c973a7a63fb603565b");
       VisualizationFolderManager visualizationFolders = new VisualizationFolderManager(folder.getRoot(), run);
       RCAVisualizer visualizer = new RCAVisualizer(measurementConfig, visualizationFolders, changes, run);
