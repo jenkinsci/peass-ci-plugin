@@ -52,3 +52,10 @@ And in the call tree, you can view the measurements for individual call tree nod
 
 # Known Problems
 - Peass only works if you use the latest version of JUnit, i.e. 4.13.x or 5.8.x. If you import an older version of JUnit (or it is imported by plugins you use, e.g. spring boot), please update your JUnit dependency.
+
+# License
+
+Peass-CI is **licensed** under the **[MIT License]** and **[AGPL License]**.
+
+[MIT License]: https://github.com/DaGeRe/peass-ci/blob/main/LICSENSE.MIT
+[AGPL License]: https://github.com/DaGeRe/peass-ci/blob/main/LICENSE.AGPL
