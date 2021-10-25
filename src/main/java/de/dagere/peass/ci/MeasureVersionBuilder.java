@@ -254,6 +254,9 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       config.getExecutionConfig().setCreateDefaultConstructor(createDefaultConstructor);
       config.setExecuteBeforeClassInMeasurement(executeBeforeClassInMeasurement);
       config.setOnlyMeasureWorkload(onlyMeasureWorkload);
+      if (onlyMeasureWorkload && repetitions != 1) {
+         throw new RuntimeException("If onlyMeasureWorkload is set, repetitions should be 1, but are " + repetitions);
+      }
       config.setRedirectToNull(redirectToNull);
       config.setShowStart(showStart);
       config.getExecutionConfig().setRemoveSnapshots(removeSnapshots);
