@@ -6,7 +6,7 @@ The Peass-CI-Plugin enables a continuous performance measurement for Java projec
 - Performance Measurement: The selected tests will be executed (repeating them inside a VM and starting the JVM, as often as you specify it) to identify performance changes.
 - Root Cause Analysis: For every identified performance change, the measurement will be repeated with additional instrumentation of your call tree to identify the method call(s) which cause your performance change (optional).
 
-Peass-CI is currently a research prototype and may not work fully. Please file issues if problems occur.
+Peass-CI is still under development. Please file issues if problems occur.
 
 # Building
 
