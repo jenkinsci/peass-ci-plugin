@@ -209,7 +209,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       listener.getLogger().println("VMs: " + VMs + " Iterations: " + iterations + " Warmup: " + warmup + " Repetitions: " + repetitions);
       listener.getLogger().println("measureJMH: " + measureJMH);
       listener.getLogger().println("Includes: " + includes + " RCA: " + executeRCA);
-      listener.getLogger().println("Strategy: " + measurementMode + " Source Instrumentation: " + useSourceInstrumentation + " Sampling: " + useAggregation);
+      listener.getLogger().println("Strategy: " + measurementMode + " Source Instrumentation: " + useSourceInstrumentation + " Aggregation: " + useAggregation);
       listener.getLogger().println("Create default constructor: " + createDefaultConstructor);
    }
 
@@ -281,7 +281,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          }
       }
       if (useAggregation && !useSourceInstrumentation) {
-         throw new RuntimeException("Sampling may only be used with source instrumentation currently.");
+         throw new RuntimeException("Aggregation may only be used with source instrumentation currently.");
       }
 
       if (versionDiff <= 0) {
