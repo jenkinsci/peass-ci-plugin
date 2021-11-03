@@ -9,19 +9,12 @@ public class RTSResult implements Serializable {
    private static final long serialVersionUID = 700041797958688300L;
 
    private final Set<TestCase> tests;
-   private final String versionOld;
 
-   public RTSResult(final Set<TestCase> tests, final String versionOld) {
+   public RTSResult(final Set<TestCase> tests) {
       this.tests = tests;
-      this.versionOld = versionOld;
    }
 
    public Set<TestCase> getTests() {
       return tests;
    }
-
-   public String getVersionOld() {
-      return versionOld;
-   }
-
 }
