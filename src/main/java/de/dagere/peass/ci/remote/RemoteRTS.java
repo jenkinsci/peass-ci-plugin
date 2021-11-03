@@ -23,6 +23,7 @@ public class RemoteRTS implements FileCallable<RTSResult> {
    private static final Logger LOG = LogManager.getLogger(RemoteRTS.class);
    
    private final PeassProcessConfiguration peassConfig;
+   private String versionOld;
 
    private final TaskListener listener;
 
@@ -53,8 +54,9 @@ public class RemoteRTS implements FileCallable<RTSResult> {
                peassConfig.getMeasurementConfig(), 
                peassConfig.getDependencyConfig(), 
                peassConfig.getEnvVars());
+         versionOld = executor.getVersionOld();
          Set<TestCase> tests = executor.executeRTS();
-         RTSResult result = new RTSResult(tests, executor.getVersionOld());
+         RTSResult result = new RTSResult(tests, versionOld);
          return result;
       } catch (Throwable e) {
          File test = new File(workspaceFolder, "error.txt"); // Workaround, since error redirection on Jenkins agents currently does not work
@@ -66,5 +68,9 @@ public class RemoteRTS implements FileCallable<RTSResult> {
          e.printStackTrace();
          return null;
       }
+   }
+   
+   public String getVersionOld() {
+      return versionOld;
    }
 }

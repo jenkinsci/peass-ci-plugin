@@ -67,7 +67,12 @@ public class LocalPeassProcessManager {
       RTSResult result = workspace.act(rts);
       copyFromRemote();
       if (result != null) {
-         peassConfig.getMeasurementConfig().getExecutionConfig().setVersionOld(result.getVersionOld());
+         listener.getLogger().println("Setting predecessor version, obtained by RTS");
+         String versionOld = result.getVersionOld();
+         peassConfig.getMeasurementConfig().getExecutionConfig().setVersionOld(versionOld);
+      } else {
+         String versionOld = rts.getVersionOld();
+         peassConfig.getMeasurementConfig().getExecutionConfig().setVersionOld(versionOld);
       }
       if (peassConfig.isDisplayRTSLogs()) {
          logActionCreator.createRTSActions();
