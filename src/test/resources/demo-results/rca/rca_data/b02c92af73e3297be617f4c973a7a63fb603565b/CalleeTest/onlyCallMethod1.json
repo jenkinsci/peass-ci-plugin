@@ -9,7 +9,6 @@
     "useKieker" : true,
     "redirectToNull" : true,
     "useGC" : false,
-    "kiekerAggregationInterval" : 5000,
     "javaVersion" : "1.8.0_272",
     "statisticsConfig" : {
     	"type1error" : 0.01,
