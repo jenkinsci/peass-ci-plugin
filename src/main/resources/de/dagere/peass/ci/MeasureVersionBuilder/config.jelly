@@ -66,6 +66,10 @@
                  description="${%removeSnapshotsDescr}">
             <f:checkbox />
         </f:entry>
+        <f:entry title="${%useAlternativeBuildfile}" field="useAlternativeBuildfile"
+                 description="${%useAlternativeBuildfile}">
+            <f:checkbox />
+        </f:entry>
         <f:entry title="${%excludeLog4j}" field="excludeLog4j"
                  description="${%excludeLog4jDescr}">
             <f:checkbox />

@@ -86,6 +86,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
    private boolean updateSnapshotDependencies = true;
    private boolean removeSnapshots = false;
+   private boolean useAlternativeBuildfile = false;
    private boolean excludeLog4j = false;
 
    private boolean useSourceInstrumentation = true;
@@ -297,6 +298,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
       config.getExecutionConfig().setIncludes(getIncludeList());
 
+      config.getExecutionConfig().setUseAlternativeBuildfile(useAlternativeBuildfile);
       config.getExecutionConfig().setRedirectSubprocessOutputToFile(redirectSubprocessOutputToFile);
 
       if (testGoal != null && !"".equals(testGoal)) {
@@ -571,6 +573,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    @DataBoundSetter
    public void setRemoveSnapshots(final boolean removeSnapshots) {
       this.removeSnapshots = removeSnapshots;
+   }
+   
+   public boolean isUseAlternativeBuildfile() {
+      return useAlternativeBuildfile;
+   }
+   
+   @DataBoundSetter
+   public void setUseAlternativeBuildfile(final boolean useAlternativeBuildfile) {
+      this.useAlternativeBuildfile = useAlternativeBuildfile;
    }
 
    public boolean isExcludeLog4j() {
