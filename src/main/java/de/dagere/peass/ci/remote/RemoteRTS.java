@@ -3,7 +3,6 @@ package de.dagere.peass.ci.remote;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,7 +11,7 @@ import org.jenkinsci.remoting.RoleChecker;
 import de.dagere.peass.ci.ContinuousExecutor;
 import de.dagere.peass.ci.JenkinsLogRedirector;
 import de.dagere.peass.ci.PeassProcessConfiguration;
-import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.ci.RTSResult;
 import hudson.FilePath.FileCallable;
 import hudson.model.TaskListener;
 import hudson.remoting.VirtualChannel;
@@ -55,9 +54,8 @@ public class RemoteRTS implements FileCallable<RTSResult> {
                peassConfig.getDependencyConfig(), 
                peassConfig.getEnvVars());
          versionOld = executor.getVersionOld();
-         Set<TestCase> tests = executor.executeRTS();
-         RTSResult result = new RTSResult(tests);
-         return result;
+         RTSResult tests = executor.executeRTS();
+         return tests;
       } catch (Throwable e) {
          File test = new File(workspaceFolder, "error.txt"); // Workaround, since error redirection on Jenkins agents currently does not work
          PrintStream writer = new PrintStream(test, "UTF-8");

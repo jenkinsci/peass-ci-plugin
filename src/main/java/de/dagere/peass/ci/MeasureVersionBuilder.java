@@ -145,15 +145,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          throws IOException, InterruptedException, JAXBException, JsonParseException, JsonMappingException, JsonGenerationException, Exception {
       final LocalPeassProcessManager processManager = new LocalPeassProcessManager(peassConfig, workspace, localWorkspace, listener, run);
 
-      Set<TestCase> tests = processManager.rts();
-      if (tests == null) {
+      RTSResult tests = processManager.rts();
+      if (tests == null || !tests.isRunning()) {
          run.setResult(Result.FAILURE);
          return;
       }
       processManager.visualizeRTSResults(run);
 
-      if (tests.size() > 0) {
-         measure(run, processManager, tests);
+      if (tests.getTests().size() > 0) {
+         measure(run, processManager, tests.getTests());
       } else {
          listener.getLogger().println("No tests selected; no measurement executed");
       }

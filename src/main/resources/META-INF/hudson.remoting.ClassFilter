@@ -6,6 +6,7 @@ de.dagere.peass.config.StatisticsConfig
 de.dagere.peass.analysis.changes.ProjectChanges
 de.dagere.peass.dependencyprocessors.VersionComparator
 de.dagere.peass.measurement.analysis.ProjectStatistics
+de.dagere.peass.ci.RTSResult
 de.dagere.peass.analysis.changes.Changes
 de.dagere.peass.analysis.changes.Change
 de.dagere.peass.measurement.analysis.statistics.TestcaseStatistic

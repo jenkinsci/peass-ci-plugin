@@ -24,7 +24,6 @@ import de.dagere.peass.ci.helper.RCAVisualizer;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.LogActionCreator;
 import de.dagere.peass.ci.persistence.TrendFileUtil;
-import de.dagere.peass.ci.remote.RTSResult;
 import de.dagere.peass.ci.remote.RemoteMeasurer;
 import de.dagere.peass.ci.remote.RemoteRCA;
 import de.dagere.peass.ci.remote.RemoteRTS;
@@ -62,7 +61,7 @@ public class LocalPeassProcessManager {
       this.logActionCreator = new LogActionCreator(peassConfig, run, localWorkspace);
    }
 
-   public Set<TestCase> rts() throws IOException, InterruptedException {
+   public RTSResult rts() throws IOException, InterruptedException {
       RemoteRTS rts = new RemoteRTS(peassConfig, listener);
       RTSResult result = workspace.act(rts);
       copyFromRemote();
@@ -73,7 +72,7 @@ public class LocalPeassProcessManager {
          logActionCreator.createRTSActions();
       }
       if (result != null) {
-         return result.getTests();
+         return result;
       } else {
          return null;
       }
