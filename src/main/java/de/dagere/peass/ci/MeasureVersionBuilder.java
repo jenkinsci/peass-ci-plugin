@@ -146,6 +146,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       final LocalPeassProcessManager processManager = new LocalPeassProcessManager(peassConfig, workspace, localWorkspace, listener, run);
 
       RTSResult tests = processManager.rts();
+      listener.getLogger().println("Tests: " + tests);
       if (tests == null || !tests.isRunning()) {
          run.setResult(Result.FAILURE);
          return;
