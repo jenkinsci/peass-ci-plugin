@@ -2,12 +2,20 @@ package de.dagere.peass.ci.helper;
 
 import java.io.File;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.jenkinsci.plugins.workflow.job.WorkflowJob;
+
 import de.dagere.peass.folders.CauseSearchFolders;
 import de.dagere.peass.folders.PeassFolders;
 import de.dagere.peass.folders.ResultsFolders;
+import hudson.model.Job;
 import hudson.model.Run;
 
 public class VisualizationFolderManager {
+
+   private static final Logger LOG = LogManager.getLogger(VisualizationFolderManager.class);
+
    private File localWorkspace;
    private final Run<?, ?> run;
 
@@ -17,7 +25,8 @@ public class VisualizationFolderManager {
    }
 
    public File getPropertyFolder() {
-      File propertyFolder = new File(localWorkspace, "properties_" + run.getParent().getFullDisplayName());
+      String projectName = getProjectName(run.getParent());
+      File propertyFolder = new File(localWorkspace, "properties_" + projectName);
       if (!propertyFolder.exists()) {
          propertyFolder = new File(localWorkspace, "properties_workspace");
       }
@@ -35,7 +44,8 @@ public class VisualizationFolderManager {
    }
 
    public File getDataFolder() {
-      String rcaResultFolder = run.getParent().getFullDisplayName() + "_peass";
+      String projectName = getProjectName(run.getParent());
+      String rcaResultFolder = projectName + "_peass";
       File dataFolder = new File(localWorkspace, rcaResultFolder);
       if (!dataFolder.exists()) {
          dataFolder = new File(localWorkspace, "workspace_peass");
@@ -48,7 +58,7 @@ public class VisualizationFolderManager {
    }
 
    public PeassFolders getPeassFolders() {
-      String projectName = run.getParent().getFullDisplayName();
+      String projectName = getProjectName(run.getParent());
       File projectFolder = new File(localWorkspace, projectName);
       if (!projectFolder.exists()) {
          projectFolder = new File(localWorkspace, "workspace");
@@ -61,9 +71,9 @@ public class VisualizationFolderManager {
          return new PeassFolders(projectFolder, run.getParent().getFullDisplayName());
       }
    }
-   
+
    public CauseSearchFolders getPeassRCAFolders() {
-      String projectName = run.getParent().getFullDisplayName();
+      String projectName = getProjectName(run.getParent());
       File projectFolder = new File(localWorkspace, projectName);
       if (!projectFolder.exists()) {
          projectFolder = new File(localWorkspace, "workspace");
@@ -78,7 +88,8 @@ public class VisualizationFolderManager {
    }
 
    public ResultsFolders getResultsFolders() {
-      String projectName = run.getParent().getFullDisplayName();
+      String projectName = getProjectName(run.getParent());
+
       File projectFolder = new File(localWorkspace, projectName);
       if (!projectFolder.exists()) {
          projectFolder = new File(localWorkspace, "workspace");
@@ -90,6 +101,25 @@ public class VisualizationFolderManager {
       } else {
          return new ResultsFolders(localWorkspace, run.getParent().getFullDisplayName());
       }
+   }
+
+   private String getProjectName(final Job job) {
+      String projectName;
+      if (job instanceof WorkflowJob) {
+         WorkflowJob workflowJob = (WorkflowJob) run.getParent();
+         String branch = workflowJob.getDisplayName();
+         String jobName = workflowJob.getParent().getFullDisplayName();
+         LOG.debug("Multibranch check: {} - {}", jobName, branch);
+         if (!jobName.isEmpty()) {
+            projectName = jobName + "_" + branch;
+         } else {
+            projectName = branch;
+         }
+      } else {
+         projectName = job.getFullDisplayName();
+      }
+      LOG.trace("Project name: {}", projectName);
+      return projectName;
    }
 
    public File getVisualizationFolder() {
