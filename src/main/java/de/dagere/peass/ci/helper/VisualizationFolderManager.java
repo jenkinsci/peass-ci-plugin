@@ -9,6 +9,8 @@ import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 import de.dagere.peass.folders.CauseSearchFolders;
 import de.dagere.peass.folders.PeassFolders;
 import de.dagere.peass.folders.ResultsFolders;
+import hudson.model.AbstractItem;
+import hudson.model.ItemGroup;
 import hudson.model.Job;
 import hudson.model.Run;
 
@@ -109,7 +111,20 @@ public class VisualizationFolderManager {
          WorkflowJob workflowJob = (WorkflowJob) run.getParent();
          String branch = workflowJob.getDisplayName();
          String jobName = workflowJob.getParent().getFullDisplayName();
-         LOG.debug("Multibranch check: {} - {}", jobName, branch);
+
+         ItemGroup parent = workflowJob.getParent();
+         while (parent != null) {
+            System.out.println("Parent: " + parent.getClass() + " " + parent.getFullDisplayName());
+            System.out.println(parent.getFullName() + " " + parent.getDisplayName());
+            if (parent instanceof AbstractItem) {
+               parent = ((AbstractItem) parent).getParent();
+            } else {
+               parent = null;
+            }
+         }
+         System.out.println();
+
+         LOG.debug("Multibranch check: {} - {} {}", jobName, branch, jobName.isEmpty());
          if (!jobName.isEmpty()) {
             projectName = jobName + "_" + branch;
          } else {
