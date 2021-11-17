@@ -26,7 +26,7 @@ import hudson.model.Run;
 public class TestRCAVisualizer {
 
    @Rule
-   public TemporaryFolder folder = new TemporaryFolder();
+   public TemporaryFolder folder = new TemporaryFolder(new File("target"));
 
    @Test
    public void testHTMLGeneration() throws Exception {
@@ -41,7 +41,7 @@ public class TestRCAVisualizer {
       // Calls the RCAVisualizer, which should be tested
       MeasurementConfig measurementConfig = new MeasurementConfig(2);
       measurementConfig.getExecutionConfig().setVersion("b02c92af73e3297be617f4c973a7a63fb603565b");
-      VisualizationFolderManager visualizationFolders = new VisualizationFolderManager(folder.getRoot(), folder.getRoot(), run);
+      VisualizationFolderManager visualizationFolders = new VisualizationFolderManager(folder.getRoot(), new File(folder.getRoot(), "project"), run);
       RCAVisualizer visualizer = new RCAVisualizer(measurementConfig, visualizationFolders, changes, run);
       visualizer.visualizeRCA();
 
