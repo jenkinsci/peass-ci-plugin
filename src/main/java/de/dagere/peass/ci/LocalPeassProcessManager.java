@@ -50,6 +50,7 @@ public class LocalPeassProcessManager {
    private final PeassProcessConfiguration peassConfig;
    private final ResultsFolders results;
    private final LogActionCreator logActionCreator;
+   private final VisualizationFolderManager visualizationFolders;
 
    public LocalPeassProcessManager(final PeassProcessConfiguration peassConfig, final FilePath workspace, final File localWorkspace, final TaskListener listener,
          final Run<?, ?> run) {
@@ -58,7 +59,9 @@ public class LocalPeassProcessManager {
       this.localWorkspace = localWorkspace;
       this.listener = listener;
       this.results = new ResultsFolders(localWorkspace, run.getParent().getFullDisplayName());
-      this.logActionCreator = new LogActionCreator(peassConfig, run, localWorkspace);
+      visualizationFolders = new VisualizationFolderManager(localWorkspace, new File(workspace.getRemote()), run);
+      this.logActionCreator = new LogActionCreator(peassConfig, run, visualizationFolders);
+      
    }
 
    public RTSResult rts() throws IOException, InterruptedException {
@@ -138,7 +141,6 @@ public class LocalPeassProcessManager {
    }
 
    public void visualizeRCAResults(final Run<?, ?> run, final ProjectChanges changes) throws Exception, IOException {
-      VisualizationFolderManager visualizationFolders = new VisualizationFolderManager(localWorkspace, run);
       final RCAVisualizer rcaVisualizer = new RCAVisualizer(peassConfig.getMeasurementConfig(), visualizationFolders, changes, run);
       rcaVisualizer.visualizeRCA();
 
@@ -148,7 +150,6 @@ public class LocalPeassProcessManager {
    }
 
    private Map<String, TestcaseStatistic> createPureMeasurementVisualization(final Run<?, ?> run, final File dataFolder, final Map<String, HistogramValues> measurements) {
-      VisualizationFolderManager visualizationFolders = new VisualizationFolderManager(localWorkspace, run);
       DefaultMeasurementVisualizer visualizer = new DefaultMeasurementVisualizer(dataFolder, peassConfig.getMeasurementConfig().getExecutionConfig().getVersion(), run,
             visualizationFolders,
             measurements.keySet());

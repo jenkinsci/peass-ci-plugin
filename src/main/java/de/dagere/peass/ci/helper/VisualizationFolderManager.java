@@ -4,14 +4,10 @@ import java.io.File;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 
 import de.dagere.peass.folders.CauseSearchFolders;
 import de.dagere.peass.folders.PeassFolders;
 import de.dagere.peass.folders.ResultsFolders;
-import hudson.model.AbstractItem;
-import hudson.model.ItemGroup;
-import hudson.model.Job;
 import hudson.model.Run;
 
 public class VisualizationFolderManager {
@@ -19,15 +15,17 @@ public class VisualizationFolderManager {
    private static final Logger LOG = LogManager.getLogger(VisualizationFolderManager.class);
 
    private File localWorkspace;
+   private final String projectName;
    private final Run<?, ?> run;
 
-   public VisualizationFolderManager(final File localWorkspace, final Run<?, ?> run) {
+   public VisualizationFolderManager(final File localWorkspace, final File workspace, final Run<?, ?> run) {
       this.localWorkspace = localWorkspace;
       this.run = run;
+      this.projectName = workspace.getName();
+      System.out.println("Workspace name: " + projectName);
    }
 
    public File getPropertyFolder() {
-      String projectName = getProjectName(run.getParent());
       File propertyFolder = new File(localWorkspace, "properties_" + projectName);
       if (!propertyFolder.exists()) {
          propertyFolder = new File(localWorkspace, "properties_workspace");
@@ -46,7 +44,6 @@ public class VisualizationFolderManager {
    }
 
    public File getDataFolder() {
-      String projectName = getProjectName(run.getParent());
       String rcaResultFolder = projectName + "_peass";
       File dataFolder = new File(localWorkspace, rcaResultFolder);
       if (!dataFolder.exists()) {
@@ -60,7 +57,6 @@ public class VisualizationFolderManager {
    }
 
    public PeassFolders getPeassFolders() {
-      String projectName = getProjectName(run.getParent());
       File projectFolder = new File(localWorkspace, projectName);
       if (!projectFolder.exists()) {
          projectFolder = new File(localWorkspace, "workspace");
@@ -75,7 +71,6 @@ public class VisualizationFolderManager {
    }
 
    public CauseSearchFolders getPeassRCAFolders() {
-      String projectName = getProjectName(run.getParent());
       File projectFolder = new File(localWorkspace, projectName);
       if (!projectFolder.exists()) {
          projectFolder = new File(localWorkspace, "workspace");
@@ -90,8 +85,6 @@ public class VisualizationFolderManager {
    }
 
    public ResultsFolders getResultsFolders() {
-      String projectName = getProjectName(run.getParent());
-
       File projectFolder = new File(localWorkspace, projectName);
       if (!projectFolder.exists()) {
          projectFolder = new File(localWorkspace, "workspace");
@@ -103,38 +96,6 @@ public class VisualizationFolderManager {
       } else {
          return new ResultsFolders(localWorkspace, run.getParent().getFullDisplayName());
       }
-   }
-
-   private String getProjectName(final Job job) {
-      String projectName;
-      if (job instanceof WorkflowJob) {
-         WorkflowJob workflowJob = (WorkflowJob) run.getParent();
-         String branch = workflowJob.getDisplayName();
-         String jobName = workflowJob.getParent().getFullDisplayName();
-
-         ItemGroup parent = workflowJob.getParent();
-         while (parent != null) {
-            System.out.println("Parent: " + parent.getClass() + " " + parent.getFullDisplayName());
-            System.out.println(parent.getFullName() + " " + parent.getDisplayName());
-            if (parent instanceof AbstractItem) {
-               parent = ((AbstractItem) parent).getParent();
-            } else {
-               parent = null;
-            }
-         }
-         System.out.println();
-
-         LOG.debug("Multibranch check: {} - {} {}", jobName, branch, jobName.isEmpty());
-         if (!jobName.isEmpty()) {
-            projectName = jobName + "_" + branch;
-         } else {
-            projectName = branch;
-         }
-      } else {
-         projectName = job.getFullDisplayName();
-      }
-      LOG.trace("Project name: {}", projectName);
-      return projectName;
    }
 
    public File getVisualizationFolder() {
