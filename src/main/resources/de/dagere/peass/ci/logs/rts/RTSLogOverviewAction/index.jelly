@@ -17,9 +17,10 @@
       <j:forEach var="run" items="${it.getProcessSuccessRuns().entrySet()}">
         <a href="../processSuccessRun_${run.getKey()}">${run.getKey()}</a>
         <j:if test="${!it.getProcessSuccessRunSucceeded().get(run.getKey())}">
-        <i class="fa fa-exclamation-triangle" title="This run was not successfull. Therefore, the regression test selection could not be finished."
-          style="color: red"></i><br />
-      </j:if>
+          <i class="fa fa-exclamation-triangle" title="This run was not successfull. Therefore, the regression test selection could not be finished."
+          style="color: red"></i>
+        </j:if>
+        <br />
       </j:forEach>
       
 
