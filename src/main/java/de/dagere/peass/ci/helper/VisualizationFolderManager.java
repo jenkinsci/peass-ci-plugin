@@ -18,10 +18,10 @@ public class VisualizationFolderManager {
    private final String projectName;
    private final Run<?, ?> run;
 
-   public VisualizationFolderManager(final File localWorkspace, final File workspace, final Run<?, ?> run) {
+   public VisualizationFolderManager(final File localWorkspace, final String projectName, final Run<?, ?> run) {
       this.localWorkspace = localWorkspace;
       this.run = run;
-      this.projectName = workspace.getName();
+      this.projectName = projectName;
       System.out.println("Workspace name: " + projectName);
    }
 

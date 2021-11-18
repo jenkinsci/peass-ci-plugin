@@ -116,7 +116,7 @@ public class RTSVisualizationCreator {
          }
 
       } else {
-         LOG.error("File {} was not found, RTS selection seems to not have worked at all");
+         LOG.error("File {} was not found, RTS selection seems to not have worked at all", dependencyfile);
       }
       return changesList;
    }

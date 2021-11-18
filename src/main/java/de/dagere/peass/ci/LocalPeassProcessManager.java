@@ -58,8 +58,9 @@ public class LocalPeassProcessManager {
       this.workspace = workspace;
       this.localWorkspace = localWorkspace;
       this.listener = listener;
-      this.results = new ResultsFolders(localWorkspace, run.getParent().getFullDisplayName());
-      visualizationFolders = new VisualizationFolderManager(localWorkspace, new File(workspace.getRemote()), run);
+      String projectName = new File(workspace.getRemote()).getName();
+      this.results = new ResultsFolders(localWorkspace, projectName);
+      visualizationFolders = new VisualizationFolderManager(localWorkspace, projectName, run);
       this.logActionCreator = new LogActionCreator(peassConfig, run, visualizationFolders);
       
    }
