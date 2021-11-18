@@ -1,6 +1,5 @@
 package de.dagere.peass.ci.logs;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Set;
 
@@ -19,10 +18,10 @@ public class LogActionCreator {
    private final LogFileReader reader;
    private final VisualizationFolderManager visualizationFolders;
    
-   public LogActionCreator(final PeassProcessConfiguration peassConfig, final Run<?, ?> run, final File localWorkspace) {
+   public LogActionCreator(final PeassProcessConfiguration peassConfig, final Run<?, ?> run, final VisualizationFolderManager visualizationFolders) {
       this.peassConfig = peassConfig;
       this.run = run;
-      visualizationFolders = new VisualizationFolderManager(localWorkspace, run);
+      this.visualizationFolders = visualizationFolders;
       reader = new LogFileReader(visualizationFolders, peassConfig.getMeasurementConfig());
    }
    

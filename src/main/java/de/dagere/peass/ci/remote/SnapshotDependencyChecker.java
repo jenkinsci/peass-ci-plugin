@@ -11,6 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import de.dagere.peass.config.MeasurementConfig;
+import de.dagere.peass.dependency.execution.pom.MavenPomUtil;
 
 public class SnapshotDependencyChecker {
 
@@ -29,23 +30,29 @@ public class SnapshotDependencyChecker {
 
       final File mavenRepo = getRepository();
       final File kopemeArtifactFolder = new File(mavenRepo, "de" + File.separator + "dagere" + File.separator + "kopeme" + File.separator +
-            "kopeme-junit" + File.separator + "0.14-SNAPSHOT");
-      kopemeFile = new File(kopemeArtifactFolder, "kopeme-junit-0.14-SNAPSHOT.jar");
+            "kopeme-junit" + File.separator + MavenPomUtil.KOPEME_VERSION);
+      kopemeFile = new File(kopemeArtifactFolder, "kopeme-junit-" + MavenPomUtil.KOPEME_VERSION + ".jar");
       File kiekerArtifactFolder = new File(mavenRepo, "net" + File.separator + "kieker-monitoring" + File.separator +
-            "kieker" + File.separator + "1.15-SNAPSHOT");
-      kiekerFile = new File(kiekerArtifactFolder, "kieker-1.15-SNAPSHOT-jar.jar");
+            "kieker" + File.separator + MavenPomUtil.KIEKER_VERSION);
+      kiekerFile = new File(kiekerArtifactFolder, "kieker-" + MavenPomUtil.KIEKER_VERSION + ".jar");
    }
 
    public void checkKopemeAndKieker() throws InterruptedException, IOException {
-      boolean snapshotDependenciesExist = kopemeAndKiekerExist();
-      LOG.info("Snapshot dependencies existing: {} Path: {}", snapshotDependenciesExist, kopemeFile.getAbsolutePath());
-      if (!snapshotDependenciesExist) {
-         cloneAndinstallPeass();
+      if (MavenPomUtil.KIEKER_VERSION.contains("-SNAPSHOT") || MavenPomUtil.KOPEME_VERSION.contains("-SNAPSHOT")) {
+         boolean snapshotDependenciesExist = kopemeAndKiekerExist();
+         LOG.info("Snapshot dependencies existing: {} Path: {}", snapshotDependenciesExist, kopemeFile.getAbsolutePath());
+         if (!snapshotDependenciesExist) {
+            cloneAndinstallPeass();
+         }
+
+         if (!kopemeAndKiekerExist()) {
+            LOG.warn("Kopeme and/or Kieker dependencies could still not be found! Build will possibly fail!");
+         }
+      } else {
+         LOG.info("Kieker version {} and KoPeMe version {} where no snapshots, so no snapshot dependency checking necessary",
+               MavenPomUtil.KIEKER_VERSION, MavenPomUtil.KOPEME_VERSION);
       }
 
-      if (!kopemeAndKiekerExist()) {
-         LOG.warn("Kopeme and/or Kieker dependencies could still not be found! Build will possibly fail!");
-      }
    }
 
    private static File getRepository() {

@@ -24,7 +24,6 @@ import de.dagere.peass.ci.helper.RCAVisualizer;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.LogActionCreator;
 import de.dagere.peass.ci.persistence.TrendFileUtil;
-import de.dagere.peass.ci.remote.RTSResult;
 import de.dagere.peass.ci.remote.RemoteMeasurer;
 import de.dagere.peass.ci.remote.RemoteRCA;
 import de.dagere.peass.ci.remote.RemoteRTS;
@@ -51,6 +50,7 @@ public class LocalPeassProcessManager {
    private final PeassProcessConfiguration peassConfig;
    private final ResultsFolders results;
    private final LogActionCreator logActionCreator;
+   private final VisualizationFolderManager visualizationFolders;
 
    public LocalPeassProcessManager(final PeassProcessConfiguration peassConfig, final FilePath workspace, final File localWorkspace, final TaskListener listener,
          final Run<?, ?> run) {
@@ -58,22 +58,25 @@ public class LocalPeassProcessManager {
       this.workspace = workspace;
       this.localWorkspace = localWorkspace;
       this.listener = listener;
-      this.results = new ResultsFolders(localWorkspace, run.getParent().getFullDisplayName());
-      this.logActionCreator = new LogActionCreator(peassConfig, run, localWorkspace);
+      String projectName = new File(workspace.getRemote()).getName();
+      this.results = new ResultsFolders(localWorkspace, projectName);
+      visualizationFolders = new VisualizationFolderManager(localWorkspace, projectName, run);
+      this.logActionCreator = new LogActionCreator(peassConfig, run, visualizationFolders);
+      
    }
 
-   public Set<TestCase> rts() throws IOException, InterruptedException {
+   public RTSResult rts() throws IOException, InterruptedException {
       RemoteRTS rts = new RemoteRTS(peassConfig, listener);
       RTSResult result = workspace.act(rts);
       copyFromRemote();
-      if (result != null) {
-         peassConfig.getMeasurementConfig().getExecutionConfig().setVersionOld(result.getVersionOld());
-      }
+      String versionOld = rts.getVersionOld();
+      listener.getLogger().println("Setting predecessor version, obtained by RTS: " + versionOld);
+      peassConfig.getMeasurementConfig().getExecutionConfig().setVersionOld(versionOld);
       if (peassConfig.isDisplayRTSLogs()) {
          logActionCreator.createRTSActions();
       }
       if (result != null) {
-         return result.getTests();
+         return result;
       } else {
          return null;
       }
@@ -102,7 +105,7 @@ public class LocalPeassProcessManager {
 
    public void copyFromRemote() throws IOException, InterruptedException {
       String remotePeassPath = ContinuousFolderUtil.getLocalFolder(new File(workspace.getRemote())).getPath();
-      listener.getLogger().print(Arrays.toString( new RuntimeException().getStackTrace()));
+      listener.getLogger().println(Arrays.toString(new RuntimeException().getStackTrace()));
       listener.getLogger().println("Remote Peass path: " + remotePeassPath);
       FilePath remotePeassFolder = new FilePath(workspace.getChannel(), remotePeassPath);
       DirScanner.Glob dirScanner = new DirScanner.Glob("**/*,**/.git/**", "", false);
@@ -128,9 +131,9 @@ public class LocalPeassProcessManager {
       TrendFileUtil.persistTrend(run, localWorkspace, statistics);
 
       Map<String, TestcaseStatistic> noWarmupStatistics = createPureMeasurementVisualization(run, dataFolder, measurements);
-      
+
       Changes versionChanges = changes.getVersion(peassConfig.getMeasurementConfig().getExecutionConfig().getVersion());
-      
+
       final MeasureVersionAction action = new MeasureVersionAction(peassConfig.getMeasurementConfig(), versionChanges, statistics,
             noWarmupStatistics, measurements, histogramReader.getUpdatedConfigurations());
       run.addAction(action);
@@ -139,7 +142,6 @@ public class LocalPeassProcessManager {
    }
 
    public void visualizeRCAResults(final Run<?, ?> run, final ProjectChanges changes) throws Exception, IOException {
-      VisualizationFolderManager visualizationFolders = new VisualizationFolderManager(localWorkspace, run);
       final RCAVisualizer rcaVisualizer = new RCAVisualizer(peassConfig.getMeasurementConfig(), visualizationFolders, changes, run);
       rcaVisualizer.visualizeRCA();
 
@@ -149,8 +151,8 @@ public class LocalPeassProcessManager {
    }
 
    private Map<String, TestcaseStatistic> createPureMeasurementVisualization(final Run<?, ?> run, final File dataFolder, final Map<String, HistogramValues> measurements) {
-      VisualizationFolderManager visualizationFolders = new VisualizationFolderManager(localWorkspace, run);
-      DefaultMeasurementVisualizer visualizer = new DefaultMeasurementVisualizer(dataFolder, peassConfig.getMeasurementConfig().getExecutionConfig().getVersion(), run, visualizationFolders,
+      DefaultMeasurementVisualizer visualizer = new DefaultMeasurementVisualizer(dataFolder, peassConfig.getMeasurementConfig().getExecutionConfig().getVersion(), run,
+            visualizationFolders,
             measurements.keySet());
       visualizer.visualizeMeasurements();
       Map<String, TestcaseStatistic> noWarmupStatistics = visualizer.getNoWarmupStatistics();

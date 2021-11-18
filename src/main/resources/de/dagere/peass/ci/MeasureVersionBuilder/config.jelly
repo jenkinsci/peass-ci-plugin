@@ -38,6 +38,10 @@
            description="${%includesDescr}">
             <f:textbox  default=""/>
         </f:entry>
+        <f:entry title="${%excludes}" field="excludes"
+           description="${%excludesDescr}">
+            <f:textbox  default=""/>
+        </f:entry>
         <f:entry title="${%properties}" field="properties"
            description="${%propertiesDescr}">
             <f:textbox  default=""/>
@@ -64,6 +68,10 @@
         </f:entry>
         <f:entry title="${%removeSnapshots}" field="removeSnapshots"
                  description="${%removeSnapshotsDescr}">
+            <f:checkbox />
+        </f:entry>
+        <f:entry title="${%useAlternativeBuildfile}" field="useAlternativeBuildfile"
+                 description="${%useAlternativeBuildfile}">
             <f:checkbox />
         </f:entry>
         <f:entry title="${%excludeLog4j}" field="excludeLog4j"

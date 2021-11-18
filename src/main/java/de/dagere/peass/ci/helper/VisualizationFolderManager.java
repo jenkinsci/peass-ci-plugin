@@ -2,22 +2,31 @@ package de.dagere.peass.ci.helper;
 
 import java.io.File;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import de.dagere.peass.folders.CauseSearchFolders;
 import de.dagere.peass.folders.PeassFolders;
 import de.dagere.peass.folders.ResultsFolders;
 import hudson.model.Run;
 
 public class VisualizationFolderManager {
+
+   private static final Logger LOG = LogManager.getLogger(VisualizationFolderManager.class);
+
    private File localWorkspace;
+   private final String projectName;
    private final Run<?, ?> run;
 
-   public VisualizationFolderManager(final File localWorkspace, final Run<?, ?> run) {
+   public VisualizationFolderManager(final File localWorkspace, final String projectName, final Run<?, ?> run) {
       this.localWorkspace = localWorkspace;
       this.run = run;
+      this.projectName = projectName;
+      System.out.println("Workspace name: " + projectName);
    }
 
    public File getPropertyFolder() {
-      File propertyFolder = new File(localWorkspace, "properties_" + run.getParent().getFullDisplayName());
+      File propertyFolder = new File(localWorkspace, "properties_" + projectName);
       if (!propertyFolder.exists()) {
          propertyFolder = new File(localWorkspace, "properties_workspace");
       }
@@ -35,7 +44,7 @@ public class VisualizationFolderManager {
    }
 
    public File getDataFolder() {
-      String rcaResultFolder = run.getParent().getFullDisplayName() + "_peass";
+      String rcaResultFolder = projectName + "_peass";
       File dataFolder = new File(localWorkspace, rcaResultFolder);
       if (!dataFolder.exists()) {
          dataFolder = new File(localWorkspace, "workspace_peass");
@@ -48,7 +57,6 @@ public class VisualizationFolderManager {
    }
 
    public PeassFolders getPeassFolders() {
-      String projectName = run.getParent().getFullDisplayName();
       File projectFolder = new File(localWorkspace, projectName);
       if (!projectFolder.exists()) {
          projectFolder = new File(localWorkspace, "workspace");
@@ -61,9 +69,8 @@ public class VisualizationFolderManager {
          return new PeassFolders(projectFolder, run.getParent().getFullDisplayName());
       }
    }
-   
+
    public CauseSearchFolders getPeassRCAFolders() {
-      String projectName = run.getParent().getFullDisplayName();
       File projectFolder = new File(localWorkspace, projectName);
       if (!projectFolder.exists()) {
          projectFolder = new File(localWorkspace, "workspace");
@@ -78,7 +85,6 @@ public class VisualizationFolderManager {
    }
 
    public ResultsFolders getResultsFolders() {
-      String projectName = run.getParent().getFullDisplayName();
       File projectFolder = new File(localWorkspace, projectName);
       if (!projectFolder.exists()) {
          projectFolder = new File(localWorkspace, "workspace");

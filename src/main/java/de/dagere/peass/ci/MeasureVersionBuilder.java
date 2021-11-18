@@ -3,8 +3,6 @@ package de.dagere.peass.ci;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -75,6 +73,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private boolean measureJMH;
 
    private String includes = "";
+   private String excludes = "";
    private String properties = "";
    private String testGoal = "test";
    private String pl = "";
@@ -86,6 +85,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
    private boolean updateSnapshotDependencies = true;
    private boolean removeSnapshots = false;
+   private boolean useAlternativeBuildfile = false;
    private boolean excludeLog4j = false;
 
    private boolean useSourceInstrumentation = true;
@@ -145,15 +145,16 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          throws IOException, InterruptedException, JAXBException, JsonParseException, JsonMappingException, JsonGenerationException, Exception {
       final LocalPeassProcessManager processManager = new LocalPeassProcessManager(peassConfig, workspace, localWorkspace, listener, run);
 
-      Set<TestCase> tests = processManager.rts();
-      if (tests == null) {
+      RTSResult tests = processManager.rts();
+      listener.getLogger().println("Tests: " + tests);
+      if (tests == null || !tests.isRunning()) {
          run.setResult(Result.FAILURE);
          return;
       }
       processManager.visualizeRTSResults(run);
 
-      if (tests.size() > 0) {
-         measure(run, processManager, tests);
+      if (tests.getTests().size() > 0) {
+         measure(run, processManager, tests.getTests());
       } else {
          listener.getLogger().println("No tests selected; no measurement executed");
       }
@@ -209,34 +210,12 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       listener.getLogger().println("VMs: " + VMs + " Iterations: " + iterations + " Warmup: " + warmup + " Repetitions: " + repetitions);
       listener.getLogger().println("measureJMH: " + measureJMH);
       listener.getLogger().println("Includes: " + includes + " RCA: " + executeRCA);
-      listener.getLogger().println("Strategy: " + measurementMode + " Source Instrumentation: " + useSourceInstrumentation + " Sampling: " + useAggregation);
+      listener.getLogger().println("Excludes: " + excludes);      listener.getLogger().println("Strategy: " + measurementMode + " Source Instrumentation: " + useSourceInstrumentation + " Aggregation: " + useAggregation);
       listener.getLogger().println("Create default constructor: " + createDefaultConstructor);
    }
 
    private String getJobName(final Run<?, ?> run) {
       return run.getParent().getFullDisplayName();
-   }
-
-   private List<String> getIncludeList() {
-      StringBuilder errorMessageBuilder = new StringBuilder();
-      List<String> includeList = new LinkedList<>();
-      if (includes != null && includes.trim().length() > 0) {
-         final String nonSpaceIncludes = includes.replaceAll(" ", "");
-         for (String include : nonSpaceIncludes.split(";")) {
-            includeList.add(include);
-            if (!include.contains("#")) {
-               errorMessageBuilder.append("Include ")
-                     .append(include)
-                     .append(" does not contain #; this will not match any method. ");
-            }
-         }
-      }
-      if (errorMessageBuilder.length() > 0) {
-         throw new RuntimeException("Please always add includes in the form package.Class#method, and if you want to include all methods package.Class#*. "
-               + " The following includes contained problems: "
-               + errorMessageBuilder);
-      }
-      return includeList;
    }
 
    public MeasurementConfig getMeasurementConfig() throws JsonParseException, JsonMappingException, IOException {
@@ -254,6 +233,9 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       config.getExecutionConfig().setCreateDefaultConstructor(createDefaultConstructor);
       config.setExecuteBeforeClassInMeasurement(executeBeforeClassInMeasurement);
       config.setOnlyMeasureWorkload(onlyMeasureWorkload);
+      if (onlyMeasureWorkload && repetitions != 1) {
+         throw new RuntimeException("If onlyMeasureWorkload is set, repetitions should be 1, but are " + repetitions);
+      }
       config.setRedirectToNull(redirectToNull);
       config.setShowStart(showStart);
       config.getExecutionConfig().setRemoveSnapshots(removeSnapshots);
@@ -278,7 +260,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          }
       }
       if (useAggregation && !useSourceInstrumentation) {
-         throw new RuntimeException("Sampling may only be used with source instrumentation currently.");
+         throw new RuntimeException("Aggregation may only be used with source instrumentation currently.");
       }
 
       if (versionDiff <= 0) {
@@ -292,8 +274,10 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       final String oldVersion = getOldVersion();
       config.getExecutionConfig().setVersionOld(oldVersion);
 
-      config.getExecutionConfig().setIncludes(getIncludeList());
+      config.getExecutionConfig().setIncludes(IncludeExcludeParser.getStringList(includes));
+      config.getExecutionConfig().setExcludes(IncludeExcludeParser.getStringList(excludes));
 
+      config.getExecutionConfig().setUseAlternativeBuildfile(useAlternativeBuildfile);
       config.getExecutionConfig().setRedirectSubprocessOutputToFile(redirectSubprocessOutputToFile);
 
       if (testGoal != null && !"".equals(testGoal)) {
@@ -452,6 +436,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public void setIncludes(final String includes) {
       this.includes = includes;
    }
+   
+   public String getExcludes() {
+      return excludes;
+   }
+   
+   @DataBoundSetter
+   public void setExcludes(final String excludes) {
+      this.excludes = excludes;
+   }
 
    public boolean isExecuteRCA() {
       return executeRCA;
@@ -568,6 +561,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    @DataBoundSetter
    public void setRemoveSnapshots(final boolean removeSnapshots) {
       this.removeSnapshots = removeSnapshots;
+   }
+   
+   public boolean isUseAlternativeBuildfile() {
+      return useAlternativeBuildfile;
+   }
+   
+   @DataBoundSetter
+   public void setUseAlternativeBuildfile(final boolean useAlternativeBuildfile) {
+      this.useAlternativeBuildfile = useAlternativeBuildfile;
    }
 
    public boolean isExcludeLog4j() {

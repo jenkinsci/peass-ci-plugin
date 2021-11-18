@@ -66,7 +66,7 @@ public class RCAExecutor {
          for (Entry<String, List<Change>> testcases : versionChanges.getTestcaseChanges().entrySet()) {
             for (Change change : testcases.getValue()) {
                final TestCase testCase = new TestCase(testcases.getKey(), change.getMethod());
-               boolean match = NonIncludedTestRemover.isTestIncluded(testCase, config.getExecutionConfig().getIncludes());
+               boolean match = NonIncludedTestRemover.isTestIncluded(testCase, config.getExecutionConfig());
                if (match) {
                   try {
                      analyseChange(currentConfig, testCase);
@@ -88,7 +88,7 @@ public class RCAExecutor {
       for (Entry<String, List<Change>> testcases : versionChanges.getTestcaseChanges().entrySet()) {
          for (Change change : testcases.getValue()) {
             final TestCase testCase = new TestCase(testcases.getKey(), change.getMethod());
-            boolean match = NonIncludedTestRemover.isTestIncluded(testCase, config.getExecutionConfig().getIncludes());
+            boolean match = NonIncludedTestRemover.isTestIncluded(testCase, config.getExecutionConfig());
             if (match) {
                final File expectedResultFile = getExpectedRCAFile(testCase);
                if (!expectedResultFile.exists()) {
