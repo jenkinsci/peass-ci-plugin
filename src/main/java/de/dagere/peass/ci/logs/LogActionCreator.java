@@ -25,10 +25,10 @@ public class LogActionCreator {
       reader = new LogFileReader(visualizationFolders, peassConfig.getMeasurementConfig());
    }
    
-   public void createRTSActions() throws IOException {
+   public void createRTSActions(final boolean staticChanges) throws IOException {
       RTSLogFileReader rtsReader = new RTSLogFileReader(visualizationFolders, peassConfig.getMeasurementConfig());
       RTSActionCreator rtsActionCreator = new RTSActionCreator(rtsReader, run, peassConfig.getMeasurementConfig());
-      rtsActionCreator.createRTSActions();
+      rtsActionCreator.createRTSActions(staticChanges);
    }
 
    public void createMeasurementActions(final Set<TestCase> tests) throws IOException {

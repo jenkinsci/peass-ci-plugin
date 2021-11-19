@@ -13,6 +13,8 @@ import org.apache.logging.log4j.Logger;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.exc.StreamReadException;
+import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import de.dagere.peass.analysis.changes.Changes;
@@ -29,6 +31,8 @@ import de.dagere.peass.ci.remote.RemoteRCA;
 import de.dagere.peass.ci.remote.RemoteRTS;
 import de.dagere.peass.ci.rts.RTSVisualizationCreator;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.persistence.Dependencies;
+import de.dagere.peass.dependency.persistence.Version;
 import de.dagere.peass.folders.ResultsFolders;
 import de.dagere.peass.measurement.analysis.ProjectStatistics;
 import de.dagere.peass.measurement.analysis.statistics.TestcaseStatistic;
@@ -73,7 +77,8 @@ public class LocalPeassProcessManager {
       listener.getLogger().println("Setting predecessor version, obtained by RTS: " + versionOld);
       peassConfig.getMeasurementConfig().getExecutionConfig().setVersionOld(versionOld);
       if (peassConfig.isDisplayRTSLogs()) {
-         logActionCreator.createRTSActions();
+         boolean staticChanges = hasStaticChanges();
+         logActionCreator.createRTSActions(staticChanges);
       }
       if (result != null) {
          return result;
@@ -81,6 +86,19 @@ public class LocalPeassProcessManager {
          return null;
       }
 
+   }
+
+   private boolean hasStaticChanges() throws IOException, StreamReadException, DatabindException {
+      boolean staticChanges = false;
+      File dependencyFile = results.getDependencyFile();
+      if (dependencyFile.exists()) {
+         Dependencies dependencies = Constants.OBJECTMAPPER.readValue(dependencyFile, Dependencies.class);
+         Version version = dependencies.getVersions().get(peassConfig.getMeasurementConfig().getExecutionConfig().getVersion());
+         if (version != null && !version.getChangedClazzes().isEmpty()) {
+            staticChanges = true;
+         }
+      }
+      return staticChanges;
    }
 
    public boolean measure(final Set<TestCase> tests) throws IOException, InterruptedException {
