@@ -66,7 +66,7 @@ public class VisualizationFolderManager {
             return new PeassFolders(projectFolder, "workspace");
          }
       } else {
-         return new PeassFolders(projectFolder, run.getParent().getFullDisplayName());
+         return new PeassFolders(projectFolder, projectName);
       }
    }
 
@@ -94,7 +94,7 @@ public class VisualizationFolderManager {
             return new ResultsFolders(localWorkspace, "workspace");
          }
       } else {
-         return new ResultsFolders(localWorkspace, run.getParent().getFullDisplayName());
+         return new ResultsFolders(localWorkspace, projectName);
       }
    }
 

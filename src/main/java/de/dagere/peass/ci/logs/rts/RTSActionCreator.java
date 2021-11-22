@@ -31,7 +31,7 @@ public class RTSActionCreator {
       this.measurementConfig = measurementConfig;
    }
 
-   public void createRTSActions() throws IOException {
+   public void createRTSActions(final boolean staticChanges) throws IOException {
       if (reader.isLogsExisting()) {
          createOverallLogAction();
 
@@ -40,15 +40,17 @@ public class RTSActionCreator {
          Map<TestCase, RTSLogData> rtsVmRuns = createVersionRTSData(measurementConfig.getExecutionConfig().getVersion());
          Map<TestCase, RTSLogData> rtsVmRunsPredecessor = createVersionRTSData(measurementConfig.getExecutionConfig().getVersionOld());
 
-         createOverviewAction(processSuccessRuns, rtsVmRuns, rtsVmRunsPredecessor);
+         createOverviewAction(processSuccessRuns, rtsVmRuns, rtsVmRunsPredecessor, staticChanges);
       } else {
          LOG.info("No RTS Actions existing; not creating regression test selection actions.");
       }
    }
 
-   private void createOverviewAction(final Map<String, File> processSuccessRuns, final Map<TestCase, RTSLogData> rtsVmRuns, final Map<TestCase, RTSLogData> rtsVmRunsPredecessor) {
+   private void createOverviewAction(final Map<String, File> processSuccessRuns, final Map<TestCase, RTSLogData> rtsVmRuns, final Map<TestCase, RTSLogData> rtsVmRunsPredecessor,
+         final boolean staticChanges) {
       RTSLogOverviewAction overviewAction = new RTSLogOverviewAction(processSuccessRuns, rtsVmRuns, rtsVmRunsPredecessor,
             processSuccessRunSucceeded, measurementConfig.getExecutionConfig().getVersion(), measurementConfig.getExecutionConfig().getVersionOld());
+      overviewAction.setStaticChanges(staticChanges);
       run.addAction(overviewAction);
    }
 

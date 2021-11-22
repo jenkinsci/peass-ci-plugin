@@ -47,6 +47,7 @@ public class RTSLogFileReader {
             Dependencies dependencies = Constants.OBJECTMAPPER.readValue(dependencyFile, Dependencies.class);
             Version version = dependencies.getVersions().get(measurementConfig.getExecutionConfig().getVersion());
             if (version != null) {
+               LOG.debug("Version run success: {}", version.isRunning());
                success = version.isRunning();
             } else {
                success = false;
@@ -57,6 +58,7 @@ public class RTSLogFileReader {
          }
 
       } else {
+         LOG.debug("Dependencyfile {} not found, so run was n o success", dependencyFile);
          success = false;
       }
       return success;

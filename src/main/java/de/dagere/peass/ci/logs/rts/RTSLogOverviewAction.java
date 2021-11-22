@@ -10,9 +10,10 @@ public class RTSLogOverviewAction extends VisibleAction {
 
    private Map<String, File> processSuccessRuns;
    private Map<String, Boolean> processSuccessRunSucceeded;
+   private boolean staticChanges;
    private Map<TestCase, RTSLogData> vmRuns;
    private Map<TestCase, RTSLogData> predecessorVmRuns;
-   private String version, versionOld;
+   private final String version, versionOld;
 
    public RTSLogOverviewAction(final Map<String, File> processSuccessRuns, final Map<TestCase, RTSLogData> vmRuns, final Map<TestCase, RTSLogData> predecessorVmRuns,
          final Map<String, Boolean> processSuccessRunSucceeded, final String version, final String versionOld) {
@@ -23,7 +24,7 @@ public class RTSLogOverviewAction extends VisibleAction {
       this.version = version;
       this.versionOld = versionOld;
    }
-
+   
    public Map<String, File> getProcessSuccessRuns() {
       return processSuccessRuns;
    }
@@ -46,6 +47,14 @@ public class RTSLogOverviewAction extends VisibleAction {
 
    public String getVersionOld() {
       return versionOld;
+   }
+
+   public boolean isStaticChanges() {
+      return staticChanges;
+   }
+
+   public void setStaticChanges(final boolean staticChanges) {
+      this.staticChanges = staticChanges;
    }
 
    @Override
