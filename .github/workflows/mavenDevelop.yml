@@ -36,7 +36,7 @@ jobs:
     - name: Build Peass (Current dependent project version)
       run: |
          branch=develop
-         cd /home/runner/work/ && git clone -b $branch https://github.com/DaGeRe/peass.git && cd peass && echo "Branch: $branch" && git rev-parse HEAD && ./mvnw clean install -DskipTests
+         cd /home/runner/work/ && git clone -b $branch https://github.com/DaGeRe/peass.git && cd peass && echo "Branch: $branch" && git rev-parse HEAD && ./mvnw clean install -DskipTests -P buildStarter
     - name: Build with Maven
       run: | 
          cd /home/runner/work/peass-ci-plugin/peass-ci-plugin/ && ./mvnw -B install --file pom.xml
