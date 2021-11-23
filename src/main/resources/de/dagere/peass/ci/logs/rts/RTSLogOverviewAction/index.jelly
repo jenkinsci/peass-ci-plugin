@@ -34,7 +34,7 @@
 	        Warning: The regression test selection had an error, and no log files were produced for the current version.
 	        <br />
 	      </j:if>
-	      <j:if test="${!it.isStaticallySelectedTests()}()}" >
+	      <j:if test="${!it.isStaticallySelectedTests()}" >
             Changes were detected, but no test method called the changed methods.
           </j:if>
 	      <j:if test="${it.getPredecessorVmRuns().isEmpty()}">
