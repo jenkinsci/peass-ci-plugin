@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import org.jenkinsci.remoting.RoleChecker;
 
-import de.dagere.peass.ci.JenkinsLogRedirector;
+import de.dagere.peass.ci.process.JenkinsLogRedirector;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.vcs.GitUtils;
 import hudson.FilePath.FileCallable;

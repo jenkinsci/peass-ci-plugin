@@ -1,4 +1,4 @@
-package de.dagere.peass.ci;
+package de.dagere.peass.ci.process;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +19,10 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 import de.dagere.peass.analysis.changes.Changes;
 import de.dagere.peass.analysis.changes.ProjectChanges;
+import de.dagere.peass.ci.ContinuousFolderUtil;
+import de.dagere.peass.ci.MeasureVersionAction;
+import de.dagere.peass.ci.PeassProcessConfiguration;
+import de.dagere.peass.ci.RTSResult;
 import de.dagere.peass.ci.helper.DefaultMeasurementVisualizer;
 import de.dagere.peass.ci.helper.HistogramReader;
 import de.dagere.peass.ci.helper.HistogramValues;
@@ -26,7 +30,6 @@ import de.dagere.peass.ci.helper.RCAVisualizer;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.LogActionCreator;
 import de.dagere.peass.ci.persistence.TrendFileUtil;
-import de.dagere.peass.ci.process.RTSInfos;
 import de.dagere.peass.ci.remote.RemoteMeasurer;
 import de.dagere.peass.ci.remote.RemoteRCA;
 import de.dagere.peass.ci.remote.RemoteRTS;
@@ -93,17 +96,19 @@ public class LocalPeassProcessManager {
    }
 
    private RTSInfos hasStaticChanges() throws IOException, StreamReadException, DatabindException {
-
       File dependencyFile = results.getDependencyFile();
       if (dependencyFile.exists()) {
          boolean staticChanges = false;
          Dependencies dependencies = Constants.OBJECTMAPPER.readValue(dependencyFile, Dependencies.class);
          Version version = dependencies.getVersions().get(peassConfig.getMeasurementConfig().getExecutionConfig().getVersion());
-         if (version != null && !version.getChangedClazzes().isEmpty()) {
-            staticChanges = true;
+         boolean hasStaticallySelectedTests = false;
+         if (version != null) {
+            if (!version.getChangedClazzes().isEmpty()) {
+               staticChanges = true;
+            }
+            TestSet tests = version.getTests();
+            hasStaticallySelectedTests = !tests.getTests().isEmpty();
          }
-         TestSet tests = version.getTests();
-         boolean hasStaticallySelectedTests = !tests.getTests().isEmpty();
          return new RTSInfos(staticChanges, hasStaticallySelectedTests);
       } else {
          return new RTSInfos(false, false);

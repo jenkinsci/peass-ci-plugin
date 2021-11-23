@@ -1,4 +1,4 @@
-package de.dagere.peass.ci;
+package de.dagere.peass.ci.process;
 
 import java.util.LinkedList;
 import java.util.List;
