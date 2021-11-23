@@ -13,8 +13,6 @@ import org.apache.logging.log4j.Logger;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.exc.StreamReadException;
-import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import de.dagere.peass.analysis.changes.Changes;
@@ -35,9 +33,6 @@ import de.dagere.peass.ci.remote.RemoteRCA;
 import de.dagere.peass.ci.remote.RemoteRTS;
 import de.dagere.peass.ci.rts.RTSVisualizationCreator;
 import de.dagere.peass.dependency.analysis.data.TestCase;
-import de.dagere.peass.dependency.analysis.data.TestSet;
-import de.dagere.peass.dependency.persistence.Dependencies;
-import de.dagere.peass.dependency.persistence.Version;
 import de.dagere.peass.folders.ResultsFolders;
 import de.dagere.peass.measurement.analysis.ProjectStatistics;
 import de.dagere.peass.measurement.analysis.statistics.TestcaseStatistic;
@@ -84,34 +79,13 @@ public class LocalPeassProcessManager {
          peassConfig.getMeasurementConfig().getExecutionConfig().setVersionOld(versionOld);
       }
       if (peassConfig.isDisplayRTSLogs()) {
-         RTSInfos infos = hasStaticChanges();
+         RTSInfos infos = RTSInfos.readInfosFromFolders(results, peassConfig);
          logActionCreator.createRTSActions(infos);
       }
       if (result != null && result.getTests() != null) {
          return result;
       } else {
          return null;
-      }
-
-   }
-
-   private RTSInfos hasStaticChanges() throws IOException, StreamReadException, DatabindException {
-      File dependencyFile = results.getDependencyFile();
-      if (dependencyFile.exists()) {
-         boolean staticChanges = false;
-         Dependencies dependencies = Constants.OBJECTMAPPER.readValue(dependencyFile, Dependencies.class);
-         Version version = dependencies.getVersions().get(peassConfig.getMeasurementConfig().getExecutionConfig().getVersion());
-         boolean hasStaticallySelectedTests = false;
-         if (version != null) {
-            if (!version.getChangedClazzes().isEmpty()) {
-               staticChanges = true;
-            }
-            TestSet tests = version.getTests();
-            hasStaticallySelectedTests = !tests.getTests().isEmpty();
-         }
-         return new RTSInfos(staticChanges, hasStaticallySelectedTests);
-      } else {
-         return new RTSInfos(false, false);
       }
 
    }
