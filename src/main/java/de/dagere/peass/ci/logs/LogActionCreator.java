@@ -8,6 +8,7 @@ import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.measurement.MeasurementActionCreator;
 import de.dagere.peass.ci.logs.rca.RCAActionCreator;
 import de.dagere.peass.ci.logs.rts.RTSActionCreator;
+import de.dagere.peass.ci.process.RTSInfos;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import hudson.model.Run;
 
@@ -25,7 +26,7 @@ public class LogActionCreator {
       reader = new LogFileReader(visualizationFolders, peassConfig.getMeasurementConfig());
    }
    
-   public void createRTSActions(final boolean staticChanges) throws IOException {
+   public void createRTSActions(final RTSInfos staticChanges) throws IOException {
       RTSLogFileReader rtsReader = new RTSLogFileReader(visualizationFolders, peassConfig.getMeasurementConfig());
       RTSActionCreator rtsActionCreator = new RTSActionCreator(rtsReader, run, peassConfig.getMeasurementConfig());
       rtsActionCreator.createRTSActions(staticChanges);

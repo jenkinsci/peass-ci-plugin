@@ -26,11 +26,13 @@ import de.dagere.peass.ci.helper.RCAVisualizer;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.LogActionCreator;
 import de.dagere.peass.ci.persistence.TrendFileUtil;
+import de.dagere.peass.ci.process.RTSInfos;
 import de.dagere.peass.ci.remote.RemoteMeasurer;
 import de.dagere.peass.ci.remote.RemoteRCA;
 import de.dagere.peass.ci.remote.RemoteRTS;
 import de.dagere.peass.ci.rts.RTSVisualizationCreator;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.data.TestSet;
 import de.dagere.peass.dependency.persistence.Dependencies;
 import de.dagere.peass.dependency.persistence.Version;
 import de.dagere.peass.folders.ResultsFolders;
@@ -66,7 +68,7 @@ public class LocalPeassProcessManager {
       this.results = new ResultsFolders(localWorkspace, projectName);
       visualizationFolders = new VisualizationFolderManager(localWorkspace, projectName, run);
       this.logActionCreator = new LogActionCreator(peassConfig, run, visualizationFolders);
-      
+
    }
 
    public RTSResult rts() throws IOException, InterruptedException {
@@ -79,8 +81,8 @@ public class LocalPeassProcessManager {
          peassConfig.getMeasurementConfig().getExecutionConfig().setVersionOld(versionOld);
       }
       if (peassConfig.isDisplayRTSLogs()) {
-         boolean staticChanges = hasStaticChanges();
-         logActionCreator.createRTSActions(staticChanges);
+         RTSInfos infos = hasStaticChanges();
+         logActionCreator.createRTSActions(infos);
       }
       if (result != null && result.getTests() != null) {
          return result;
@@ -90,17 +92,23 @@ public class LocalPeassProcessManager {
 
    }
 
-   private boolean hasStaticChanges() throws IOException, StreamReadException, DatabindException {
-      boolean staticChanges = false;
+   private RTSInfos hasStaticChanges() throws IOException, StreamReadException, DatabindException {
+
       File dependencyFile = results.getDependencyFile();
       if (dependencyFile.exists()) {
+         boolean staticChanges = false;
          Dependencies dependencies = Constants.OBJECTMAPPER.readValue(dependencyFile, Dependencies.class);
          Version version = dependencies.getVersions().get(peassConfig.getMeasurementConfig().getExecutionConfig().getVersion());
          if (version != null && !version.getChangedClazzes().isEmpty()) {
             staticChanges = true;
          }
+         TestSet tests = version.getTests();
+         boolean hasStaticallySelectedTests = !tests.getTests().isEmpty();
+         return new RTSInfos(staticChanges, hasStaticallySelectedTests);
+      } else {
+         return new RTSInfos(false, false);
       }
-      return staticChanges;
+
    }
 
    public boolean measure(final Set<TestCase> tests) throws IOException, InterruptedException {
