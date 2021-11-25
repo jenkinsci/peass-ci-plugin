@@ -1,0 +1,48 @@
+{
+  "url" : "/home/reichelt/nvme/workspaces/dissworkspace/peass-demo/demo-project",
+  "testGoal" : null,
+  "initialversion" : {
+    "version" : "0d0f5faf9a13f46203b42ed738be1d6b162d6553",
+    "jdk" : 8,
+    "initialDependencies" : {
+      "de.dagere.peass.ExampleTest#test" : {
+        "entities" : [ {
+          "clazz" : "de.dagere.peass.Callee",
+          "method" : "<init>",
+          "parameters" : [ ]
+        }, {
+          "clazz" : "de.dagere.peass.Callee",
+          "method" : "innerMethod",
+          "parameters" : [ ]
+        }, {
+          "clazz" : "de.dagere.peass.Callee",
+          "method" : "method1",
+          "parameters" : [ ]
+        }, {
+          "clazz" : "de.dagere.peass.ExampleClazz",
+          "method" : "<init>",
+          "parameters" : [ ]
+        }, {
+          "clazz" : "de.dagere.peass.ExampleClazz",
+          "method" : "calleeMethod",
+          "parameters" : [ ]
+        }, {
+          "clazz" : "de.dagere.peass.ExampleTest",
+          "method" : "test",
+          "parameters" : [ ]
+        } ]
+      }
+    }
+  },
+  "versions" : {
+    "15f345835d2a0c85070c9d2ffbbb0f098f68adb5" : {
+      "running" : true,
+      "jdk" : 8,
+      "predecessor" : "0d0f5faf9a13f46203b42ed738be1d6b162d6553",
+      "changedClazzes" : {
+        "de.dagere.peass.Callee2" : { }
+      }
+    }
+  },
+  "android" : false
+}

@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 import de.dagere.peass.ci.logs.InternalLogAction;
 import de.dagere.peass.ci.logs.RTSLogFileReader;
+import de.dagere.peass.ci.process.RTSInfos;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import hudson.model.Run;
@@ -31,7 +32,7 @@ public class RTSActionCreator {
       this.measurementConfig = measurementConfig;
    }
 
-   public void createRTSActions(final boolean staticChanges) throws IOException {
+   public void createRTSActions(final RTSInfos staticChanges) throws IOException {
       if (reader.isLogsExisting()) {
          createOverallLogAction();
 
@@ -47,10 +48,11 @@ public class RTSActionCreator {
    }
 
    private void createOverviewAction(final Map<String, File> processSuccessRuns, final Map<TestCase, RTSLogData> rtsVmRuns, final Map<TestCase, RTSLogData> rtsVmRunsPredecessor,
-         final boolean staticChanges) {
+         final RTSInfos rtsInfos) {
       RTSLogOverviewAction overviewAction = new RTSLogOverviewAction(processSuccessRuns, rtsVmRuns, rtsVmRunsPredecessor,
             processSuccessRunSucceeded, measurementConfig.getExecutionConfig().getVersion(), measurementConfig.getExecutionConfig().getVersionOld());
-      overviewAction.setStaticChanges(staticChanges);
+      overviewAction.setStaticChanges(rtsInfos.isStaticChanges());
+      overviewAction.setStaticallySelectedTests(rtsInfos.isStaticallySelectedTests());
       run.addAction(overviewAction);
    }
 

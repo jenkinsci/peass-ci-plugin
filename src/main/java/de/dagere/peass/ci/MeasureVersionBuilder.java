@@ -21,6 +21,9 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.ci.persistence.TestcaseKeyDeserializer;
+import de.dagere.peass.ci.process.IncludeExcludeParser;
+import de.dagere.peass.ci.process.JenkinsLogRedirector;
+import de.dagere.peass.ci.process.LocalPeassProcessManager;
 import de.dagere.peass.ci.remote.RemoteVersionReader;
 import de.dagere.peass.config.DependencyConfig;
 import de.dagere.peass.config.MeasurementConfig;

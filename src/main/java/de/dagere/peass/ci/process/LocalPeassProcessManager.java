@@ -1,4 +1,4 @@
-package de.dagere.peass.ci;
+package de.dagere.peass.ci.process;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,12 +13,14 @@ import org.apache.logging.log4j.Logger;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.exc.StreamReadException;
-import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import de.dagere.peass.analysis.changes.Changes;
 import de.dagere.peass.analysis.changes.ProjectChanges;
+import de.dagere.peass.ci.ContinuousFolderUtil;
+import de.dagere.peass.ci.MeasureVersionAction;
+import de.dagere.peass.ci.PeassProcessConfiguration;
+import de.dagere.peass.ci.RTSResult;
 import de.dagere.peass.ci.helper.DefaultMeasurementVisualizer;
 import de.dagere.peass.ci.helper.HistogramReader;
 import de.dagere.peass.ci.helper.HistogramValues;
@@ -31,8 +33,6 @@ import de.dagere.peass.ci.remote.RemoteRCA;
 import de.dagere.peass.ci.remote.RemoteRTS;
 import de.dagere.peass.ci.rts.RTSVisualizationCreator;
 import de.dagere.peass.dependency.analysis.data.TestCase;
-import de.dagere.peass.dependency.persistence.Dependencies;
-import de.dagere.peass.dependency.persistence.Version;
 import de.dagere.peass.folders.ResultsFolders;
 import de.dagere.peass.measurement.analysis.ProjectStatistics;
 import de.dagere.peass.measurement.analysis.statistics.TestcaseStatistic;
@@ -66,7 +66,7 @@ public class LocalPeassProcessManager {
       this.results = new ResultsFolders(localWorkspace, projectName);
       visualizationFolders = new VisualizationFolderManager(localWorkspace, projectName, run);
       this.logActionCreator = new LogActionCreator(peassConfig, run, visualizationFolders);
-      
+
    }
 
    public RTSResult rts() throws IOException, InterruptedException {
@@ -79,8 +79,8 @@ public class LocalPeassProcessManager {
          peassConfig.getMeasurementConfig().getExecutionConfig().setVersionOld(versionOld);
       }
       if (peassConfig.isDisplayRTSLogs()) {
-         boolean staticChanges = hasStaticChanges();
-         logActionCreator.createRTSActions(staticChanges);
+         RTSInfos infos = RTSInfos.readInfosFromFolders(results, peassConfig);
+         logActionCreator.createRTSActions(infos);
       }
       if (result != null && result.getTests() != null) {
          return result;
@@ -88,19 +88,6 @@ public class LocalPeassProcessManager {
          return null;
       }
 
-   }
-
-   private boolean hasStaticChanges() throws IOException, StreamReadException, DatabindException {
-      boolean staticChanges = false;
-      File dependencyFile = results.getDependencyFile();
-      if (dependencyFile.exists()) {
-         Dependencies dependencies = Constants.OBJECTMAPPER.readValue(dependencyFile, Dependencies.class);
-         Version version = dependencies.getVersions().get(peassConfig.getMeasurementConfig().getExecutionConfig().getVersion());
-         if (version != null && !version.getChangedClazzes().isEmpty()) {
-            staticChanges = true;
-         }
-      }
-      return staticChanges;
    }
 
    public boolean measure(final Set<TestCase> tests) throws IOException, InterruptedException {

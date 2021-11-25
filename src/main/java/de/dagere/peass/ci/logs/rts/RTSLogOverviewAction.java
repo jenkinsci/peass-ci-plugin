@@ -11,6 +11,7 @@ public class RTSLogOverviewAction extends VisibleAction {
    private Map<String, File> processSuccessRuns;
    private Map<String, Boolean> processSuccessRunSucceeded;
    private boolean staticChanges;
+   private boolean staticallySelectedTests;
    private Map<TestCase, RTSLogData> vmRuns;
    private Map<TestCase, RTSLogData> predecessorVmRuns;
    private final String version, versionOld;
@@ -55,6 +56,14 @@ public class RTSLogOverviewAction extends VisibleAction {
 
    public void setStaticChanges(final boolean staticChanges) {
       this.staticChanges = staticChanges;
+   }
+
+   public boolean isStaticallySelectedTests() {
+      return staticallySelectedTests;
+   }
+
+   public void setStaticallySelectedTests(final boolean staticallySelectedTests) {
+      this.staticallySelectedTests = staticallySelectedTests;
    }
 
    @Override
