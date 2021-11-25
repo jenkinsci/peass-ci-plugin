@@ -161,6 +161,17 @@
         </div>
       </j:forEach>
 
+      <h2>
+        ${%measurements}
+        <a href='#' onClick='jq$( "#dialogMeasurements" ).dialog( "open" );'>
+          <i class="fa fa-question-circle" title='Display Help' style="font-size:24px"></i>
+        </a>
+      </h2>
+      <div id="dialogMeasurements" title="${%measurements}">${%measurementsHint}</div>
+      <script>
+        jq$( "#dialogMeasurements" ).dialog({ autoOpen: false });
+      </script>
+
       <st:include page="measurements.jelly" it="${it}" optional="false" />
       <script>
         <j:forEach var="testcase" items="${it.measurements.entrySet()}">
