@@ -15,26 +15,43 @@
     }
 
     .changes-table,
-    .configuration-table {
+    .configuration-table,
+    .measurement-table {
       border: 1px solid #E6E6E6;
       border-collapse: collapse;
     }
 
     .changes-table tr:nth-child(2n),
-    .configuration-table tr:nth-child(2n) {
+    .configuration-table tr:nth-child(2n),
+    .measurement-table tr:nth-child(2n) {
       background-color: #EBEBEB;
     }
 
     .changes-table tr td:nth-child(2n),
-    .configuration-table tr td:nth-child(2n) {
+    .configuration-table tr td:nth-child(2n),
+    .measurement-table tr td:nth-child(2n) {
       padding-left: 1rem;
+      text-align: right;
+    }
+
+    .configuration-table {
+      margin-bottom: 30px;
+    }
+
+    .measurement-table tr td {
+      vertical-align: middle;
+    }
+
+    .measurement-table tr td:nth-child(n+2) {
       text-align: right;
     }
 
     .changes-table td,
     .changes-table tr,
     .configuration-table td,
-    .configuration-table th {
+    .configuration-table th,
+    .measurement-table td,
+    .measurement-table th {
       padding: 5px 15px;
     }
   </style>
@@ -147,38 +164,43 @@
       <st:include page="measurements.jelly" it="${it}" optional="false" />
       <script>
         <j:forEach var="testcase" items="${it.measurements.entrySet()}">
-          var layout = {barmode: "overlay",
-          title: { text: "Histogramm"},
-          xaxis: { title:
-          { text: "Duration / ${testcase.getValue().getUnit()}"}
-          },
-          yaxis: { title: { text: "Frequency"} },
-          height: 275,
-          width: 575
+          var layout = {
+            barmode: "overlay",
+            title: {
+              text: "Histogramm"
+            },
+            xaxis: {
+              title: {
+                text: "Duration / ${testcase.getValue().getUnit()}"
+              }
+            },
+            yaxis: {
+              title: {
+                text: "Frequency"
+              }
+            },
+            height: 275,
+            width: 575
           };
           var version = {
-          x:
-          ${testcase.getValue().valuesCurrentReadable},
-          type: "histogram",
-          name: "Version",
-          opacity: 0.5,
-          marker: {
-          color: 'green',
-          },
+            x: ${testcase.getValue().valuesCurrentReadable},
+            type: "histogram",
+            name: "Version",
+            opacity: 0.5,
+            marker: {
+              color: 'green',
+            },
           };
-          var predecessor =
-          {
-          x:
-          ${testcase.getValue().valuesBeforeReadable},
-          type: "histogram",
-          name: "Predecessor",
-          opacity: 0.6,
-          marker: {
-          color: 'red',
-          },
+          var predecessor = {
+            x: ${testcase.getValue().valuesBeforeReadable},
+            type: "histogram",
+            name: "Predecessor",
+            opacity: 0.6,
+            marker: {
+              color: 'red',
+            },
           };
-          var data = [version,
-          predecessor];
+          var data = [version, predecessor];
           Plotly.newPlot("histogramm_${testcase.getKey()}", data, layout);
         </j:forEach>
       </script>
