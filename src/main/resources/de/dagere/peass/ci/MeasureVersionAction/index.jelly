@@ -179,8 +179,7 @@
                 text: "Frequency"
               }
             },
-            height: 275,
-            width: 575
+            height: 400
           };
           var version = {
             x: ${testcase.getValue().valuesCurrentReadable},
@@ -201,7 +200,10 @@
             },
           };
           var data = [version, predecessor];
-          Plotly.newPlot("histogramm_${testcase.getKey()}", data, layout);
+          var config = {
+            responsive: true
+          };
+          Plotly.newPlot("histogramm_${testcase.getKey()}", data, layout, config);
         </j:forEach>
       </script>
     </l:main-panel>
