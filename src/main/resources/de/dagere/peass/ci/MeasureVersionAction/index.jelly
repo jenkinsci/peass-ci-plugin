@@ -1,20 +1,38 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout" xmlns:x="jelly:xml">
   <style>
+    .card {
+      box-shadow: 0 5px 5px rgba(0, 0, 0, 0.25);
+      padding: 15px;
+    }
+
+    .changes-container {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .changes-table,
     .configuration-table {
       border: 1px solid #E6E6E6;
       border-collapse: collapse;
     }
 
+    .changes-table tr:nth-child(2n),
     .configuration-table tr:nth-child(2n) {
       background-color: #EBEBEB;
     }
 
+    .changes-table tr td:nth-child(2n),
     .configuration-table tr td:nth-child(2n) {
       padding-left: 1rem;
       text-align: right;
     }
 
+    .changes-table td,
+    .changes-table tr,
     .configuration-table td,
     .configuration-table th {
       padding: 5px 15px;
@@ -43,7 +61,7 @@
       </h1>
 
       <h2><a href="#" onClick="jq$('#configuration').toggle();">${%configuration} &#9660;</a></h2>
-      <div id="configuration" style="display:none">
+      <div id="configuration" style="display: none">
         <div><p>${%configurationText}</p></div>
         <table class="configuration-table">
           <tr>
@@ -100,35 +118,31 @@
         jq$( "#dialogChanges" ).dialog({ autoOpen: false });
       </script>
 
-      Version: ${it.getConfig().getVersion()}
-      <br />
-      <table>
-        <j:forEach var="testcase" items="${it.getChanges().getTestcaseChanges().entrySet()}">
-          <tr>
-            <td>
-              <b>${%testcase}</b>
-              : ${testcase.getKey()}
-            </td>
-            <td>
-              <table>
-                <j:forEach var="methodChange" items="${testcase.getValue()}">
-                  <tr>
-                    <td>
-                      Method:
-                      <a href="../${it.getReducedName(testcase.getKey())}_${methodChange.method}">${methodChange.method}</a>
-                    </td>
-                    <td>Old time: ${it.round(methodChange.oldTime/1000)} $&#x00B5;s</td>
-                  </tr>
-                  <tr>
-                    <td>Change: ${methodChange.changePercent} % </td>
-                    <td> t=${it.round(methodChange.tvalue)}</td>
-                  </tr>
-                </j:forEach>
+      <p>Version: ${it.getConfig().getVersion()}</p>
+
+      <j:forEach var="testcase" items="${it.getChanges().getTestcaseChanges().entrySet()}">
+        <h5>${%testcase}: ${testcase.getKey()}</h5>
+        <div class="changes-container">
+          <j:forEach var="methodChange" items="${testcase.getValue()}">
+            <div class="card">
+              <table class="changes-table">
+                <tr>
+                  <td>Method</td>
+                  <td><a href="../${it.getReducedName(testcase.getKey())}_${methodChange.method}">${methodChange.method}</a></td>
+                </tr>
+                <tr>
+                  <td>Old time</td>
+                  <td>${it.round(methodChange.oldTime/1000)} $&#x00B5;s</td>
+                </tr>
+                <tr>
+                  <td>Change</td>
+                  <td><span>${methodChange.changePercent} %</span><br /><span>t = ${it.round(methodChange.tvalue)}</span></td>
+                </tr>
               </table>
-            </td>
-          </tr>
-        </j:forEach>
-      </table>
+            </div>
+          </j:forEach>
+        </div>
+      </j:forEach>
 
       <st:include page="measurements.jelly" it="${it}" optional="false" />
       <script>
