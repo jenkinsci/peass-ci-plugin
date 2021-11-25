@@ -1,5 +1,25 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout" xmlns:x="jelly:xml">
+  <style>
+    .configuration-table {
+      border: 1px solid #E6E6E6;
+      border-collapse: collapse;
+    }
+
+    .configuration-table tr:nth-child(2n) {
+      background-color: #EBEBEB;
+    }
+
+    .configuration-table tr td:nth-child(2n) {
+      padding-left: 1rem;
+      text-align: right;
+    }
+
+    .configuration-table td,
+    .configuration-table th {
+      padding: 5px 15px;
+    }
+  </style>
   <l:layout title="Performance Measurement">
     <l:side-panel>
       <st:include page="sidepanel.jelly" it="${it.run}" optional="true" />
@@ -10,6 +30,7 @@
       <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
       <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
       <script> jq$ = jQuery.noConflict();</script>
+
       <h1>
         ${%resultsTitle}
         <a href='#' onClick='jq$( "#dialogGeneral" ).dialog( "open" );'>
@@ -17,32 +38,33 @@
         </a>
         <div id="dialogGeneral" title="${%helpValues}">${%repetitionHint}</div>
         <script>
-          jq$( "#dialogGeneral" ).dialog({ autoOpen: false });
+          jq$("#dialogGeneral").dialog({ autoOpen: false });
         </script>
       </h1>
-      <a href="#" onClick="jq$('#configuration').toggle();">${%configuration}</a>
+
+      <h2><a href="#" onClick="jq$('#configuration').toggle();">${%configuration} &#9660;</a></h2>
       <div id="configuration" style="display:none">
-        ${%configurationText}
-        <br />
-        <table>
+        <div><p>${%configurationText}</p></div>
+        <table class="configuration-table">
           <tr>
-            <td>VMs </td>
+            <td>VMs</td>
             <td> ${it.config.vms} </td>
           </tr>
           <tr>
             <td>${%iterations}</td>
-            <td> ${it.config.iterations} </td>
+            <td>${it.config.iterations}</td>
           </tr>
           <tr>
             <td>${%warmup}</td>
-            <td> ${it.config.warmup}</td>
+            <td>${it.config.warmup}</td>
           </tr>
           <tr>
             <td>${%repetitions}</td>
-            <td> ${it.config.repetitions}</td>
+            <td>${it.config.repetitions}</td>
           </tr>
         </table>
       </div>
+
       <j:if test="${it.hasUpdatedConfigurations()}">
         ${AMP}
         <a href='#' onClick='jq$( "#dialogUpdates" ).dialog( "open" );' style="font-size:24px; color: red;">
