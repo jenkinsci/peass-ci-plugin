@@ -234,10 +234,14 @@ function plotVMGraph(divName, node, ids, idsPredecessor, name) {
 		yaxis: {
 			title: { text: "Duration / &#x00B5;s" },
 			mode: "lines+markers"
-		}
+		},
+		height: 300
 	};
+	var config = {
+    responsive: true
+  };
 	var graphDiv = document.getElementById(divName);
-	Plotly.newPlot(graphDiv, data, layout);
+	Plotly.newPlot(graphDiv, data, layout, config);
 	graphDiv.on('plotly_relayout', function (event) {
 		console.log(event);
 		xstart = event["xaxis.range[0]"];
@@ -318,7 +322,7 @@ function printTTvalue(averagesPredecessor, averagesCurrent) {
        var relativeDifference = 2.0*diff / (predecessorStat.mean()+currentStat.mean());
        console.log(mannWhitneyP);
 	document.getElementById("tValueTable").innerHTML = "<b>Properties without outlier removal</b>"
-		+ "<table><tr><th>Property</th><th>Predecessor</th><th>Current</th></tr>"
+		+ "<table class='properties-table'><tr><th>Property</th><th>Predecessor</th><th>Current</th></tr>"
 		+ "<tr><td>Mean</td><td>" + Math.round(predecessorStat.mean() * 1000) / 1000 + "</td><td>" + Math.round(currentStat.mean() * 1000) / 1000 + "</td></tr>"
 		+ "<tr><td>Difference</td><td colspan='2'>" + Math.round(diff * 1000) / 1000 + " (" + Math.round(100*relativeDifference*1000)/1000 + "%)</td></tr>"
 		+ "<tr><td>Deviation</td><td>" + Math.round(predecessorStat.stdev() * 1000) / 1000 + "</td><td>" + Math.round(currentStat.stdev() * 1000) / 1000 + "</td></tr>"
@@ -373,14 +377,17 @@ function visualizeHistogram() {
 	};
 	var data = [version, predecessor];
 	var layout = {
-	        layout: {autosize: false, height: "200px"},
+	  layout: {autosize: false, height: "400px"},
 		barmode: "overlay",
 		title: { text: "Histogramm" },
 		xaxis: { title: { text: "Duration / &#x00B5;s" } },
 		yaxis: { title: { text: "Frequency" } }
 	};
+	var config = {
+    responsive: true
+  };
 	var selectedHistogram = document.getElementById("selectedHistogram");
-	Plotly.newPlot(selectedHistogram, data, layout);
+	Plotly.newPlot(selectedHistogram, data, layout, config);
 	selectedHistogram.on('plotly_relayout', function (event) {
 		console.log("Filtering histogram");
 		histStart = event["xaxis.range[0]"];
