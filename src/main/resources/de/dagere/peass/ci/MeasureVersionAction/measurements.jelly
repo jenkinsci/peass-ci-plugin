@@ -34,7 +34,7 @@
 
     .plot-card {
       flex-grow: 1;
-      min-width: 600px;
+      min-width: 400px;
     }
   </style>
 
