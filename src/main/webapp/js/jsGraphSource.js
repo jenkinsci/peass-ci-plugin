@@ -23,9 +23,14 @@ function plotOverallHistogram(divName, node) {
     title: { text: "Histogramm" },
     xaxis: { title: { text: "Duration / &#x00B5;s" } },
     yaxis: { title: { text: "Frequency" } },
-    margin: { t: 30, b: 35 }
+    margin: { t: 30, b: 35 },
+    height: 400
   };
-  Plotly.newPlot(divName, data, layout, { displayModeBar: false });
+  var config = {
+    displayModeBar: false,
+    responsive: true
+  };
+  Plotly.newPlot(divName, data, layout, config);
 
   currentNode = node;
 }
