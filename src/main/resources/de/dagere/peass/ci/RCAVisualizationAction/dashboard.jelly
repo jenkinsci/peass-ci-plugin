@@ -109,36 +109,43 @@
 			<script type="text/javascript" src="${rootURL}/plugin/peass-ci/js/jsGraphSource.js"></script>
 			<script> jq$ = jQuery.noConflict();</script>
 
-			<div  class='part' style='float:left; width:47%; height: 40%'>
-				<div id='overallHistogram' style="width:95%; height: 90%"></div>
-			</div>
-			<div class='part' style='float:right; width:47%; height: 40%'>
-				<div id='selectedHistogram' style="width:95%; height: 95%"></div>
-			</div>
-			<div id='selection' class='part' style='float:left; width:47%; height: 47%'>
-			  <div id='selectionTable' style='float:left; width: 47%; height: 95%'>
-					Available VMs:
-					<table style="height: 90%; width: 300px;">
-						<tr><td>Predecessor</td><td>Current</td></tr>
-						<tr style="height: 90%">
-							<td style='width: 50%; height: 100%'>
-								<div id='predecessorOptions' style='height:100%'></div>
-							</td>
-							<td  style='width: 50%; height: 100%'>
-								<div id='currentOptions' style='height: 100%'></div>
-							</td>
-						</tr>
-					</table>
-					<a href='#' onClick='visualizeSelected();'>Visualize Selected</a>
+			<div class="dashboard-container">
+				<div class="card">
+					<div id="overallHistogram"></div>
 				</div>
-				<div id='tValueTable' style='float: right; width: 45%'></div>
-			</div>
-			<div id='graphs' style='float: right; width: 47%; height: 49%'>
-				<div  class='part' style='width: 100%; height:49%;'>
-					<div id='graphPredecessor' style="width:99%; height: 99%"></div>
+				<div class="card">
+					<div id="selectedHistogram"></div>
 				</div>
-				<div class='part' style='width: 100%; height:49%;' >
-				  <div id='graphCurrent' style="width:99%; height: 99%"></div>
+				<div id="selection" class="card selection-card">
+					<div class="selection-container">
+						<div class="vms-container">
+							<span><b>Available VMs:</b></span>
+							<div class="vms-selection-container">
+								<div class="vms-selection-options">
+									<div><span><b>Predecessor</b></span></div>
+									<div id='predecessorOptions'></div>
+								</div>
+								<div class="vms-selection-options">
+									<div><span><b>Current</b></span></div>
+									<div id='currentOptions'></div>
+								</div>
+							</div>
+							<div class="button-wrap">
+								<a role="button" onClick='visualizeSelected();'>Visualize Selected</a>
+							</div>
+						</div>
+						<div id='tValueTable'></div>
+					</div>
+				</div>
+				<div id='graphs' class='card'>
+					<div id='graphPredecessor'>
+						<span>Wählen sie die zu visualisierenden VMs aus!</span>
+					</div>
+				</div>
+				<div class='card'>
+					<div id='graphCurrent'>
+						<span>Wählen sie die zu visualisierenden VMs aus!</span>
+					</div>
 				</div>
 			</div>
 			<j:set var="dataJS" value="${it.getDataJS()}" />
