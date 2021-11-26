@@ -15,7 +15,7 @@ public class TestLongestPrefix {
       Set<String> oneTestcase = new HashSet<>();
       oneTestcase.add("de.dagere.testpackage.TestClass#methodA");
 
-      Assert.assertEquals("de.dagere.testpackage", RCAVisualizer.getLongestPrefix(oneTestcase));
+      Assert.assertEquals("de.dagere.testpackage.", RCAVisualizer.getLongestPrefix(oneTestcase));
    }
    
    @Test
@@ -25,7 +25,7 @@ public class TestLongestPrefix {
       severalTestcases.add("de.dagere.testpackage.MyTest#methodB");
       severalTestcases.add("de.dagere.testpackage.SomeStuff#methodC");
 
-      Assert.assertEquals("de.dagere.testpackage", RCAVisualizer.getLongestPrefix(severalTestcases));
+      Assert.assertEquals("de.dagere.testpackage.", RCAVisualizer.getLongestPrefix(severalTestcases));
    }
    
    @Test
@@ -35,6 +35,6 @@ public class TestLongestPrefix {
       severalTestcases.add("de.dagere.MyTest#methodB");
       severalTestcases.add("de.dagere.otherPackage.SomeStuff#methodC");
 
-      Assert.assertEquals("de.dagere", RCAVisualizer.getLongestPrefix(severalTestcases));
+      Assert.assertEquals("de.dagere.", RCAVisualizer.getLongestPrefix(severalTestcases));
    }
 }
