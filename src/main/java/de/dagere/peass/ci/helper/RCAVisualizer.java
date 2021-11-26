@@ -71,20 +71,26 @@ public class RCAVisualizer {
             File jsFile = new File(versionVisualizationFolder, name + ".js");
             LOG.info("Trying to copy {} Exists: {}", jsFile.getAbsolutePath(), jsFile.exists());
             if (jsFile.exists()) {
-               final String destName = testcases.getKey() + "_" + change.getMethod() + ".js";
-               final File rcaDestFile = new File(rcaResults, destName);
-               FileUtils.copyFile(jsFile, rcaDestFile);
-
-               LOG.info("Adding: " + rcaDestFile + " " + name);
-               final String displayName = name.substring(longestPrefix.length() + 1);
-               
-               final String content = FileUtils.readFileToString(rcaDestFile, StandardCharsets.UTF_8);
-               run.addAction(new RCAVisualizationAction(displayName, content));
+               createRCAAction(rcaResults, longestPrefix, testcases, change, name, jsFile);
             } else {
                LOG.error("An error occured: " + jsFile.getAbsolutePath() + " not found");
             }
          }
       }
+   }
+
+   public void createRCAAction(final File rcaResults, final String longestPrefix, final Entry<String, List<Change>> testcases, final Change change, final String name,
+         final File jsFile)
+         throws IOException {
+      final String destName = testcases.getKey() + "_" + change.getMethod() + ".js";
+      final File rcaDestFile = new File(rcaResults, destName);
+      FileUtils.copyFile(jsFile, rcaDestFile);
+
+      LOG.info("Adding: " + rcaDestFile + " " + name);
+      final String displayName = name.substring(longestPrefix.length());
+
+      final String content = FileUtils.readFileToString(rcaDestFile, StandardCharsets.UTF_8);
+      run.addAction(new RCAVisualizationAction(displayName, content));
    }
 
    public static String getLongestPrefix(final Set<String> tests) {
@@ -95,7 +101,7 @@ public class RCAVisualizer {
          longestPrefix = "";
       }
       for (final String clazz : tests) {
-         String withoutClazzItself = clazz.substring(0, clazz.lastIndexOf('.'));
+         String withoutClazzItself = clazz.substring(0, clazz.lastIndexOf('.') + 1);
          longestPrefix = StringUtils.getCommonPrefix(longestPrefix, withoutClazzItself);
       }
       return longestPrefix;

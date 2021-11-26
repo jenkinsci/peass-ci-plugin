@@ -1,0 +1,25 @@
+{
+  "versionCount" : 1,
+  "changeCount" : 7,
+  "testcaseCount" : 7,
+  "versionChanges" : {
+    "c887b6745ad3a967c81681294ce5aafbdbc772da" : {
+      "testcaseChanges" : {
+        "myModule§de.package.TestClazzA" : [ {
+          "method" : "testSomething",
+          "oldTime" : 1.4351456E7,
+          "changePercent" : -239.57,
+          "tvalue" : -81.392515704437,
+          "vms" : 2
+        } ],
+        "myModule§net.package.TestClazzB" : [ {
+          "method" : "testSomethingElse",
+          "oldTime" : 2102971.25,
+          "changePercent" : -1570.05,
+          "tvalue" : -4175.35791088965,
+          "vms" : 2
+        } ]
+      }
+    }
+  }
+}
