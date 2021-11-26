@@ -322,7 +322,7 @@ function printTTvalue(averagesPredecessor, averagesCurrent) {
        var relativeDifference = 2.0*diff / (predecessorStat.mean()+currentStat.mean());
        console.log(mannWhitneyP);
 	document.getElementById("tValueTable").innerHTML = "<b>Properties without outlier removal</b>"
-		+ "<table><tr><th>Property</th><th>Predecessor</th><th>Current</th></tr>"
+		+ "<table class='properties-table'><tr><th>Property</th><th>Predecessor</th><th>Current</th></tr>"
 		+ "<tr><td>Mean</td><td>" + Math.round(predecessorStat.mean() * 1000) / 1000 + "</td><td>" + Math.round(currentStat.mean() * 1000) / 1000 + "</td></tr>"
 		+ "<tr><td>Difference</td><td colspan='2'>" + Math.round(diff * 1000) / 1000 + " (" + Math.round(100*relativeDifference*1000)/1000 + "%)</td></tr>"
 		+ "<tr><td>Deviation</td><td>" + Math.round(predecessorStat.stdev() * 1000) / 1000 + "</td><td>" + Math.round(currentStat.stdev() * 1000) / 1000 + "</td></tr>"
