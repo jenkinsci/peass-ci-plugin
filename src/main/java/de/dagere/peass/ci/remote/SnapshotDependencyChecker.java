@@ -86,7 +86,7 @@ public class SnapshotDependencyChecker {
       File parentFolder = workspaceFolder.getParentFile();
       File peassFolder = new File(parentFolder, "peass");
       if (!peassFolder.exists()) {
-         ProcessBuilder builder = new ProcessBuilder("git", "clone", "--progress", "https://github.com/DaGeRe/peass")
+         ProcessBuilder builder = new ProcessBuilder("git", "clone", "--branch", "develop", "--progress", "https://github.com/DaGeRe/peass")
                .directory(parentFolder);
          setRedirection(logFile, builder);
       } else {
