@@ -67,7 +67,7 @@ public class DefaultMeasurementVisualizer {
 
                LOG.debug("Adding action: " + testcase.getExecutable());
 
-               String name = testcase.getExecutable().replace("#", "_").substring(longestPrefix.length() + 1);
+               String name = testcase.getExecutable().replace("#", "_").substring(longestPrefix.length());
 
                final String content = FileUtils.readFileToString(testcaseVisualizationFile, StandardCharsets.UTF_8);
                run.addAction(new MeasurementVisualizationAction("measurement_" + name, content));
