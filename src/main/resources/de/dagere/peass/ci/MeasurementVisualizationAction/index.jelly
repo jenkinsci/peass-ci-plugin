@@ -1,28 +1,26 @@
 <?jelly escape-by-default='false'?>
 <j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:st="jelly:stapler">
-	<l:layout title="Measurement Dashboard"> 
-	    <style>
-		.part{
-		  background-color: #DDD; border: 2px solid blue; border-radius: 1em 1em 1em 1em; padding: 1em;
-		}
+	<l:layout title="Measurement Dashboard">
+	  <style>
+			.part{
+				background-color: #DDD; border: 2px solid blue; border-radius: 1em 1em 1em 1em; padding: 1em;
+			}
 		</style>
-        <l:side-panel> 
-            <st:include page="sidepanel.jelly" it="${it.run}" optional="true" /> 
-        </l:side-panel>
-        <l:main-panel>
-        	<script type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+		<l:side-panel>
+			<st:include page="sidepanel.jelly" it="${it.run}" optional="true" />
+		</l:side-panel>
+    <l:main-panel>
+      <script type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 			<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 			<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jstat@latest/dist/jstat.min.js"></script>
 			<script type="text/javascript" src="${rootURL}/plugin/peass-ci/js/jsGraphSource.js"></script>
-            <script> jq$ = jQuery.noConflict();</script>
-			
-			<div  class='part' style='float:left; width:47%; height: 40%'>
-				<div id='overallHistogram' style="width:95%; height: 90%">
-    			</div>
+      <script> jq$ = jQuery.noConflict();</script>
+
+			<div class='part' style='float:left; width:47%; height: 40%'>
+				<div id='overallHistogram' style="width:95%; height: 90%"></div>
 			</div>
 			<div class='part' style='float:right; width:47%; height: 40%'>
-				<div id='selectedHistogram' style="width:95%; height: 95%">
-    			</div>
+				<div id='selectedHistogram' style="width:95%; height: 95%"></div>
 			</div>
 			<div id='selection' class='part' style='float:left; width:47%; height: 47%'>
 			  <div id='selectionTable' style='float:left; width: 47%; height: 95%'>
@@ -31,38 +29,31 @@
 			  	<tr><td>Predecessor</td><td>Current</td></tr>
 			    <tr style="height: 90%">
 			      <td style='width: 50%; height: 100%'>
-			       <div id='predecessorOptions' style='height:100%'>
-			       </div>
-			     </td>
-			     <td  style='width: 50%; height: 100%'>
-			      <div id='currentOptions' style='height: 100%'>
-			      </div>
-			   </td></tr>
+			       	<div id='predecessorOptions' style='height:100%'></div>
+			     	</td>
+			     	<td  style='width: 50%; height: 100%'>
+			      	<div id='currentOptions' style='height: 100%'></div>
+			   		</td>
+					</tr>
 			  </table>
 			  <a href='#' onClick='visualizeSelected();'>Visualize Selected</a>
-			  </div>
-			  <div id='tValueTable' style='float: right; width: 45%'>
-			  
-			  </div>
+			</div>
+			  <div id='tValueTable' style='float: right; width: 45%'></div>
 			</div>
 			<div id='graphs' style='float: right; width: 47%; height: 49%'>
 				<div  class='part' style='width: 100%; height:49%;' >
-					<div id='graphPredecessor' style="width:99%; height: 99%">
-					
-					</div>
+					<div id='graphPredecessor' style="width:99%; height: 99%"></div>
 				</div>
 				<div class='part' style='width: 100%; height:49%;' >
-				    <div id='graphCurrent' style="width:99%; height: 99%">
-					
-					</div>
+				  <div id='graphCurrent' style="width:99%; height: 99%"></div>
 				</div>
 			</div>
-					
-			<j:set var="dataJS" value="${it.getDataJS()}" /> 
+
+			<j:set var="dataJS" value="${it.getDataJS()}" />
 			<script>
 			  ${dataJS}
-			</script>	
-			<script type="text/javascript" src="${rootURL}/plugin/peass-ci/js/peass-dashboard-start.js"/>	
-        </l:main-panel>
-    </l:layout>
+			</script>
+			<script type="text/javascript" src="${rootURL}/plugin/peass-ci/js/peass-dashboard-start.js"/>
+    </l:main-panel>
+  </l:layout>
 </j:jelly>
