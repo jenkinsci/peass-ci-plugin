@@ -116,7 +116,7 @@ public class MeasureVersionAction extends VisibleAction {
    }
 
    public String getReducedName(final String name) {
-      return name.substring(prefix.length() + 1);
+      return name.substring(prefix.length());
    }
 
    public double round(final double value) {
