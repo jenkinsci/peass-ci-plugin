@@ -30,7 +30,7 @@
 		      margin-bottom: 10px;
 	    	}
     	</style>
-    	<st:include page="../style.jelly" optional="false" />
+    	<st:include page="/style.jelly" optional="false" />
         <l:side-panel> 
             <st:include page="sidepanel.jelly" it="${it.run}" optional="true" /> 
         </l:side-panel>
