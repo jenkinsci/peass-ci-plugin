@@ -1,0 +1,26 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core">
+	<style type="text/css">
+		.button-wrap a {
+		border: 2px solid #4d545d;
+		border-radius: 4px;
+		color: #4d545d;
+		cursor: pointer;
+		padding: 0.375rem 1rem;
+		text-decoration: none;
+		white-space: nowrap;
+		}
+
+		.button-wrap a:focus,
+		.button-wrap a:hover {
+		border-color: #0b6aa2;
+		color: #0b6aa2;
+		}
+
+		.card {
+		box-shadow: 0 5px 5px rgba(0, 0, 0, 0.25);
+		padding: 15px;
+		height: 100%;
+		}
+	</style>
+</j:jelly>

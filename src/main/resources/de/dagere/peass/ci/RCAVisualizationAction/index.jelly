@@ -23,6 +23,7 @@
 			  stroke-width: 2px;
 			}
     	</style>
+    	<st:include page="../style.jelly" optional="false" />
         <l:side-panel> 
             <st:include page="sidepanel.jelly" it="${it.run}" optional="true" /> 
         </l:side-panel>
@@ -40,28 +41,33 @@
 			<div id='header'
 				style='position: relative; width: 100%;'>
 				<div id='infos'
-					style='float:left; background-color: #DDD; border: 2px solid blue; border-radius: 1em 1em 1em 1em; padding: 1em;'>
+				    class='card'
+					style='float:left;'>
 				Statistische Informationen
 				</div>
 				
 				<div id="testcaseDiv" 
-					style='overflow:scroll; background-color: #DDD; border: 2px solid blue; border-radius: 1em 1em 1em 1em; padding: 1em;'>
+					class='card'
+					style='overflow:scroll; '>
 				</div>
 			</div>
 			
 			<div id='tree' 
-				style='position: relative; width: 100%; min-height: 500px; overflow: scroll; border: 2px solid blue; border-radius: 1em 1em 1em 1em;'> 
+			    class='card'
+				style='position: relative; width: 100%; min-height: 500px; overflow: scroll;'> 
 			</div>
 			
 			<div id='footer'
 				style='position: relative; width: 100%;'>
 				<div id='histogramm' 
-				   style='float: left; width: 650px; min-height: 150px; overflow: scroll; background-color: #DDD; border: 2px solid blue; border-radius: 1em 1em 1em 1em; padding: 1em;'>
+				   class='card'
+				   style='float: left; width: 650px; min-height: 150px; overflow: scroll; '>
 				Plot
 				</div>
 				
 				<div id='quelltext' 
-					style='overflow: scroll; background-color: #DDD; border: 2px solid blue; border-radius: 1em 1em 1em 1em; padding: 1em;'>
+				    class='card'
+					style='overflow: scroll;'>
 				Quelltext
 				</div>
 			</div>
