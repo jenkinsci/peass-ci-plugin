@@ -6,20 +6,6 @@
       display: flex;
     }
 
-    .button-wrap a {
-      border: 2px solid #4d545d;
-      border-radius: 4px;
-      color: #4d545d;
-      padding: 0.375rem 1rem;
-      text-decoration: none;
-    }
-
-    .button-wrap a:focus,
-    .button-wrap a:hover {
-      border-color: #0b6aa2;
-      color: #0b6aa2;
-    }
-
     .measurements-container {
       display: flex;
       flex-direction: row;

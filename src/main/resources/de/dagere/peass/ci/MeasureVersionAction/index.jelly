@@ -77,7 +77,7 @@
         </script>
       </h1>
 
-      <h2><a href="#" onClick="jq$('#configuration').toggle();">${%configuration} &#9660;</a></h2>
+      <a href="#" onClick="jq$('#configuration').toggle();">${%configuration} &#9660;</a>
       <div id="configuration" style="display: none">
         <div><p>${%configurationText}</p></div>
         <table class="configuration-table">
@@ -172,6 +172,7 @@
         jq$( "#dialogMeasurements" ).dialog({ autoOpen: false });
       </script>
 
+	  <st:include page="/style.jelly" optional="false" />
       <st:include page="measurements.jelly" it="${it}" optional="false" />
       <script>
         <j:forEach var="testcase" items="${it.measurements.entrySet()}">
