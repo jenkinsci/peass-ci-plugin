@@ -241,6 +241,7 @@ function plotVMGraph(divName, node, ids, idsPredecessor, name) {
     responsive: true
   };
 	var graphDiv = document.getElementById(divName);
+	graphDiv.innerHTML = ''; 
 	Plotly.newPlot(graphDiv, data, layout, config);
 	graphDiv.on('plotly_relayout', function (event) {
 		console.log(event);
