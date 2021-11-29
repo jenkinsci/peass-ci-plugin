@@ -52,15 +52,15 @@
           </j:if>
           <tr>
             <th></th>
-            <th colspan="2">Warmup Removed</th>
-            <th colspan="2">Full Measurement</th>
+            <th colspan="2">${%warmupRemoved}</th>
+            <th colspan="2">${%fullMeasurement}</th>
           </tr>
           <tr>
             <th>Property</th>
-            <th>Predecessor Version</th>
-            <th>Current Version</th>
-            <th>Predecessor Version</th>
-            <th>Current Version</th>
+            <th>${%predecessorVersion}</th>
+            <th>${%currentVersion}</th>
+            <th>${%predecessorVersion}</th>
+            <th>${%currentVersion}</th>
           </tr>
           <tr>
             <td>${%mean}<br />${%measured}</td>

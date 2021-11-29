@@ -227,7 +227,7 @@ function diffUsingJS(text1, text2, outputDiv) {
 
 function shownode(node) {
   if (node.statistic != null){
-	  infos.innerHTML="<table>" +
+	  infos.innerHTML="<table class='general-table'>" +
       "<tr><th>Property</th><th>Predecessor</th><th>Current</th></tr>"+
       "<tr><td>Mean</td><td>" + round(node.statistic.meanOld) +    " &micro;s</td><td>" + round(node.statistic.meanCurrent)+" &micro;s</td></tr>"+
       "<tr><td>Deviation</td><td>" + round(node.statistic.deviationOld)+"</td><td>" + round(node.statistic.deviationCurrent)+"</td></tr>"+
@@ -254,13 +254,14 @@ function shownode(node) {
   }
   
   
-  var inspectLink = "";
+  var inspectLink = "<p class='button-wrap'>";
   if (node.ess != -1){
     if (jenkins) {
-      inspectLink = "<a href='dashboard?ess="+node.ess+"&call=" + encodeURIComponent(node.call)+"' target='parent'>Inspect Node</a><br><br>";
+      inspectLink += "<a role='button' href='dashboard?ess="+node.ess+"&call=" + encodeURIComponent(node.call)+"' target='parent'>Inspect Node</a><br><br>";
     } else {
-      inspectLink = "<a href='"+treeData[0].call.replace("#", "_") +"_dashboard.html?ess="+node.ess+"&call=" + encodeURIComponent(node.call)+"' target='parent'>Inspect Node</a><br><br>";
+      inspectLink += "<a role='button' href='"+treeData[0].call.replace("#", "_") +"_dashboard.html?ess="+node.ess+"&call=" + encodeURIComponent(node.call)+"' target='parent'>Inspect Node</a><br><br>";
     }
+    inspectLink+="</p>";
   }
   if (node.kiekerPattern != node.otherKiekerPattern) {
   	histogramm.innerHTML=node.kiekerPattern + " " + node.otherKiekerPattern + inspectLink;
