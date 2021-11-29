@@ -5,16 +5,17 @@
             <st:include page="sidepanel.jelly" it="${it.run}" optional="true" /> 
         </l:side-panel>
         <l:main-panel>
+            <st:include page="/style.jelly" optional="false" />
             <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
             <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
             <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css"/>
             
             <h1>Regression Test Selection Results</h1> 
-            <a href="#" onClick="$('#configuration').toggle();">Configuration</a>
+            <a href="#" onClick="$('#configuration').toggle();">${%configuration} &#9660;</a>
             <div id="configuration" style="display:none">
-              Regression Test Selection was executed with the following configuration:<br/>           
-              <table>
+              ${%configurationText}<br/>           
+              <table class="configuration-table">
                 <tr><td>Threads</td><td>${it.config.threads}</td></tr>
                 <tr><td>doNotUpdateDependencies</td><td>${it.config.doNotUpdateDependencies}</td></tr>
                 <tr><td>generateViews</td><td>${it.config.generateViews}</td></tr>
@@ -34,7 +35,8 @@
 				$( "#dialogStaticallySelected" ).dialog({ autoOpen: false });
 			</script>
             
-            <table><tr><th>Change</th><th>Test Cases</th></tr>
+            <table class="general-table">
+            <tr><th>Change</th><th>Test Cases</th></tr>
             <j:forEach var="change" items="${it.staticSelection.entrySet()}">
               <tr><td>${change.getKey()}</td><td>
                 <j:forEach var="testcase" items="${change.getValue()}">

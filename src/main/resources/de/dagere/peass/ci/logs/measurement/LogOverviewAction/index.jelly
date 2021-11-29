@@ -5,6 +5,7 @@
             <st:include page="sidepanel.jelly" it="${it.run}" optional="true" /> 
         </l:side-panel>
 		<l:main-panel>
+		    <st:include page="/style.jelly" optional="false" />
 		    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
 			
 			<h1>Performance Measurement Logs Overview</h1>
@@ -12,7 +13,7 @@
 			<j:forEach var="testcase" items="${it.getLogFiles().entrySet()}" >
 				<b>Test Case: ${testcase.getKey()}</b>
 				VMs: ${testcase.getValue().size()}
-				<table>
+				<table  class="general-table">
 				<tr><th>VM-Id</th><th>Predecessor</th><th>End Time</th><th>Version</th><th>End Time</th></tr>
 				<j:set var="vmid" value="0"/>
 				<j:forEach var="logFilePair" items="${testcase.getValue()}">

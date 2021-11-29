@@ -22,5 +22,39 @@
 		padding: 15px;
 		height: 100%;
 		}
+		
+		.general-table,
+		.changes-table,
+	    .configuration-table,
+	    .measurement-table {
+	      border: 1px solid #E6E6E6;
+	      border-collapse: collapse;
+	    }
+	
+		.general-table tr:nth-child(2n),
+	    .changes-table tr:nth-child(2n),
+	    .configuration-table tr:nth-child(2n),
+	    .measurement-table tr:nth-child(2n) {
+	      background-color: #EBEBEB;
+	    }
+	
+		.general-table tr:nth-child(2n),
+	    .changes-table tr td:nth-child(2n),
+	    .configuration-table tr td:nth-child(2n),
+	    .measurement-table tr td:nth-child(2n) {
+	      padding-left: 1rem;
+	      text-align: right;
+	    }
+	    
+	    .general-table tr,
+	    .general-table td,
+	    .changes-table td,
+	    .changes-table tr,
+	    .configuration-table td,
+	    .configuration-table th,
+	    .measurement-table td,
+	    .measurement-table th {
+	      padding: 5px 15px;
+	    }
 	</style>
 </j:jelly>
