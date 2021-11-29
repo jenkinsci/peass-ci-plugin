@@ -234,12 +234,12 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       config.setUseGC(useGC);
       config.setEarlyStop(false);
       config.getExecutionConfig().setCreateDefaultConstructor(createDefaultConstructor);
-      config.setExecuteBeforeClassInMeasurement(executeBeforeClassInMeasurement);
-      config.setOnlyMeasureWorkload(onlyMeasureWorkload);
+      config.getExecutionConfig().setExecuteBeforeClassInMeasurement(executeBeforeClassInMeasurement);
+      config.getExecutionConfig().setOnlyMeasureWorkload(onlyMeasureWorkload);
       if (onlyMeasureWorkload && repetitions != 1) {
          throw new RuntimeException("If onlyMeasureWorkload is set, repetitions should be 1, but are " + repetitions);
       }
-      config.setRedirectToNull(redirectToNull);
+      config.getExecutionConfig().setRedirectToNull(redirectToNull);
       config.setShowStart(showStart);
       config.getExecutionConfig().setRemoveSnapshots(removeSnapshots);
       config.getExecutionConfig().setExcludeLog4j(excludeLog4j);
