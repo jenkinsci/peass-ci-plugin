@@ -1,19 +1,19 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout" >
 	<l:layout title="Performance Measurement Log Overview">
-		 <l:side-panel> 
-            <st:include page="sidepanel.jelly" it="${it.run}" optional="true" /> 
+		 <l:side-panel>
+            <st:include page="sidepanel.jelly" it="${it.run}" optional="true" />
         </l:side-panel>
 		<l:main-panel>
 		    <st:include page="/style.jelly" optional="false" />
 		    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
-			
+
 			<h1>Performance Measurement Logs Overview</h1>
 			<a href="../measurementLog">Peass Measurement Execution Log</a><br />
 			<j:forEach var="testcase" items="${it.getLogFiles().entrySet()}" >
 				<b>Test Case: ${testcase.getKey()}</b>
 				VMs: ${testcase.getValue().size()}
-				<table  class="general-table">
+				<table  class="data-table">
 				<tr><th>VM-Id</th><th>Predecessor</th><th>End Time</th><th>Version</th><th>End Time</th></tr>
 				<j:set var="vmid" value="0"/>
 				<j:forEach var="logFilePair" items="${testcase.getValue()}">
@@ -22,8 +22,8 @@
 			    		<td>
 			    		  <a href="../measurelog_${testcase.getKey().getLinkUsable()}_${vmid}_${it.versionOld}">${it.versionOld}</a>
 			    		  <j:if test="${!logFilePair.isPredecessorSuccess()}">
-			    		    <i class="fa fa-exclamation-triangle" 
-			    		      title="This run did not correctly produce measurement results. Checking it for timeout or exceptions might lead to further insights." 
+			    		    <i class="fa fa-exclamation-triangle"
+			    		      title="This run did not correctly produce measurement results. Checking it for timeout or exceptions might lead to further insights."
 			    		      style="color: red"></i>
 			    		  </j:if>
 			    		</td>
@@ -31,8 +31,8 @@
 			    		<td>
 			    		  <a href="../measurelog_${testcase.getKey().getLinkUsable()}_${vmid}_${it.version}">${it.version}</a>
 			    		  <j:if test="${!logFilePair.isCurrentSuccess()}">
-			    		    <i class="fa fa-exclamation-triangle" 
-			    		      title="This run did not correctly produce measurement results. Checking it for timeout or exceptions might lead to further insights." 
+			    		    <i class="fa fa-exclamation-triangle"
+			    		      title="This run did not correctly produce measurement results. Checking it for timeout or exceptions might lead to further insights."
 			    		      style="color: red"></i>
 			    		  </j:if>
 			    		</td>
@@ -42,9 +42,9 @@
 				</j:forEach>
 				</table>
 			</j:forEach>
-			
-			
+
+
 
 		</l:main-panel>
 	</l:layout>
-</j:jelly> 
+</j:jelly>

@@ -15,6 +15,14 @@
       margin-bottom: 10px;
     }
 
+    .measurement-table tr td {
+      vertical-align: middle;
+    }
+
+    .measurement-table tr td:nth-child(n+2) {
+      text-align: right;
+    }
+
     .plot {
       border: 1px solid #E6E6E6;
     }
@@ -42,7 +50,7 @@
         <div class="plot" id='histogramm_${testcase.getKey()}'></div>
       </div>
       <div class="card">
-        <table class="measurement-table">
+        <table class="data-table measurement-table">
           <j:set var="currentStatistic" value="${it.getTestcaseStatistic(testcase.getKey())}" />
           <j:set var="noWarmupStatistic" value="${it.getNoWarmupStatistic(testcase.getKey())}" />
           <j:if test="${it.getUpdatedConfigurations().get(testcase.getKey()).repetitions != it.config.repetitions}">
