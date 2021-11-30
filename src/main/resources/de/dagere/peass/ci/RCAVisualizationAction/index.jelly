@@ -36,6 +36,7 @@
 
 			.tree-card {
 				max-height: 500px;
+				min-height: 300px;
 				overflow: auto;
 				width: 100%;
 			}
