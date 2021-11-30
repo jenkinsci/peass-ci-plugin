@@ -241,7 +241,7 @@ function plotVMGraph(divName, node, ids, idsPredecessor, name) {
     responsive: true
   };
 	var graphDiv = document.getElementById(divName);
-	graphDiv.innerHTML = ''; 
+	graphDiv.innerHTML = '';
 	Plotly.newPlot(graphDiv, data, layout, config);
 	graphDiv.on('plotly_relayout', function (event) {
 		console.log(event);
@@ -447,7 +447,7 @@ if (currentNode == null) {
 	currentNode = treeData[0];
 }
 
-document.getElementById("overallHistogram").innerHTML = "Current Node: " + currentNode.call
+document.getElementById("currentNode").innerHTML = "Current Node: " + currentNode.call
 
 plotOverallHistogram("overallHistogram", currentNode);
 

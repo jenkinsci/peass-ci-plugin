@@ -107,6 +107,7 @@
 
 			<div class="dashboard-container">
 				<div class="card">
+					<div id="currentNode"></div>
 					<div id="overallHistogram"></div>
 				</div>
 				<div class="card">
