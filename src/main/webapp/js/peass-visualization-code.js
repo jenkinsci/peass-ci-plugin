@@ -259,10 +259,11 @@ function shownode(node) {
     inspectLink+="</p>";
   }
   if (node.kiekerPattern != node.otherKiekerPattern) {
-  	histogramm.innerHTML=node.kiekerPattern + " " + node.otherKiekerPattern + inspectLink;
+  	kieker.innerHTML = node.kiekerPattern + " " + node.otherKiekerPattern;
   } else {
-  	histogramm.innerHTML=node.kiekerPattern + node.otherKiekerPattern + inspectLink;
+  	kieker.innerHTML = node.kiekerPattern + "<br>" + node.otherKiekerPattern;
   }
+  histogrammLink.innerHTML = inspectLink;
   plotOverallHistogram("histogramm", node);
 }
 
