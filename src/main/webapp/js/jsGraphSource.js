@@ -27,7 +27,6 @@ function plotOverallHistogram(divName, node) {
     height: 400
   };
   var config = {
-    displayModeBar: false,
     responsive: true
   };
   Plotly.newPlot(divName, data, layout, config);
