@@ -137,7 +137,7 @@
             <b>${it.config.statisticsConfig.type1error}</b>
             (= ${(1-it.config.statisticsConfig.type1error)*100}%
             ${%helpTValueSignificance}
-            <b>${it.config.vms}</b>
+            <b>${it.config.vms}</b> VMs (Degrees of Freedom: <b>${it.getDegreesOfFreedom()}</b>)
             ${%helpTValueMiddle}
             <b>${it.round(it.getCriticalTValue())}</b>
             ${%helpTValueEnd}
