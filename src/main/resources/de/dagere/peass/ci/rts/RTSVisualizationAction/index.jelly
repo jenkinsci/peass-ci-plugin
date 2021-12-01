@@ -1,8 +1,8 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:st="jelly:stapler">
-    <l:layout title="Regression Test Selection"> 
-        <l:side-panel> 
-            <st:include page="sidepanel.jelly" it="${it.run}" optional="true" /> 
+    <l:layout title="Regression Test Selection">
+        <l:side-panel>
+            <st:include page="sidepanel.jelly" it="${it.run}" optional="true" />
         </l:side-panel>
         <l:main-panel>
             <st:include page="/style.jelly" optional="false" />
@@ -10,11 +10,11 @@
             <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
             <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css"/>
-            
-            <h1>Regression Test Selection Results</h1> 
+
+            <h1>Regression Test Selection Results</h1>
             <a href="#" onClick="$('#configuration').toggle();">${%configuration} &#9660;</a>
             <div id="configuration" style="display:none">
-              ${%configurationText}<br/>           
+              ${%configurationText}<br/>
               <table class="configuration-table">
                 <tr><td>Threads</td><td>${it.config.threads}</td></tr>
                 <tr><td>doNotUpdateDependencies</td><td>${it.config.doNotUpdateDependencies}</td></tr>
@@ -24,18 +24,18 @@
                 <tr><td>Old Version</td><td>${it.getVersionOld()}</td></tr>
               </table>
             </div>
-            
-            
+
+
             <h2>Statically Selected Tests
              <a href='#' onClick='$( "#dialogStaticallySelected" ).dialog( "open" );'><i class="fa fa-question-circle" title='Display Help' style="font-size:24px" ></i></a>
             </h2>
-            
+
             <div id="dialogStaticallySelected" title="Statically Selected Changes">Peass-CI first selects changes by static code analysis. Therefore, all changes (which may affect a method or all methods of a class) are generated and the tests, which call the changes, are derived.</div>
             <script>
 				$( "#dialogStaticallySelected" ).dialog({ autoOpen: false });
 			</script>
-            
-            <table class="general-table">
+
+            <table class="data-table">
             <tr><th>Change</th><th>Test Cases</th></tr>
             <j:forEach var="change" items="${it.staticSelection.entrySet()}">
               <tr><td>${change.getKey()}</td><td>
@@ -46,12 +46,12 @@
             </j:forEach>
             </table>
             <j:if test="${it.config.generateViews}">
-            
-            
+
+
             <h2>Trace-based Selected Tests
             <a href='#' onClick='$( "#dialogTraceSelected" ).dialog( "open" );'><i class="fa fa-question-circle" title='Display Help' style="font-size:24px" ></i></a>
             </h2>
-            
+
             <div id="dialogTraceSelected" title="Trace Selected Changes">In the second step, the traces of the statically selected test cases are derived. Only test cases with a change in the trace are selected.</div>
             <script>
 				$( "#dialogTraceSelected" ).dialog({ autoOpen: false });
@@ -60,16 +60,16 @@
 	           <a href="../rts_${testcase.replace('#', '_')}"> ${testcase} </a><br />
 	        </j:forEach>
 	        </j:if>
-	        
+
 	        <j:if test="${!it.config.generateViews}">
 	          generateViews was false, therefore no trace-based selected changes are displayed
 	        </j:if>
-	        
+
 	        <j:if test="${it.config.generateCoverageSelection}">
             <h2>Coverage-based Selected Tests
             <a href='#' onClick='$( "#dialogCoverageSelected" ).dialog( "open" );'><i class="fa fa-question-circle" title='Display Help' style="font-size:24px" ></i></a>
             </h2>
-            
+
             <div id="dialogCoverageSelected" title="Coverage Selected Changes">Finally, tests are selected in a way that every source code change is covered by at least one test case. Deactivate this is you want to measure all trace-based selected tests.</div>
             <script>
 				$( "#dialogCoverageSelected" ).dialog({ autoOpen: false });
@@ -100,7 +100,7 @@
 	        </j:forEach>
 	        </table>
 	        </j:if>
-	        
+
 	        <j:if test="${!it.config.generateCoverageSelection}">
 	          Coverage-based selection was false, therefore no coverage results are displayed
 	        </j:if>

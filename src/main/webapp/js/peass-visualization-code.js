@@ -1,4 +1,4 @@
-	
+
 var i = 0,
 	duration = 750,
 	root;
@@ -39,27 +39,23 @@ svg.call(equal_changed);
 root = treeData[0];
 root.x0 = height / 2;
 root.y0 = 0;
-  
+
 update(root);
 
 d3.select(self.frameElement).style("height", "500px");
 
 function getTexture(node){
-  if (node.hasSourceChange)
-  { 
-    switch (node.state){
-	  case 'FASTER': return faster_changed.url();
-	  case 'SLOWER': return slower_changed.url();
-	  case 'UNKNOWN': return unknown_changed.url();
-	  case null: return equal_changed.url();
-	}
-  }
-  else 
-	return node.color;
+  if (node.hasSourceChange) {
+    switch (node.state) {
+      case 'FASTER': return faster_changed.url();
+      case 'SLOWER': return slower_changed.url();
+      case 'UNKNOWN': return unknown_changed.url();
+      case null: return equal_changed.url();
+    }
+  } else return node.color;
 }
 
 function update(source) {
-	
   var t = textures.lines()
 	  .thicker();
 
@@ -184,7 +180,7 @@ function collapseNode(parent){
 function fallbackCopyTextToClipboard(text) {
   var textArea = document.createElement("textarea");
   textArea.value = text;
-  
+
   // Avoid scrolling to bottom
   textArea.style.top = "0";
   textArea.style.left = "0";
@@ -227,11 +223,11 @@ function diffUsingJS(text1, text2, outputDiv) {
 
 function shownode(node) {
   if (node.statistic != null){
-	  infos.innerHTML="<table class='general-table'>" +
+	  infos.innerHTML="<table class='data-table'>" +
       "<tr><th>Property</th><th>Predecessor</th><th>Current</th></tr>"+
       "<tr><td>Mean</td><td>" + round(node.statistic.meanOld) +    " &micro;s</td><td>" + round(node.statistic.meanCurrent)+" &micro;s</td></tr>"+
       "<tr><td>Deviation</td><td>" + round(node.statistic.deviationOld)+"</td><td>" + round(node.statistic.deviationCurrent)+"</td></tr>"+
-      "<tr><td>In-VM-Deviation</td><td>" + round(node.inVMDeviationPredecessor) + "</td><td>" + round(node.inVMDeviation)+ "</td></tr>" + 
+      "<tr><td>In-VM-Deviation</td><td>" + round(node.inVMDeviationPredecessor) + "</td><td>" + round(node.inVMDeviation)+ "</td></tr>" +
       "</table> VMs: " + node.statistic.vms +
       " T=" + round(node.statistic.tvalue);
   } else {
@@ -252,8 +248,7 @@ function shownode(node) {
       }
     }
   }
-  
-  
+
   var inspectLink = "<p class='button-wrap'>";
   if (node.ess != -1){
     if (jenkins) {
@@ -264,10 +259,11 @@ function shownode(node) {
     inspectLink+="</p>";
   }
   if (node.kiekerPattern != node.otherKiekerPattern) {
-  	histogramm.innerHTML=node.kiekerPattern + " " + node.otherKiekerPattern + inspectLink;
+  	kieker.innerHTML = node.kiekerPattern + " " + node.otherKiekerPattern;
   } else {
-  	histogramm.innerHTML=node.kiekerPattern + node.otherKiekerPattern + inspectLink;
+  	kieker.innerHTML = node.kiekerPattern + "<br>" + node.otherKiekerPattern;
   }
+  histogrammLink.innerHTML = inspectLink;
   plotOverallHistogram("histogramm", node);
 }
 
