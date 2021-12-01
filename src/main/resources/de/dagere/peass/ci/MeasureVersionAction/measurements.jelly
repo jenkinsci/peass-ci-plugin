@@ -37,7 +37,6 @@
             <th></th>
             <th colspan="2">
               <span>${%warmupRemoved}</span>
-              <span>histogramm_${testcase.getKey()}</span>
               <br />
               <a href="#" onClick="jq$('.fullMeasurement').toggle(); window.dispatchEvent(new Event('resize'));">Volle Messung anzeigen/verbergen</a>
             </th>
