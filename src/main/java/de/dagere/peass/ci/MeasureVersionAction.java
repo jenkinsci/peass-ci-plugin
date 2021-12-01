@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.math3.distribution.TDistribution;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,6 +15,7 @@ import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.measurement.analysis.ProjectStatistics;
 import de.dagere.peass.measurement.analysis.statistics.TestcaseStatistic;
+import de.dagere.peass.statistics.StatisticUtil;
 
 public class MeasureVersionAction extends VisibleAction {
 
@@ -98,7 +98,13 @@ public class MeasureVersionAction extends VisibleAction {
    }
 
    public double getCriticalTValue() {
-      return new TDistribution(config.getVms() * 2 - 1).inverseCumulativeProbability(1 - config.getStatisticsConfig().getType1error());
+      int degreesOfFreedom = getDegreesOfFreedom();
+      return StatisticUtil.getCriticalValueTTest(config.getStatisticsConfig().getType1error(), degreesOfFreedom);
+   }
+
+   public int getDegreesOfFreedom() {
+      int degreesOfFreedom = config.getVms() * 2 - 2;
+      return degreesOfFreedom;
    }
 
    public double abs(final double value) {
