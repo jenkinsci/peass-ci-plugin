@@ -14,7 +14,7 @@ public class VisualizationFolderManager {
 
    private static final Logger LOG = LogManager.getLogger(VisualizationFolderManager.class);
 
-   private File localWorkspace;
+   private final File localWorkspace;
    private final String projectName;
    private final Run<?, ?> run;
 
@@ -89,9 +89,15 @@ public class VisualizationFolderManager {
       if (!projectFolder.exists()) {
          projectFolder = new File(localWorkspace, "workspace");
          if (!projectFolder.exists()) {
-            for (File file : localWorkspace.listFiles()) {
-               LOG.info("Existing file: {}", file.getAbsolutePath());
+            File[] files = localWorkspace.listFiles();
+            if (files != null) {
+               for (File file : files) {
+                  LOG.info("Existing file: {}", file.getAbsolutePath());
+               }
+            }else {
+               LOG.error("Local workspace did not contain anything");
             }
+            
             throw new RuntimeException(localWorkspace.getAbsolutePath() + " neither contains workspace_peass nor " + projectName + "; one must exist for visualization!");
          } else {
             return new ResultsFolders(localWorkspace, "workspace");
