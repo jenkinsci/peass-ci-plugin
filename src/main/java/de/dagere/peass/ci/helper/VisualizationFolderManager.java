@@ -89,6 +89,9 @@ public class VisualizationFolderManager {
       if (!projectFolder.exists()) {
          projectFolder = new File(localWorkspace, "workspace");
          if (!projectFolder.exists()) {
+            for (File file : localWorkspace.listFiles()) {
+               LOG.info("Existing file: {}", file.getAbsolutePath());
+            }
             throw new RuntimeException(localWorkspace.getAbsolutePath() + " neither contains workspace_peass nor " + projectName + "; one must exist for visualization!");
          } else {
             return new ResultsFolders(localWorkspace, "workspace");
