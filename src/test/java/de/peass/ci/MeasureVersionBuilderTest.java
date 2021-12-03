@@ -77,6 +77,8 @@ public class MeasureVersionBuilderTest {
       builder.setWarmup(WARMUP);
       builder.setSignificanceLevel(0.05);
       builder.setExecuteRCA(false);
+      builder.setRedirectSubprocessOutputToFile(false);
+      builder.setShowStart(true);
       return builder;
    }
 }
