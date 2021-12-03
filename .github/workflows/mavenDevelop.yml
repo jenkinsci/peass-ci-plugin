@@ -37,20 +37,7 @@ jobs:
     - name: maven-settings-xml-action
       uses: whelk-io/maven-settings-xml-action@v20
       with:
-        repositories: |
-          [
-            {
-              "id": "central",
-              "name": "Maven Central",
-              "url": "https://repo1.maven.org/maven2",
-              "releases": {
-                "enabled": "true"
-              },
-              "snapshots": {
-                "enabled": "true"
-              }
-           }
-        ]
+        repositories: '[{        "id": "central",         "name": "Maven Central",               "url": "https://repo1.maven.org/maven2",               "releases": {                 "enabled": "true"               },                "snapshots": {                 "enabled": "true"               }            } ]'
     - name: Cache Maven packages
       uses: actions/cache@v2
       with:
