@@ -34,23 +34,6 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: ${{ matrix.java }}
-    - name: maven-settings-xml-action
-      uses: whelk-io/maven-settings-xml-action@v20
-      with:
-        repositories: >
-          [
-            {
-              "id": "central",
-              "name": "Maven Central",
-              "url": "https://repo1.maven.org/maven2",
-              "releases": {
-                "enabled": "true"
-              },
-              "snapshots": {
-                "enabled": "true"
-              }
-           }
-        ]
     - name: Cache Maven packages
       uses: actions/cache@v2
       with:
@@ -63,7 +46,7 @@ jobs:
     #     branch=develop
     #     cd /home/runner/work/ && git clone -b $branch https://github.com/DaGeRe/peass.git && cd peass && echo "Branch: $branch" && git rev-parse HEAD && ./mvnw clean install -DskipTests -P buildStarter
     - name: Build with Maven
-      run: ./mvnw -B install --file pom.xml 
+      run: ./mvnw -B install --file pom.xml -P develop
     - name: Publish Test Report
       if: ${{ always() }}      
       uses: scacap/action-surefire-report@v1
