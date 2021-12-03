@@ -54,21 +54,25 @@ public class RTSVisualizationCreator {
          run.addAction(rtsVisualizationAction);
 
          for (String traceSelectedTest : traceSelectedTests) {
-            TestCase testcase = new TestCase(traceSelectedTest);
-            File traceFolder = localWorkspace.getVersionDiffFolder(peassConfig.getMeasurementConfig().getExecutionConfig().getVersion());
-            File traceFile = new File(traceFolder, testcase.getShortClazz() + "#" + testcase.getMethod() + ".txt");
-            System.out.println("Trace file: " + traceFile.getAbsolutePath());
-            String traceSource = "";
-            if (traceFile.exists()) {
-               traceSource = FileUtils.readFileToString(traceFile, StandardCharsets.UTF_8);
-            }
-
-            RTSTraceAction traceAction = new RTSTraceAction(traceSelectedTest, traceSource);
-            run.addAction(traceAction);
+            visualizeTest(run, traceSelectedTest);
          }
       } catch (IOException e) {
          throw new RuntimeException(e);
       }
+   }
+
+   private void visualizeTest(final Run<?, ?> run, String traceSelectedTest) throws IOException {
+      TestCase testcase = new TestCase(traceSelectedTest);
+      File traceFolder = localWorkspace.getVersionDiffFolder(peassConfig.getMeasurementConfig().getExecutionConfig().getVersion());
+      File traceFile = new File(traceFolder, testcase.getShortClazz() + "#" + testcase.getMethod() + ".txt");
+      System.out.println("Trace file: " + traceFile.getAbsolutePath());
+      String traceSource = "";
+      if (traceFile.exists()) {
+         traceSource = FileUtils.readFileToString(traceFile, StandardCharsets.UTF_8);
+      }
+
+      RTSTraceAction traceAction = new RTSTraceAction(traceSelectedTest, traceSource);
+      run.addAction(traceAction);
    }
 
    private List<String> readDynamicSelection(final Run<?, ?> run) throws IOException, JsonParseException, JsonMappingException {
