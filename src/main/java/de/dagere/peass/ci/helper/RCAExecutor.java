@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 
 import javax.xml.bind.JAXBException;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
@@ -149,8 +150,12 @@ public class RCAExecutor {
             destFolder = new File(oldPeassFolder.getParentFile(), "oldPeassFolder_" + i);
          }
          LOG.debug("Moving Peass folder {} to {}", oldPeassFolder, destFolder.getAbsolutePath());
-         boolean success = oldPeassFolder.renameTo(destFolder);
-         LOG.debug("Success: {}", success);
+         try {
+            FileUtils.moveDirectory(oldPeassFolder, destFolder);
+         } catch (IOException e) {
+            LOG.error("Moving did not work");
+            e.printStackTrace();
+         }
       } else {
          LOG.debug("Folder {} does not exist", oldPeassFolder.getAbsolutePath());
       }
