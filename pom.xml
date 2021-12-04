@@ -17,7 +17,8 @@
 		<java.level>8</java.level>
 		<maven.test.redirectTestOutputToFile>false</maven.test.redirectTestOutputToFile>
 	</properties>
-	<!-- Jenkins discourages usage of names like peass-jenkins-plugin or peass-plugin (https://www.jenkins.io/doc/developer/publishing/requesting-hosting/), therefore it's just peass-ci -->
+	<!-- Jenkins discourages usage of names like peass-jenkins-plugin or peass-plugin (https://www.jenkins.io/doc/developer/publishing/requesting-hosting/), therefore 
+		it's just peass-ci -->
 	<name>Peass-CI</name>
 	<url>https://github.com/jenkinsci/peass-ci-plugin</url>
 
@@ -47,12 +48,20 @@
 		<dependency>
 			<groupId>de.dagere.peass</groupId>
 			<artifactId>analysis</artifactId>
-			<version>0.1.1-SNAPSHOT</version>
+			<version>0.1.2-SNAPSHOT</version>
 		</dependency>
+		<!-- This overwrite dependency is only required if a newer version of the peass-libraries than in peass-jmh should be encluded (if this is not used, enforcer will 
+			throw an error -->
+		<dependency>
+			<groupId>de.dagere.peass</groupId>
+			<artifactId>dependency</artifactId>
+			<version>0.1.2-SNAPSHOT</version>
+		</dependency>
+
 		<dependency>
 			<groupId>de.dagere.peass</groupId>
 			<artifactId>peass-jmh</artifactId>
-			<version>0.1.0-SNAPSHOT</version>
+			<version>0.1.0</version>
 		</dependency>
 
 		<dependency>
@@ -189,4 +198,26 @@
 			<url>https://repo.jenkins-ci.org/public/</url>
 		</pluginRepository>
 	</pluginRepositories>
+
+	<profiles>
+		<profile>
+			<!-- For develop branch builds, use this profile which enables snapshot dependencies -->
+			<id>develop</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<repositories>
+				<repository>
+					<id>snapshots-repo</id>
+					<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+					<releases>
+						<enabled>false</enabled>
+					</releases>
+					<snapshots>
+						<enabled>true</enabled>
+					</snapshots>
+				</repository>
+			</repositories>
+		</profile>
+	</profiles>
 </project>

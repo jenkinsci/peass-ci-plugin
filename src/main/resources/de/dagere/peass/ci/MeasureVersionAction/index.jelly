@@ -12,14 +12,6 @@
     .configuration-table {
       margin-bottom: 30px;
     }
-
-    .measurement-table tr td {
-      vertical-align: middle;
-    }
-
-    .measurement-table tr td:nth-child(n+2) {
-      text-align: right;
-    }
   </style>
   <l:layout title="Performance Measurement">
     <l:side-panel>
@@ -47,7 +39,7 @@
       <a href="#" onClick="jq$('#configuration').toggle();">${%configuration} &#9660;</a>
       <div id="configuration" style="display: none">
         <div><p>${%configurationText}</p></div>
-        <table class="configuration-table">
+        <table class="data-table configuration-table">
           <tr>
             <td>VMs</td>
             <td> ${it.config.vms} </td>
@@ -109,7 +101,7 @@
         <div class="changes-container">
           <j:forEach var="methodChange" items="${testcase.getValue()}">
             <div class="card">
-              <table class="changes-table">
+              <table class="data-table changes-table">
                 <tr>
                   <td>Method</td>
                   <td><a href="../${it.getReducedName(testcase.getKey())}_${methodChange.method}">${methodChange.method}</a></td>

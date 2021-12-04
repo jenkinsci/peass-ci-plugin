@@ -241,7 +241,7 @@ function plotVMGraph(divName, node, ids, idsPredecessor, name) {
     responsive: true
   };
 	var graphDiv = document.getElementById(divName);
-	graphDiv.innerHTML = ''; 
+	graphDiv.innerHTML = '';
 	Plotly.newPlot(graphDiv, data, layout, config);
 	graphDiv.on('plotly_relayout', function (event) {
 		console.log(event);
@@ -323,7 +323,7 @@ function printTTvalue(averagesPredecessor, averagesCurrent) {
        var relativeDifference = 2.0*diff / (predecessorStat.mean()+currentStat.mean());
        console.log(mannWhitneyP);
 	document.getElementById("tValueTable").innerHTML = "<b>Properties without outlier removal</b>"
-		+ "<table class='properties-table'><tr><th>Property</th><th>Predecessor</th><th>Current</th></tr>"
+		+ "<table class='data-table properties-table'><tr><th>Property</th><th>Predecessor</th><th>Current</th></tr>"
 		+ "<tr><td>Mean</td><td>" + Math.round(predecessorStat.mean() * 1000) / 1000 + "</td><td>" + Math.round(currentStat.mean() * 1000) / 1000 + "</td></tr>"
 		+ "<tr><td>Difference</td><td colspan='2'>" + Math.round(diff * 1000) / 1000 + " (" + Math.round(100*relativeDifference*1000)/1000 + "%)</td></tr>"
 		+ "<tr><td>Deviation</td><td>" + Math.round(predecessorStat.stdev() * 1000) / 1000 + "</td><td>" + Math.round(currentStat.stdev() * 1000) / 1000 + "</td></tr>"
@@ -447,7 +447,7 @@ if (currentNode == null) {
 	currentNode = treeData[0];
 }
 
-document.getElementById("overallHistogram").innerHTML = "Current Node: " + currentNode.call
+document.getElementById("currentNode").innerHTML = "Current Node: " + currentNode.call
 
 plotOverallHistogram("overallHistogram", currentNode);
 

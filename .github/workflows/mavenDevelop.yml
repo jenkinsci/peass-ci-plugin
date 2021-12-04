@@ -1,5 +1,4 @@
-# This workflow will build a Java project with Maven
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+# This workflow builds the develop branch of Peass
 
 name: Build develop branch
 
@@ -13,13 +12,23 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
     strategy:
        matrix:
+          os: [ubuntu-latest, macos-latest, windows-latest] # no windows since kieker currently does not support windows execution
           java: [ 1.8, 11 ]
        fail-fast: false
-    name: Java ${{ matrix.java }} sample
+    runs-on: ${{ matrix.os }}
+    name: Java ${{ matrix.java }} ${{ matrix.os }}
     steps:
+    - name: Set Git Property and output path
+      run: |
+        if [ "$RUNNER_OS" == "Windows" ]; then
+          git config --system core.longpaths true
+          echo %PATH%
+          where mvn
+          mvn -version
+        fi
+      shell: bash
     - uses: actions/checkout@v2
     - name: Set up JDK ${{ matrix.java }}
       uses: actions/setup-java@v1
@@ -31,13 +40,13 @@ jobs:
         path: ~/.m2
         key: ${{ matrix.java }}-m2-${{ hashFiles('**/pom.xml') }}
         restore-keys: ${{ matrix.java }}-m2
-    - name: Build Peass (Current dependent project version)
-      run: |
-         branch=develop
-         cd /home/runner/work/ && git clone -b $branch https://github.com/DaGeRe/peass.git && cd peass && echo "Branch: $branch" && git rev-parse HEAD && ./mvnw clean install -DskipTests -P buildStarter
+    # Temporarily, the Peass build is disabled since release versions are available; this will be re-enabled on develop after the first release
+    #- name: Build Peass (Current dependent project version)
+    #  run: |
+    #     branch=develop
+    #     cd /home/runner/work/ && git clone -b $branch https://github.com/DaGeRe/peass.git && cd peass && echo "Branch: $branch" && git rev-parse HEAD && ./mvnw clean install -DskipTests -P buildStarter
     - name: Build with Maven
-      run: | 
-         cd /home/runner/work/peass-ci-plugin/peass-ci-plugin/ && ./mvnw -B install --file pom.xml
+      run: ./mvnw -B install --file pom.xml -P develop
     - name: Publish Test Report
       if: ${{ always() }}      
       uses: scacap/action-surefire-report@v1

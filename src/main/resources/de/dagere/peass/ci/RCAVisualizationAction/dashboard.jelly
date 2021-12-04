@@ -4,79 +4,6 @@
     <st:include page="sidepanel.jelly" it="${it.run}" optional="true" />
   </l:side-panel>
 	<l:layout title="RCA Dashboard">
-	  <style>
-			#graphPredecessor,
-			#graphCurrent {
-				text-align: center;
-			}
-
-			#currentOptions,
-			#predecessorOptions {
-				flex-grow: 1;
-				margin: 10px 0;
-			}
-
-			.dashboard-container {
-				display: grid;
-				gap: 10px;
-				grid-auto-flow: row dense;
-				grid-template-columns: minmax(0, 1fr);
-			}
-
-			.dashboard-container .selection-card .selection-container {
-				display: flex;
-				justify-content: space-evenly;
-				gap: 15px;
-			}
-
-			.properties-table {
-				border: 1px solid #E6E6E6;
-      	border-collapse: collapse;
-				margin-top: 10px;
-			}
-
-			.properties-table tr:nth-child(2n) {
-				background-color: #EBEBEB;
-			}
-
-			.properties-table tr td:nth-child(n+2) {
-				padding-left: 1rem;
-      	text-align: right;
-			}
-
-			.properties-table td,
-			.properties-table th {
-				padding: 5px 15px;
-			}
-
-			.vms-container {
-				display: flex;
-				flex-direction: column;
-				gap: 10px;
-			}
-
-			.vms-selection-container {
-				display: flex;
-				flex-grow: 1;
-				gap: 10px;
-			}
-
-			.vms-selection-options {
-				display: flex;
-				flex-direction: column;
-				flex-grow: 1;
-			}
-
-			@media (min-width: 1400px) {
-				.dashboard-container {
-					grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-				}
-
-				.dashboard-container .selection-card {
-					grid-row: third-line / span 2;
-				}
-			}
-		</style>
 		<st:include page="/style.jelly" optional="false" />
     <l:side-panel>
       <st:include page="sidepanel.jelly" it="${it.run}" optional="true" />
@@ -90,6 +17,7 @@
 
 			<div class="dashboard-container">
 				<div class="card">
+					<div id="currentNode"></div>
 					<div id="overallHistogram"></div>
 				</div>
 				<div class="card">
