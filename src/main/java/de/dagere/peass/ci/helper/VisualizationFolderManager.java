@@ -22,7 +22,7 @@ public class VisualizationFolderManager {
       this.localWorkspace = localWorkspace;
       this.run = run;
       this.projectName = projectName;
-      System.out.println("Workspace name: " + projectName);
+      LOG.debug("Workspace name: " + projectName);
    }
 
    public File getPropertyFolder() {
