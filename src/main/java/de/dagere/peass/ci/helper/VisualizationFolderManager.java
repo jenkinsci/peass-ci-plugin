@@ -49,6 +49,7 @@ public class VisualizationFolderManager {
       if (!dataFolder.exists()) {
          dataFolder = new File(localWorkspace, "workspace_peass");
          if (!dataFolder.exists()) {
+            debugListFiles();
             throw new RuntimeException(
                   localWorkspace.getAbsolutePath() + " neither contains workspace_peass nor " + rcaResultFolder + "; one must exist for visualization!");
          }
@@ -61,6 +62,7 @@ public class VisualizationFolderManager {
       if (!projectFolder.exists()) {
          projectFolder = new File(localWorkspace, "workspace");
          if (!projectFolder.exists()) {
+            debugListFiles();
             throw new RuntimeException(localWorkspace.getAbsolutePath() + " neither contains workspace_peass nor " + projectName + "; one must exist for visualization!");
          } else {
             return new PeassFolders(projectFolder, "workspace");
@@ -75,6 +77,7 @@ public class VisualizationFolderManager {
       if (!projectFolder.exists()) {
          projectFolder = new File(localWorkspace, "workspace");
          if (!projectFolder.exists()) {
+            debugListFiles();
             throw new RuntimeException(localWorkspace.getAbsolutePath() + " neither contains workspace_peass nor " + projectName + "; one must exist for visualization!");
          } else {
             return new CauseSearchFolders(projectFolder);
