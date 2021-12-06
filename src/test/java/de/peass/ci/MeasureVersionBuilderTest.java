@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Rule;
 import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
@@ -11,6 +12,7 @@ import org.jvnet.hudson.test.JenkinsRule;
 import de.dagere.peass.ci.MeasureVersionAction;
 import de.dagere.peass.ci.MeasureVersionBuilder;
 import de.dagere.peass.ci.helper.GitProjectBuilder;
+import de.dagere.peass.dependency.execution.EnvironmentVariables;
 import hudson.FilePath;
 import hudson.model.FreeStyleBuild;
 import hudson.model.FreeStyleProject;
@@ -40,6 +42,9 @@ public class MeasureVersionBuilderTest {
    
    @Test
    public void testFullBuild() throws Exception {
+      // Windows tends to create some strange errors when trying to copy .git-folders; therefore, windows builds are currently not fully supported
+      Assume.assumeFalse(EnvironmentVariables.isWindows()); 
+      
       FreeStyleProject project = jenkins.createFreeStyleProject();
       initProjectFolder(project);
       
