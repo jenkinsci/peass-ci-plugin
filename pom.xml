@@ -61,7 +61,7 @@
 		<dependency>
 			<groupId>de.dagere.peass</groupId>
 			<artifactId>peass-jmh</artifactId>
-			<version>0.1.1-SNAPSHOT</version>
+			<version>0.1.1</version>
 		</dependency>
 
 		<dependency>
