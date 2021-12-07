@@ -6,6 +6,7 @@ on:
   check_run:
     types:
       - completed
+    branches: [ main ]
 
 jobs:
   validate:
