@@ -4,6 +4,7 @@ Peass-CI
 The Peass-CI-Plugin enables a continuous performance measurement for Java projects in an Jenkins server. Peass-CI currently supports the following workload types:
 - JUnit tests (which are transformed into performance unit tests)
 - JMH benchmarks.
+
 Currently, JUnit tests can be measured for maven and Gradle projects and JMH benchmarks only for maven projects.
 
 By integrating Peass-CI in your build process, you will get performance measurements of each JUnit test or JMH benchmark and hints when regressions have occured. Furthermore, Peass-CI creates a call tree of the unit test or benchmark, which pinpoints the root cause of your performance changes. Therefore, the following steps are executed:
@@ -54,27 +55,7 @@ For testing, run `mvn hpi:run` and access `localhost:8080/jenkins`.
 
 ## Development Version Running
 
-For installing latest Peass-CI to your Jenkins installation, you may either upload it through the website (Manage Jenkins -> Manage Plugins -> Advanced -> Upload Plugin) or stop Jenkins, copy `target/peass-ci.hpi` to `~/.jenkins/plugins` (or wherever your Jenkins home is) and restart Jenkins. Afterwards, when configuring your project, the `Measure Version Performance` step is available. Peass-CI is currently not available in the plugin repository.
-
-If you want to include Peass-CI in your Jenkins Pipeline, you may configure it like this:
-
-```groovy
-pipeline {
-    agent any
-    stages {
-        stage('build') {
-            steps {
-                sh 'mvn clean package'
-            }
-        }
-        stage('measurement') {
-            steps {
-                measure VMs: 30, iterations: 10, warmup: 10, repetitions: 100000
-            }
-        }
-    }
-}
-```
+For installing latest Peass-CI to your Jenkins installation, you may either upload it through the website (Manage Jenkins -> Manage Plugins -> Advanced -> Upload Plugin) or stop Jenkins, copy `target/peass-ci.hpi` to `~/.jenkins/plugins` (or wherever your Jenkins home is) and restart Jenkins. Afterwards, when configuring your project, the `measure`-step is available. 
 
 # License
 
