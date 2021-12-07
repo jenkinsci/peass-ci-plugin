@@ -35,14 +35,35 @@ After you added this stage, each build will contain performance measurements (if
 
 ## Example
 
-After successfull experiment execution, you'll get an overview over performance measurements (and especially the detected changes) like this:
-![Overview over Performance Measurements](graphs/demo1.png)
+After successfull experiment execution, you will get three things:
+- the regression test selection result (telling you which test will be measured),
+- the measurement result and
+- the root cause analysis result (if not disabled).
 
-For every change, you get a call tree:
-![Example Call Tree](graphs/demo2.png)
+For our simple demonstration, the regression test selection result looks like this:
+![Regression Test Selection Results](graphs/demo-rts.png)
 
-And in the call tree, you can view the measurements for individual call tree nodes and the source change of these nodes:
-![Example Source Diff](graphs/demo3.png)
+We can see here, that the `innerMethod` in the class `Callee` was changed, and that this changed class as called is called by the test method `ExampleTest#test`. The trace analysis confirms this test selection. By clicking on `Configuration` you can see the configuration (which you might change for a re-run in your job) and you can see the traces with the method source when clicking on the test case.
+
+Since `ExampleTest#test` was selected, we can see the following measurement afterwards
+![Measurement Results](graphs/demo-measurement.png)
+In the *Changes* section, we can see that test method `test` was selected as a performance change. In the *Measurements* section, we see that the histogram clearly show the performance difference and that the measured values also clearly indicate the performance change. By clicking on *Inspect Measurement* we could see more measurent details.
+
+In the regression test selection, we see the call tree.
+![Root Cause Analysis Result](graphs/demo-rca.png)
+Red indicates a performance regression in the node and green an improvement. Nodes with stripes indicate a source code change. In this example, we see that a `Thread.sleep` was increased from 1 to 20 and therefore the unit test got slower.
+
+## Inspection
+
+If you do not understand the measurement results, there are two main options to inspect the measurement process: The logs and the measurement dashboard. 
+
+For regression test selection, measurement and root cause analysis, several executions of your software are necessary. If there is unexpected behaviour, this logs might be useful. To inspect the logs of the stage, click on the particular log overview. For measurements, the VM is started several times; you can have a look at all of the logs.
+![Example Log Overview](graphs/demo-logs.png)
+
+Finally, if you want to look at the performance of individual nodes or the overall measurement in more detail, click on the *Inspect Measurement* buttons of the particular node or the overall measurement of the test case. 
+![Example Dashboard](graphs/demo-dashboard.png)
+When looking at this, you'll the histogram of the averages of you VM runs and the evolution of the measurements inside a VM. You can select a subsect of VM runs or change the selected iterations and thereby get a better understanding of the performance measurement.
+
 
 # Known Problems
 - Peass only works if you use the latest version of JUnit, i.e. 4.13.x or 5.8.x, or JMH, i.e. 1.33. If you import an older version of JUnit (or it is imported by plugins you use, e.g. spring boot), please update your JUnit dependency. It is currently not possible to maintain and check the compatibility with older versions of the build tools. 
