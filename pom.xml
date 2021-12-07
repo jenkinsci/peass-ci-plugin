@@ -10,12 +10,15 @@
 	</parent>
 	<groupId>de.peass</groupId>
 	<artifactId>peass-ci</artifactId>
-	<version>0.1-SNAPSHOT</version>
+	<version>${revision}${changelist}</version>
 	<packaging>hpi</packaging>
 	<properties>
 		<jenkins.version>2.303.1</jenkins.version>
 		<java.level>8</java.level>
 		<maven.test.redirectTestOutputToFile>false</maven.test.redirectTestOutputToFile>
+		<revision>1.23</revision>
+		<changelist>-SNAPSHOT</changelist>
+		<gitHubRepo>jenkinsci/peass-ci-plugin</gitHubRepo>
 	</properties>
 	<!-- Jenkins discourages usage of names like peass-jenkins-plugin or peass-plugin (https://www.jenkins.io/doc/developer/publishing/requesting-hosting/), therefore 
 		it's just peass-ci -->
@@ -198,6 +201,13 @@
 			<url>https://repo.jenkins-ci.org/public/</url>
 		</pluginRepository>
 	</pluginRepositories>
+
+	<scm>
+		<connection>scm:git:ssh://github.com:${gitHubRepo}.git</connection>
+		<developerConnection>scm:git:git@github.com:${gitHubRepo}.git</developerConnection>
+		<url>https://git@github.com:${gitHubRepo}.git</url>
+		<tag>${scmTag}</tag>
+	</scm>
 
 	<profiles>
 		<profile>
