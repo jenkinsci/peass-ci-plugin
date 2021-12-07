@@ -1,6 +1,8 @@
 Peass-CI
 ===================
 
+Detecting and understanding performance changes is hard: Commits (often) contain many changes, so it is hard to keep track of every effect on the performance, and optimizations of the JVM might cause code changes to have unexpected side effects. By measuring the performance with statistic rigor, we can detect and understand perfromance changes and thereby avoid regressions.
+
 The Peass-CI-Plugin enables a continuous performance measurement for Java projects in an Jenkins server. Peass-CI currently supports the following workload types:
 - JUnit tests (which are transformed into performance unit tests)
 - JMH benchmarks.
@@ -27,6 +29,8 @@ stage('measure performance') {
 }
 ```
 
+If you are using classic freestyle jobs, the build step will be called "Measure Version Performance".
+
 After you added this stage, each build will contain performance measurements (if a code that is called by a unit test or benchmark is changed - there will be no measurements if only documentation changes).  See the [Wiki entry for measurement process configuration](https://github.com/DaGeRe/peass/wiki/Configuration-of-Measurement-Processes) for starting points for configuring the measurement step for your project.
 
 ## Example
@@ -46,6 +50,8 @@ And in the call tree, you can view the measurements for individual call tree nod
 # Development
 
 Building and updating to the latest Peass version from git is only required if you need the latest changes, e.g. if you want to change something yourself or you want to check whether a bug has been fixed. Otherwise, just use the release.
+
+If you see an error, do not hesitate to file an issue. If you know what you are doing, you can also create a PR, but we will only merge working PRs.
 
 ## Building
 
