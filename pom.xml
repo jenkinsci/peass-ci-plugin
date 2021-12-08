@@ -83,7 +83,7 @@
 		<dependency>
 			<groupId>de.dagere.peass</groupId>
 			<artifactId>analysis</artifactId>
-			<version>0.1.0</version>
+			<version>0.1.5</version>
 			<classifier>tests</classifier>
 			<scope>test</scope>
 		</dependency>
