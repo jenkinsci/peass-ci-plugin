@@ -14,8 +14,8 @@ import de.dagere.peass.ci.helper.RCAVisualizer;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.measurement.analysis.ProjectStatistics;
-import de.dagere.peass.measurement.analysis.statistics.TestcaseStatistic;
-import de.dagere.peass.statistics.StatisticUtil;
+import de.dagere.peass.measurement.statistics.StatisticUtil;
+import de.dagere.peass.measurement.statistics.data.TestcaseStatistic;
 
 public class MeasureVersionAction extends VisibleAction {
 

@@ -19,7 +19,7 @@ import de.dagere.peass.ci.persistence.TestMeasurementValues;
 import de.dagere.peass.ci.persistence.TrendFileUtil;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.measurement.analysis.ProjectStatistics;
-import de.dagere.peass.measurement.analysis.statistics.TestcaseStatistic;
+import de.dagere.peass.measurement.statistics.data.TestcaseStatistic;
 import hudson.model.Run;
 
 /**

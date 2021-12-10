@@ -21,7 +21,7 @@ import de.dagere.kopeme.datastorage.XMLDataLoader;
 import de.dagere.kopeme.generated.Kopemedata;
 import de.dagere.peass.ci.MeasurementVisualizationAction;
 import de.dagere.peass.dependency.analysis.data.TestCase;
-import de.dagere.peass.measurement.analysis.statistics.TestcaseStatistic;
+import de.dagere.peass.measurement.statistics.data.TestcaseStatistic;
 import de.dagere.peass.utils.Constants;
 import de.dagere.peass.visualization.GraphNode;
 import de.dagere.peass.visualization.KoPeMeTreeConverter;

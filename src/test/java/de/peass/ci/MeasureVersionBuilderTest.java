@@ -12,7 +12,7 @@ import org.jvnet.hudson.test.JenkinsRule;
 import de.dagere.peass.ci.MeasureVersionAction;
 import de.dagere.peass.ci.MeasureVersionBuilder;
 import de.dagere.peass.ci.helper.GitProjectBuilder;
-import de.dagere.peass.dependency.execution.EnvironmentVariables;
+import de.dagere.peass.execution.utils.EnvironmentVariables;
 import hudson.FilePath;
 import hudson.model.FreeStyleBuild;
 import hudson.model.FreeStyleProject;

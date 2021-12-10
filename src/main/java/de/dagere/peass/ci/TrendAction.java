@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import de.dagere.peass.ci.persistence.BuildMeasurementValues;
 import de.dagere.peass.ci.persistence.TestMeasurementValues;
 import de.dagere.peass.ci.persistence.TrendFileUtil;
-import de.dagere.peass.measurement.analysis.statistics.TestcaseStatistic;
+import de.dagere.peass.measurement.statistics.data.TestcaseStatistic;
 import hudson.model.Action;
 import hudson.model.Job;
 import hudson.model.Project;

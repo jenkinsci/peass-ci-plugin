@@ -12,12 +12,12 @@ import org.jenkinsci.remoting.RoleChecker;
 
 import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.ci.ContinuousFolderUtil;
-import de.dagere.peass.ci.LogRedirector;
 import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.ci.helper.RCAExecutor;
+import de.dagere.peass.ci.logHandling.LogRedirector;
 import de.dagere.peass.config.MeasurementConfig;
-import de.dagere.peass.dependency.execution.EnvironmentVariables;
 import de.dagere.peass.dependencyprocessors.ViewNotFoundException;
+import de.dagere.peass.execution.utils.EnvironmentVariables;
 import de.dagere.peass.folders.ResultsFolders;
 import de.dagere.peass.measurement.rca.CauseSearcherConfig;
 import hudson.FilePath.FileCallable;
