@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import de.dagere.peass.config.DependencyConfig;
 import de.dagere.peass.config.MeasurementConfig;
-import de.dagere.peass.dependency.execution.EnvironmentVariables;
+import de.dagere.peass.execution.utils.EnvironmentVariables;
 
 public class PeassProcessConfiguration implements Serializable {
    private static final long serialVersionUID = 5858433989302224348L;

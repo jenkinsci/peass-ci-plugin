@@ -40,11 +40,11 @@ jobs:
         path: ~/.m2
         key: ${{ matrix.java }}-m2-${{ hashFiles('**/pom.xml') }}
         restore-keys: ${{ matrix.java }}-m2
-    # Temporarily, the Peass build is disabled since release versions are available; this will be re-enabled on develop after the first release
-    #- name: Build Peass (Current dependent project version)
-    #  run: |
-    #     branch=develop
-    #     cd /home/runner/work/ && git clone -b $branch https://github.com/DaGeRe/peass.git && cd peass && echo "Branch: $branch" && git rev-parse HEAD && ./mvnw clean install -DskipTests -P buildStarter
+     Temporarily, the Peass build is disabled since release versions are available; this will be re-enabled on develop after the first release
+    - name: Build Peass (Current dependent project version)
+      run: |
+         branch=develop
+         cd /home/runner/work/ && git clone -b $branch https://github.com/DaGeRe/peass.git && cd peass && echo "Branch: $branch" && git rev-parse HEAD && ./mvnw clean install -DskipTests -P buildStarter
     - name: Build with Maven
       run: ./mvnw -B install --file pom.xml -P develop
     - name: Publish Test Report

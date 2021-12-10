@@ -13,8 +13,8 @@ import de.dagere.kopeme.generated.Kopemedata;
 import de.dagere.kopeme.generated.TestcaseType;
 import de.dagere.kopeme.generated.TestcaseType.Datacollector.Chunk;
 import de.dagere.peass.config.MeasurementConfig;
-import de.dagere.peass.measurement.analysis.MultipleVMTestUtil;
-import de.dagere.peass.measurement.analysis.ResultLoader;
+import de.dagere.peass.measurement.dataloading.MultipleVMTestUtil;
+import de.dagere.peass.measurement.dataloading.ResultLoader;
 import io.jenkins.cli.shaded.org.apache.commons.io.filefilter.WildcardFileFilter;
 
 public class HistogramReader {

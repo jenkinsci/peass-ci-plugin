@@ -29,7 +29,7 @@ import de.dagere.peass.config.DependencyConfig;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.config.MeasurementStrategy;
 import de.dagere.peass.dependency.analysis.data.TestCase;
-import de.dagere.peass.dependency.execution.EnvironmentVariables;
+import de.dagere.peass.execution.utils.EnvironmentVariables;
 import de.dagere.peass.measurement.rca.RCAStrategy;
 import de.dagere.peass.utils.Constants;
 import hudson.EnvVars;
