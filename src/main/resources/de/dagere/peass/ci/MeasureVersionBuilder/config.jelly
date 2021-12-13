@@ -140,11 +140,11 @@
         </f:entry>
         <f:entry title="${%testExecutor}" field="testExecutor"
                  description="${%testExecutorDescr}">
-            <f:checkbox default="true"/>
+            <f:textbox default="true"/>
         </f:entry>
         <f:entry title="${%testTransformer}" field="testTransformer"
                  description="${%testTransformerDescr}">
-            <f:checkbox default="true"/>
+            <f:textbox default="true"/>
         </f:entry>
     </f:advanced>
 </j:jelly>
