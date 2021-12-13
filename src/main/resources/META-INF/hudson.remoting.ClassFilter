@@ -9,7 +9,7 @@ de.dagere.peass.measurement.analysis.ProjectStatistics
 de.dagere.peass.ci.RTSResult
 de.dagere.peass.analysis.changes.Changes
 de.dagere.peass.analysis.changes.Change
-de.dagere.peass.measurement.analysis.statistics.TestcaseStatistic
+de.dagere.peass.measurement.statistics.data.TestcaseStatistic
 de.dagere.peass.dependency.analysis.data.TestCase
 de.dagere.peass.dependency.traces.coverage.CoverageSelectionVersion
 de.dagere.peass.dependency.traces.coverage.TraceCallSummary
