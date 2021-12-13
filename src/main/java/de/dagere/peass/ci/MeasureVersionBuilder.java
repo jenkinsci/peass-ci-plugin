@@ -96,6 +96,9 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private boolean createDefaultConstructor = true;
 
    private boolean redirectSubprocessOutputToFile = true;
+   
+   private String testTransformer = "de.dagere.peass.testtransformation.JUnitTestTransformer";
+   private String testExecutor = "default";
 
    @DataBoundConstructor
    public MeasureVersionBuilder() {
@@ -282,6 +285,9 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
       config.getExecutionConfig().setUseAlternativeBuildfile(useAlternativeBuildfile);
       config.getExecutionConfig().setRedirectSubprocessOutputToFile(redirectSubprocessOutputToFile);
+      
+      config.getExecutionConfig().setTestTransformer(testTransformer);
+      config.getExecutionConfig().setTestExecutor(testExecutor);
 
       if (testGoal != null && !"".equals(testGoal)) {
          config.getExecutionConfig().setTestGoal(testGoal);
@@ -609,6 +615,24 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    @DataBoundSetter
    public void setMeasureJMH(final boolean measureJMH) {
       this.measureJMH = measureJMH;
+   }
+   
+   public String getTestExecutor() {
+      return testExecutor;
+   }
+   
+   @DataBoundSetter
+   public void setTestExecutor(final String testExecutor) {
+      this.testExecutor = testExecutor;
+   }
+   
+   public String getTestTransformer() {
+      return testTransformer;
+   }
+   
+   @DataBoundSetter
+   public void setTestTransformer(final String testTransformer) {
+      this.testTransformer = testTransformer;
    }
 
    @Symbol("measure")
