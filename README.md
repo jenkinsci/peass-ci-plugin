@@ -11,7 +11,7 @@ Currently, JUnit tests can be measured for maven and Gradle projects and JMH ben
 
 By integrating Peass-CI in your build process, you will get performance measurements of each JUnit test or JMH benchmark and hints when regressions have occured. Furthermore, Peass-CI creates a call tree of the unit test or benchmark, which pinpoints the root cause of your performance changes. Therefore, the following steps are executed:
 - Regression Test Selection: The unit tests which may have changed performance based on the current commit will be selected by a combination of static and dynamic code analysis.
-- Performance Measurement: The selected tests will be executed (repeating them inside a VM and starting the JVM, as often as you specify it) to identify performance changes.
+- Performance Measurement: The selected tests will be executed (repeating them inside a VM and restarting the JVM, as often as you specify it, both for the current and the predecessor version) to identify performance changes.
 - Root Cause Analysis: For every identified performance change, the measurement will be repeated with additional instrumentation of your call tree to identify the method call(s) which cause your performance change (optional).
 
 # Usage
@@ -35,15 +35,15 @@ After you added this stage, each build will contain performance measurements (if
 
 ## Example
 
-After successfull experiment execution, you will get three things:
-- the regression test selection result (telling you which test will be measured),
+After successfull measurement execution, you will get three things:
+- the regression test selection result (telling you which tests were measured),
 - the measurement result and
-- the root cause analysis result (if not disabled).
+- the root cause analysis result (if not disabled and statistically significant changes were measured).
 
 For our simple demonstration, the regression test selection result looks like this:
 ![Regression Test Selection Results](graphs/demo-rts.png)
 
-We can see here, that the `innerMethod` in the class `Callee` was changed, and that this changed class as called is called by the test method `ExampleTest#test`. The trace analysis confirms this test selection. By clicking on `Configuration` you can see the configuration (which you might change for a re-run in your job) and you can see the traces with the method source when clicking on the test case.
+We can see here, that the `innerMethod` in the class `Callee` was changed, and that this changed class is called by the test method `ExampleTest#test`. The trace analysis confirms this test selection. By clicking on `Configuration` you can see the corresponding configuration (which you might change for a re-run in your job) and you can see the traces with the method source when clicking on the test case.
 
 Since `ExampleTest#test` was selected, we can see the following measurement afterwards
 ![Measurement Results](graphs/demo-measurement.png)
@@ -55,14 +55,14 @@ Red indicates a performance regression in the node and green an improvement. Nod
 
 ## Inspection
 
-If you do not understand the measurement results, there are two main options to inspect the measurement process: The logs and the measurement dashboard. 
+If you need more detailed information about the measurements and their results, there are two main options to inspect the measurement process: The logs and the measurement dashboard. 
 
-For regression test selection, measurement and root cause analysis, several executions of your software are necessary. If there is unexpected behaviour, this logs might be useful. To inspect the logs of the stage, click on the particular log overview. For measurements, the VM is started several times; you can have a look at all of the logs.
+For regression test selection, measurement and root cause analysis, several executions of your software are necessary. If there is unexpected behaviour, these logs might be useful. To inspect the logs of any stage, click on the corresponding log overview. For measurements, the VM is started several times; here you can find a log for each run for both the current and the predecessor version.
 ![Example Log Overview](graphs/demo-logs.png)
 
 Finally, if you want to look at the performance of individual nodes or the overall measurement in more detail, click on the *Inspect Measurement* buttons of the particular node or the overall measurement of the test case. 
 ![Example Dashboard](graphs/demo-dashboard.png)
-When looking at this, you'll the histogram of the averages of you VM runs and the evolution of the measurements inside a VM. You can select a subsect of VM runs or change the selected iterations and thereby get a better understanding of the performance measurement.
+When looking at this, you can see the histogram of the averages of you VM runs and the evolution of the measurements inside a VM. You can select a subset of VM runs or change the selected iterations and thereby get a better understanding of the performance measurement.
 
 
 # Known Problems
@@ -76,13 +76,13 @@ If you see an error, do not hesitate to file an issue. If you know what you are 
 
 ## Building
 
-Peass-CI relies on the Peass-libraries. To build them, get peass by running `git clone https://github.com/DaGeRe/peass.git && cd peass && mvn clean install -DskipTests -P buildStarter` (to build the full Peass project, and not only the basic libraries, the profile `buildStarter` needs to be built). Then, execute `mvn clean package`.
+Peass-CI relies on the Peass-libraries. To build them, get peass by running `git clone https://github.com/DaGeRe/peass.git && cd peass && mvn clean install -DskipTests -P buildStarter` (to build the full Peass project, and not only the basic libraries, the profile `buildStarter` needs to be built). Then, execute `mvn clean package` for the peass-ci-plugin.
 
 For testing, run `mvn hpi:run` and access `localhost:8080/jenkins`. 
 
 ## Development Version Running
 
-For installing latest Peass-CI to your Jenkins installation, you may either upload it through the website (Manage Jenkins -> Manage Plugins -> Advanced -> Upload Plugin) or stop Jenkins, copy `target/peass-ci.hpi` to `~/.jenkins/plugins` (or wherever your Jenkins home is) and restart Jenkins. Afterwards, when configuring your project, the `measure`-step is available. 
+To install the latest Peass-CI to your Jenkins installation, you may either upload it through the website (Manage Jenkins -> Manage Plugins -> Advanced -> Upload Plugin) or stop Jenkins, copy `target/peass-ci.hpi` to `~/.jenkins/plugins` (or wherever your Jenkins home is) and restart Jenkins. Afterwards, when configuring your project, the `measure`-step is available. 
 
 # License
 
