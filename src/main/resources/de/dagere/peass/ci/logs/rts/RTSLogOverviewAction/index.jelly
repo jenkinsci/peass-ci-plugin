@@ -5,6 +5,7 @@
       <st:include page="sidepanel.jelly" it="${it.run}" optional="true" />
     </l:side-panel>
     <l:main-panel>
+      <st:include page="/style.jelly" optional="false" />
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
 
       <h1>Regression Test Selection Log Overview</h1>
@@ -40,29 +41,25 @@
 	      <j:if test="${it.getPredecessorVmRuns().isEmpty()}">
 	          No log files where produced for the predecessor. Are there maybe no tests existing or runnable?
 	      </j:if>
-	      <j:if test="${!it.getPredecessorVmRuns().isEmpty()}">
-	        Some predecessor runs have been executed: <br />
-	        <j:forEach var="run" items="${it.getPredecessorVmRuns().entrySet()}">
-	            Testcase: ${run.getKey()} Version:
-	            <a href="../rtsLog_${run.getKey().getLinkUsable()}_${it.getPredecessorVmRuns().get(run.getKey()).getVersion()}">
-	              ${it.getPredecessorVmRuns().get(run.getKey()).getVersion()}
-	            </a>
-	            <br />
-	        </j:forEach>  
-	      </j:if>
-	      <j:forEach var="run" items="${it.getVmRuns().entrySet()}">
-	        Testcase: ${run.getKey()}
-	        <br />
-	        Version:
-	        <a href="../rtsLog_${run.getKey().getLinkUsable()}_${run.getValue().getVersion()}">${run.getValue().getVersion()}</a>
-	        <br />
-	        <j:if test='${it.getPredecessorVmRuns().get(run.getKey()) != null}'>
-	          Version:
-	          <a href="../rtsLog_${run.getKey().getLinkUsable()}_${it.getPredecessorVmRuns().get(run.getKey()).getVersion()}">${it.getPredecessorVmRuns().get(run.getKey()).getVersion()}</a>
-	          <br />
+	      
+	      <table  class="data-table">
+	      <tr><th>Testcase</th><th>Current Version Run</th><th>Predecessor Version Run (if Present)</th></tr>
+	      <j:forEach var="run" items="${it.getAllTests()}">
+	        <tr><td> ${run}</td>
+	        <td>
+	        <j:if test='${it.getVmRuns().get(run) != null}'>
+	        <a href="../rtsLog_${run.getLinkUsable()}_${it.getVmRuns().get(run).getVersion()}">${it.getVmRuns().get(run).getVersion()}</a>
 	        </j:if>
-	        <br />
+	        </td>
+	        <j:if test='${it.getPredecessorVmRuns().get(run) != null}'>
+	          <td>
+	          <a href="../rtsLog_${run.getLinkUsable()}_${it.getPredecessorVmRuns().get(run).getVersion()}">${it.getPredecessorVmRuns().get(run).getVersion()}</a>
+	          </td>
+	        </j:if>
+	        </tr>
 	      </j:forEach>
+	      </table>      
+	     
 	    </j:if>
     </l:main-panel>
   </l:layout>

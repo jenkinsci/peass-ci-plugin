@@ -1,7 +1,9 @@
 package de.dagere.peass.ci.logs.rts;
 
 import java.io.File;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import de.dagere.peass.ci.VisibleAction;
 import de.dagere.peass.dependency.analysis.data.TestCase;
@@ -28,6 +30,13 @@ public class RTSLogOverviewAction extends VisibleAction {
    
    public Map<String, File> getProcessSuccessRuns() {
       return processSuccessRuns;
+   }
+   
+   public Set<TestCase> getAllTests(){
+      Set<TestCase> allTests = new HashSet<>();
+      allTests.addAll(vmRuns.keySet());
+      allTests.addAll(predecessorVmRuns.keySet());
+      return allTests;
    }
 
    public Map<TestCase, RTSLogData> getVmRuns() {
