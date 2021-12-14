@@ -1,0 +1,63 @@
+----- withMaven Wrapper script -----
+Picked up JAVA_TOOL_OPTIONS: -Dmaven.ext.class.path="/home/reichelt/workspaces/dissworkspace/permanent/peass-ci/work/workspace/demo-vis2@tmp/withMaven3bb7e7b2/pipeline-maven-spy.jar" -Dorg.jenkinsci.plugins.pipeline.maven.reportsFolder="/home/reichelt/workspaces/dissworkspace/permanent/peass-ci/work/workspace/demo-vis2@tmp/withMaven3bb7e7b2" 
+Apache Maven 3.6.3
+Maven home: /usr/share/maven
+Java version: 1.8.0_292, vendor: Private Build, runtime: /usr/lib/jvm/java-8-openjdk-amd64/jre
+Default locale: de_DE, platform encoding: UTF-8
+OS name: "linux", version: "5.4.0-80-generic", arch: "amd64", family: "unix"
+[INFO] [jenkins-event-spy] Generate /home/reichelt/workspaces/dissworkspace/permanent/peass-ci/work/workspace/demo-vis2@tmp/withMaven3bb7e7b2/maven-spy-20210812-125835-4495741133262418138333.log.tmp ...
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------------< de.test:demo-project >------------------------
+[INFO] Building project 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ demo-project ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/reichelt/workspaces/dissworkspace/permanent/peass-ci/work/workspace/demo-vis2_fullPeass/demo-vis2_peass/projectTemp/parallel_33ce17c04b5218c25c40137d4d09f40fbb3e4f0f/src/main/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ demo-project ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 1 source file to /home/reichelt/workspaces/dissworkspace/permanent/peass-ci/work/workspace/demo-vis2_fullPeass/demo-vis2_peass/projectTemp/parallel_33ce17c04b5218c25c40137d4d09f40fbb3e4f0f/target/classes
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ demo-project ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/reichelt/workspaces/dissworkspace/permanent/peass-ci/work/workspace/demo-vis2_fullPeass/demo-vis2_peass/projectTemp/parallel_33ce17c04b5218c25c40137d4d09f40fbb3e4f0f/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:testCompile (default-testCompile) @ demo-project ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 1 source file to /home/reichelt/workspaces/dissworkspace/permanent/peass-ci/work/workspace/demo-vis2_fullPeass/demo-vis2_peass/projectTemp/parallel_33ce17c04b5218c25c40137d4d09f40fbb3e4f0f/target/test-classes
+[INFO] 
+[INFO] --- maven-surefire-plugin:3.0.0-M5:test (default-test) @ demo-project ---
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[ERROR] Picked up JAVA_TOOL_OPTIONS: -Dmaven.ext.class.path="/home/reichelt/workspaces/dissworkspace/permanent/peass-ci/work/workspace/demo-vis2@tmp/withMaven3bb7e7b2/pipeline-maven-spy.jar" -Dorg.jenkinsci.plugins.pipeline.maven.reportsFolder="/home/reichelt/workspaces/dissworkspace/permanent/peass-ci/work/workspace/demo-vis2@tmp/withMaven3bb7e7b2" 
+[INFO] Running de.test.CalleeTest
+12:58:40.590 [main] DEBUG de.dagere.kopeme.junit.rule.TestRunnables:82 - Klasse: class de.test.CalleeTest
+12:58:40.599 [main] DEBUG de.dagere.kopeme.parsing.BuildtoolProjectNameReader:52 - Directory: /home/reichelt/workspaces/dissworkspace/permanent/peass-ci/work/workspace/demo-vis2_fullPeass/demo-vis2_peass/projectTemp/parallel_33ce17c04b5218c25c40137d4d09f40fbb3e4f0f/.
+No GC Collector
+12:58:40.631 [main] DEBUG de.dagere.kopeme.TimeBoundExecution:100 - Waiting: 600000
+12:58:40.669 [timebound-0] DEBUG de.dagere.kopeme.junit.rule.KoPeMeBasicStatement:125 - Executing 6 execution 
+12:58:40.785 [timebound-0] DEBUG de.dagere.kopeme.junit.rule.KoPeMeBasicStatement:152 - Executions: 6
+Aug 12, 2021 12:58:40 PM de.dagere.kopeme.datacollection.tempfile.ResultTempWriter finalizeCollection
+INFORMATION: Flushing to /home/reichelt/workspaces/dissworkspace/permanent/peass-ci/work/workspace/demo-vis2/../demo-vis2_fullPeass/demo-vis2_peass/projectTemp/parallel_33ce17c04b5218c25c40137d4d09f40fbb3e4f0f_peass/temp/kopeme-1817892464836922809.tmp finished
+12:58:40.806 [timebound-0] DEBUG de.dagere.kopeme.datacollection.tempfile.WrittenResultReader:48 - Count of executions: 6  Values: 6
+12:58:40.860 [timebound-0] INFO  de.dagere.kopeme.datastorage.XMLDataStorer:152 - Storing data to: /home/reichelt/workspaces/dissworkspace/permanent/peass-ci/work/workspace/demo-vis2/../demo-vis2_fullPeass/demo-vis2_peass/projectTemp/parallel_33ce17c04b5218c25c40137d4d09f40fbb3e4f0f_peass/measurementsTemp/de.test/demo-project/de.test.CalleeTest/onlyCallMethod2.xml
+12:58:41.058 [timebound-0] INFO  de.dagere.kopeme.datastorage.XMLDataStorer:152 - Storing data to: /home/reichelt/workspaces/dissworkspace/permanent/peass-ci/work/workspace/demo-vis2/../demo-vis2_fullPeass/demo-vis2_peass/projectTemp/parallel_33ce17c04b5218c25c40137d4d09f40fbb3e4f0f_peass/measurementsTemp/de.test/demo-project/de.test.CalleeTest/onlyCallMethod2.xml
+12:58:41.061 [main] DEBUG de.dagere.kopeme.TimeBoundExecution:107 - KoPeMe-Test METHOD. Kieker: false Threads: 0
+12:58:41.061 [main] INFO  de.dagere.kopeme.junit.rule.KoPeMeStandardRuleStatement:69 - Test de.test.CalleeTest beendet
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.945 s - in de.test.CalleeTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  5.395 s
+[INFO] Finished at: 2021-08-12T12:58:41+02:00
+[INFO] ------------------------------------------------------------------------
+[INFO] [jenkins-event-spy] Generated /home/reichelt/workspaces/dissworkspace/permanent/peass-ci/work/workspace/demo-vis2@tmp/withMaven3bb7e7b2/maven-spy-20210812-125835-4495741133262418138333.log

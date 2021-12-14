@@ -1,0 +1,87 @@
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by com.google.inject.internal.cglib.core.$ReflectUtils$1 (file:/usr/share/maven/lib/guice.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+WARNING: Please consider reporting this to the maintainers of com.google.inject.internal.cglib.core.$ReflectUtils$1
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+[[1;34mINFO[m] Scanning for projects...
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m------------------------< [0;36mde.test:demo-project[0;1m >------------------------[m
+[[1;34mINFO[m] [1mBuilding project 1.0-SNAPSHOT[m
+[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mdemo-project[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] Copying 2 resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:compile[m [1m(default-compile)[m @ [36mdemo-project[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 1 source file to /home/reichelt/nvme/workspaces/dissworkspace/permanent/peass-ci/work/workspace/demo-test3_fullPeass/demo-test3/target/classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36mdemo-project[0;1m ---[m
+[[1;34mINFO[m] Using 'UTF-8' encoding to copy filtered resources.
+[[1;34mINFO[m] Copying 2 resources
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.8.1:testCompile[m [1m(default-testCompile)[m @ [36mdemo-project[0;1m ---[m
+[[1;34mINFO[m] Changes detected - recompiling the module!
+[[1;34mINFO[m] Compiling 1 source file to /home/reichelt/nvme/workspaces/dissworkspace/permanent/peass-ci/work/workspace/demo-test3_fullPeass/demo-test3/target/test-classes
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1m--- [0;32mmaven-surefire-plugin:3.0.0-M5:test[m [1m(default-test)[m @ [36mdemo-project[0;1m ---[m
+[[1;33mWARNING[m] The system property java.io.tmpdir is configured twice! The property appears in <argLine/> and any of <systemPropertyVariables/>, <systemProperties/> or user property.
+[[1;34mINFO[m] 
+[[1;34mINFO[m] -------------------------------------------------------
+[[1;34mINFO[m]  T E S T S
+[[1;34mINFO[m] -------------------------------------------------------
+[[1;31mERROR[m] [AppClassLoader@3d4eac69] info AspectJ Weaver Version 1.9.7 built on Thursday Jun 24, 2021 at 16:14:45 PDT
+[[1;31mERROR[m] [AppClassLoader@3d4eac69] info register classloader jdk.internal.loader.ClassLoaders$AppClassLoader@3d4eac69
+[[1;31mERROR[m] [AppClassLoader@3d4eac69] info using configuration /home/reichelt/nvme/workspaces/dissworkspace/permanent/peass-ci/work/workspace/demo-test3_fullPeass/demo-test3/target/test-classes/META-INF/aop.xml
+[[1;31mERROR[m] [AppClassLoader@3d4eac69] info using configuration /home/reichelt/nvme/workspaces/dissworkspace/permanent/peass-ci/work/workspace/demo-test3_fullPeass/demo-test3/target/classes/META-INF/aop.xml
+[[1;31mERROR[m] [AppClassLoader@3d4eac69] info using configuration file:/home/reichelt/.m2/repository/de/dagere/kopeme/kopeme-core/0.14-SNAPSHOT/kopeme-core-0.14-SNAPSHOT.jar!/META-INF/aop.xml
+[[1;31mERROR[m] [AppClassLoader@3d4eac69] info register aspect kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFull
+[[1;31mERROR[m] [AppClassLoader@3d4eac69] info register aspect kieker.monitoring.probe.aspectj.operationExecution.OperationExecutionAspectFull
+[[1;34mINFO[m] Running de.test.[1mCalleeTest[m
+[[1;31mERROR[m] [AppClassLoader@3d4eac69] warning javax.* types are not being woven because the weaver option '-Xset:weaveJavaxPackages=true' has not been specified
+[[1;31mERROR[m] WARNING: An illegal reflective access operation has occurred
+[[1;31mERROR[m] WARNING: Illegal reflective access by com.sun.xml.bind.v2.runtime.reflect.opt.Injector (file:/home/reichelt/.m2/repository/org/glassfish/jaxb/jaxb-runtime/2.3.0/jaxb-runtime-2.3.0.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int)
+[[1;31mERROR[m] WARNING: Please consider reporting this to the maintainers of com.sun.xml.bind.v2.runtime.reflect.opt.Injector
+[[1;31mERROR[m] WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+[[1;31mERROR[m] WARNING: All illegal access operations will be denied in a future release
+Aug. 23, 2021 5:40:35 NACHM. de.dagere.kopeme.kieker.writer.AggregatedTreeWriter <init>
+INFORMATION: Init..
+Initializing class de.dagere.kopeme.kieker.writer.AggregatedTreeWriter
+Sleeping: 5000
+Aug. 23, 2021 5:40:35 NACHM. de.dagere.kopeme.kieker.writer.AggregatedTreeWriter setFolder
+INFORMATION: Writing to: /home/reichelt/nvme/workspaces/dissworkspace/permanent/peass-ci/work/workspace/demo-test3/../demo-test3_fullPeass/demo-test3_peass/measurementsTemp/de.test/demo-project/de.test.CalleeTest/1629733235302/onlyCallMethod2
+Aug. 23, 2021 5:40:35 NACHM. de.dagere.kopeme.kieker.writer.AggregatedTreeWriter onTerminating
+INFORMATION: Finishing AggregatedTreeWriter
+Writing finally...
+Writing is finished...
+Initializing class de.dagere.kopeme.kieker.writer.AggregatedTreeWriter
+Sleeping: 5000
+No GC Collector
+Aug. 23, 2021 5:40:36 NACHM. de.dagere.kopeme.datacollection.tempfile.ResultTempWriter finalizeCollection
+INFORMATION: Flushing to /home/reichelt/nvme/workspaces/dissworkspace/permanent/peass-ci/work/workspace/demo-test3/../demo-test3_fullPeass/demo-test3_peass/temp/kopeme-1071737788011877062.tmp finished
+Aug. 23, 2021 5:40:36 NACHM. de.dagere.kopeme.kieker.writer.AggregatedTreeWriter onTerminating
+INFORMATION: Finishing AggregatedTreeWriter
+Writing finally...
+Writing is finished...
+Aug. 23, 2021 5:40:36 NACHM. de.dagere.kopeme.kieker.writer.AggregatedTreeWriter <init>
+INFORMATION: Init..
+Initializing class de.dagere.kopeme.kieker.writer.AggregatedTreeWriter
+Sleeping: 5000
+[[1;34mINFO[m] [1;32mTests run: [0;1;32m1[m, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.187 s - in de.test.[1mCalleeTest[m
+Aug. 23, 2021 5:40:36 NACHM. de.dagere.kopeme.kieker.writer.AggregatedTreeWriter onTerminating
+INFORMATION: Finishing AggregatedTreeWriter
+Writing finally...
+Writing is finished...
+[[1;34mINFO[m] 
+[[1;34mINFO[m] Results:
+[[1;34mINFO[m] 
+[[1;34mINFO[m] [1;32mTests run: 1, Failures: 0, Errors: 0, Skipped: 0[m
+[[1;34mINFO[m] 
+[[1;33mWARNING[m] Corrupted STDOUT by directly writing to native stream in forked JVM 1. See FAQ web page and the dump file /home/reichelt/nvme/workspaces/dissworkspace/permanent/peass-ci/work/workspace/demo-test3_fullPeass/demo-test3/target/surefire-reports/2021-08-23T17-40-34_058-jvmRun1.dumpstream
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] [1;32mBUILD SUCCESS[m
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
+[[1;34mINFO[m] Total time:  3.688 s
+[[1;34mINFO[m] Finished at: 2021-08-23T17:40:36+02:00
+[[1;34mINFO[m] [1m------------------------------------------------------------------------[m

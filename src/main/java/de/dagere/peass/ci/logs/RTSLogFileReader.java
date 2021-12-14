@@ -1,13 +1,14 @@
 package de.dagere.peass.ci.logs;
 
 import java.io.File;
-import java.io.FileFilter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,7 +20,6 @@ import de.dagere.peass.dependency.persistence.Dependencies;
 import de.dagere.peass.dependency.persistence.Version;
 import de.dagere.peass.dependency.traces.TraceWriter;
 import de.dagere.peass.utils.Constants;
-import io.jenkins.cli.shaded.org.apache.commons.io.filefilter.WildcardFileFilter;
 
 public class RTSLogFileReader {
    private static final Logger LOG = LogManager.getLogger(RTSLogFileReader.class);
@@ -77,16 +77,17 @@ public class RTSLogFileReader {
    public Map<TestCase, RTSLogData> getRtsVmRuns(final String version) {
       Map<TestCase, RTSLogData> files = new LinkedHashMap<>();
       File versionFolder = new File(visualizationFolders.getPeassFolders().getDependencyLogFolder(), version);
-      File[] versionFiles = versionFolder.listFiles((FileFilter) new WildcardFileFilter("log_*"));
-      if (versionFiles != null) {
-         for (File testClazzFolder : versionFiles) {
-            LOG.debug("Looking for method files in {}", testClazzFolder.getAbsolutePath());
-            File[] testClazzFiles = testClazzFolder.listFiles();
-            if (testClazzFiles != null) {
-               for (File methodFile : testClazzFiles) {
-                  LOG.debug("Looking for method log file in {}", methodFile.getAbsolutePath());
-                  if (!methodFile.isDirectory()) {
-                     addMethodLog(version, files, testClazzFolder, methodFile);
+      File[] allFiles = versionFolder.listFiles();
+      if (allFiles != null) {
+         for (File examinedFolder : allFiles) {
+            if (examinedFolder.getName().startsWith("log_")) {
+               getClazzLogs(version, null, files, examinedFolder);
+            } else if (examinedFolder.isDirectory()) {
+               String module = examinedFolder.getName();
+               File[] versionFiles = examinedFolder.listFiles((FilenameFilter) new WildcardFileFilter("log_*"));
+               if (versionFiles != null) {
+                  for (File testClazzFolder : versionFiles) {
+                     getClazzLogs(version, module, files, testClazzFolder);
                   }
                }
             }
@@ -94,14 +95,29 @@ public class RTSLogFileReader {
       } else {
          LOG.info("Expected rts version folder {} did not exist", versionFolder);
       }
+
       return files;
    }
 
-   private void addMethodLog(final String version, final Map<TestCase, RTSLogData> files, final File testClazzFolder, final File methodFile) {
-      String clazz = testClazzFolder.getName().substring("log_".length());
-      String method = methodFile.getName().substring(0, methodFile.getName().length() - ".txt".length());
-      TestCase test = new TestCase(clazz + "#" + method);
+   private void getClazzLogs(final String version, final String module, final Map<TestCase, RTSLogData> files, final File testClazzFolder) {
+      LOG.debug("Looking for method files in {}", testClazzFolder.getAbsolutePath());
+      File[] methodFiles = testClazzFolder.listFiles();
+      if (methodFiles != null) {
+         for (File methodFile : methodFiles) {
+            LOG.debug("Looking for method log file in {}", methodFile.getAbsolutePath());
+            if (!methodFile.isDirectory()) {
+               String clazz = testClazzFolder.getName().substring("log_".length());
+               String method = methodFile.getName().substring(0, methodFile.getName().length() - ".txt".length());
+               TestCase test = new TestCase(clazz, method, module);
 
+               addMethodLog(version, files, testClazzFolder, methodFile, test);
+            }
+         }
+      }
+   }
+
+   private void addMethodLog(final String version, final Map<TestCase, RTSLogData> files, final File testClazzFolder,
+         final File methodFile, final TestCase test) {
       boolean runWasSuccessful = wasSuccessful(version, test);
 
       File cleanFile = new File(testClazzFolder, "clean" + File.separator + methodFile.getName());
