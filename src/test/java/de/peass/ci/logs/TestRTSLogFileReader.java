@@ -58,7 +58,7 @@ public class TestRTSLogFileReader {
    }
 
    private void initExampleViewFile(final ResultsFolders folders) throws IOException {
-      File viewMethodDir = folders.getViewMethodDir(VERSION, TEST1);
+      File viewMethodDir = folders.getViewMethodDir(VERSION_OLD, TEST1);
       File methodFile = new File(viewMethodDir, TraceWriter.getShortVersion(VERSION_OLD));
       FileUtils.write(methodFile, "This is a rts diff", StandardCharsets.UTF_8);
    }
