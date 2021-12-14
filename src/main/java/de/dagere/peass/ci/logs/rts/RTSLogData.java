@@ -2,6 +2,8 @@ package de.dagere.peass.ci.logs.rts;
 
 import java.io.File;
 
+import de.dagere.peass.dependency.traces.TraceWriter;
+
 public class RTSLogData {
    private final String version;
    private final File methodFile;
@@ -17,6 +19,10 @@ public class RTSLogData {
 
    public String getVersion() {
       return version;
+   }
+
+   public String getShortVersion() {
+      return TraceWriter.getShortVersion(version);
    }
 
    public File getMethodFile() {
