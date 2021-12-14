@@ -6,11 +6,13 @@ public class RTSLogData {
    private final String version;
    private final File methodFile;
    private final File cleanFile;
+   private final boolean success;
 
-   public RTSLogData(final String version, final File methodFile, final File cleanFile) {
+   public RTSLogData(final String version, final File methodFile, final File cleanFile, final boolean success) {
       this.version = version;
       this.methodFile = methodFile;
       this.cleanFile = cleanFile;
+      this.success = success;
    }
 
    public String getVersion() {
@@ -25,4 +27,7 @@ public class RTSLogData {
       return cleanFile;
    }
 
+   public boolean isSuccess() {
+      return success;
+   }
 }

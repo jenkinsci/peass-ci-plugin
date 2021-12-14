@@ -17,6 +17,7 @@ import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.persistence.Dependencies;
 import de.dagere.peass.dependency.persistence.Version;
+import de.dagere.peass.dependency.traces.TraceWriter;
 import de.dagere.peass.utils.Constants;
 import io.jenkins.cli.shaded.org.apache.commons.io.filefilter.WildcardFileFilter;
 
@@ -32,7 +33,8 @@ public class RTSLogFileReader {
       this.visualizationFolders = visualizationFolders;
       this.measurementConfig = measurementConfig;
 
-      File rtsLogOverviewFile = visualizationFolders.getResultsFolders().getDependencyLogFile(measurementConfig.getExecutionConfig().getVersion(), measurementConfig.getExecutionConfig().getVersionOld());
+      File rtsLogOverviewFile = visualizationFolders.getResultsFolders().getDependencyLogFile(measurementConfig.getExecutionConfig().getVersion(),
+            measurementConfig.getExecutionConfig().getVersionOld());
       LOG.info("RTS log overview file: {} Exists: {}", rtsLogOverviewFile, rtsLogOverviewFile.exists());
       logsExisting = rtsLogOverviewFile.exists();
 
@@ -96,17 +98,32 @@ public class RTSLogFileReader {
    }
 
    private void addMethodLog(final String version, final Map<TestCase, RTSLogData> files, final File testClazzFolder, final File methodFile) {
-      File cleanFile = new File(testClazzFolder, "clean" + File.separator + methodFile.getName());
-      RTSLogData data = new RTSLogData(version, methodFile, cleanFile);
       String clazz = testClazzFolder.getName().substring("log_".length());
       String method = methodFile.getName().substring(0, methodFile.getName().length() - ".txt".length());
       TestCase test = new TestCase(clazz + "#" + method);
+
+      boolean runWasSuccessful = wasSuccessful(version, test);
+
+      File cleanFile = new File(testClazzFolder, "clean" + File.separator + methodFile.getName());
+      RTSLogData data = new RTSLogData(version, methodFile, cleanFile, runWasSuccessful);
+
       files.put(test, data);
       LOG.debug("Adding log: {}", test);
    }
 
+   private boolean wasSuccessful(final String version, final TestCase test) {
+      boolean runWasSuccessful = false;
+      File viewMethodDir = visualizationFolders.getResultsFolders().getViewMethodDir(version, test);
+      if (viewMethodDir.exists()) {
+         File viewMethodFile = new File(viewMethodDir, TraceWriter.getShortVersion(version));
+         runWasSuccessful = viewMethodFile.exists();
+      }
+      return runWasSuccessful;
+   }
+
    public String getRTSLog() {
-      File rtsLogFile = visualizationFolders.getResultsFolders().getDependencyLogFile(measurementConfig.getExecutionConfig().getVersion(), measurementConfig.getExecutionConfig().getVersionOld());
+      File rtsLogFile = visualizationFolders.getResultsFolders().getDependencyLogFile(measurementConfig.getExecutionConfig().getVersion(),
+            measurementConfig.getExecutionConfig().getVersionOld());
       try {
          LOG.debug("Reading {}", rtsLogFile.getAbsolutePath());
          String rtsLog = FileUtils.readFileToString(rtsLogFile, StandardCharsets.UTF_8);

@@ -19,48 +19,56 @@
         <a href="../processSuccessRun_${run.getKey()}">${run.getKey()}</a>
         <j:if test="${!it.getProcessSuccessRunSucceeded().get(run.getKey())}">
           <i class="fa fa-exclamation-triangle" title="This run was not successfull. Therefore, the regression test selection could not be finished."
-          style="color: red"></i>
+            style="color: red"></i>
         </j:if>
         <br />
       </j:forEach>
-      
+
 
       <h2>Trace Creation Runs</h2>
-      <j:if test="${!it.isStaticChanges()}" >
+      <j:if test="${!it.isStaticChanges()}">
         No static changes found, so no trace creation runs were executed
       </j:if>
-      <j:if test="${it.isStaticChanges()}" >
-	      <j:if test="${it.getVmRuns().isEmpty() &amp;&amp; it.isStaticallySelectedTests()}" >
-	        <i class="fa fa-exclamation-triangle" title="Regression test selection had error" style="color: red"></i>
-	        Warning: The regression test selection had an error, and no log files were produced for the current version.
-	        <br />
-	      </j:if>
-	      <j:if test="${!it.isStaticallySelectedTests()}" >
-            Changes were detected, but no test method called the changed methods.
-          </j:if>
-	      <j:if test="${it.getPredecessorVmRuns().isEmpty()}">
-	          No log files where produced for the predecessor. Are there maybe no tests existing or runnable?
-	      </j:if>
-	      
-	      <table  class="data-table">
-	      <tr><th>Testcase</th><th>Current Version Run</th><th>Predecessor Version Run (if Present)</th></tr>
-	      <j:forEach var="run" items="${it.getAllTests()}">
-	        <tr><td> ${run}</td>
-	        <td>
-	        <j:if test='${it.getVmRuns().get(run) != null}'>
-	        <a href="../rtsLog_${run.getLinkUsable()}_${it.getVmRuns().get(run).getVersion()}">${it.getVmRuns().get(run).getVersion()}</a>
-	        </j:if>
-	        </td>
-	        <j:if test='${it.getPredecessorVmRuns().get(run) != null}'>
-	          <td>
-	          <a href="../rtsLog_${run.getLinkUsable()}_${it.getPredecessorVmRuns().get(run).getVersion()}">${it.getPredecessorVmRuns().get(run).getVersion()}</a>
-	          </td>
-	        </j:if>
-	        </tr>
-	      </j:forEach>
-	      </table>      
-	     
-	    </j:if>
+      <j:if test="${it.isStaticChanges()}">
+        <j:if test="${it.getVmRuns().isEmpty() &amp;&amp; it.isStaticallySelectedTests()}">
+          <i class="fa fa-exclamation-triangle" title="Regression test selection had error" style="color: red"></i>
+          Warning: The regression test selection had an error, and no log files were produced for the current version.
+          <br />
+        </j:if>
+        <j:if test="${!it.isStaticallySelectedTests()}">
+          Changes were detected, but no test method called the changed methods.
+        </j:if>
+        <j:if test="${it.getPredecessorVmRuns().isEmpty()}">
+          No log files where produced for the predecessor. Are there maybe no tests existing or runnable?
+        </j:if>
+
+        <table class="data-table">
+          <tr>
+            <th>Testcase</th>
+            <th>Current Version Run</th>
+            <th>Predecessor Version Run (if Present)</th>
+          </tr>
+          <j:forEach var="run" items="${it.getAllTests()}">
+            <tr>
+              <td> ${run}</td>
+              <td>
+                <j:if test='${it.getVmRuns().get(run) != null}'>
+                  <a href="../rtsLog_${run.getLinkUsable()}_${it.getVmRuns().get(run).getVersion()}">${it.getVmRuns().get(run).getVersion()}</a>
+                  <j:if test="${!it.getVmRuns().get(run).isSuccess()}">
+                    <i class="fa fa-exclamation-triangle" title="Regression test selection had error" style="color: red"></i>
+                  </j:if>
+                </j:if>
+              </td>
+              <j:if test='${it.getPredecessorVmRuns().get(run) != null}'>
+                <td>
+                  <a href="../rtsLog_${run.getLinkUsable()}_${it.getPredecessorVmRuns().get(run).getVersion()}">${it.getPredecessorVmRuns().get(run).getVersion()}</a>
+                </td>
+              </j:if>
+            </tr>
+          </j:forEach>
+        </table>
+
+      </j:if>
     </l:main-panel>
   </l:layout>
 </j:jelly> 
