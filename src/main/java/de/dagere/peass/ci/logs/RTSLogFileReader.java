@@ -113,8 +113,7 @@ public class RTSLogFileReader {
 
    private boolean wasSuccessful(final String version, final TestCase test) {
       boolean runWasSuccessful = false;
-      String analyzedVersion = measurementConfig.getExecutionConfig().getVersion();
-      File viewMethodDir = visualizationFolders.getResultsFolders().getViewMethodDir(analyzedVersion, test);
+      File viewMethodDir = visualizationFolders.getResultsFolders().getViewMethodDir(version, test);
       if (viewMethodDir.exists()) {
          File viewMethodFile = new File(viewMethodDir, TraceWriter.getShortVersion(version));
          runWasSuccessful = viewMethodFile.exists();
