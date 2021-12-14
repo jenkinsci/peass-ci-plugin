@@ -45,6 +45,9 @@ public class MeasureVersionBuilderTest {
       // Windows tends to create some strange errors when trying to copy .git-folders; therefore, windows builds are currently not fully supported
       Assume.assumeFalse(EnvironmentVariables.isWindows()); 
       
+      // On Github actions, this test currently fails because of timeout - try to use higher timeout
+      jenkins.timeout = 5 * 60;
+      
       FreeStyleProject project = jenkins.createFreeStyleProject();
       initProjectFolder(project);
       
