@@ -1,9 +1,9 @@
 package de.dagere.peass.ci.logs.rts;
 
 import java.io.File;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import de.dagere.peass.ci.VisibleAction;
 import de.dagere.peass.dependency.analysis.data.TestCase;
@@ -33,7 +33,7 @@ public class RTSLogOverviewAction extends VisibleAction {
    }
    
    public Set<TestCase> getAllTests(){
-      Set<TestCase> allTests = new HashSet<>();
+      Set<TestCase> allTests = new TreeSet<>();
       allTests.addAll(vmRuns.keySet());
       allTests.addAll(predecessorVmRuns.keySet());
       return allTests;
