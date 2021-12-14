@@ -62,6 +62,9 @@
               <j:if test='${it.getPredecessorVmRuns().get(run) != null}'>
                 <td>
                   <a href="../rtsLog_${run.getLinkUsable()}_${it.getPredecessorVmRuns().get(run).getVersion()}">${it.getPredecessorVmRuns().get(run).getShortVersion()}</a>
+                  <j:if test="${!it.getPredecessorVmRuns().get(run).isSuccess()}">
+                    <i class="fa fa-exclamation-triangle" title="Regression test selection had error" style="color: red"></i>
+                  </j:if>
                 </td>
               </j:if>
             </tr>
