@@ -63,19 +63,21 @@ public class LogFileReader {
    private void tryLocalLogFolderVMIds(final TestCase testcase, final List<LogFiles> currentFiles, final File logFolder, final PeassFolders folders) {
       if (logFolder != null && logFolder.exists() && logFolder.isDirectory()) {
          LOG.debug("Log folder: {} {}", logFolder, logFolder.listFiles());
+
          int tryIndex = 0;
          String filenameSuffix = "log_" + testcase.getClazz() + File.separator + testcase.getMethod() + ".txt";
-         File predecessorFile = new File(logFolder, "vm_" + tryIndex + "_" + measurementConfig.getExecutionConfig().getVersionOld() + File.separator + filenameSuffix);
-         LOG.debug("Trying whether {} exists", predecessorFile, predecessorFile.exists());
+         File predecessorFile = getVersionFile(testcase, logFolder, tryIndex, filenameSuffix, measurementConfig.getExecutionConfig().getVersionOld());
+
+         LOG.debug("Trying whether {} exists {}", predecessorFile, predecessorFile.exists());
          while (predecessorFile.exists()) {
             CorrectRunChecker checker = new CorrectRunChecker(testcase, tryIndex, measurementConfig, visualizationFolders);
 
-            File currentFile = new File(logFolder, "vm_" + tryIndex + "_" + measurementConfig.getExecutionConfig().getVersion() + File.separator + filenameSuffix);
+            File currentFile = getVersionFile(testcase, logFolder, tryIndex, filenameSuffix, measurementConfig.getExecutionConfig().getVersion());
             LogFiles vmidLogFile = new LogFiles(predecessorFile, currentFile, checker.isPredecessorRunning(), checker.isCurrentRunning());
             currentFiles.add(vmidLogFile);
 
             tryIndex++;
-            predecessorFile = new File(logFolder, "vm_" + tryIndex + "_" + measurementConfig.getExecutionConfig().getVersionOld() + File.separator + filenameSuffix);
+            predecessorFile = getVersionFile(testcase, logFolder, tryIndex, filenameSuffix, measurementConfig.getExecutionConfig().getVersionOld());
             LOG.debug("Trying whether {} exists", predecessorFile, predecessorFile.exists());
          }
       } else {
@@ -84,8 +86,20 @@ public class LogFileReader {
 
    }
 
+   private File getVersionFile(final TestCase testcase, final File logFolder, final int tryIndex, final String filenameSuffix, final String version) {
+      String vmFolderName = "vm_" + tryIndex + "_" + version;
+      File predecessorFile;
+      if (testcase.getModule() != null) {
+         predecessorFile = new File(logFolder, vmFolderName + File.separator + testcase.getModule() + File.separator + filenameSuffix);
+      } else {
+         predecessorFile = new File(logFolder, vmFolderName + File.separator + filenameSuffix);
+      }
+      return predecessorFile;
+   }
+
    public String getMeasureLog() {
-      File measureLogFile = visualizationFolders.getResultsFolders().getMeasurementLogFile(measurementConfig.getExecutionConfig().getVersion(), measurementConfig.getExecutionConfig().getVersionOld());
+      File measureLogFile = visualizationFolders.getResultsFolders().getMeasurementLogFile(measurementConfig.getExecutionConfig().getVersion(),
+            measurementConfig.getExecutionConfig().getVersionOld());
       try {
          if (measureLogFile.exists()) {
             LOG.debug("Reading {}", measureLogFile.getAbsolutePath());
@@ -101,7 +115,8 @@ public class LogFileReader {
    }
 
    public String getRCALog() {
-      File rcaLogFile = visualizationFolders.getResultsFolders().getRCALogFile(measurementConfig.getExecutionConfig().getVersion(), measurementConfig.getExecutionConfig().getVersionOld());
+      File rcaLogFile = visualizationFolders.getResultsFolders().getRCALogFile(measurementConfig.getExecutionConfig().getVersion(),
+            measurementConfig.getExecutionConfig().getVersionOld());
       try {
          LOG.debug("Reading {}", rcaLogFile.getAbsolutePath());
          String rcaLog = FileUtils.readFileToString(rcaLogFile, StandardCharsets.UTF_8);
@@ -138,7 +153,7 @@ public class LogFileReader {
    private void readRCATestcase(final CauseSearchFolders causeFolders, final Map<TestCase, List<RCALevel>> testcases, final File jsonFileName)
          throws IOException, JsonParseException, JsonMappingException {
       CauseSearchData data = Constants.OBJECTMAPPER.readValue(jsonFileName, CauseSearchData.class);
-      TestCase test = new TestCase(data.getTestcase());
+      TestCase test = data.getCauseConfig().getTestCase();
 
       boolean lastHadLogs = true;
       int levelId = 0;

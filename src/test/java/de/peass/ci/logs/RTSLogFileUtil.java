@@ -43,7 +43,7 @@ public class RTSLogFileUtil {
 
       ResultsFolders folders = initExampleLogFile(projectName);
 
-      initExampleViewFile(folders);
+      initExampleTraceDiffFile(folders);
    }
 
    private ResultsFolders initExampleLogFile(final String projectName) throws IOException {
@@ -53,10 +53,10 @@ public class RTSLogFileUtil {
       return folders;
    }
 
-   private void initExampleViewFile(final ResultsFolders folders) throws IOException {
+   private void initExampleTraceDiffFile(final ResultsFolders folders) throws IOException {
       File viewMethodDir = folders.getViewMethodDir(VERSION_OLD, test1);
       File methodFile = new File(viewMethodDir, TraceWriter.getShortVersion(VERSION_OLD));
-      FileUtils.write(methodFile, "This is a trace generated for rca", StandardCharsets.UTF_8);
+      FileUtils.write(methodFile, "This is a trace generated for rts trace diff", StandardCharsets.UTF_8);
    }
 
    RTSLogFileReader initializeReader() {

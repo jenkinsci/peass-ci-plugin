@@ -26,14 +26,16 @@ import de.dagere.peass.folders.CauseSearchFolders;
 import de.dagere.peass.folders.PeassFolders;
 import de.dagere.peass.folders.ResultsFolders;
 
-public class TestRCALogFileReader {
+public class TestRCALogFileReaderMultimodule {
 
    private final File localFolder = new File("target/peass-data");
    private final File testFolder = new File(localFolder, "current_peass");
+   
+   private static final TestCase test = new TestCase("de.test.CalleeTest","onlyCallMethod2", "moduleA");
 
    @BeforeEach
    public void init() throws IOException {
-      File source = new File("src/test/resources/demo-results-logs/demo-vis2_peass");
+      File source = new File("src/test/resources/demo-results-logs/demo-vis2-multimodule_peass");
       if (localFolder.exists()) {
          FileUtils.deleteDirectory(localFolder);
       }
@@ -57,8 +59,7 @@ public class TestRCALogFileReader {
       Mockito.when(visualizationFolders.getPeassRCAFolders()).thenReturn(new CauseSearchFolders(testFolder));
       Mockito.when(visualizationFolders.getResultsFolders()).thenReturn(new ResultsFolders(localFolder, "demo-vis2"));
       LogFileReader reader = new LogFileReader(visualizationFolders, peassDemoConfig);
-
-      TestCase test = new TestCase("de.test.CalleeTest#onlyCallMethod2");
+      
       Map<TestCase, List<RCALevel>> rcaTestcases = reader.getRCATestcases();
       List<RCALevel> levels = rcaTestcases.get(test);
       Assert.assertEquals(1, levels.size());
