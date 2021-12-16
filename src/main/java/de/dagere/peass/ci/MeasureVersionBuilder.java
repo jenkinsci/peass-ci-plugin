@@ -3,6 +3,7 @@ package de.dagere.peass.ci;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 
@@ -97,9 +98,12 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private boolean createDefaultConstructor = true;
 
    private boolean redirectSubprocessOutputToFile = true;
-   
+
    private String testTransformer = "de.dagere.peass.testtransformation.JUnitTestTransformer";
    private String testExecutor = "default";
+
+   private String clazzFolders;
+   private String testClazzFolders;
 
    @DataBoundConstructor
    public MeasureVersionBuilder() {
@@ -207,7 +211,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       listener.getLogger().println("Starting RemoteVersionReader");
       final RemoteVersionReader remoteVersionReader = new RemoteVersionReader(measurementConfig, listener);
       final MeasurementConfig configWithRealGitVersions = workspace.act(remoteVersionReader);
-      listener.getLogger().println("Read version: " + configWithRealGitVersions.getExecutionConfig().getVersion() + " " + configWithRealGitVersions.getExecutionConfig().getVersionOld());
+      listener.getLogger()
+            .println("Read version: " + configWithRealGitVersions.getExecutionConfig().getVersion() + " " + configWithRealGitVersions.getExecutionConfig().getVersionOld());
       return configWithRealGitVersions;
    }
 
@@ -217,7 +222,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       listener.getLogger().println("VMs: " + VMs + " Iterations: " + iterations + " Warmup: " + warmup + " Repetitions: " + repetitions);
       listener.getLogger().println("measureJMH: " + measureJMH);
       listener.getLogger().println("Includes: " + includes + " RCA: " + executeRCA);
-      listener.getLogger().println("Excludes: " + excludes);      listener.getLogger().println("Strategy: " + measurementMode + " Source Instrumentation: " + useSourceInstrumentation + " Aggregation: " + useAggregation);
+      listener.getLogger().println("Excludes: " + excludes);
+      listener.getLogger().println("Strategy: " + measurementMode + " Source Instrumentation: " + useSourceInstrumentation + " Aggregation: " + useAggregation);
       listener.getLogger().println("Create default constructor: " + createDefaultConstructor);
    }
 
@@ -286,9 +292,19 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
       config.getExecutionConfig().setUseAlternativeBuildfile(useAlternativeBuildfile);
       config.getExecutionConfig().setRedirectSubprocessOutputToFile(redirectSubprocessOutputToFile);
-      
+
       config.getExecutionConfig().setTestTransformer(testTransformer);
       config.getExecutionConfig().setTestExecutor(testExecutor);
+
+      if (clazzFolders != null && !"".equals(clazzFolders.trim())) {
+         String[] pathes = clazzFolders.trim().split(";");
+         config.getExecutionConfig().getClazzFolders().addAll(Arrays.asList(pathes));
+      }
+
+      if (testClazzFolders != null && !"".equals(testClazzFolders.trim())) {
+         String[] testPathes = testClazzFolders.trim().split(";");
+         config.getExecutionConfig().getTestClazzFolders().addAll(Arrays.asList(testPathes));
+      }
 
       if (testGoal != null && !"".equals(testGoal)) {
          config.getExecutionConfig().setTestGoal(testGoal);
@@ -446,11 +462,11 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public void setIncludes(final String includes) {
       this.includes = includes;
    }
-   
+
    public String getExcludes() {
       return excludes;
    }
-   
+
    @DataBoundSetter
    public void setExcludes(final String excludes) {
       this.excludes = excludes;
@@ -500,11 +516,11 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public void setExecuteBeforeClassInMeasurement(final boolean executeBeforeClassInMeasurement) {
       this.executeBeforeClassInMeasurement = executeBeforeClassInMeasurement;
    }
-   
+
    public boolean isOnlyMeasureWorkload() {
       return onlyMeasureWorkload;
    }
-   
+
    @DataBoundSetter
    public void setOnlyMeasureWorkload(final boolean onlyMeasureWorkload) {
       this.onlyMeasureWorkload = onlyMeasureWorkload;
@@ -572,11 +588,11 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public void setRemoveSnapshots(final boolean removeSnapshots) {
       this.removeSnapshots = removeSnapshots;
    }
-   
+
    public boolean isUseAlternativeBuildfile() {
       return useAlternativeBuildfile;
    }
-   
+
    @DataBoundSetter
    public void setUseAlternativeBuildfile(final boolean useAlternativeBuildfile) {
       this.useAlternativeBuildfile = useAlternativeBuildfile;
@@ -617,23 +633,41 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public void setMeasureJMH(final boolean measureJMH) {
       this.measureJMH = measureJMH;
    }
-   
+
    public String getTestExecutor() {
       return testExecutor;
    }
-   
+
    @DataBoundSetter
    public void setTestExecutor(final String testExecutor) {
       this.testExecutor = testExecutor;
    }
-   
+
    public String getTestTransformer() {
       return testTransformer;
    }
-   
+
    @DataBoundSetter
    public void setTestTransformer(final String testTransformer) {
       this.testTransformer = testTransformer;
+   }
+
+   public String getClazzFolders() {
+      return clazzFolders;
+   }
+
+   @DataBoundSetter
+   public void setClazzFolders(final String clazzFolders) {
+      this.clazzFolders = clazzFolders;
+   }
+
+   public String getTestClazzFolders() {
+      return testClazzFolders;
+   }
+
+   @DataBoundSetter
+   public void setTestClazzFolders(final String testClazzFolders) {
+      this.testClazzFolders = testClazzFolders;
    }
 
    @Symbol("measure")

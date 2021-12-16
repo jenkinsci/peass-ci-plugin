@@ -146,5 +146,13 @@
                  description="${%testTransformerDescr}">
             <f:textbox default="true"/>
         </f:entry>
+        <f:entry title="${%clazzFolders}" field="clazzFolders"
+                 description="${%clazzFoldersDescr}">
+            <f:textbox default="true"/>
+        </f:entry>
+        <f:entry title="${%testClazzFolders}" field="testClazzFolders"
+                 description="${%testClazzFolders}">
+            <f:textbox default="true"/>
+        </f:entry>
     </f:advanced>
 </j:jelly>
