@@ -77,7 +77,6 @@
       </table>
       <j:if test="${it.config.generateTraces}">
 
-
         <h2>
           Trace-based Selected Tests
           <a href='#' onClick='$( "#dialogTraceSelected" ).dialog( "open" );'>
@@ -90,6 +89,13 @@
         <script>
           $( "#dialogTraceSelected" ).dialog({ autoOpen: false });
         </script>
+        
+        <j:if test="${it.getLogSummary().isErrorInCurrentVersionOccured() || it.getLogSummary().isErrorInPredecessorVersionOccured()}">
+          <i class="fa fa-exclamation-triangle" title="Regression test selection had error" style="color: red"></i>
+          Warning: An error occured during trace getting execution. Please check the logs for details and consider fixing the configuration or excluding the erroneous test cases.
+          <br />
+        </j:if>
+        
         <j:forEach var="testcase" items="${it.dynamicSelection}">
           <a href="../rts_${testcase.replace('#', '_')}"> ${testcase} </a>
           <br />

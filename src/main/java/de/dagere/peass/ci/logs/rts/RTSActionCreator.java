@@ -25,6 +25,7 @@ public class RTSActionCreator {
    private final Run<?, ?> run;
    private final MeasurementConfig measurementConfig;
    private Map<String, Boolean> processSuccessRunSucceeded = new HashMap<>();
+   private RTSLogSummary logSummary;
 
    public RTSActionCreator(final RTSLogFileReader reader, final Run<?, ?> run, final MeasurementConfig measurementConfig) {
       this.reader = reader;
@@ -40,6 +41,10 @@ public class RTSActionCreator {
 
          Map<TestCase, RTSLogData> rtsVmRuns = createVersionRTSData(measurementConfig.getExecutionConfig().getVersion());
          Map<TestCase, RTSLogData> rtsVmRunsPredecessor = createVersionRTSData(measurementConfig.getExecutionConfig().getVersionOld());
+
+         boolean versionContainsNonSuccess = rtsVmRuns.values().stream().anyMatch(log -> !log.isSuccess());
+         boolean predecessorContainsNonSuccess = rtsVmRunsPredecessor.values().stream().anyMatch(log -> !log.isSuccess());
+         logSummary = new RTSLogSummary(versionContainsNonSuccess, predecessorContainsNonSuccess);
 
          createOverviewAction(processSuccessRuns, rtsVmRuns, rtsVmRunsPredecessor, staticChanges);
       } else {
@@ -98,5 +103,9 @@ public class RTSActionCreator {
          methodLogData = "Log could not be loaded";
       }
       return methodLogData;
+   }
+
+   public RTSLogSummary getLogSummary() {
+      return logSummary;
    }
 }

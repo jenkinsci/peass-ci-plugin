@@ -16,6 +16,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import de.dagere.peass.ci.PeassProcessConfiguration;
+import de.dagere.peass.ci.logs.rts.RTSLogSummary;
 import de.dagere.peass.dependency.analysis.data.ChangedEntity;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.analysis.data.TestSet;
@@ -40,7 +41,7 @@ public class RTSVisualizationCreator {
       this.peassConfig = peassConfig;
    }
 
-   public void visualize(final Run<?, ?> run) {
+   public void visualize(final Run<?, ?> run, final RTSLogSummary logSummary) {
       try {
          Map<String, List<String>> changesList = readStaticSelection(run);
 
@@ -50,7 +51,8 @@ public class RTSVisualizationCreator {
          System.out.println("Selected: " + traceSelectedTests + " Coverage: " + coverageSelectedTests);
 
          RTSVisualizationAction rtsVisualizationAction = new RTSVisualizationAction(peassConfig.getDependencyConfig(), changesList, traceSelectedTests, coverageSelectedTests,
-               peassConfig.getMeasurementConfig().getExecutionConfig().getVersion(), peassConfig.getMeasurementConfig().getExecutionConfig().getVersionOld());
+               peassConfig.getMeasurementConfig().getExecutionConfig().getVersion(), peassConfig.getMeasurementConfig().getExecutionConfig().getVersionOld(),
+               logSummary);
          run.addAction(rtsVisualizationAction);
 
          for (String traceSelectedTest : traceSelectedTests) {
@@ -61,7 +63,7 @@ public class RTSVisualizationCreator {
       }
    }
 
-   private void visualizeTest(final Run<?, ?> run, String traceSelectedTest) throws IOException {
+   private void visualizeTest(final Run<?, ?> run, final String traceSelectedTest) throws IOException {
       TestCase testcase = new TestCase(traceSelectedTest);
       File traceFolder = localWorkspace.getVersionDiffFolder(peassConfig.getMeasurementConfig().getExecutionConfig().getVersion());
       File traceFile = new File(traceFolder, testcase.getShortClazz() + "#" + testcase.getMethod() + ".txt");

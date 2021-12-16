@@ -27,6 +27,8 @@ import de.dagere.peass.ci.helper.HistogramValues;
 import de.dagere.peass.ci.helper.RCAVisualizer;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.LogActionCreator;
+import de.dagere.peass.ci.logs.rts.AggregatedRTSResult;
+import de.dagere.peass.ci.logs.rts.RTSLogSummary;
 import de.dagere.peass.ci.persistence.TrendFileUtil;
 import de.dagere.peass.ci.remote.RemoteMeasurer;
 import de.dagere.peass.ci.remote.RemoteRCA;
@@ -69,7 +71,7 @@ public class LocalPeassProcessManager {
 
    }
 
-   public RTSResult rts() throws IOException, InterruptedException {
+   public AggregatedRTSResult rts() throws IOException, InterruptedException {
       RemoteRTS rts = new RemoteRTS(peassConfig, listener);
       RTSResult result = workspace.act(rts);
       copyFromRemote();
@@ -80,10 +82,11 @@ public class LocalPeassProcessManager {
       }
       if (peassConfig.isDisplayRTSLogs()) {
          RTSInfos infos = RTSInfos.readInfosFromFolders(results, peassConfig);
-         logActionCreator.createRTSActions(infos);
+         RTSLogSummary summary = logActionCreator.createRTSActions(infos);
+         return new AggregatedRTSResult(summary, result);
       }
       if (result != null && result.getTests() != null) {
-         return result;
+         return new AggregatedRTSResult(null, result);
       } else {
          return null;
       }
@@ -120,9 +123,9 @@ public class LocalPeassProcessManager {
       listener.getLogger().println("Copied " + count + " files from " + remotePeassFolder + " to " + localWorkspace.getAbsolutePath());
    }
 
-   public void visualizeRTSResults(final Run<?, ?> run) throws IOException {
+   public void visualizeRTSResults(final Run<?, ?> run, final RTSLogSummary logSummary) throws IOException {
       RTSVisualizationCreator rtsVisualizationCreator = new RTSVisualizationCreator(results, peassConfig);
-      rtsVisualizationCreator.visualize(run);
+      rtsVisualizationCreator.visualize(run, logSummary);
    }
 
    public ProjectChanges visualizeMeasurementResults(final Run<?, ?> run)

@@ -10,6 +10,7 @@ import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import de.dagere.peass.ci.PeassProcessConfiguration;
+import de.dagere.peass.ci.logs.rts.RTSLogSummary;
 import de.dagere.peass.ci.rts.RTSVisualizationCreator;
 import de.dagere.peass.config.DependencyConfig;
 import de.dagere.peass.config.MeasurementConfig;
@@ -32,7 +33,7 @@ public class TestRTSVisualizationCreator {
       
       RTSVisualizationCreator creator = new RTSVisualizationCreator(localWorkspace, peassConfig);
       
-      creator.visualize(Mockito.mock(Run.class));
+      creator.visualize(Mockito.mock(Run.class), new RTSLogSummary(false, false));
    }
 
    private void writeEmptyExecutionData(final ResultsFolders localWorkspace) throws IOException, JsonGenerationException, JsonMappingException {

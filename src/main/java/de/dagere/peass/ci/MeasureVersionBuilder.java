@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import de.dagere.peass.analysis.changes.ProjectChanges;
+import de.dagere.peass.ci.logs.rts.AggregatedRTSResult;
 import de.dagere.peass.ci.persistence.TestcaseKeyDeserializer;
 import de.dagere.peass.ci.process.IncludeExcludeParser;
 import de.dagere.peass.ci.process.JenkinsLogRedirector;
@@ -151,16 +152,16 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          throws IOException, InterruptedException, JAXBException, JsonParseException, JsonMappingException, JsonGenerationException, Exception {
       final LocalPeassProcessManager processManager = new LocalPeassProcessManager(peassConfig, workspace, localWorkspace, listener, run);
 
-      RTSResult tests = processManager.rts();
+      AggregatedRTSResult tests = processManager.rts();
       listener.getLogger().println("Tests: " + tests);
-      if (tests == null || !tests.isRunning()) {
+      if (tests == null || !tests.getResult().isRunning()) {
          run.setResult(Result.FAILURE);
          return;
       }
-      processManager.visualizeRTSResults(run);
+      processManager.visualizeRTSResults(run, tests.getLogSummary());
 
-      if (tests.getTests().size() > 0) {
-         measure(run, processManager, tests.getTests());
+      if (tests.getResult().getTests().size() > 0) {
+         measure(run, processManager, tests.getResult().getTests());
       } else {
          listener.getLogger().println("No tests selected; no measurement executed");
       }
