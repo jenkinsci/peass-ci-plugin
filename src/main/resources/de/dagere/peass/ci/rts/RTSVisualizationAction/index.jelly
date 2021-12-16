@@ -75,7 +75,7 @@
           </tr>
         </j:forEach>
       </table>
-      <j:if test="${it.config.generateViews}">
+      <j:if test="${it.config.generateTraces}">
 
 
         <h2>
