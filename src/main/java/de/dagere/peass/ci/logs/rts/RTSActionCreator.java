@@ -44,6 +44,8 @@ public class RTSActionCreator {
 
          boolean versionContainsNonSuccess = rtsVmRuns.values().stream().anyMatch(log -> !log.isSuccess());
          boolean predecessorContainsNonSuccess = rtsVmRunsPredecessor.values().stream().anyMatch(log -> !log.isSuccess());
+         
+         LOG.debug("Errors in logs: {} {}", versionContainsNonSuccess, predecessorContainsNonSuccess);
          logSummary = new RTSLogSummary(versionContainsNonSuccess, predecessorContainsNonSuccess);
 
          createOverviewAction(processSuccessRuns, rtsVmRuns, rtsVmRunsPredecessor, staticChanges);
