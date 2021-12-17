@@ -102,7 +102,7 @@
         </j:forEach>
       </j:if>
 
-      <j:if test="${!it.config.generateViews}">
+      <j:if test="${!it.config.generateTraces}">
         generateViews was false, therefore no trace-based selected changes are displayed
       </j:if>
 
