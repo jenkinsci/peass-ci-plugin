@@ -64,6 +64,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private int warmup;
    private int repetitions;
    private int timeout = 5;
+   private int kiekerWaitTime = 10;
    private double significanceLevel = 0.01;
    private boolean redirectToNull = true;
    private boolean showStart = false;
@@ -237,6 +238,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       }
       final MeasurementConfig config = new MeasurementConfig(VMs);
       config.getExecutionConfig().setTimeout(timeout * 60l * 1000);
+      config.getExecutionConfig().setKiekerWaitTime(kiekerWaitTime);
       config.getStatisticsConfig().setType1error(significanceLevel);
       config.setIterations(iterations);
       config.setWarmup(warmup);
@@ -371,6 +373,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    @DataBoundSetter
    public void setTimeout(final int timeout) {
       this.timeout = timeout;
+   }
+   
+   public int getKiekerWaitTime() {
+      return kiekerWaitTime;
+   }
+   
+   @DataBoundSetter
+   public void setKiekerWaitTime(final int kiekerWaitTime) {
+      this.kiekerWaitTime = kiekerWaitTime;
    }
 
    public double getSignificanceLevel() {

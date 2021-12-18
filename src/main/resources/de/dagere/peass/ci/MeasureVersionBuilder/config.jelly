@@ -154,5 +154,9 @@
                  description="${%testClazzFolders}">
             <f:textbox default="true"/>
         </f:entry>
+        <f:entry title="${%kiekerWaitTime}" field="kiekerWaitTime"
+       description="${%kiekerWaitTimeDescr}">
+       <f:textbox  default="10"/>
+    </f:entry>
     </f:advanced>
 </j:jelly>
