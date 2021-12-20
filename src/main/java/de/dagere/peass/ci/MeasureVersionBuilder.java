@@ -71,6 +71,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
    private boolean nightlyBuild = true;
    private int versionDiff = 1;
+   private int traceSizeInMb = 100;
+   
    private boolean displayRTSLogs = true;
    private boolean displayLogs = true;
    private boolean displayRCALogs = true;
@@ -284,6 +286,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       if (nightlyBuild && versionDiff != 1) {
          throw new RuntimeException("If nightly build is set, do not set versionDiff! nightlyBuild will automatically select the last tested version.");
       }
+      config.getKiekerConfig().setTraceSizeInMb(traceSizeInMb);
 
       config.getExecutionConfig().setVersion("HEAD");
       final String oldVersion = getOldVersion();
@@ -409,6 +412,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    @DataBoundSetter
    public void setVersionDiff(final int versionDiff) {
       this.versionDiff = versionDiff;
+   }
+   
+   public int getTraceSizeInMb() {
+      return traceSizeInMb;
+   }
+   
+   @DataBoundSetter
+   public void setTraceSizeInMb(final int traceSizeInMb) {
+      this.traceSizeInMb = traceSizeInMb;
    }
 
    public boolean isDisplayRTSLogs() {
