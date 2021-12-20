@@ -61,7 +61,7 @@ public class RTSVisualizationAction extends VisibleAction {
 
    @Override
    public String getIconFileName() {
-      return "/plugin/peass-ci/images/rts.jpg";
+      return "/plugin/peass-ci/images/rts.png";
    }
 
    @Override
