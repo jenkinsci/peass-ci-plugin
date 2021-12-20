@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -303,12 +304,16 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
       if (clazzFolders != null && !"".equals(clazzFolders.trim())) {
          String[] pathes = clazzFolders.trim().split(";");
-         config.getExecutionConfig().getClazzFolders().addAll(Arrays.asList(pathes));
+         List<String> clazzFolders2 = config.getExecutionConfig().getClazzFolders();
+         clazzFolders2.clear();
+         clazzFolders2.addAll(Arrays.asList(pathes));
       }
 
       if (testClazzFolders != null && !"".equals(testClazzFolders.trim())) {
          String[] testPathes = testClazzFolders.trim().split(";");
-         config.getExecutionConfig().getTestClazzFolders().addAll(Arrays.asList(testPathes));
+         List<String> testClazzFolders2 = config.getExecutionConfig().getTestClazzFolders();
+         testClazzFolders2.clear();
+         testClazzFolders2.addAll(Arrays.asList(testPathes));
       }
 
       if (testGoal != null && !"".equals(testGoal)) {
