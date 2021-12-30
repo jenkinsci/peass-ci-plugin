@@ -105,7 +105,7 @@ public class LocalPeassProcessManager {
    }
 
    public boolean rca(final ProjectChanges changes, final RCAStrategy rcaStrategy) throws IOException, InterruptedException, Exception {
-      final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(null, true, true, 0.01, false, true, rcaStrategy, 1);
+      final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(null, true, 0.01, false, true, rcaStrategy, 1);
 
       RemoteRCA remoteRCAExecutor = new RemoteRCA(peassConfig, causeSearcherConfig, changes, listener);
       boolean rcaWorked = workspace.act(remoteRCAExecutor);
