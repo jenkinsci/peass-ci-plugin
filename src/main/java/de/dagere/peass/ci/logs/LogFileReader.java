@@ -54,13 +54,14 @@ public class LogFileReader {
 
    private void readTestcase(final PeassFolders folders, final Map<TestCase, List<LogFiles>> logFiles, final TestCase testcase) {
       LOG.info("Reading testcase " + testcase);
-      List<LogFiles> currentFiles = new LinkedList<>();
+
       File logFolder = folders.getExistingMeasureLogFolder(measurementConfig.getExecutionConfig().getVersion(), testcase);
-      tryLocalLogFolderVMIds(testcase, currentFiles, logFolder, folders);
+      List<LogFiles> currentFiles = tryLocalLogFolderVMIds(testcase, logFolder, folders);
       logFiles.put(testcase, currentFiles);
    }
 
-   private void tryLocalLogFolderVMIds(final TestCase testcase, final List<LogFiles> currentFiles, final File logFolder, final PeassFolders folders) {
+   private List<LogFiles> tryLocalLogFolderVMIds(final TestCase testcase, final File logFolder, final PeassFolders folders) {
+      List<LogFiles> currentFiles = new LinkedList<>();
       if (logFolder != null && logFolder.exists() && logFolder.isDirectory()) {
          LOG.debug("Log folder: {} {}", logFolder, logFolder.listFiles());
 
@@ -78,12 +79,12 @@ public class LogFileReader {
 
             tryIndex++;
             predecessorFile = getVersionFile(testcase, logFolder, tryIndex, filenameSuffix, measurementConfig.getExecutionConfig().getVersionOld());
-            LOG.debug("Trying whether {} exists", predecessorFile, predecessorFile.exists());
+            LOG.debug("Trying whether {} exists: {}", predecessorFile, predecessorFile.exists());
          }
       } else {
-         LOG.error("Log folder {} missing", logFolder);
+         LOG.info("Log folder {} not existing", logFolder);
       }
-
+      return currentFiles;
    }
 
    private File getVersionFile(final TestCase testcase, final File logFolder, final int tryIndex, final String filenameSuffix, final String version) {
@@ -159,9 +160,8 @@ public class LogFileReader {
       int levelId = 0;
       List<RCALevel> levels = new LinkedList<>();
       while (lastHadLogs) {
-         List<LogFiles> currentFiles = new LinkedList<>();
          File logFolder = causeFolders.getExistingRCALogFolder(measurementConfig.getExecutionConfig().getVersion(), test, levelId);
-         tryLocalLogFolderVMIds(test, currentFiles, logFolder, causeFolders);
+         List<LogFiles> currentFiles = tryLocalLogFolderVMIds(test, logFolder, causeFolders);
          if (currentFiles.size() > 0) {
             RCALevel level = new RCALevel(currentFiles);
             levels.add(level);
