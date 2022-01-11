@@ -122,5 +122,8 @@
     <f:entry title="${%kiekerWaitTime}" field="kiekerWaitTime" description="${%kiekerWaitTimeDescr}">
       <f:textbox default="10" />
     </f:entry>
+    <f:entry title="${%kiekerQueueSize}" field="kiekerQueueSize" description="${%kiekerQueueSize}">
+      <f:textbox default="10000000" />
+    </f:entry>
   </f:advanced>
 </j:jelly>
