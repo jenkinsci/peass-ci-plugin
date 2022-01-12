@@ -66,6 +66,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private int repetitions;
    private int timeout = 5;
    private int kiekerWaitTime = 10;
+   private long kiekerQueueSize = 10000000;
    private double significanceLevel = 0.01;
    private boolean redirectToNull = true;
    private boolean showStart = false;
@@ -242,6 +243,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       final MeasurementConfig config = new MeasurementConfig(VMs);
       config.getExecutionConfig().setTimeout(timeout * 60l * 1000);
       config.getExecutionConfig().setKiekerWaitTime(kiekerWaitTime);
+      config.getKiekerConfig().setKiekerQueueSize(kiekerQueueSize);
       config.getStatisticsConfig().setType1error(significanceLevel);
       config.setIterations(iterations);
       config.setWarmup(warmup);
@@ -696,6 +698,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    @DataBoundSetter
    public void setTestClazzFolders(final String testClazzFolders) {
       this.testClazzFolders = testClazzFolders;
+   }
+   
+   public long getKiekerQueueSize() {
+      return kiekerQueueSize;
+   }
+   
+   @DataBoundSetter
+   public void setKiekerQueueSize(final long kiekerQueueSize) {
+      this.kiekerQueueSize = kiekerQueueSize;
    }
 
    @Symbol("measure")

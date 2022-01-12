@@ -6,8 +6,6 @@ name: Build develop branch (on PR)
 on:
   pull_request:
     branches: [ develop ]
-  schedule:
-    - cron: "0 3 * * *"
 jobs:
   build:
 
