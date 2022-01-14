@@ -3,7 +3,6 @@ package de.dagere.peass.ci;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,6 +28,7 @@ import de.dagere.peass.ci.process.JenkinsLogRedirector;
 import de.dagere.peass.ci.process.LocalPeassProcessManager;
 import de.dagere.peass.ci.remote.RemoteVersionReader;
 import de.dagere.peass.config.DependencyConfig;
+import de.dagere.peass.config.ExecutionConfig;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.config.MeasurementStrategy;
 import de.dagere.peass.dependency.analysis.data.TestCase;
@@ -305,17 +305,17 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       config.getExecutionConfig().setTestExecutor(testExecutor);
 
       if (clazzFolders != null && !"".equals(clazzFolders.trim())) {
-         String[] pathes = clazzFolders.trim().split(";");
+         List<String> pathes = ExecutionConfig.buildFolderList(clazzFolders);
          List<String> clazzFolders2 = config.getExecutionConfig().getClazzFolders();
          clazzFolders2.clear();
-         clazzFolders2.addAll(Arrays.asList(pathes));
+         clazzFolders2.addAll(pathes);
       }
 
       if (testClazzFolders != null && !"".equals(testClazzFolders.trim())) {
-         String[] testPathes = testClazzFolders.trim().split(";");
+         List<String> testPathes = ExecutionConfig.buildFolderList(testClazzFolders);
          List<String> testClazzFolders2 = config.getExecutionConfig().getTestClazzFolders();
          testClazzFolders2.clear();
-         testClazzFolders2.addAll(Arrays.asList(testPathes));
+         testClazzFolders2.addAll(testPathes);
       }
 
       if (testGoal != null && !"".equals(testGoal)) {

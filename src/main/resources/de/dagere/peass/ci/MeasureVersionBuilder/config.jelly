@@ -114,10 +114,10 @@
       <f:textbox default="true" />
     </f:entry>
     <f:entry title="${%clazzFolders}" field="clazzFolders" description="${%clazzFoldersDescr}">
-      <f:textbox default="src/main/java;src/java" />
+      <f:textbox default="src/main/java:src/java" />
     </f:entry>
     <f:entry title="${%testClazzFolders}" field="testClazzFolders" description="${%testClazzFolders}">
-      <f:textbox default="src/test/java;src/test" />
+      <f:textbox default="src/test/java:src/test" />
     </f:entry>
     <f:entry title="${%kiekerWaitTime}" field="kiekerWaitTime" description="${%kiekerWaitTimeDescr}">
       <f:textbox default="10" />
