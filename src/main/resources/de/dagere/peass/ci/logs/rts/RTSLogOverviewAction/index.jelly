@@ -23,13 +23,17 @@
         </j:if>
         <br />
       </j:forEach>
+      <j:if test="${it.getProcessSuccessRuns().isEmpty()}">
+        <i class="fa fa-exclamation-triangle" title="No Process success runs happened. This indicates an error." style="color: red"></i>
+        No Process success runs happened. This indicates an error.
+      </j:if>
 
 
       <h2>Trace Creation Runs</h2>
       <j:if test="${!it.isStaticChanges()}">
         No static changes found, so no trace creation runs were executed
       </j:if>
-      <j:if test="${it.isStaticChanges()}">
+      <j:if test="${it.isStaticChanges() || !it.getAllTests().isEmpty()}">
         <j:if test="${it.getVmRuns().isEmpty() &amp;&amp; it.isStaticallySelectedTests()}">
           <i class="fa fa-exclamation-triangle" title="Regression test selection had error" style="color: red"></i>
           Warning: The regression test selection had an error, and no log files were produced for the current version.
