@@ -108,10 +108,10 @@
       <f:checkbox default="true" />
     </f:entry>
     <f:entry title="${%testExecutor}" field="testExecutor" description="${%testExecutorDescr}">
-      <f:textbox default="true" />
+      <f:textbox/>
     </f:entry>
     <f:entry title="${%testTransformer}" field="testTransformer" description="${%testTransformerDescr}">
-      <f:textbox default="true" />
+      <f:textbox/>
     </f:entry>
     <f:entry title="${%clazzFolders}" field="clazzFolders" description="${%clazzFoldersDescr}">
       <f:textbox default="src/main/java:src/java" />
@@ -124,6 +124,9 @@
     </f:entry>
     <f:entry title="${%kiekerQueueSize}" field="kiekerQueueSize" description="${%kiekerQueueSize}">
       <f:textbox default="10000000" />
+    </f:entry>
+    <f:entry title="onlyOneCallRecording" field="onlyOneCallRecording" description="${%onlyOneCallRecordingDescr}">
+      <f:checkbox default="false" />
     </f:entry>
   </f:advanced>
 </j:jelly>

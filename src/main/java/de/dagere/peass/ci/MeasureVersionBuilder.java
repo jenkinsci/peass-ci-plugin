@@ -92,7 +92,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private boolean executeParallel = false;
    private boolean executeBeforeClassInMeasurement = false;
    private boolean onlyMeasureWorkload = false;
-
+   private boolean onlyOneCallRecording = false;
+   
    private boolean updateSnapshotDependencies = true;
    private boolean removeSnapshots = false;
    private boolean useAlternativeBuildfile = false;
@@ -325,6 +326,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       if (pl != null && !"".equals(pl)) {
          config.getExecutionConfig().setPl(pl);
       }
+      
+      config.getKiekerConfig().setOnlyOneCallRecording(onlyOneCallRecording);
 
       System.out.println("Building, iterations: " + iterations + " test goal: " + testGoal);
       return config;
@@ -708,6 +711,19 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public void setKiekerQueueSize(final long kiekerQueueSize) {
       this.kiekerQueueSize = kiekerQueueSize;
    }
+   
+   
+
+   public boolean isOnlyOneCallRecording() {
+      return onlyOneCallRecording;
+   }
+
+   @DataBoundSetter
+   public void setOnlyOneCallRecording(final boolean onlyOneCallRecording) {
+      this.onlyOneCallRecording = onlyOneCallRecording;
+   }
+
+
 
    @Symbol("measure")
    @Extension
