@@ -67,6 +67,9 @@ public class RTSActionCreator {
       if (measurementConfig.getExecutionConfig().isRedirectSubprocessOutputToFile()) {
          String rtsLog = reader.getRTSLog();
          run.addAction(new InternalLogAction("rtsLog", "Regression Test Selection Log", rtsLog));
+         
+         String sourceReadingLog = reader.getSourceReadingLog();
+         run.addAction(new InternalLogAction("sourceLog", "Source Reading Log", sourceReadingLog));
       }
    }
 

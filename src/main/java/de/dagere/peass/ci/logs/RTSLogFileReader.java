@@ -141,9 +141,22 @@ public class RTSLogFileReader {
       File rtsLogFile = visualizationFolders.getResultsFolders().getDependencyLogFile(measurementConfig.getExecutionConfig().getVersion(),
             measurementConfig.getExecutionConfig().getVersionOld());
       try {
-         LOG.debug("Reading {}", rtsLogFile.getAbsolutePath());
+         LOG.debug("Reading RTS Log {}", rtsLogFile.getAbsolutePath());
          String rtsLog = FileUtils.readFileToString(rtsLogFile, StandardCharsets.UTF_8);
          return rtsLog;
+      } catch (IOException e) {
+         e.printStackTrace();
+         return "RTS log not readable";
+      }
+   }
+   
+   public String getSourceReadingLog() {
+      File sourceReadLogFile = visualizationFolders.getResultsFolders().getSourceReadLogFile(measurementConfig.getExecutionConfig().getVersion(),
+            measurementConfig.getExecutionConfig().getVersionOld());
+      try {
+         LOG.debug("Reading Source Read Log{}", sourceReadLogFile.getAbsolutePath());
+         String sourceReadLog = FileUtils.readFileToString(sourceReadLogFile, StandardCharsets.UTF_8);
+         return sourceReadLog;
       } catch (IOException e) {
          e.printStackTrace();
          return "RTS log not readable";
