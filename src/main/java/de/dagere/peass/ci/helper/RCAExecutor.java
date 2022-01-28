@@ -7,7 +7,6 @@ import java.util.Map.Entry;
 
 import javax.xml.bind.JAXBException;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
@@ -25,7 +24,6 @@ import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependencyprocessors.ViewNotFoundException;
 import de.dagere.peass.execution.utils.EnvironmentVariables;
 import de.dagere.peass.folders.CauseSearchFolders;
-import de.dagere.peass.folders.PeassFolders;
 import de.dagere.peass.measurement.rca.CauseSearcherConfig;
 import de.dagere.peass.measurement.rca.data.CauseSearchData;
 import de.dagere.peass.measurement.rca.kieker.BothTreeReader;
@@ -138,26 +136,5 @@ public class RCAExecutor {
 
       CauseSearcher tester = RootCauseAnalysis.getCauseSeacher(config, causeSearcherConfig, alternateFolders, reader);
       tester.search();
-   }
-
-   private void saveOldPeassFolder() {
-      final File oldPeassFolder = PeassFolders.getPeassFolder(projectFolder);
-      if (oldPeassFolder.exists()) {
-         int i = 0;
-         File destFolder = new File(oldPeassFolder.getParentFile(), "oldPeassFolder_" + i);
-         while (destFolder.exists()) {
-            i++;
-            destFolder = new File(oldPeassFolder.getParentFile(), "oldPeassFolder_" + i);
-         }
-         LOG.debug("Moving Peass folder {} to {}", oldPeassFolder, destFolder.getAbsolutePath());
-         try {
-            FileUtils.moveDirectory(oldPeassFolder, destFolder);
-         } catch (IOException e) {
-            LOG.error("Moving did not work");
-            e.printStackTrace();
-         }
-      } else {
-         LOG.debug("Folder {} does not exist", oldPeassFolder.getAbsolutePath());
-      }
    }
 }
