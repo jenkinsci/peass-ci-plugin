@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 
 import javax.xml.bind.JAXBException;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
@@ -24,6 +25,7 @@ import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependencyprocessors.ViewNotFoundException;
 import de.dagere.peass.execution.utils.EnvironmentVariables;
 import de.dagere.peass.folders.CauseSearchFolders;
+import de.dagere.peass.folders.ResultsFolders;
 import de.dagere.peass.measurement.rca.CauseSearcherConfig;
 import de.dagere.peass.measurement.rca.data.CauseSearchData;
 import de.dagere.peass.measurement.rca.kieker.BothTreeReader;
@@ -39,14 +41,17 @@ public class RCAExecutor {
    private final File projectFolder;
    private final ProjectChanges changes;
    private final CauseSearcherConfig causeConfig;
+   private final ResultsFolders resultsFolders;
    private final EnvironmentVariables env;
 
    public RCAExecutor(final MeasurementConfig config, final File workspaceFolder, final ProjectChanges changes, final CauseSearcherConfig causeConfig,
+         final ResultsFolders resultsFolders,
          final EnvironmentVariables env) {
       this.config = config;
       this.projectFolder = workspaceFolder;
       this.changes = changes;
       this.causeConfig = causeConfig;
+      this.resultsFolders = resultsFolders;
       this.env = env;
    }
 
@@ -58,7 +63,7 @@ public class RCAExecutor {
 
       if (needsRCA) {
          LOG.info("At least one testcase was not successfully executed in the last build for the current version - executing RCA");
-//         saveOldPeassFolder();
+         // saveOldPeassFolder();
 
          MeasurementConfig currentConfig = new MeasurementConfig(config);
 
@@ -77,6 +82,12 @@ public class RCAExecutor {
                   LOG.info("Skipping not included test: {}", testCase);
                }
             }
+         }
+
+         CauseSearchFolders folders = new CauseSearchFolders(projectFolder);
+         if (folders.getRcaFolder().exists()) {
+            File rcaResultsFolder = resultsFolders.getRCAResultsVersion(config);
+            FileUtils.moveDirectory(folders.getRcaFolder(), rcaResultsFolder);
          }
       }
 
@@ -120,10 +131,18 @@ public class RCAExecutor {
    }
 
    private File getExpectedRCAFile(final TestCase testCase) {
-      CauseSearchFolders folders = new CauseSearchFolders(projectFolder);
-      final File expectedResultFile = new File(folders.getRcaTreeFolder(config.getExecutionConfig().getVersion(), testCase),
-            testCase.getMethod() + ".json");
-      return expectedResultFile;
+      File basicFolder = resultsFolders.getRCAResultsVersion(config);
+      if (basicFolder.exists()) {
+         File expectedResultFile = new File("tree/" + config.getExecutionConfig().getVersion() + "/" + testCase.getShortClazz() + "/" + testCase.getMethod() + ".json");
+         return expectedResultFile;
+      } else {
+         CauseSearchFolders folders = new CauseSearchFolders(projectFolder);
+         final File expectedResultFile = new File(folders.getRcaTreeFolder(config.getExecutionConfig().getVersion(), testCase),
+               testCase.getMethod() + ".json");
+         return expectedResultFile;
+      }
+
+     
    }
 
    private void executeRCA(final MeasurementConfig config, final TestCase testCase)

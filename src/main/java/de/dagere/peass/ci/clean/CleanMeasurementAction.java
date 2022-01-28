@@ -6,6 +6,7 @@ import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 
+import de.dagere.peass.ci.clean.callables.CleanMeasurementCallable;
 import hudson.FilePath;
 import hudson.model.Action;
 import hudson.model.FreeStyleProject;

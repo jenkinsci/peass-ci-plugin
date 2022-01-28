@@ -1,0 +1,14 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+
+  <f:entry title="${%cleanRTS}" field="cleanRTS" description="${%cleanRTSDescr}">
+    <f:checkbox default="true" />
+  </f:entry>
+  <f:entry title="${%cleanMeasurement}" field="cleanMeasurement" description="${%cleanMeasurementDescr}">
+    <f:checkbox default="true" />
+  </f:entry>
+  <f:entry title="${%cleanRCA}" field="cleanRCA" description="${%cleanRCADescr}">
+    <f:checkbox default="true" />
+  </f:entry>
+
+</j:jelly>
