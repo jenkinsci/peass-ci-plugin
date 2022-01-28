@@ -31,6 +31,8 @@ stage('measure performance') {
 
 If you are using classic freestyle jobs, the build step will be called "Measure Version Performance".
 
+Since Peass-CI does not support parallel builds, please also add ` options { disableConcurrentBuilds() }` to your job. Furthermore, performance measurements may get flaky if too much load is on your system. Therefore, if you only have one Jenkins node (and not several agents to run your measurements at), consider limiting the parallel job builds of your Jenkins instance.
+
 After you added this stage, each build will contain performance measurements (if a code that is called by a unit test or benchmark is changed - there will be no measurements if only documentation changes).  See the [Wiki entry for measurement process configuration](https://github.com/DaGeRe/peass/wiki/Configuration-of-Measurement-Processes) for starting points for configuring the measurement step for your project.
 
 ## Example
