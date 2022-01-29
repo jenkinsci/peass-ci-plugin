@@ -84,7 +84,7 @@ public class RemoteRCA implements FileCallable<Boolean>, Serializable {
       File propertyFolder = resultsFolder.getPropertiesFolder();
       causeConfig.setPropertyFolder(propertyFolder);
       listener.getLogger().println("Setting property folder: " + propertyFolder.getAbsolutePath());
-      final RCAExecutor rcaExecutor = new RCAExecutor(measurementConfig, projectFolderLocal, changes, causeConfig, resultsFolder, env);
+      final RCAExecutor rcaExecutor = new RCAExecutor(measurementConfig, projectFolderLocal, changes, causeConfig, env);
       rcaExecutor.executeRCAs();
    }
 
