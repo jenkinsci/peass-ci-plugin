@@ -52,7 +52,7 @@ public class RCAVisualizer {
 
    private VisualizeRCA preparePeassVisualizer(final File resultFolder) {
       VisualizeRCA visualizer = new VisualizeRCA();
-      File dataFolder = visualizationFolders.getDataFolder();
+      File dataFolder = visualizationFolders.getResultsFolders().getRCAResultsVersion(measurementConfig);
       visualizer.setData(new File[] { dataFolder });
       File propertyFolder = visualizationFolders.getPropertyFolder();
       LOG.info("Setting property folder: " + propertyFolder);

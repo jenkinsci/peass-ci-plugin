@@ -1,5 +1,6 @@
 package de.dagere.peass.ci.clean;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 
@@ -10,6 +11,7 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
 import org.kohsuke.stapler.QueryParameter;
 
+import de.dagere.peass.ci.MeasureVersionBuilder;
 import de.dagere.peass.ci.Messages;
 import de.dagere.peass.ci.clean.callables.CleanMeasurementCallable;
 import de.dagere.peass.ci.clean.callables.CleanRCACallable;
@@ -43,6 +45,9 @@ public class CleanBuilder extends Builder implements SimpleBuildStep, Serializab
          throws InterruptedException, IOException {
       listener.getLogger().println("Cleaning");
 
+      final File localWorkspace = new File(run.getRootDir(), ".." + File.separator + ".." + File.separator + MeasureVersionBuilder.PEASS_FOLDER_NAME).getCanonicalFile();
+      String projectName = new File(workspace.getRemote()).getName();
+
       if (cleanRTS) {
          workspace.act(new CleanRTSCallable());
       } else {
@@ -55,6 +60,7 @@ public class CleanBuilder extends Builder implements SimpleBuildStep, Serializab
       }
       if (cleanRCA) {
          workspace.act(new CleanRCACallable());
+         CleanRCACallable.cleanFolder(projectName, localWorkspace);
       } else {
          listener.getLogger().println("RCA cleaning disabled");
       }
@@ -86,7 +92,7 @@ public class CleanBuilder extends Builder implements SimpleBuildStep, Serializab
    public void setCleanRCA(final boolean cleanRCA) {
       this.cleanRCA = cleanRCA;
    }
-   
+
    @Symbol("cleanPerformanceMeasurement")
    @Extension
    public static final class DescriptorImpl extends BuildStepDescriptor<Builder> {

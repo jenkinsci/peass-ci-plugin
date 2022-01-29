@@ -7,6 +7,7 @@ import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import org.jenkinsci.remoting.RoleChecker;
 
+import de.dagere.peass.folders.CauseSearchFolders;
 import de.dagere.peass.folders.ResultsFolders;
 import hudson.FilePath.FileCallable;
 import hudson.remoting.VirtualChannel;
@@ -24,12 +25,8 @@ public class CleanRCACallable implements FileCallable<Boolean> {
       try {
          String projectName = potentialSlaveWorkspace.getName();
          File folder = new File(potentialSlaveWorkspace.getParentFile(), projectName + "_fullPeass");
-         ResultsFolders resultsFolders = new ResultsFolders(folder, projectName);
+         cleanFolder(projectName, folder);
 
-         deleteRCALogFolder(resultsFolders);
-         
-         deleteCopiedFolders(folder);
-         
          return true;
       } catch (IOException e) {
          e.printStackTrace();
@@ -37,8 +34,15 @@ public class CleanRCACallable implements FileCallable<Boolean> {
       }
    }
 
+   public static void cleanFolder(final String projectName, final File folder) throws IOException {
+      ResultsFolders resultsFolders = new ResultsFolders(folder, projectName);
 
-   private void deleteCopiedFolders(final File folder) throws IOException {
+      deleteRCALogFolder(resultsFolders);
+
+      deleteCopiedFolders(folder);
+   }
+
+   private static void deleteCopiedFolders(final File folder) throws IOException {
       File[] measurementFolders = folder.listFiles((FileFilter) new WildcardFileFilter(ResultsFolders.RCA_PREFIX + "*"));
       if (measurementFolders != null) {
          for (File oldMeasurementFolder : measurementFolders) {
@@ -48,9 +52,18 @@ public class CleanRCACallable implements FileCallable<Boolean> {
       }
    }
 
-   public void deleteRCALogFolder(final ResultsFolders resultsFolders) throws IOException {
+   private static void deleteRCALogFolder(final ResultsFolders resultsFolders) throws IOException {
       System.out.println("Deleting " + resultsFolders.getRCALogFolder());
       FileUtils.deleteDirectory(resultsFolders.getRCALogFolder());
+
+      CauseSearchFolders folders = resultsFolders.getPeassFolders();
+      if (folders.getRcaFolder().exists()) {
+         System.out.println("Deleting: " + folders.getRcaFolder());
+         FileUtils.cleanDirectory(folders.getRcaFolder());
+      }
+
+      System.out.println("Deleting: " + folders.getRCALogFolder());
+      FileUtils.cleanDirectory(folders.getRCALogFolder());
    }
 
 }

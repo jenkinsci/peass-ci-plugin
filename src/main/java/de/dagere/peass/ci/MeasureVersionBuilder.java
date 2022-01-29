@@ -53,6 +53,8 @@ import net.kieker.sourceinstrumentation.AllowedKiekerRecord;
 
 public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, Serializable {
 
+   public static final String PEASS_FOLDER_NAME = "peass-data";
+   
    private static final long serialVersionUID = -7455227251645979702L;
 
    static {
@@ -121,7 +123,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       if (!workspace.exists()) {
          throw new RuntimeException("Workspace folder " + workspace.toString() + " does not exist, please asure that the repository was correctly cloned!");
       } else {
-         final File localWorkspace = new File(run.getRootDir(), ".." + File.separator + ".." + File.separator + "peass-data").getCanonicalFile();
+         final File localWorkspace = new File(run.getRootDir(), ".." + File.separator + ".." + File.separator + PEASS_FOLDER_NAME ).getCanonicalFile();
          printRunMetadata(run, workspace, listener, localWorkspace);
 
          if (!localWorkspace.exists()) {
