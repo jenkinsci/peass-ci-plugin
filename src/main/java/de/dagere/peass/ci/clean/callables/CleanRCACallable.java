@@ -39,7 +39,7 @@ public class CleanRCACallable implements FileCallable<Boolean> {
 
 
    private void deleteCopiedFolders(final File folder) throws IOException {
-      File[] measurementFolders = folder.listFiles((FileFilter) new WildcardFileFilter(ResultsFolders.MEASUREMENT_PREFIX + "*"));
+      File[] measurementFolders = folder.listFiles((FileFilter) new WildcardFileFilter(ResultsFolders.RCA_PREFIX + "*"));
       if (measurementFolders != null) {
          for (File oldMeasurementFolder : measurementFolders) {
             System.out.println("Deleting: " + oldMeasurementFolder);
