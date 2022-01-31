@@ -114,6 +114,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private String clazzFolders;
    private String testClazzFolders;
 
+   private boolean failOnRtsError = false;
+
    @DataBoundConstructor
    public MeasureVersionBuilder() {
    }
@@ -171,6 +173,12 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          run.setResult(Result.FAILURE);
          return;
       }
+
+      if (failOnRtsError && tests.isRtsError()) {
+         run.setResult(Result.FAILURE);
+         return;
+      }
+
       processManager.visualizeRTSResults(run, tests.getLogSummary());
 
       if (tests.getResult().getTests().size() > 0) {
@@ -234,6 +242,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       listener.getLogger().println("Excludes: " + excludes);
       listener.getLogger().println("Strategy: " + measurementMode + " Source Instrumentation: " + useSourceInstrumentation + " Aggregation: " + useAggregation);
       listener.getLogger().println("Create default constructor: " + createDefaultConstructor);
+      listener.getLogger().println("Fail on error in RTS: " + failOnRtsError);
    }
 
    private String getJobName(final Run<?, ?> run) {
@@ -711,6 +720,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       this.testClazzFolders = testClazzFolders;
    }
    
+   public boolean isFailOnRtsError() {
+      return failOnRtsError;
+   }
+
+   @DataBoundSetter
+   public void setFailOnRtsError(boolean failOnRtsError) {
+      this.failOnRtsError = failOnRtsError;
+   }
+
    public long getKiekerQueueSize() {
       return kiekerQueueSize;
    }
