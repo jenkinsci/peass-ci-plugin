@@ -44,6 +44,7 @@ import hudson.model.Result;
 import hudson.model.Run;
 import hudson.model.TaskListener;
 import hudson.tasks.BuildStepDescriptor;
+import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Builder;
 import hudson.util.FormValidation;
 import hudson.util.ListBoxModel;
@@ -343,6 +344,11 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          oldVersion = "HEAD~" + versionDiff;
       }
       return oldVersion;
+   }
+   
+   @Override
+   public BuildStepMonitor getRequiredMonitorService() {
+      return BuildStepMonitor.BUILD;
    }
 
    public int getVMs() {
