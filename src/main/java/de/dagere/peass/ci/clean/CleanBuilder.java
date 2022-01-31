@@ -21,6 +21,7 @@ import hudson.Extension;
 import hudson.FilePath;
 import hudson.Launcher;
 import hudson.model.AbstractProject;
+import hudson.model.Result;
 import hudson.model.Run;
 import hudson.model.TaskListener;
 import hudson.tasks.BuildStepDescriptor;
@@ -49,17 +50,29 @@ public class CleanBuilder extends Builder implements SimpleBuildStep, Serializab
       String projectName = new File(workspace.getRemote()).getName();
 
       if (cleanRTS) {
-         workspace.act(new CleanRTSCallable());
+         boolean worked = workspace.act(new CleanRTSCallable(listener));
+         if (!worked) {
+            run.setResult(Result.FAILURE);
+            return;
+         }
       } else {
          listener.getLogger().println("Regression Test Selection cleaning disabled");
       }
       if (cleanMeasurement) {
-         workspace.act(new CleanMeasurementCallable());
+         boolean worked = workspace.act(new CleanMeasurementCallable(listener));
+         if (!worked) {
+            run.setResult(Result.FAILURE);
+            return;
+         }
       } else {
          listener.getLogger().println("Measurement cleaning disabled");
       }
       if (cleanRCA) {
-         workspace.act(new CleanRCACallable());
+         boolean worked = workspace.act(new CleanRCACallable(listener));
+         if (!worked) {
+            run.setResult(Result.FAILURE);
+            return;
+         }
          CleanRCACallable.cleanFolder(projectName, localWorkspace);
       } else {
          listener.getLogger().println("RCA cleaning disabled");

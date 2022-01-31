@@ -7,13 +7,21 @@ import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import org.jenkinsci.remoting.RoleChecker;
 
+import de.dagere.peass.ci.process.JenkinsLogRedirector;
 import de.dagere.peass.folders.ResultsFolders;
 import hudson.FilePath.FileCallable;
+import hudson.model.TaskListener;
 import hudson.remoting.VirtualChannel;
 import io.jenkins.cli.shaded.org.apache.commons.io.filefilter.WildcardFileFilter;
 
 public class CleanMeasurementCallable implements FileCallable<Boolean> {
    private static final long serialVersionUID = 4804971173610549315L;
+
+   private final TaskListener listener;
+
+   public CleanMeasurementCallable(final TaskListener listener) {
+      this.listener = listener;
+   }
 
    @Override
    public void checkRoles(final RoleChecker checker) throws SecurityException {
@@ -21,7 +29,7 @@ public class CleanMeasurementCallable implements FileCallable<Boolean> {
 
    @Override
    public Boolean invoke(final File potentialSlaveWorkspace, final VirtualChannel channel) {
-      try {
+      try (final JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
          String projectName = potentialSlaveWorkspace.getName();
          File folder = new File(potentialSlaveWorkspace.getParentFile(), projectName + "_fullPeass");
          ResultsFolders resultsFolders = new ResultsFolders(folder, projectName);
@@ -35,6 +43,8 @@ public class CleanMeasurementCallable implements FileCallable<Boolean> {
 
          return true;
       } catch (IOException e) {
+         listener.getLogger().println("Exception thrown");
+         e.printStackTrace(listener.getLogger());
          e.printStackTrace();
          return false;
       }
@@ -52,9 +62,9 @@ public class CleanMeasurementCallable implements FileCallable<Boolean> {
 
    private void deleteResultFiles(final ResultsFolders resultsFolders) throws IOException {
       System.out.println("Deleting " + resultsFolders.getChangeFile());
-      FileUtils.delete(resultsFolders.getChangeFile());
+      resultsFolders.getChangeFile().delete();
       System.out.println("Deleting " + resultsFolders.getStatisticsFile());
-      FileUtils.delete(resultsFolders.getStatisticsFile());
+      resultsFolders.getStatisticsFile().delete();
    }
 
    private void deleteLogFolders(final ResultsFolders resultsFolders) throws IOException {

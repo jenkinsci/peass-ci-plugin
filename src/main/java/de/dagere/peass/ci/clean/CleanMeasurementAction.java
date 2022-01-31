@@ -2,6 +2,7 @@ package de.dagere.peass.ci.clean;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 
 import org.apache.commons.io.FileUtils;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
@@ -12,6 +13,7 @@ import hudson.model.Action;
 import hudson.model.FreeStyleProject;
 import hudson.model.Job;
 import hudson.model.Project;
+import hudson.model.TaskListener;
 import hudson.model.TopLevelItem;
 import jenkins.model.Jenkins;
 
@@ -54,7 +56,16 @@ public class CleanMeasurementAction implements Action {
          if (path == null) {
             return "There exists no workspace for job " + job.toString();
          }
-         boolean cleaningWorked = path.act(new CleanMeasurementCallable());
+         
+         TaskListener fakeListener = new TaskListener() {
+            
+            @Override
+            public PrintStream getLogger() {
+               return System.out;
+            }
+         };
+         
+         boolean cleaningWorked = path.act(new CleanMeasurementCallable(fakeListener));
          if (cleaningWorked) {
             return "Cleaning succeeded";
          } else {

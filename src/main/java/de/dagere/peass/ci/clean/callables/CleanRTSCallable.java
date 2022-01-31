@@ -6,11 +6,21 @@ import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import org.jenkinsci.remoting.RoleChecker;
 
+import de.dagere.peass.ci.process.JenkinsLogRedirector;
 import de.dagere.peass.folders.ResultsFolders;
 import hudson.FilePath.FileCallable;
+import hudson.model.TaskListener;
 import hudson.remoting.VirtualChannel;
 
 public class CleanRTSCallable implements FileCallable<Boolean> {
+
+   private static final long serialVersionUID = 6370053198339266977L;
+   
+   private final TaskListener listener;
+
+   public CleanRTSCallable(final TaskListener listener) {
+      this.listener = listener;
+   }
 
    @Override
    public void checkRoles(final RoleChecker checker) throws SecurityException {
@@ -19,7 +29,7 @@ public class CleanRTSCallable implements FileCallable<Boolean> {
 
    @Override
    public Boolean invoke(final File potentialSlaveWorkspace, final VirtualChannel channel) throws IOException, InterruptedException {
-      try {
+      try (final JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
          String projectName = potentialSlaveWorkspace.getName();
          File folder = new File(potentialSlaveWorkspace.getParentFile(), projectName + "_fullPeass");
          ResultsFolders resultsFolders = new ResultsFolders(folder, projectName);
@@ -31,6 +41,8 @@ public class CleanRTSCallable implements FileCallable<Boolean> {
 
          return true;
       } catch (IOException e) {
+         listener.getLogger().println("Exception thrown");
+         e.printStackTrace(listener.getLogger());
          e.printStackTrace();
          return false;
       }
@@ -38,19 +50,19 @@ public class CleanRTSCallable implements FileCallable<Boolean> {
 
    private void deleteResultFiles(final ResultsFolders resultsFolders) throws IOException {
       System.out.println("Deleting " + resultsFolders.getDependencyFile());
-      FileUtils.delete(resultsFolders.getDependencyFile());
+      resultsFolders.getDependencyFile().delete();
       System.out.println("Deleting " + resultsFolders.getExecutionFile());
-      FileUtils.delete(resultsFolders.getExecutionFile());
+      resultsFolders.getExecutionFile().delete();
       System.out.println("Deleting " + resultsFolders.getCoverageSelectionFile());
-      FileUtils.delete(resultsFolders.getCoverageSelectionFile());
+      resultsFolders.getCoverageSelectionFile().delete();
       System.out.println("Deleting " + resultsFolders.getCoverageInfoFile());
-      FileUtils.delete(resultsFolders.getCoverageInfoFile());
-      
+      resultsFolders.getCoverageInfoFile().delete();
+
       System.out.println("Deleting " + resultsFolders.getViewFolder());
       FileUtils.deleteDirectory(resultsFolders.getViewFolder());
       System.out.println("Deleting " + resultsFolders.getPropertiesFolder());
       FileUtils.deleteDirectory(resultsFolders.getPropertiesFolder());
-      
+
    }
 
    private void deleteLogFolders(final ResultsFolders resultsFolders) throws IOException {
