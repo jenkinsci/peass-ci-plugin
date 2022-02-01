@@ -3,6 +3,7 @@ package de.dagere.peass.ci;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -115,6 +116,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private String testClazzFolders;
 
    private boolean failOnRtsError = false;
+   
+   private String excludeForTracing = "";
 
    @DataBoundConstructor
    public MeasureVersionBuilder() {
@@ -292,6 +295,11 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
             config.getKiekerConfig().setRecord(AllowedKiekerRecord.DURATION);
          }
       }
+      if (!"".equals(excludeForTracing)) {
+         LinkedHashSet<String> excludeSet = IncludeExcludeParser.getStringSet(excludeForTracing);
+         config.getKiekerConfig().setExcludeForTracing(excludeSet);
+      }
+      
       if (useAggregation && !useSourceInstrumentation) {
          throw new RuntimeException("Aggregation may only be used with source instrumentation currently.");
       }
@@ -725,7 +733,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    }
 
    @DataBoundSetter
-   public void setFailOnRtsError(boolean failOnRtsError) {
+   public void setFailOnRtsError(final boolean failOnRtsError) {
       this.failOnRtsError = failOnRtsError;
    }
 
@@ -748,8 +756,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public void setOnlyOneCallRecording(final boolean onlyOneCallRecording) {
       this.onlyOneCallRecording = onlyOneCallRecording;
    }
-
-
+   
+   public String getExcludeForTracing() {
+      return excludeForTracing;
+   }
+   
+   @DataBoundSetter
+   public void setExcludeForTracing(final String excludeForTracing) {
+      this.excludeForTracing = excludeForTracing;
+   }
 
    @Symbol("measure")
    @Extension

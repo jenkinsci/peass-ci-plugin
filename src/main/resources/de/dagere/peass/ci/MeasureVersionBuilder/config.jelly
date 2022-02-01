@@ -131,5 +131,8 @@
     <f:entry title="onlyOneCallRecording" field="onlyOneCallRecording" description="${%onlyOneCallRecordingDescr}">
       <f:checkbox default="false" />
     </f:entry>
+    <f:entry title="${%excludeForTracing}" field="excludeForTracing" description="${%excludeForTracingDescr}">
+      <f:textbox default="" />
+    </f:entry>
   </f:advanced>
 </j:jelly>

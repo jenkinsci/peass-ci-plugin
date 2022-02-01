@@ -1,9 +1,22 @@
 package de.dagere.peass.ci.process;
 
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 
 public class IncludeExcludeParser {
+   
+   public static LinkedHashSet<String> getStringSet(final String raw) {
+      LinkedHashSet<String> includeList = new LinkedHashSet<>();
+      if (raw != null && raw.trim().length() > 0) {
+         final String nonSpaceIncludes = raw.trim();
+         for (String include : nonSpaceIncludes.split(";")) {
+            includeList.add(include);
+         }
+      }
+      return includeList;
+   }
+   
    public static List<String> getStringList(final String raw) {
       StringBuilder errorMessageBuilder = new StringBuilder();
       List<String> includeList = new LinkedList<>();
