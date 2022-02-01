@@ -50,13 +50,16 @@ public class CleanRTSCallable implements FileCallable<Boolean> {
 
    private void deleteResultFiles(final ResultsFolders resultsFolders) throws IOException {
       System.out.println("Deleting " + resultsFolders.getDependencyFile());
-      resultsFolders.getDependencyFile().delete();
+      System.out.println("Success: " + resultsFolders.getDependencyFile().delete());
+
       System.out.println("Deleting " + resultsFolders.getExecutionFile());
-      resultsFolders.getExecutionFile().delete();
+      System.out.println("Success: " + resultsFolders.getExecutionFile().delete());
+      
       System.out.println("Deleting " + resultsFolders.getCoverageSelectionFile());
-      resultsFolders.getCoverageSelectionFile().delete();
+      System.out.println("Success: " + resultsFolders.getCoverageSelectionFile().delete());
+      
       System.out.println("Deleting " + resultsFolders.getCoverageInfoFile());
-      resultsFolders.getCoverageInfoFile().delete();
+      System.out.println("Success: " + resultsFolders.getCoverageInfoFile().delete());
 
       System.out.println("Deleting " + resultsFolders.getViewFolder());
       FileUtils.deleteDirectory(resultsFolders.getViewFolder());

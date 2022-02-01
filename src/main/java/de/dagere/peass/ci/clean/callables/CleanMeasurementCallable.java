@@ -62,9 +62,10 @@ public class CleanMeasurementCallable implements FileCallable<Boolean> {
 
    private void deleteResultFiles(final ResultsFolders resultsFolders) throws IOException {
       System.out.println("Deleting " + resultsFolders.getChangeFile());
-      resultsFolders.getChangeFile().delete();
+      System.out.println("Success: " + resultsFolders.getChangeFile().delete());
       System.out.println("Deleting " + resultsFolders.getStatisticsFile());
-      resultsFolders.getStatisticsFile().delete();
+      System.out.println("Success: " + resultsFolders.getStatisticsFile().delete());
+      
    }
 
    private void deleteLogFolders(final ResultsFolders resultsFolders) throws IOException {
