@@ -84,27 +84,15 @@ public class LocalPeassProcessManager {
          RTSInfos infos = RTSInfos.readInfosFromFolders(results, peassConfig);
          RTSLogSummary summary = logActionCreator.createRTSActions(infos);
          AggregatedRTSResult aggregatedRTSResult = new AggregatedRTSResult(summary, result);
-         checkAndSetRtsError(aggregatedRTSResult);
          return aggregatedRTSResult;
       }
       if (result != null && result.getTests() != null) {
          AggregatedRTSResult aggregatedRTSResult = new AggregatedRTSResult(null, result);
-         checkAndSetRtsError(aggregatedRTSResult);
          return aggregatedRTSResult;
       } else {
          return null;
       }
 
-   }
-
-   private void checkAndSetRtsError(final AggregatedRTSResult aggregatedRTSResult) {
-      final RTSLogSummary rtsLogSummary = aggregatedRTSResult.getLogSummary();
-      final boolean errorInCurrentVersion = rtsLogSummary.isErrorInCurrentVersionOccured();
-      final boolean errorInPredecessorVersion = rtsLogSummary.isErrorInPredecessorVersionOccured();
-      if (errorInCurrentVersion || errorInPredecessorVersion) {
-         LOG.error("RTS-logs indicated an error! current Version: {}, previous Version: {}", errorInCurrentVersion, errorInPredecessorVersion);
-         aggregatedRTSResult.setRtsError(true);
-      }
    }
 
    public boolean measure(final Set<TestCase> tests) throws IOException, InterruptedException {

@@ -5,11 +5,16 @@ import de.dagere.peass.ci.RTSResult;
 public class AggregatedRTSResult {
    private final RTSLogSummary logSummary;
    private final RTSResult result;
-   private boolean rtsError = false;
+   private final boolean rtsError;
 
    public AggregatedRTSResult(final RTSLogSummary logSummary, final RTSResult result) {
       this.logSummary = logSummary;
       this.result = result;
+      if (logSummary != null) {
+         rtsError = logSummary.isErrorInCurrentVersionOccured() || logSummary.isErrorInPredecessorVersionOccured();
+      } else {
+         rtsError = true;
+      }
    }
 
    public RTSLogSummary getLogSummary() {
@@ -23,9 +28,4 @@ public class AggregatedRTSResult {
    public boolean isRtsError() {
       return rtsError;
    }
-
-   public void setRtsError(final boolean rtsError) {
-      this.rtsError = rtsError;
-   }
-
 }
