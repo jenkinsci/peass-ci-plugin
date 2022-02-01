@@ -119,6 +119,9 @@
     <f:entry title="${%testClazzFolders}" field="testClazzFolders" description="${%testClazzFolders}">
       <f:textbox default="src/test/java:src/test" />
     </f:entry>
+    <f:entry title="${%failOnRtsError}" field="failOnRtsError" description="${%failOnRtsErrorDescr}">
+      <f:checkbox default="false" />
+    </f:entry>
     <f:entry title="${%kiekerWaitTime}" field="kiekerWaitTime" description="${%kiekerWaitTimeDescr}">
       <f:textbox default="10" />
     </f:entry>
