@@ -6,6 +6,7 @@ import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 
+import de.dagere.peass.ci.MeasureVersionBuilder;
 import hudson.FilePath;
 import hudson.model.Action;
 import hudson.model.FreeStyleProject;
@@ -25,7 +26,7 @@ public class CleanAllAction implements Action {
    public String clean() {
       if (project instanceof WorkflowJob || project instanceof Project) {
          try {
-            File persistentWorkspace = new File(project.getRootDir(), "peass-data");
+            File persistentWorkspace = new File(project.getRootDir(), MeasureVersionBuilder.PEASS_FOLDER_NAME);
             FileUtils.cleanDirectory(persistentWorkspace);
 
             if (project instanceof WorkflowJob) {
