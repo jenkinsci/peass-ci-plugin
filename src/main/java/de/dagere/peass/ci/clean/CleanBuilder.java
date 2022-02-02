@@ -12,7 +12,6 @@ import org.kohsuke.stapler.DataBoundSetter;
 import org.kohsuke.stapler.QueryParameter;
 
 import de.dagere.peass.ci.MeasureVersionBuilder;
-import de.dagere.peass.ci.Messages;
 import de.dagere.peass.ci.clean.callables.CleanMeasurementCallable;
 import de.dagere.peass.ci.clean.callables.CleanRCACallable;
 import de.dagere.peass.ci.clean.callables.CleanRTSCallable;
@@ -125,7 +124,7 @@ public class CleanBuilder extends Builder implements SimpleBuildStep, Serializab
 
       @Override
       public String getDisplayName() {
-         return Messages.MeasureVersion_DescriptorImpl_DisplayName();
+         return Messages.Clean_DescriptorImpl_DisplayName();
       }
 
    }
