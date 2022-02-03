@@ -1,6 +1,7 @@
 package de.dagere.peass.ci;
 
 import java.io.Serializable;
+import java.util.regex.Pattern;
 
 import de.dagere.peass.config.DependencyConfig;
 import de.dagere.peass.config.MeasurementConfig;
@@ -13,6 +14,7 @@ public class PeassProcessConfiguration implements Serializable {
    private final MeasurementConfig measurementConfig;
    private final DependencyConfig dependencyConfig;
    private final EnvironmentVariables envVars;
+   private final Pattern pattern;
 
 
    private final boolean displayRTSLogs;
@@ -20,7 +22,7 @@ public class PeassProcessConfiguration implements Serializable {
    private final boolean displayRCALogs;
 
    public PeassProcessConfiguration(final boolean updateSnapshotDependencies, final MeasurementConfig measurementConfig, final DependencyConfig dependencyConfig, final EnvironmentVariables envVars,
-         final boolean displayRTSLogs, final boolean displayLogs, final boolean displayRCALogs) {
+         final boolean displayRTSLogs, final boolean displayLogs, final boolean displayRCALogs, final Pattern pattern) {
       this.updateSnapshotDependencies = updateSnapshotDependencies;
       this.measurementConfig = measurementConfig;
       this.dependencyConfig = dependencyConfig;
@@ -28,6 +30,7 @@ public class PeassProcessConfiguration implements Serializable {
       this.displayRTSLogs = displayRTSLogs;
       this.displayLogs = displayLogs;
       this.displayRCALogs = displayRCALogs;
+      this.pattern = pattern;
    }
 
    public boolean isUpdateSnapshotDependencies() {
@@ -44,6 +47,10 @@ public class PeassProcessConfiguration implements Serializable {
 
    public EnvironmentVariables getEnvVars() {
       return envVars;
+   }
+   
+   public Pattern getPattern() {
+      return pattern;
    }
 
    public boolean isDisplayRTSLogs() {

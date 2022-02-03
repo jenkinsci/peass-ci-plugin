@@ -29,7 +29,7 @@ public class LogActionCreator {
    
    public RTSLogSummary createRTSActions(final RTSInfos staticChanges) throws IOException {
       RTSLogFileReader rtsReader = new RTSLogFileReader(visualizationFolders, peassConfig.getMeasurementConfig());
-      RTSActionCreator rtsActionCreator = new RTSActionCreator(rtsReader, run, peassConfig.getMeasurementConfig());
+      RTSActionCreator rtsActionCreator = new RTSActionCreator(rtsReader, run, peassConfig.getMeasurementConfig(), peassConfig.getPattern());
       rtsActionCreator.createRTSActions(staticChanges);
       return rtsActionCreator.getLogSummary();
    }

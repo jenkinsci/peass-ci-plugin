@@ -25,7 +25,8 @@ public class TestRTSVisualizationCreator {
    
    @Test
    public void testEmptyCreation() throws JsonGenerationException, JsonMappingException, IOException {
-      PeassProcessConfiguration peassConfig = new PeassProcessConfiguration(true, new MeasurementConfig(15), new DependencyConfig(1, false), null, false, false, false);
+      PeassProcessConfiguration peassConfig = new PeassProcessConfiguration(true, new MeasurementConfig(15), new DependencyConfig(1, false), null, false, false, false,
+            null);
       ResultsFolders localWorkspace = new ResultsFolders(new File("target/current"), "empty-test");
       
       writeEmptyDependencies(localWorkspace);

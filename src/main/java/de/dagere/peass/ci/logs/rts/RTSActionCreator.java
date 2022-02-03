@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
@@ -26,11 +28,13 @@ public class RTSActionCreator {
    private final MeasurementConfig measurementConfig;
    private Map<String, Boolean> processSuccessRunSucceeded = new HashMap<>();
    private RTSLogSummary logSummary;
+   private final Pattern pattern;
 
-   public RTSActionCreator(final RTSLogFileReader reader, final Run<?, ?> run, final MeasurementConfig measurementConfig) {
+   public RTSActionCreator(final RTSLogFileReader reader, final Run<?, ?> run, final MeasurementConfig measurementConfig, final Pattern pattern) {
       this.reader = reader;
       this.run = run;
       this.measurementConfig = measurementConfig;
+      this.pattern = pattern;
    }
 
    public void createRTSActions(final RTSInfos staticChanges) throws IOException {
@@ -44,7 +48,7 @@ public class RTSActionCreator {
 
          boolean versionContainsNonSuccess = rtsVmRuns.values().stream().anyMatch(log -> !log.isSuccess());
          boolean predecessorContainsNonSuccess = rtsVmRunsPredecessor.values().stream().anyMatch(log -> !log.isSuccess());
-         
+
          LOG.debug("Errors in logs: {} {}", versionContainsNonSuccess, predecessorContainsNonSuccess);
          logSummary = new RTSLogSummary(versionContainsNonSuccess, predecessorContainsNonSuccess);
 
@@ -66,8 +70,18 @@ public class RTSActionCreator {
    private void createOverallLogAction() {
       if (measurementConfig.getExecutionConfig().isRedirectSubprocessOutputToFile()) {
          String rtsLog = reader.getRTSLog();
-         run.addAction(new InternalLogAction("rtsLog", "Regression Test Selection Log", rtsLog));
-         
+         String maskedLog = rtsLog;
+         LOG.debug("Masking");
+         if (pattern != null) {
+            Matcher matcher = pattern.matcher(rtsLog);
+            LOG.debug("Found: " + matcher.find());
+            if (matcher.find()) {
+               LOG.debug("Replacing");
+               maskedLog = matcher.replaceAll("****");
+            }
+         }
+         run.addAction(new InternalLogAction("rtsLog", "Regression Test Selection Log", maskedLog));
+
          String sourceReadingLog = reader.getSourceReadingLog();
          run.addAction(new InternalLogAction("sourceLog", "Source Reading Log", sourceReadingLog));
       }
