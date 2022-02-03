@@ -3,6 +3,7 @@ package de.dagere.peass.ci;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -156,7 +157,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
                throw new RuntimeException("Was not able to create folder");
             }
          }
-         
+
          Pattern patternForBuild = getMaskingPattern();
 
          try (JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
@@ -174,23 +175,20 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    }
 
    private Pattern getMaskingPattern() {
-      Pattern patternForBuild;
-      if (credentialsId != null) {
+      Pattern patternForBuild = null;
+      if (credentialsId != null && !credentialsId.equals("")) {
          StandardUsernamePasswordCredentials credential = CredentialsMatchers.firstOrNull(
                CredentialsProvider.lookupCredentials(
                      StandardUsernamePasswordCredentials.class,
                      Jenkins.get(),
-                     ACL.SYSTEM),
+                     ACL.SYSTEM,
+                     Collections.emptyList()),
                CredentialsMatchers.allOf(
                      CredentialsMatchers.withId(credentialsId),
                      CredentialsMatchers.instanceOf(StandardUsernamePasswordCredentials.class)));
 
-         System.out.println("Credentials: " + credential);
-
          String patternString = credential.getUsername() + "|" + credential.getPassword().getPlainText();
          patternForBuild = Pattern.compile(patternString);
-      }else {
-         patternForBuild = null;
       }
       return patternForBuild;
    }
