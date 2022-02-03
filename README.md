@@ -41,13 +41,16 @@ Sometimes, your build requires credentials, e.g. the you have a own Nexus-Server
 
 Therefore, your job with credentials might look like this:
 ```
-	withCredentials([usernamePassword(credentialsId: 'myCredentialId', usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASSWORD')]){ 
-		script {
-			measure properties: "-PmavenPassword=$NEXUS_PASSWORD -PmavenUser=$NEXUS_USER",
-				...
-		}
-	}
+  withCredentials([usernamePassword(credentialsId: 'myCredentialId', usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASSWORD')]){ 
+    script {
+      measure properties: "-PmavenPassword=$NEXUS_PASSWORD -PmavenUser=$NEXUS_USER",
+        ...
+      }
+    }
+  }
 ```
+
+If you have other credentials that you pass to processes and the current masking approach does not work for you, feel free to file an issue.
 
 ## Example
 
