@@ -5,12 +5,14 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
 
 import de.dagere.peass.ci.logs.InternalLogAction;
 import de.dagere.peass.ci.logs.LogFileReader;
 import de.dagere.peass.ci.logs.LogFiles;
+import de.dagere.peass.ci.logs.LogUtil;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import hudson.model.Run;
@@ -19,11 +21,13 @@ public class RCAActionCreator {
    private final LogFileReader reader;
    private final Run<?, ?> run;
    private final MeasurementConfig measurementConfig;
+   private final Pattern pattern;
 
-   public RCAActionCreator(final LogFileReader reader, final Run<?, ?> run, final MeasurementConfig measurementConfig) {
+   public RCAActionCreator(final LogFileReader reader, final Run<?, ?> run, final MeasurementConfig measurementConfig, final Pattern pattern) {
       this.reader = reader;
       this.run = run;
       this.measurementConfig = measurementConfig;
+      this.pattern = pattern;
    }
 
    public void createRCAActions() throws IOException {
@@ -39,7 +43,8 @@ public class RCAActionCreator {
    private void createOverallActionLog() {
       if (measurementConfig.getExecutionConfig().isRedirectSubprocessOutputToFile()) {
          String rcaLog = reader.getRCALog();
-         run.addAction(new InternalLogAction("rcaLog", "RCA Log", rcaLog));
+         String maskedLog = LogUtil.mask(rcaLog, pattern);
+         run.addAction(new InternalLogAction("rcaLog", "RCA Log", maskedLog));
       }
    }
 

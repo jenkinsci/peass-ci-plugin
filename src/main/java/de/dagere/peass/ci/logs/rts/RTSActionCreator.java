@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
@@ -13,6 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import de.dagere.peass.ci.logs.InternalLogAction;
+import de.dagere.peass.ci.logs.LogUtil;
 import de.dagere.peass.ci.logs.RTSLogFileReader;
 import de.dagere.peass.ci.process.RTSInfos;
 import de.dagere.peass.config.MeasurementConfig;
@@ -70,16 +70,7 @@ public class RTSActionCreator {
    private void createOverallLogAction() {
       if (measurementConfig.getExecutionConfig().isRedirectSubprocessOutputToFile()) {
          String rtsLog = reader.getRTSLog();
-         String maskedLog = rtsLog;
-         LOG.debug("Masking");
-         if (pattern != null) {
-            Matcher matcher = pattern.matcher(rtsLog);
-            LOG.debug("Found: " + matcher.find());
-            if (matcher.find()) {
-               LOG.debug("Replacing");
-               maskedLog = matcher.replaceAll("****");
-            }
-         }
+         String maskedLog = LogUtil.mask(rtsLog, pattern);
          run.addAction(new InternalLogAction("rtsLog", "Regression Test Selection Log", maskedLog));
 
          String sourceReadingLog = reader.getSourceReadingLog();
