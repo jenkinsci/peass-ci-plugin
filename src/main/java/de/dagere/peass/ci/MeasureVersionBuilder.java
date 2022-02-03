@@ -2,6 +2,7 @@ package de.dagere.peass.ci;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -158,7 +159,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
             }
          }
 
-         Pattern patternForBuild = getMaskingPattern();
+         Pattern patternForBuild = getMaskingPattern(listener.getLogger());
 
          try (JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
             PeassProcessConfiguration peassConfig = buildConfiguration(workspace, env, listener, patternForBuild);
@@ -174,7 +175,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       }
    }
 
-   private Pattern getMaskingPattern() {
+   private Pattern getMaskingPattern(final PrintStream logger) {
       Pattern patternForBuild = null;
       if (credentialsId != null && !credentialsId.equals("")) {
          StandardUsernamePasswordCredentials credential = CredentialsMatchers.firstOrNull(
@@ -187,8 +188,12 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
                      CredentialsMatchers.withId(credentialsId),
                      CredentialsMatchers.instanceOf(StandardUsernamePasswordCredentials.class)));
 
-         String patternString = credential.getUsername() + "|" + credential.getPassword().getPlainText();
-         patternForBuild = Pattern.compile(patternString);
+         if (credential != null) {
+            String patternString = credential.getUsername() + "|" + credential.getPassword().getPlainText();
+            patternForBuild = Pattern.compile(patternString);
+         } else {
+            logger.println("Could not find credential with name " + credentialsId);
+         }
       }
       return patternForBuild;
    }
