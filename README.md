@@ -35,6 +35,20 @@ Since Peass-CI does not support parallel builds, please also add ` options { dis
 
 After you added this stage, each build will contain performance measurements (if a code that is called by a unit test or benchmark is changed - there will be no measurements if only documentation changes).  See the [Wiki entry for measurement process configuration](https://github.com/DaGeRe/peass/wiki/Configuration-of-Measurement-Processes) for starting points for configuring the measurement step for your project.
 
+## Credentials
+
+Sometimes, your build requires credentials, e.g. the you have a own Nexus-Server for storing your libraries and want to start your build with `-PmavenPassword=$NEXUS_PASSWORD -PmavenUser=$NEXUS_USER`. To add these to Peass-CI, you'll need to set the `properties` flag. Since you do not want the password to appear in your logs, you'll additionally need to pass the `usernamePassword`-credentials to Peass-CI.
+
+Therefore, your job with credentials might look like this:
+```
+	withCredentials([usernamePassword(credentialsId: 'myCredentialId', usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASSWORD')]){ 
+		script {
+			measure properties: "-PmavenPassword=$NEXUS_PASSWORD -PmavenUser=$NEXUS_USER",
+				...
+		}
+	}
+```
+
 ## Example
 
 After successfull measurement execution, you will get three things:
