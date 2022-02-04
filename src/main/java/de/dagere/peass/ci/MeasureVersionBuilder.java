@@ -922,7 +922,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          ListBoxModel model = new ListBoxModel();
          model.add(new Option("Complete", "COMPLETE", "COMPLETE".equals(measurementMode)));
          model.add(new Option("Levelwise", "LEVELWISE", "LEVELWISE".equals(measurementMode)));
-         model.add(new Option("Until Source Change (Early testing)", "UNTIL_SOURCE_CHANGE", "UNTIL_SOURCE_CHANGE".equals(measurementMode)));
+         model.add(new Option("Until Source Change", "UNTIL_SOURCE_CHANGE", "UNTIL_SOURCE_CHANGE".equals(measurementMode)));
          model.add(new Option("Until Structure Change (NOT IMPLEMENTED)", "UNTIL_STRUCTURE_CHANGE", "UNTIL_STRUCTURE_CHANGE".equals(measurementMode)));
          model.add(new Option("Constant Levels(NOT IMPLEMENTED)", "CONSTANT_LEVELS", "CONSTANT_LEVELS".equals(measurementMode)));
          return model;

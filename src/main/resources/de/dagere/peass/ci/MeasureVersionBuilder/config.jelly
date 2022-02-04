@@ -31,16 +31,9 @@
           <f:textbox default="5" />
         </f:entry>
       </td>
-    </tr>
-    <tr>
       <td>
-        <f:entry title="${%executeRCA}" field="executeRCA" description="${%executeRCADescr}">
-          <f:checkbox default="true" />
-        </f:entry>
-      </td>
-      <td>
-        <f:entry title="${%nightlyBuild}" field="nightlyBuild" description="${%nightlyBuildDescr}">
-          <f:checkbox />
+        <f:entry title="${%significanceLevel}" field="significanceLevel" description="${%significanceLevelDescr}">
+          <f:textbox default="0.01" />
         </f:entry>
       </td>
     </tr>
@@ -49,13 +42,35 @@
     <c:select includeUser="true" />
   </f:entry>
   <f:advanced>
-    <f:entry title="${%executeParallel}" field="executeParallel" description="${%executeParallelDescr}">
-      <f:checkbox />
-    </f:entry>
-    <f:entry title="${%rcaStrategy}" field="measurementMode" description="${%rcaStrategyDescr}">
-      <f:select default="UNTIL_SOURCE_CHANGE" />
-    </f:entry>
+
+
+    <h1>Ausführungssteuerung</h1>
     <table>
+      <tr>
+        <td>
+          <f:entry title="${%executeParallel}" field="executeParallel" description="${%executeParallelDescr}">
+            <f:checkbox />
+          </f:entry>
+        </td>
+        <td>
+          <f:entry title="onlyMeasureWorkload" field="onlyMeasureWorkload" description="${%onlyMeasureWorkloadDescr}">
+            <f:checkbox />
+          </f:entry>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <f:entry title="${%executeBeforeClassInMeasurement}" field="executeBeforeClassInMeasurement"
+            description="${%executeBeforeClassInMeasurementDescr}">
+            <f:checkbox />
+          </f:entry>
+        </td>
+        <td>
+          <f:entry title="${%useGC}" field="useGC" description="${%useGCDescr}">
+            <f:checkbox />
+          </f:entry>
+        </td>
+      </tr>
       <tr>
         <td>
           <f:entry title="${%includes}" field="includes" description="${%includesDescr}">
@@ -68,59 +83,52 @@
           </f:entry>
         </td>
       </tr>
+      <tr>
+        <td>
+          <f:entry title="${%testGoal}" field="testGoal" description="${%testGoalDescr}">
+            <f:textbox default="test" />
+          </f:entry>
+        </td>
+        <td>
+          <f:entry title="${%pl}" field="pl" description="${%plDescr}">
+            <f:textbox default="" />
+          </f:entry>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <f:entry title="${%properties}" field="properties" description="${%propertiesDescr}">
+            <f:textbox default="" />
+          </f:entry>
+        </td>
+        <td>
+          <f:entry title="${%failOnRtsError}" field="failOnRtsError" description="${%failOnRtsErrorDescr}">
+            <f:checkbox default="false" />
+          </f:entry>
+        </td>
+      </tr>
     </table>
-    <f:entry title="${%properties}" field="properties" description="${%propertiesDescr}">
-      <f:textbox default="" />
-    </f:entry>
-    <f:entry title="${%testGoal}" field="testGoal" description="${%testGoalDescr}">
-      <f:textbox default="test" />
-    </f:entry>
-    <f:entry title="${%pl}" field="pl" description="${%plDescr}">
-      <f:textbox default="" />
-    </f:entry>
-    <f:entry title="${%versionDiff}" field="versionDiff" description="${%versionDiffDescr}">
-      <f:textbox default="1" />
-    </f:entry>
-    <f:entry title="${%updateSnapshotDependencies}" field="updateSnapshotDependencies" description="${%updateSnapshotDependenciesDescr}">
-      <f:checkbox />
-    </f:entry>
-    <f:entry title="${%removeSnapshots}" field="removeSnapshots" description="${%removeSnapshotsDescr}">
-      <f:checkbox />
-    </f:entry>
-    <f:entry title="${%useAlternativeBuildfile}" field="useAlternativeBuildfile" description="${%useAlternativeBuildfile}">
-      <f:checkbox />
-    </f:entry>
-    <f:entry title="${%excludeLog4j}" field="excludeLog4j" description="${%excludeLog4jDescr}">
-      <f:checkbox />
-    </f:entry>
-    <f:entry title="${%useSourceInstrumentation}" field="useSourceInstrumentation" description="${%useSourceInstrumentationDescr}">
-      <f:checkbox default="true" />
-    </f:entry>
-    <f:entry title="${%useAggregation}" field="useAggregation" description="${%useAggregationDescr}">
-      <f:checkbox default="true" />
-    </f:entry>
-    <f:entry title="${%useGC}" field="useGC" description="${%useGCDescr}">
-      <f:checkbox />
-    </f:entry>
-    <f:entry title="${%measureJMH}" field="measureJMH" description="${%measureJMHDescr}">
-      <f:checkbox />
-    </f:entry>
 
-    <f:entry title="${%createDefaultConstructor}" field="createDefaultConstructor" description="${%createDefaultConstructorDescr}">
-      <f:checkbox default="unchecked" />
-    </f:entry>
-    <f:entry title="${%generateCoverageSelection}" field="generateCoverageSelection" description="${%generateCoverageSelectionDescr}">
-      <f:checkbox />
-    </f:entry>
-    <f:entry title="${%executeBeforeClassInMeasurement}" field="executeBeforeClassInMeasurement" description="${%executeBeforeClassInMeasurementDescr}">
-      <f:checkbox />
-    </f:entry>
-    <f:entry title="onlyMeasureWorkload" field="onlyMeasureWorkload" description="${%onlyMeasureWorkloadDescr}">
-      <f:checkbox />
-    </f:entry>
-    <f:entry title="${%significanceLevel}" field="significanceLevel" description="${%significanceLevelDescr}">
-      <f:textbox default="0.01" />
-    </f:entry>
+    <h1>Versionsauswahl</h1>
+    <table>
+      <tr>
+        <td>
+          <f:entry title="${%nightlyBuild}" field="nightlyBuild" description="${%nightlyBuildDescr}">
+            <f:checkbox />
+          </f:entry>
+        </td>
+        <td>
+          <f:entry title="${%versionDiff}" field="versionDiff" description="${%versionDiffDescr}">
+            <f:textbox default="1" />
+          </f:entry>
+        </td>
+        <td>
+          <f:entry title="${%generateCoverageSelection}" field="generateCoverageSelection" description="${%generateCoverageSelectionDescr}">
+            <f:checkbox />
+          </f:entry>
+        </td>
+      </tr>
+    </table>
 
     <h1>Ausgabensteuerung</h1>
     <table>
@@ -164,27 +172,37 @@
     </table>
 
 
-
-
-
-    <f:entry title="${%testExecutor}" field="testExecutor" description="${%testExecutorDescr}">
-      <f:textbox default="default" />
-    </f:entry>
-    <f:entry title="${%testTransformer}" field="testTransformer" description="${%testTransformerDescr}">
-      <f:textbox default="de.dagere.peass.testtransformation.JUnitTestTransformer" />
-    </f:entry>
-    <f:entry title="${%clazzFolders}" field="clazzFolders" description="${%clazzFoldersDescr}">
-      <f:textbox default="src/main/java:src/java" />
-    </f:entry>
-    <f:entry title="${%testClazzFolders}" field="testClazzFolders" description="${%testClazzFolders}">
-      <f:textbox default="src/test/java:src/test" />
-    </f:entry>
-    <f:entry title="${%failOnRtsError}" field="failOnRtsError" description="${%failOnRtsErrorDescr}">
-      <f:checkbox default="false" />
-    </f:entry>
+    <h1>RCA-Konfiguration</h1>
+    <table>
+      <tr>
+        <td>
+          <f:entry title="${%executeRCA}" field="executeRCA" description="${%executeRCADescr}">
+            <f:checkbox default="true" />
+          </f:entry>
+        </td>
+        <td>
+          <f:entry title="${%rcaStrategy}" field="measurementMode" description="${%rcaStrategyDescr}">
+            <f:select default="UNTIL_SOURCE_CHANGE" />
+          </f:entry>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <f:entry title="${%useSourceInstrumentation}" field="useSourceInstrumentation" description="${%useSourceInstrumentationDescr}">
+            <f:checkbox default="true" />
+          </f:entry>
+        </td>
+        <td>
+          <f:entry title="${%useAggregation}" field="useAggregation" description="${%useAggregationDescr}">
+            <f:checkbox default="true" />
+          </f:entry>
+        </td>
+      </tr>
+    </table>
 
     <h1>Tracingkonfiguration</h1>
     <table>
+
       <tr>
         <td>
           <f:entry title="${%kiekerWaitTime}" field="kiekerWaitTime" description="${%kiekerWaitTimeDescr}">
@@ -219,5 +237,68 @@
       </tr>
     </table>
 
+    <h1>Technische Kompatibilität</h1>
+    <table>
+      <tr>
+        <td>
+          <f:entry title="${%clazzFolders}" field="clazzFolders" description="${%clazzFoldersDescr}">
+            <f:textbox default="src/main/java:src/java" />
+          </f:entry>
+        </td>
+        <td>
+          <f:entry title="${%testClazzFolders}" field="testClazzFolders" description="${%testClazzFolders}">
+            <f:textbox default="src/test/java:src/test" />
+          </f:entry>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <f:entry title="${%testExecutor}" field="testExecutor" description="${%testExecutorDescr}">
+            <f:textbox default="default" />
+          </f:entry>
+        </td>
+        <td>
+          <f:entry title="${%testTransformer}" field="testTransformer" description="${%testTransformerDescr}">
+            <f:textbox default="de.dagere.peass.testtransformation.JUnitTestTransformer" />
+          </f:entry>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <f:entry title="${%measureJMH}" field="measureJMH" description="${%measureJMHDescr}">
+            <f:checkbox />
+          </f:entry>
+        </td>
+        <td>
+          <f:entry title="${%createDefaultConstructor}" field="createDefaultConstructor" description="${%createDefaultConstructorDescr}">
+            <f:checkbox default="unchecked" />
+          </f:entry>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <f:entry title="${%removeSnapshots}" field="removeSnapshots" description="${%removeSnapshotsDescr}">
+            <f:checkbox />
+          </f:entry>
+        </td>
+        <td>
+          <f:entry title="${%updateSnapshotDependencies}" field="updateSnapshotDependencies" description="${%updateSnapshotDependenciesDescr}">
+            <f:checkbox />
+          </f:entry>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <f:entry title="${%useAlternativeBuildfile}" field="useAlternativeBuildfile" description="${%useAlternativeBuildfile}">
+            <f:checkbox />
+          </f:entry>
+        </td>
+        <td>
+          <f:entry title="${%excludeLog4j}" field="excludeLog4j" description="${%excludeLog4jDescr}">
+            <f:checkbox />
+          </f:entry>
+        </td>
+      </tr>
+    </table>
   </f:advanced>
 </j:jelly>
