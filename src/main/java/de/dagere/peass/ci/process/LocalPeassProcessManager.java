@@ -83,10 +83,12 @@ public class LocalPeassProcessManager {
       if (peassConfig.isDisplayRTSLogs()) {
          RTSInfos infos = RTSInfos.readInfosFromFolders(results, peassConfig);
          RTSLogSummary summary = logActionCreator.createRTSActions(infos);
-         return new AggregatedRTSResult(summary, result);
+         AggregatedRTSResult aggregatedRTSResult = new AggregatedRTSResult(summary, result);
+         return aggregatedRTSResult;
       }
       if (result != null && result.getTests() != null) {
-         return new AggregatedRTSResult(null, result);
+         AggregatedRTSResult aggregatedRTSResult = new AggregatedRTSResult(null, result);
+         return aggregatedRTSResult;
       } else {
          return null;
       }

@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import org.apache.commons.io.FileUtils;
 import org.mockito.Mockito;
 
+import de.dagere.peass.ci.MeasureVersionBuilder;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.RTSLogFileReader;
 import de.dagere.peass.config.MeasurementConfig;
@@ -20,7 +21,7 @@ public class RTSLogFileUtil {
    static final String VERSION_OLD = "33ce17c04b5218c25c40137d4d09f40fbb3e4f0f";
    static final String VERSION = "a23e385264c31def8dcda86c3cf64faa698c62d8";
 
-   static final File localFolder = new File("target/peass-data");
+   static final File localFolder = new File("target/" + MeasureVersionBuilder.PEASS_FOLDER_NAME);
    static final File testFolder = new File(localFolder, "current_peass");
    
    private final TestCase test1;

@@ -31,7 +31,26 @@ stage('measure performance') {
 
 If you are using classic freestyle jobs, the build step will be called "Measure Version Performance".
 
+Since Peass-CI does not support parallel builds, please also add ` options { disableConcurrentBuilds() }` to your job. Furthermore, performance measurements may get flaky if too much load is on your system. Therefore, if you only have one Jenkins node (and not several agents to run your measurements at), consider limiting the parallel job builds of your Jenkins instance.
+
 After you added this stage, each build will contain performance measurements (if a code that is called by a unit test or benchmark is changed - there will be no measurements if only documentation changes).  See the [Wiki entry for measurement process configuration](https://github.com/DaGeRe/peass/wiki/Configuration-of-Measurement-Processes) for starting points for configuring the measurement step for your project.
+
+## Credentials
+
+Sometimes, your build requires credentials, e.g. the you have a own Nexus-Server for storing your libraries and want to start your build with `-PmavenPassword=$NEXUS_PASSWORD -PmavenUser=$NEXUS_USER`. To add these to Peass-CI, you'll need to set the `properties` flag. Since you do not want the password to appear in your logs, you'll additionally need to pass the `usernamePassword`-credentials to Peass-CI.
+
+Therefore, your job with credentials might look like this:
+```
+  withCredentials([usernamePassword(credentialsId: 'myCredentialId', usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASSWORD')]){ 
+    script {
+      measure properties: "-PmavenPassword=$NEXUS_PASSWORD -PmavenUser=$NEXUS_USER",
+        ...
+      }
+    }
+  }
+```
+
+If you have other credentials that you pass to processes and the current masking approach does not work for you, feel free to file an issue.
 
 ## Example
 

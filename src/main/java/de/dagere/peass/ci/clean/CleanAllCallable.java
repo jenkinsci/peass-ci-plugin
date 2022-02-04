@@ -20,10 +20,14 @@ public class CleanAllCallable implements FileCallable<Boolean> {
    public Boolean invoke(final File potentialSlaveWorkspace, final VirtualChannel channel) {
       try {
          File folder = new File(potentialSlaveWorkspace.getParentFile(), potentialSlaveWorkspace.getName() + "_fullPeass");
-         System.out.println("Cleaning " + folder.getAbsolutePath());
-         FileUtils.cleanDirectory(folder);
+         if (folder.exists()) {
+            System.out.println("Cleaning " + folder.getAbsolutePath());
+            FileUtils.cleanDirectory(folder);
+         } else {
+            FileUtils.cleanDirectory(potentialSlaveWorkspace);
+         }
          return true;
-      } catch (IOException e) {
+      } catch (IOException | IllegalArgumentException e) {
          e.printStackTrace();
          return false;
       }

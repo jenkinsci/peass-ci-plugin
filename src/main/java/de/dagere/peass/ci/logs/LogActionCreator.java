@@ -29,18 +29,18 @@ public class LogActionCreator {
    
    public RTSLogSummary createRTSActions(final RTSInfos staticChanges) throws IOException {
       RTSLogFileReader rtsReader = new RTSLogFileReader(visualizationFolders, peassConfig.getMeasurementConfig());
-      RTSActionCreator rtsActionCreator = new RTSActionCreator(rtsReader, run, peassConfig.getMeasurementConfig());
+      RTSActionCreator rtsActionCreator = new RTSActionCreator(rtsReader, run, peassConfig.getMeasurementConfig(), peassConfig.getPattern());
       rtsActionCreator.createRTSActions(staticChanges);
       return rtsActionCreator.getLogSummary();
    }
 
    public void createMeasurementActions(final Set<TestCase> tests) throws IOException {
-      MeasurementActionCreator measurementActionCreator = new MeasurementActionCreator(reader, run, peassConfig.getMeasurementConfig());
+      MeasurementActionCreator measurementActionCreator = new MeasurementActionCreator(reader, run, peassConfig.getMeasurementConfig(), peassConfig.getPattern());
       measurementActionCreator.createMeasurementActions(tests);
    }
    
    public void createRCAActions() throws IOException {
-      RCAActionCreator rcaActionCreator = new RCAActionCreator(reader, run, peassConfig.getMeasurementConfig());
+      RCAActionCreator rcaActionCreator = new RCAActionCreator(reader, run, peassConfig.getMeasurementConfig(), peassConfig.getPattern());
       rcaActionCreator.createRCAActions();
    }
 }

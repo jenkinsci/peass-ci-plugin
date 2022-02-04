@@ -104,7 +104,7 @@ public class TrendAction implements Action {
 
    private BuildMeasurementValues readValues() throws InterruptedException, IOException, JsonParseException, JsonMappingException {
       if (project instanceof WorkflowJob || project instanceof Project) {
-         File localWorkspace = new File(project.getRootDir(), "peass-data");
+         File localWorkspace = new File(project.getRootDir(), MeasureVersionBuilder.PEASS_FOLDER_NAME);
          BuildMeasurementValues values = TrendFileUtil.readMeasurementValues(localWorkspace);
          return values;
       } else {

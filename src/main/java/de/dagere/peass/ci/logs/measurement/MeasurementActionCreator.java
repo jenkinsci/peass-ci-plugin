@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
@@ -13,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 import de.dagere.peass.ci.logs.InternalLogAction;
 import de.dagere.peass.ci.logs.LogFileReader;
 import de.dagere.peass.ci.logs.LogFiles;
+import de.dagere.peass.ci.logs.LogUtil;
 import de.dagere.peass.config.ExecutionConfig;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
@@ -25,11 +27,13 @@ public class MeasurementActionCreator {
    private final LogFileReader reader;
    private final Run<?, ?> run;
    private final MeasurementConfig measurementConfig;
+   private final Pattern pattern;
 
-   public MeasurementActionCreator(final LogFileReader reader, final Run<?, ?> run, final MeasurementConfig measurementConfig) {
+   public MeasurementActionCreator(final LogFileReader reader, final Run<?, ?> run, final MeasurementConfig measurementConfig, final Pattern pattern) {
       this.reader = reader;
       this.run = run;
       this.measurementConfig = measurementConfig;
+      this.pattern = pattern;
    }
 
    public void createMeasurementActions(final Set<TestCase> tests ) throws IOException {
@@ -46,7 +50,8 @@ public class MeasurementActionCreator {
    private void createOverallLogAction() {
       if (measurementConfig.getExecutionConfig().isRedirectSubprocessOutputToFile()) {
          String measureLog = reader.getMeasureLog();
-         run.addAction(new InternalLogAction("measurementLog", "Measurement Log", measureLog));
+         String maskedLog = LogUtil.mask(measureLog, pattern);
+         run.addAction(new InternalLogAction("measurementLog", "Measurement Log", maskedLog));
       }
    }
 

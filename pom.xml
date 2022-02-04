@@ -1,233 +1,238 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.jenkins-ci.plugins</groupId>
-		<artifactId>plugin</artifactId>
-		<version>4.16</version>
-		<relativePath />
-	</parent>
-	<groupId>de.peass</groupId>
-	<artifactId>peass-ci</artifactId>
-	<version>${revision}-${changelist}</version>
-	<packaging>hpi</packaging>
-	<properties>
-		<jenkins.version>2.303.1</jenkins.version>
-		<java.level>8</java.level>
-		<maven.test.redirectTestOutputToFile>false</maven.test.redirectTestOutputToFile>
-		<revision>2.0.0</revision>
-		<changelist>999999-SNAPSHOT</changelist>
-		<gitHubRepo>jenkinsci/peass-ci-plugin</gitHubRepo>
-	</properties>
-	<!-- Jenkins discourages usage of names like peass-jenkins-plugin or peass-plugin (https://www.jenkins.io/doc/developer/publishing/requesting-hosting/), therefore 
-		it's just peass-ci -->
-	<name>Peass-CI</name>
-	<url>https://github.com/jenkinsci/peass-ci-plugin</url>
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.jenkins-ci.plugins</groupId>
+    <artifactId>plugin</artifactId>
+    <version>4.16</version>
+    <relativePath />
+  </parent>
+  <groupId>de.peass</groupId>
+  <artifactId>peass-ci</artifactId>
+  <version>${revision}-${changelist}</version>
+  <packaging>hpi</packaging>
+  <properties>
+    <jenkins.version>2.303.1</jenkins.version>
+    <java.level>8</java.level>
+    <maven.test.redirectTestOutputToFile>false</maven.test.redirectTestOutputToFile>
+    <revision>2.0.0</revision>
+    <changelist>999999-SNAPSHOT</changelist>
+    <gitHubRepo>jenkinsci/peass-ci-plugin</gitHubRepo>
+  </properties>
+  <!-- Jenkins discourages usage of names like peass-jenkins-plugin or peass-plugin (https://www.jenkins.io/doc/developer/publishing/requesting-hosting/), therefore 
+    it's just peass-ci -->
+  <name>Peass-CI</name>
+  <url>https://github.com/jenkinsci/peass-ci-plugin</url>
 
-	<licenses>
-		<!-- The Peass-CI plugin is licensed under MIT and AGPL license -->
-		<license>
-			<name>MIT License</name>
-			<url>https://opensource.org/licenses/MIT</url>
-		</license>
-		<license>
-			<name>GNU Affero General Public License</name>
-			<url>https://www.gnu.org/licenses/agpl.txt</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
+  <licenses>
+    <!-- The Peass-CI plugin is licensed under MIT and AGPL license -->
+    <license>
+      <name>MIT License</name>
+      <url>https://opensource.org/licenses/MIT</url>
+    </license>
+    <license>
+      <name>GNU Affero General Public License</name>
+      <url>https://www.gnu.org/licenses/agpl.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
 
-	<dependencies>
-		<!-- Higher import order needed for tests -->
-		<dependency>
-			<groupId>org.hamcrest</groupId>
-			<artifactId>hamcrest-core</artifactId>
-			<version>1.3</version>
-			<scope>test</scope>
-		</dependency>
+  <dependencies>
+    <!-- Higher import order needed for tests -->
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-core</artifactId>
+      <version>2.2</version>
+      <scope>test</scope>
+    </dependency>
 
 
-		<dependency>
-			<groupId>de.dagere.peass</groupId>
-			<artifactId>analysis</artifactId>
-			<version>0.1.10-SNAPSHOT</version>
-		</dependency>
-		<!-- This overwrite dependency is only required if a newer version of the peass-libraries than in peass-jmh should be encluded (if this is not used, enforcer will 
-			throw an error -->
-		<dependency>
-			<groupId>de.dagere.peass</groupId>
-			<artifactId>dependency</artifactId>
-			<version>0.1.10-SNAPSHOT</version>
-		</dependency>
+    <dependency>
+      <groupId>de.dagere.peass</groupId>
+      <artifactId>analysis</artifactId>
+      <version>0.1.10-SNAPSHOT</version>
+    </dependency>
+    <!-- This overwrite dependency is only required if a newer version of the peass-libraries than in peass-jmh should be encluded (if this is not used, enforcer 
+      will throw an error -->
+    <dependency>
+      <groupId>de.dagere.peass</groupId>
+      <artifactId>dependency</artifactId>
+      <version>0.1.10-SNAPSHOT</version>
+    </dependency>
 
-		<dependency>
-			<groupId>de.dagere.peass</groupId>
-			<artifactId>peass-jmh</artifactId>
-			<version>0.1.5</version>
-		</dependency>
+    <dependency>
+      <groupId>de.dagere.peass</groupId>
+      <artifactId>peass-jmh</artifactId>
+      <version>0.1.5</version>
+    </dependency>
 
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.13.2</version>
-		</dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13.2</version>
+    </dependency>
 
-		<!-- To avoid enforcer problems -->
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-math3</artifactId>
-			<version>3.6.1</version>
-		</dependency>
+    <!-- To avoid enforcer problems -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-math3</artifactId>
+      <version>3.6.1</version>
+    </dependency>
 
-		<dependency>
-			<groupId>de.dagere.peass</groupId>
-			<artifactId>analysis</artifactId>
-			<version>0.1.9</version>
-			<classifier>tests</classifier>
-			<scope>test</scope>
-		</dependency>
+    <dependency>
+      <groupId>de.dagere.peass</groupId>
+      <artifactId>analysis</artifactId>
+      <version>0.1.9</version>
+      <classifier>tests</classifier>
+      <scope>test</scope>
+    </dependency>
 
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-web</artifactId>
-			<version>2.17.1</version>
-		</dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-web</artifactId>
+      <version>2.17.1</version>
+    </dependency>
 
-		<dependency>
-			<groupId>org.jenkins-ci.plugins</groupId>
-			<artifactId>structs</artifactId>
-		</dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins</groupId>
+      <artifactId>credentials</artifactId>
+    </dependency>
 
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
-			<version>1.10.19</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jenkins-ci.plugins.workflow</groupId>
-			<artifactId>workflow-step-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.jenkins-ci.plugins.workflow</groupId>
-			<artifactId>workflow-cps</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jenkins-ci.plugins.workflow</groupId>
-			<artifactId>workflow-job</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.jenkins-ci.plugins.workflow</groupId>
-			<artifactId>workflow-basic-steps</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jenkins-ci.plugins.workflow</groupId>
-			<artifactId>workflow-durable-task-step</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jenkins-ci.plugins.workflow</groupId>
-			<artifactId>workflow-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.jenkins-ci.plugins.workflow</groupId>
-			<artifactId>workflow-support</artifactId>
-		</dependency>
-	</dependencies>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins</groupId>
+      <artifactId>structs</artifactId>
+    </dependency>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<environmentVariables>
-						<PEASS_HOME>${project.build.directory}/peass_home</PEASS_HOME>
-					</environmentVariables>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>com.github.spotbugs</groupId>
-				<artifactId>spotbugs-maven-plugin</artifactId>
-				<configuration>
-					<excludeFilterFile>spotbugs-exclude.xml</excludeFilterFile>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-all</artifactId>
+      <version>1.10.19</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins.workflow</groupId>
+      <artifactId>workflow-step-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins.workflow</groupId>
+      <artifactId>workflow-cps</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins.workflow</groupId>
+      <artifactId>workflow-job</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins.workflow</groupId>
+      <artifactId>workflow-basic-steps</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins.workflow</groupId>
+      <artifactId>workflow-durable-task-step</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins.workflow</groupId>
+      <artifactId>workflow-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins.workflow</groupId>
+      <artifactId>workflow-support</artifactId>
+    </dependency>
+  </dependencies>
 
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>io.jenkins.tools.bom</groupId>
-				<artifactId>bom-2.263.x</artifactId>
-				<version>23</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.jenkins-ci.plugins</groupId>
-				<artifactId>script-security</artifactId>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.jenkins-ci.plugins</groupId>
-				<artifactId>scm-api</artifactId>
-				<scope>test</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <environmentVariables>
+            <PEASS_HOME>${project.build.directory}/peass_home</PEASS_HOME>
+          </environmentVariables>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <configuration>
+          <excludeFilterFile>spotbugs-exclude.xml</excludeFilterFile>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
-	<developers>
-		<developer>
-			<id>DaGeRe</id>
-			<name>David Georg Reichelt</name>
-			<email>kopeme@dagere.de</email>
-		</developer>
-	</developers>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.jenkins.tools.bom</groupId>
+        <artifactId>bom-2.303.x</artifactId>
+        <version>987.v4ade2e49fe70</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.jenkins-ci.plugins</groupId>
+        <artifactId>script-security</artifactId>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.jenkins-ci.plugins</groupId>
+        <artifactId>scm-api</artifactId>
+        <scope>test</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
-	<repositories>
-		<repository>
-			<id>repo.jenkins-ci.org</id>
-			<url>https://repo.jenkins-ci.org/public/</url>
-		</repository>
-	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>repo.jenkins-ci.org</id>
-			<url>https://repo.jenkins-ci.org/public/</url>
-		</pluginRepository>
-	</pluginRepositories>
+  <developers>
+    <developer>
+      <id>DaGeRe</id>
+      <name>David Georg Reichelt</name>
+      <email>kopeme@dagere.de</email>
+    </developer>
+  </developers>
 
-	<scm>
-		<connection>scm:git:ssh://github.com:${gitHubRepo}.git</connection>
-		<developerConnection>scm:git:git@github.com:${gitHubRepo}.git</developerConnection>
-		<url>https://git@github.com:${gitHubRepo}.git</url>
-		<tag>${scmTag}</tag>
-	</scm>
+  <repositories>
+    <repository>
+      <id>repo.jenkins-ci.org</id>
+      <url>https://repo.jenkins-ci.org/public/</url>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>repo.jenkins-ci.org</id>
+      <url>https://repo.jenkins-ci.org/public/</url>
+    </pluginRepository>
+  </pluginRepositories>
 
-	<profiles>
-		<profile>
-			<!-- For develop branch builds, use this profile which enables snapshot dependencies -->
-			<id>develop</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<repositories>
-				<repository>
-					<id>snapshots-repo</id>
-					<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-					<releases>
-						<enabled>false</enabled>
-					</releases>
-					<snapshots>
-						<enabled>true</enabled>
-					</snapshots>
-				</repository>
-			</repositories>
-		</profile>
-	</profiles>
+  <scm>
+    <connection>scm:git:ssh://github.com:${gitHubRepo}.git</connection>
+    <developerConnection>scm:git:git@github.com:${gitHubRepo}.git</developerConnection>
+    <url>https://git@github.com:${gitHubRepo}.git</url>
+    <tag>${scmTag}</tag>
+  </scm>
+
+  <profiles>
+    <profile>
+      <!-- For develop branch builds, use this profile which enables snapshot dependencies -->
+      <id>develop</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <repositories>
+        <repository>
+          <id>snapshots-repo</id>
+          <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+          <releases>
+            <enabled>false</enabled>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+          </snapshots>
+        </repository>
+      </repositories>
+    </profile>
+  </profiles>
 </project>

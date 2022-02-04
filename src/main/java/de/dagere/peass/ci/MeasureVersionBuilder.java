@@ -2,20 +2,31 @@ package de.dagere.peass.ci;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.io.Serializable;
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.xml.bind.JAXBException;
 
 import org.jenkinsci.Symbol;
+import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
 import org.kohsuke.stapler.QueryParameter;
 
+import com.cloudbees.plugins.credentials.CredentialsMatchers;
+import com.cloudbees.plugins.credentials.CredentialsProvider;
+import com.cloudbees.plugins.credentials.common.StandardListBoxModel;
+import com.cloudbees.plugins.credentials.common.StandardUsernameCredentials;
+import com.cloudbees.plugins.credentials.common.StandardUsernamePasswordCredentials;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -29,6 +40,7 @@ import de.dagere.peass.ci.process.JenkinsLogRedirector;
 import de.dagere.peass.ci.process.LocalPeassProcessManager;
 import de.dagere.peass.ci.remote.RemoteVersionReader;
 import de.dagere.peass.config.DependencyConfig;
+import de.dagere.peass.config.ExecutionConfig;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.config.MeasurementStrategy;
 import de.dagere.peass.dependency.analysis.data.TestCase;
@@ -39,19 +51,30 @@ import hudson.EnvVars;
 import hudson.Extension;
 import hudson.FilePath;
 import hudson.Launcher;
+import hudson.Util;
 import hudson.model.AbstractProject;
+import hudson.model.FreeStyleProject;
+import hudson.model.Item;
+import hudson.model.Queue;
 import hudson.model.Result;
 import hudson.model.Run;
 import hudson.model.TaskListener;
+import hudson.model.queue.Tasks;
+import hudson.security.ACL;
 import hudson.tasks.BuildStepDescriptor;
+import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Builder;
 import hudson.util.FormValidation;
 import hudson.util.ListBoxModel;
 import hudson.util.ListBoxModel.Option;
+import io.jenkins.cli.shaded.org.apache.commons.lang.StringUtils;
+import jenkins.model.Jenkins;
 import jenkins.tasks.SimpleBuildStep;
 import net.kieker.sourceinstrumentation.AllowedKiekerRecord;
 
 public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, Serializable {
+
+   public static final String PEASS_FOLDER_NAME = "peass-data";
 
    private static final long serialVersionUID = -7455227251645979702L;
 
@@ -74,7 +97,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private boolean nightlyBuild = true;
    private int versionDiff = 1;
    private int traceSizeInMb = 100;
-   
+
    private boolean displayRTSLogs = true;
    private boolean displayLogs = true;
    private boolean displayRCALogs = true;
@@ -92,6 +115,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private boolean executeParallel = false;
    private boolean executeBeforeClassInMeasurement = false;
    private boolean onlyMeasureWorkload = false;
+   private boolean onlyOneCallRecording = false;
 
    private boolean updateSnapshotDependencies = true;
    private boolean removeSnapshots = false;
@@ -110,6 +134,12 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private String clazzFolders;
    private String testClazzFolders;
 
+   private boolean failOnRtsError = false;
+
+   private String excludeForTracing = "";
+
+   private String credentialsId;
+
    @DataBoundConstructor
    public MeasureVersionBuilder() {
    }
@@ -120,7 +150,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       if (!workspace.exists()) {
          throw new RuntimeException("Workspace folder " + workspace.toString() + " does not exist, please asure that the repository was correctly cloned!");
       } else {
-         final File localWorkspace = new File(run.getRootDir(), ".." + File.separator + ".." + File.separator + "peass-data").getCanonicalFile();
+         final File localWorkspace = new File(run.getRootDir(), ".." + File.separator + ".." + File.separator + PEASS_FOLDER_NAME).getCanonicalFile();
          printRunMetadata(run, workspace, listener, localWorkspace);
 
          if (!localWorkspace.exists()) {
@@ -129,8 +159,10 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
             }
          }
 
+         Pattern patternForBuild = getMaskingPattern(listener.getLogger());
+
          try (JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
-            PeassProcessConfiguration peassConfig = buildConfiguration(workspace, env, listener);
+            PeassProcessConfiguration peassConfig = buildConfiguration(workspace, env, listener, patternForBuild);
             boolean versionIsUsable = checkVersion(run, listener, peassConfig);
             if (versionIsUsable) {
                runAllSteps(run, workspace, listener, localWorkspace, peassConfig);
@@ -141,6 +173,29 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
             run.setResult(Result.FAILURE);
          }
       }
+   }
+
+   private Pattern getMaskingPattern(final PrintStream logger) {
+      Pattern patternForBuild = null;
+      if (credentialsId != null && !credentialsId.equals("")) {
+         StandardUsernamePasswordCredentials credential = CredentialsMatchers.firstOrNull(
+               CredentialsProvider.lookupCredentials(
+                     StandardUsernamePasswordCredentials.class,
+                     Jenkins.get(),
+                     ACL.SYSTEM,
+                     Collections.emptyList()),
+               CredentialsMatchers.allOf(
+                     CredentialsMatchers.withId(credentialsId),
+                     CredentialsMatchers.instanceOf(StandardUsernamePasswordCredentials.class)));
+
+         if (credential != null) {
+            String patternString = credential.getUsername() + "|" + credential.getPassword().getPlainText();
+            patternForBuild = Pattern.compile(patternString);
+         } else {
+            logger.println("Could not find credential with name " + credentialsId);
+         }
+      }
+      return patternForBuild;
    }
 
    private boolean checkVersion(final Run<?, ?> run, final TaskListener listener, final PeassProcessConfiguration peassConfig) {
@@ -167,6 +222,12 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          run.setResult(Result.FAILURE);
          return;
       }
+
+      if (failOnRtsError && tests.isRtsError()) {
+         run.setResult(Result.FAILURE);
+         return;
+      }
+
       processManager.visualizeRTSResults(run, tests.getLogSummary());
 
       if (tests.getResult().getTests().size() > 0) {
@@ -195,7 +256,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       }
    }
 
-   private PeassProcessConfiguration buildConfiguration(final FilePath workspace, final EnvVars env, final TaskListener listener)
+   private PeassProcessConfiguration buildConfiguration(final FilePath workspace, final EnvVars env, final TaskListener listener, final Pattern pattern)
          throws IOException, InterruptedException {
       final MeasurementConfig configWithRealGitVersions = generateMeasurementConfig(workspace, listener);
 
@@ -205,8 +266,9 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       }
 
       DependencyConfig dependencyConfig = new DependencyConfig(1, false, true, generateCoverageSelection);
-      PeassProcessConfiguration peassConfig = new PeassProcessConfiguration(updateSnapshotDependencies, configWithRealGitVersions, dependencyConfig, peassEnv,
-            displayRTSLogs, displayLogs, displayRCALogs);
+      PeassProcessConfiguration peassConfig = new PeassProcessConfiguration(updateSnapshotDependencies, configWithRealGitVersions, dependencyConfig,
+            peassEnv,
+            displayRTSLogs, displayLogs, displayRCALogs, pattern);
       return peassConfig;
    }
 
@@ -230,6 +292,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       listener.getLogger().println("Excludes: " + excludes);
       listener.getLogger().println("Strategy: " + measurementMode + " Source Instrumentation: " + useSourceInstrumentation + " Aggregation: " + useAggregation);
       listener.getLogger().println("Create default constructor: " + createDefaultConstructor);
+      listener.getLogger().println("Fail on error in RTS: " + failOnRtsError);
    }
 
    private String getJobName(final Run<?, ?> run) {
@@ -279,6 +342,11 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
             config.getKiekerConfig().setRecord(AllowedKiekerRecord.DURATION);
          }
       }
+      if (!"".equals(excludeForTracing)) {
+         LinkedHashSet<String> excludeSet = IncludeExcludeParser.getStringSet(excludeForTracing);
+         config.getKiekerConfig().setExcludeForTracing(excludeSet);
+      }
+
       if (useAggregation && !useSourceInstrumentation) {
          throw new RuntimeException("Aggregation may only be used with source instrumentation currently.");
       }
@@ -305,17 +373,17 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       config.getExecutionConfig().setTestExecutor(testExecutor);
 
       if (clazzFolders != null && !"".equals(clazzFolders.trim())) {
-         String[] pathes = clazzFolders.trim().split(";");
+         List<String> pathes = ExecutionConfig.buildFolderList(clazzFolders);
          List<String> clazzFolders2 = config.getExecutionConfig().getClazzFolders();
          clazzFolders2.clear();
-         clazzFolders2.addAll(Arrays.asList(pathes));
+         clazzFolders2.addAll(pathes);
       }
 
       if (testClazzFolders != null && !"".equals(testClazzFolders.trim())) {
-         String[] testPathes = testClazzFolders.trim().split(";");
+         List<String> testPathes = ExecutionConfig.buildFolderList(testClazzFolders);
          List<String> testClazzFolders2 = config.getExecutionConfig().getTestClazzFolders();
          testClazzFolders2.clear();
-         testClazzFolders2.addAll(Arrays.asList(testPathes));
+         testClazzFolders2.addAll(testPathes);
       }
 
       if (testGoal != null && !"".equals(testGoal)) {
@@ -325,6 +393,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       if (pl != null && !"".equals(pl)) {
          config.getExecutionConfig().setPl(pl);
       }
+
+      config.getKiekerConfig().setOnlyOneCallRecording(onlyOneCallRecording);
 
       System.out.println("Building, iterations: " + iterations + " test goal: " + testGoal);
       return config;
@@ -338,6 +408,11 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          oldVersion = "HEAD~" + versionDiff;
       }
       return oldVersion;
+   }
+
+   @Override
+   public BuildStepMonitor getRequiredMonitorService() {
+      return BuildStepMonitor.BUILD;
    }
 
    public int getVMs() {
@@ -384,11 +459,11 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public void setTimeout(final int timeout) {
       this.timeout = timeout;
    }
-   
+
    public int getKiekerWaitTime() {
       return kiekerWaitTime;
    }
-   
+
    @DataBoundSetter
    public void setKiekerWaitTime(final int kiekerWaitTime) {
       this.kiekerWaitTime = kiekerWaitTime;
@@ -420,11 +495,11 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public void setVersionDiff(final int versionDiff) {
       this.versionDiff = versionDiff;
    }
-   
+
    public int getTraceSizeInMb() {
       return traceSizeInMb;
    }
-   
+
    @DataBoundSetter
    public void setTraceSizeInMb(final int traceSizeInMb) {
       this.traceSizeInMb = traceSizeInMb;
@@ -699,14 +774,50 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public void setTestClazzFolders(final String testClazzFolders) {
       this.testClazzFolders = testClazzFolders;
    }
-   
+
+   public boolean isFailOnRtsError() {
+      return failOnRtsError;
+   }
+
+   @DataBoundSetter
+   public void setFailOnRtsError(final boolean failOnRtsError) {
+      this.failOnRtsError = failOnRtsError;
+   }
+
    public long getKiekerQueueSize() {
       return kiekerQueueSize;
    }
-   
+
    @DataBoundSetter
    public void setKiekerQueueSize(final long kiekerQueueSize) {
       this.kiekerQueueSize = kiekerQueueSize;
+   }
+
+   public boolean isOnlyOneCallRecording() {
+      return onlyOneCallRecording;
+   }
+
+   @DataBoundSetter
+   public void setOnlyOneCallRecording(final boolean onlyOneCallRecording) {
+      this.onlyOneCallRecording = onlyOneCallRecording;
+   }
+
+   public String getExcludeForTracing() {
+      return excludeForTracing;
+   }
+
+   @DataBoundSetter
+   public void setExcludeForTracing(final String excludeForTracing) {
+      this.excludeForTracing = excludeForTracing;
+   }
+
+   public String getCredentialsId() {
+      return credentialsId;
+   }
+
+   @DataBoundSetter
+   public void setCredentialsId(final String credentialsId) {
+      this.credentialsId = credentialsId;
    }
 
    @Symbol("measure")
@@ -729,6 +840,77 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       @Override
       public String getDisplayName() {
          return Messages.MeasureVersion_DescriptorImpl_DisplayName();
+      }
+
+      public ListBoxModel doFillCredentialsIdItems(@AncestorInPath Item project,
+            @QueryParameter final String url,
+            @QueryParameter final String credentialsId) {
+         if (project == null && !Jenkins.get().hasPermission(Jenkins.ADMINISTER) ||
+               project != null && !project.hasPermission(Item.EXTENDED_READ)) {
+            return new StandardListBoxModel().includeCurrentValue(credentialsId);
+         }
+         if (project == null) {
+            /*
+             * Construct a fake project, suppress the deprecation warning because the replacement for the deprecated API isn't accessible in this context.
+             */
+            @SuppressWarnings("deprecation")
+            Item fakeProject = new FreeStyleProject(Jenkins.get(), "fake-" + UUID.randomUUID().toString());
+            project = fakeProject;
+         }
+         return new StandardListBoxModel()
+               .includeEmptyValue()
+               .includeMatchingAs(
+                     project instanceof Queue.Task
+                           ? Tasks.getAuthenticationOf((Queue.Task) project)
+                           : ACL.SYSTEM,
+                     project,
+                     StandardUsernamePasswordCredentials.class,
+                     new LinkedList<>(),
+                     CredentialsMatchers.instanceOf(StandardUsernamePasswordCredentials.class))
+               .includeCurrentValue(credentialsId);
+      }
+
+      public FormValidation doCheckCredentialsId(@AncestorInPath final Item project,
+            @QueryParameter String url,
+            @QueryParameter String value) {
+         if (project == null && !Jenkins.get().hasPermission(Jenkins.ADMINISTER) ||
+               project != null && !project.hasPermission(Item.EXTENDED_READ)) {
+            return FormValidation.ok();
+         }
+
+         value = Util.fixEmptyAndTrim(value);
+         if (value == null) {
+            return FormValidation.ok();
+         }
+
+         url = Util.fixEmptyAndTrim(url);
+         if (url == null)
+         // not set, can't check
+         {
+            return FormValidation.ok();
+         }
+
+         if (url.indexOf('$') >= 0)
+         // set by variable, can't check
+         {
+            return FormValidation.ok();
+         }
+         for (ListBoxModel.Option o : CredentialsProvider
+               .listCredentials(StandardUsernameCredentials.class, project, project instanceof Queue.Task
+                     ? Tasks.getAuthenticationOf((Queue.Task) project)
+                     : ACL.SYSTEM,
+                     new LinkedList<>(),
+                     CredentialsMatchers.instanceOf(StandardUsernamePasswordCredentials.class))) {
+            if (StringUtils.equals(value, o.value)) {
+               // TODO check if this type of credential is acceptable to the Git client or does it merit warning
+               // NOTE: we would need to actually lookup the credential to do the check, which may require
+               // fetching the actual credential instance from a remote credentials store. Perhaps this is
+               // not required
+               return FormValidation.ok();
+            }
+         }
+         // no credentials available, can't check
+         return FormValidation.warning("Cannot find any credentials with id " + value);
       }
 
       public ListBoxModel doFillMeasurementModeItems(@QueryParameter final String measurementMode) {

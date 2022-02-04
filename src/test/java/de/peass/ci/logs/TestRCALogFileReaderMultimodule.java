@@ -17,6 +17,7 @@ import org.mockito.Mockito;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
+import de.dagere.peass.ci.MeasureVersionBuilder;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.LogFileReader;
 import de.dagere.peass.ci.logs.rca.RCALevel;
@@ -28,7 +29,7 @@ import de.dagere.peass.folders.ResultsFolders;
 
 public class TestRCALogFileReaderMultimodule {
 
-   private final File localFolder = new File("target/peass-data");
+   private final File localFolder = new File("target/"+ MeasureVersionBuilder.PEASS_FOLDER_NAME);
    private final File testFolder = new File(localFolder, "current_peass");
    
    private static final TestCase test = new TestCase("de.test.CalleeTest","onlyCallMethod2", "moduleA");
