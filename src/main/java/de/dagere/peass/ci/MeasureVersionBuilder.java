@@ -116,28 +116,28 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private String testGoal = "test";
    private String pl = "";
    
-   private RCAStrategy measurementMode = RCAStrategy.LEVELWISE;
+   private RCAStrategy measurementMode = RCAStrategy.UNTIL_SOURCE_CHANGE;
    
    private boolean executeBeforeClassInMeasurement = false;
    private boolean onlyMeasureWorkload = false;
    private boolean onlyOneCallRecording = false;
 
-   private boolean updateSnapshotDependencies = true;
+   private boolean updateSnapshotDependencies = false;
    private boolean removeSnapshots = false;
    private boolean useAlternativeBuildfile = false;
    private boolean excludeLog4j = false;
 
    private boolean useSourceInstrumentation = true;
    private boolean useAggregation = true;
-   private boolean createDefaultConstructor = true;
+   private boolean createDefaultConstructor = false;
 
    private boolean redirectSubprocessOutputToFile = true;
 
    private String testTransformer = "de.dagere.peass.testtransformation.JUnitTestTransformer";
    private String testExecutor = "default";
 
-   private String clazzFolders;
-   private String testClazzFolders;
+   private String clazzFolders = "src/main/java:src/java";
+   private String testClazzFolders = "src/test/java:src/test";
 
    private boolean failOnRtsError = false;
 

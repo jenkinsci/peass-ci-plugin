@@ -28,7 +28,7 @@
   </f:entry>
   <f:advanced>
     <f:entry title="${%rcaStrategy}" field="measurementMode" description="${%rcaStrategyDescr}">
-      <f:select />
+      <f:select default="UNTIL_SOURCE_CHANGE"/>
     </f:entry>
     <f:entry title="${%includes}" field="includes" description="${%includesDescr}">
       <f:textbox default="" />
@@ -40,7 +40,7 @@
       <f:textbox default="" />
     </f:entry>
     <f:entry title="${%testGoal}" field="testGoal" description="${%testGoalDescr}">
-      <f:textbox default="" />
+      <f:textbox default="test" />
     </f:entry>
     <f:entry title="${%pl}" field="pl" description="${%plDescr}">
       <f:textbox default="" />
@@ -67,10 +67,10 @@
       <f:checkbox />
     </f:entry>
     <f:entry title="${%useSourceInstrumentation}" field="useSourceInstrumentation" description="${%useSourceInstrumentationDescr}">
-      <f:checkbox />
+      <f:checkbox default="true"/>
     </f:entry>
     <f:entry title="${%useAggregation}" field="useAggregation" description="${%useAggregationDescr}">
-      <f:checkbox />
+      <f:checkbox default="true"/>
     </f:entry>
     <f:entry title="${%useGC}" field="useGC" description="${%useGCDescr}">
       <f:checkbox />
@@ -79,13 +79,13 @@
       <f:checkbox />
     </f:entry>
     <f:entry title="${%redirectToNull}" field="redirectToNull" description="${%redirectToNullDescr}">
-      <f:checkbox />
+      <f:checkbox default="true"/>
     </f:entry>
     <f:entry title="${%showStart}" field="showStart" description="${%showStartDescr}">
       <f:checkbox />
     </f:entry>
     <f:entry title="${%createDefaultConstructor}" field="createDefaultConstructor" description="${%createDefaultConstructorDescr}">
-      <f:checkbox />
+      <f:checkbox default="unchecked"/>
     </f:entry>
     <f:entry title="${%generateCoverageSelection}" field="generateCoverageSelection" description="${%generateCoverageSelectionDescr}">
       <f:checkbox />
@@ -100,7 +100,7 @@
       <f:textbox default="0.01" />
     </f:entry>
     <f:entry title="${%redirectSubprocessOutputToFile}" field="redirectSubprocessOutputToFile" description="${%redirectSubprocessOutputToFileDescr}">
-      <f:checkbox />
+      <f:checkbox default="true"/>
     </f:entry>
     <f:entry title="${%displayRTSLogs}" field="displayRTSLogs" description="${%displayRTSLogsDescr}">
       <f:checkbox default="true" />
@@ -112,10 +112,10 @@
       <f:checkbox default="true" />
     </f:entry>
     <f:entry title="${%testExecutor}" field="testExecutor" description="${%testExecutorDescr}">
-      <f:textbox />
+      <f:textbox default="default"/>
     </f:entry>
     <f:entry title="${%testTransformer}" field="testTransformer" description="${%testTransformerDescr}">
-      <f:textbox />
+      <f:textbox default="de.dagere.peass.testtransformation.JUnitTestTransformer"/>
     </f:entry>
     <f:entry title="${%clazzFolders}" field="clazzFolders" description="${%clazzFoldersDescr}">
       <f:textbox default="src/main/java:src/java" />
