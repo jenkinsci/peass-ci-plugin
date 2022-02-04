@@ -13,11 +13,13 @@ public class LogOverviewAction extends VisibleAction {
    private Map<TestCase, List<LogFiles>> logFiles = new HashMap<>();
    private String version;
    private String versionOld;
+   private boolean redirectSubprocessOutputToFile;
 
-   public LogOverviewAction(final Map<TestCase, List<LogFiles>> logFiles, final String version, final String versionOld) {
+   public LogOverviewAction(final Map<TestCase, List<LogFiles>> logFiles, final String version, final String versionOld, final boolean redirectSubprocessOutputToFile) {
       this.logFiles = logFiles;
       this.version = version;
       this.versionOld = versionOld;
+      this.redirectSubprocessOutputToFile = redirectSubprocessOutputToFile;
    }
    
    public Map<TestCase, List<LogFiles>> getLogFiles() {
@@ -30,6 +32,10 @@ public class LogOverviewAction extends VisibleAction {
    
    public String getVersionOld() {
       return versionOld;
+   }
+
+   public boolean isRedirectSubprocessOutputToFile(){
+      return redirectSubprocessOutputToFile;
    }
 
    @Override
