@@ -44,7 +44,8 @@
   <f:advanced>
 
 
-    <h1>Ausführungssteuerung</h1>
+    <h1>${%ExecutionConfiguration}</h1>
+    ${%ExecutionConfigurationDescr}
     <table>
       <tr>
         <td>
@@ -109,7 +110,8 @@
       </tr>
     </table>
 
-    <h1>Versionsauswahl</h1>
+    <h1>${%VersionSelection}</h1>
+    ${%VersionSelectionDescr}
     <table>
       <tr>
         <td>
@@ -130,7 +132,8 @@
       </tr>
     </table>
 
-    <h1>Ausgabensteuerung</h1>
+    <h1>${%OutputHandling}</h1>
+    ${%OutputHandlingDescr}
     <table>
       <tr>
         <td>
@@ -172,7 +175,8 @@
     </table>
 
 
-    <h1>RCA-Konfiguration</h1>
+    <h1>${%RCAConfig}</h1>
+    ${%RCAConfigDescr}
     <table>
       <tr>
         <td>
@@ -200,9 +204,9 @@
       </tr>
     </table>
 
-    <h1>Tracingkonfiguration</h1>
+    <h1>${%TracingConfig}</h1>
+    ${%TracingConfigDescr}
     <table>
-
       <tr>
         <td>
           <f:entry title="${%kiekerWaitTime}" field="kiekerWaitTime" description="${%kiekerWaitTimeDescr}">
@@ -237,7 +241,8 @@
       </tr>
     </table>
 
-    <h1>Technische Kompatibilität</h1>
+    <h1>${%TechnicalCompatibility}</h1>
+    ${%TechnicalCompatibilityDescr}
     <table>
       <tr>
         <td>
