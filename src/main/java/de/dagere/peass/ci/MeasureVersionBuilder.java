@@ -83,11 +83,16 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       Constants.OBJECTMAPPER.registerModules(keyDeserializer);
    }
 
-   private int VMs;
-   private int iterations;
-   private int warmup;
-   private int repetitions;
+   private int VMs = 30;
+   private int iterations = 5;
+   private int warmup = 5;
+   private int repetitions = 1000000;
    private int timeout = 5;
+   
+   private boolean executeRCA = true;
+   private boolean executeParallel = false;
+   private String credentialsId;
+   
    private int kiekerWaitTime = 10;
    private long kiekerQueueSize = 10000000;
    private double significanceLevel = 0.01;
@@ -110,9 +115,9 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private String properties = "";
    private String testGoal = "test";
    private String pl = "";
-   private boolean executeRCA = true;
+   
    private RCAStrategy measurementMode = RCAStrategy.LEVELWISE;
-   private boolean executeParallel = false;
+   
    private boolean executeBeforeClassInMeasurement = false;
    private boolean onlyMeasureWorkload = false;
    private boolean onlyOneCallRecording = false;
@@ -138,7 +143,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
    private String excludeForTracing = "";
 
-   private String credentialsId;
+   
 
    @DataBoundConstructor
    public MeasureVersionBuilder() {
