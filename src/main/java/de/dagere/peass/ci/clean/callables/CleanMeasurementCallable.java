@@ -7,6 +7,7 @@ import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import org.jenkinsci.remoting.RoleChecker;
 
+import de.dagere.peass.ci.persistence.TrendFileUtil;
 import de.dagere.peass.ci.process.JenkinsLogRedirector;
 import de.dagere.peass.folders.ResultsFolders;
 import hudson.FilePath.FileCallable;
@@ -34,12 +35,7 @@ public class CleanMeasurementCallable implements FileCallable<Boolean> {
          File folder = new File(potentialSlaveWorkspace.getParentFile(), projectName + "_fullPeass");
          ResultsFolders resultsFolders = new ResultsFolders(folder, projectName);
 
-         deleteResultFiles(resultsFolders);
-         deleteLogFolders(resultsFolders);
-
-         CleanUtil.cleanProjectFolder(folder, projectName);
-
-         deleteCopiedFolders(folder);
+         deleteAllMeasurementData(projectName, folder, resultsFolders);
 
          return true;
       } catch (IOException e) {
@@ -49,8 +45,30 @@ public class CleanMeasurementCallable implements FileCallable<Boolean> {
          return false;
       }
    }
+   
+   public static void cleanFolder(final String projectName, final File folder) throws IOException {
+      System.out.println("Trying " + folder + " " + projectName);
+      ResultsFolders resultsFolders = new ResultsFolders(folder, projectName);
+      
+      File trendFile = new File(folder, TrendFileUtil.TREND_FILE_NAME);
+      if (trendFile.exists()) {
+         System.out.println("Deleting " + trendFile);
+         System.out.println("Success: " + trendFile.delete());
+      }
 
-   private void deleteCopiedFolders(final File folder) throws IOException {
+      deleteAllMeasurementData(projectName, folder, resultsFolders);
+   }
+
+   private static void deleteAllMeasurementData(final String projectName, final File folder, final ResultsFolders resultsFolders) throws IOException {
+      deleteResultFiles(resultsFolders);
+      deleteLogFolders(resultsFolders);
+
+      CleanUtil.cleanProjectFolder(folder, projectName);
+
+      deleteCopiedFolders(folder);
+   }
+
+   private static void deleteCopiedFolders(final File folder) throws IOException {
       File[] measurementFolders = folder.listFiles((FileFilter) new WildcardFileFilter(ResultsFolders.MEASUREMENT_PREFIX + "*"));
       if (measurementFolders != null) {
          for (File oldMeasurementFolder : measurementFolders) {
@@ -60,7 +78,7 @@ public class CleanMeasurementCallable implements FileCallable<Boolean> {
       }
    }
 
-   private void deleteResultFiles(final ResultsFolders resultsFolders) throws IOException {
+   private static void deleteResultFiles(final ResultsFolders resultsFolders) throws IOException {
       System.out.println("Deleting " + resultsFolders.getChangeFile());
       System.out.println("Success: " + resultsFolders.getChangeFile().delete());
       System.out.println("Deleting " + resultsFolders.getStatisticsFile());
@@ -68,7 +86,7 @@ public class CleanMeasurementCallable implements FileCallable<Boolean> {
       
    }
 
-   private void deleteLogFolders(final ResultsFolders resultsFolders) throws IOException {
+   private static void deleteLogFolders(final ResultsFolders resultsFolders) throws IOException {
       System.out.println("Deleting " + resultsFolders.getMeasurementLogFolder());
       FileUtils.deleteDirectory(resultsFolders.getMeasurementLogFolder());
    }

@@ -47,8 +47,16 @@ public class CleanRTSCallable implements FileCallable<Boolean> {
          return false;
       }
    }
+   
+   public static void cleanFolder(final String projectName, final File folder) throws IOException {
+      System.out.println("Trying " + folder + " " + projectName);
+      ResultsFolders resultsFolders = new ResultsFolders(folder, projectName);
 
-   private void deleteResultFiles(final ResultsFolders resultsFolders) throws IOException {
+      deleteResultFiles(resultsFolders);
+      deleteLogFolders(resultsFolders);
+   }
+
+   private static void deleteResultFiles(final ResultsFolders resultsFolders) throws IOException {
       System.out.println("Deleting " + resultsFolders.getDependencyFile());
       System.out.println("Success: " + resultsFolders.getDependencyFile().delete());
 
@@ -68,7 +76,7 @@ public class CleanRTSCallable implements FileCallable<Boolean> {
 
    }
 
-   private void deleteLogFolders(final ResultsFolders resultsFolders) throws IOException {
+   private static void deleteLogFolders(final ResultsFolders resultsFolders) throws IOException {
       System.out.println("Deleting " + resultsFolders.getRtsLogFolder());
       FileUtils.deleteDirectory(resultsFolders.getRtsLogFolder());
       System.out.println("Deleting " + resultsFolders.getSourceReadLogFolder());

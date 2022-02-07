@@ -10,6 +10,7 @@ import org.jvnet.hudson.test.JenkinsRule;
 
 import com.google.common.io.Files;
 
+import de.dagere.peass.ci.MeasureVersionBuilder;
 import de.dagere.peass.ci.clean.CleanBuilder;
 import hudson.model.FreeStyleBuild;
 import hudson.model.FreeStyleProject;
@@ -39,13 +40,14 @@ public class CleanBuilderTest {
    }
 
    private void checkAllDeleted() {
-      Assert.assertFalse(dependencyFile.exists());
+      Assert.assertFalse("Dependencyfile " + dependencyFile.getAbsolutePath() + " should not exist", dependencyFile.exists());
       Assert.assertFalse(trendFile.exists());
       Assert.assertFalse(visualizationFolder.exists());
    }
 
    private void createDummyData(final FreeStyleProject project) throws IOException {
-      File rootDir = project.getRootDir();
+      File rootDir = new File(project.getRootDir(), MeasureVersionBuilder.PEASS_FOLDER_NAME);
+      rootDir.mkdirs();
       dependencyFile = new File(rootDir, "deps_" + project.getName() + ".json");
       Files.touch(dependencyFile);
       

@@ -6,6 +6,7 @@ import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import org.jenkinsci.remoting.RoleChecker;
 
+import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.process.JenkinsLogRedirector;
 import de.dagere.peass.folders.CauseSearchFolders;
 import de.dagere.peass.folders.ResultsFolders;
@@ -45,8 +46,15 @@ public class CleanRCACallable implements FileCallable<Boolean> {
    }
 
    public static void cleanFolder(final String projectName, final File folder) throws IOException {
+      System.out.println("Trying " + folder + " " + projectName);
       ResultsFolders resultsFolders = new ResultsFolders(folder, projectName);
 
+      File visualizationFolder = new File(folder, VisualizationFolderManager.VISUALIZATION_FOLDER_NAME);
+      if (visualizationFolder.exists()) {
+         System.out.println("Deleting " + visualizationFolder);
+         FileUtils.deleteDirectory(visualizationFolder);
+      }
+      
       deleteRCALogFolder(resultsFolders);
    }
 
@@ -64,7 +72,7 @@ public class CleanRCACallable implements FileCallable<Boolean> {
          System.out.println("Deleting: " + folders.getRCALogFolder());
          FileUtils.cleanDirectory(folders.getRCALogFolder());
       } else {
-         System.err.println("Project folder was not existing - not cleaning");
+         System.err.println("Project folder " + resultsFolders.getPeassFolders()+ " was not existing - not cleaning");
       }
 
    }

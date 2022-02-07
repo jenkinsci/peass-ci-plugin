@@ -11,6 +11,8 @@ import de.dagere.peass.folders.ResultsFolders;
 import hudson.model.Run;
 
 public class VisualizationFolderManager {
+   
+   public static final String VISUALIZATION_FOLDER_NAME = "visualization";
 
    private static final Logger LOG = LogManager.getLogger(VisualizationFolderManager.class);
 
@@ -115,7 +117,7 @@ public class VisualizationFolderManager {
    }
 
    public File getVisualizationFolder() {
-      final File visualizationFolder = new File(localWorkspace, "visualization");
+      final File visualizationFolder = new File(localWorkspace, VISUALIZATION_FOLDER_NAME);
       if (!visualizationFolder.exists()) {
          if (!visualizationFolder.mkdirs()) {
             throw new RuntimeException("Could not create " + visualizationFolder.getAbsolutePath());
