@@ -43,7 +43,7 @@ Therefore, your job with credentials might look like this:
 ```
   withCredentials([usernamePassword(credentialsId: 'myCredentialId', usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASSWORD')]){ 
     script {
-      measure properties: "-PmavenPassword=$NEXUS_PASSWORD -PmavenUser=$NEXUS_USER",
+      measure properties: '-PmavenPassword=$NEXUS_PASSWORD -PmavenUser=$NEXUS_USER',
         ...
       }
     }
