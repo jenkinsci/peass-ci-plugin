@@ -1,8 +1,14 @@
 package de.peass.ci.clean.callables;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
+
+import com.google.common.io.Files;
 
 import de.dagere.peass.ci.clean.CleanBuilder;
 import hudson.model.FreeStyleBuild;
@@ -14,15 +20,39 @@ public class CleanBuilderTest {
    @Rule
    public JenkinsRule jenkins = new JenkinsRule();
    
+   private File dependencyFile, trendFile, visualizationFolder;
+   
    @Test
    public void testEmptyFolderCleaning() throws Exception {
       FreeStyleProject project = jenkins.createFreeStyleProject();
 
+      createDummyData(project);
+      
       CleanBuilder builder = new CleanBuilder();
 
       project.getBuildersList().add(builder);
       project = jenkins.configRoundtrip(project);
 
       FreeStyleBuild build = jenkins.buildAndAssertStatus(Result.SUCCESS, project);
+      
+      checkAllDeleted();
+   }
+
+   private void checkAllDeleted() {
+      Assert.assertFalse(dependencyFile.exists());
+      Assert.assertFalse(trendFile.exists());
+      Assert.assertFalse(visualizationFolder.exists());
+   }
+
+   private void createDummyData(final FreeStyleProject project) throws IOException {
+      File rootDir = project.getRootDir();
+      dependencyFile = new File(rootDir, "deps_" + project.getName() + ".json");
+      Files.touch(dependencyFile);
+      
+      trendFile = new File(rootDir, "trend.json");
+      Files.touch(trendFile);
+      
+      visualizationFolder = new File(rootDir, "visualization");
+      visualizationFolder.mkdir();
    }
 }
