@@ -298,6 +298,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       listener.getLogger().println("Strategy: " + measurementMode + " Source Instrumentation: " + useSourceInstrumentation + " Aggregation: " + useAggregation);
       listener.getLogger().println("Create default constructor: " + createDefaultConstructor);
       listener.getLogger().println("Fail on error in RTS: " + failOnRtsError);
+      listener.getLogger().println("Redirect subprocess output to file: " + redirectSubprocessOutputToFile);
    }
 
    private String getJobName(final Run<?, ?> run) {

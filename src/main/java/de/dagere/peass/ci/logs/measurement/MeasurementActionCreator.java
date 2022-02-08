@@ -43,7 +43,7 @@ public class MeasurementActionCreator {
       createLogActions(run, logFiles);
 
       ExecutionConfig executionConfig = measurementConfig.getExecutionConfig();
-      LogOverviewAction logOverviewAction = new LogOverviewAction(logFiles, executionConfig.getVersion().substring(0, 6), executionConfig.getVersionOld().substring(0, 6));
+      LogOverviewAction logOverviewAction = new LogOverviewAction(logFiles, executionConfig.getVersion().substring(0, 6), executionConfig.getVersionOld().substring(0, 6), executionConfig.isRedirectSubprocessOutputToFile());
       run.addAction(logOverviewAction);
    }
 
