@@ -11,11 +11,13 @@ public class RCALogOverviewAction extends VisibleAction {
    private final Map<TestCase, List<RCALevel>> testLevelMap;
    private String version;
    private String versionOld;
+   private boolean redirectSubprocessOutputToFile;
 
-   public RCALogOverviewAction(final Map<TestCase, List<RCALevel>> testLevelMap, final String version, final String versionOld) {
+   public RCALogOverviewAction(final Map<TestCase, List<RCALevel>> testLevelMap, final String version, final String versionOld, final boolean redirectSubprocessOutputToFile) {
       this.testLevelMap = testLevelMap;
       this.version = version;
       this.versionOld = versionOld;
+      this.redirectSubprocessOutputToFile = redirectSubprocessOutputToFile;
    }
 
    public Map<TestCase, List<RCALevel>> getTestLevelMap() {
@@ -28,6 +30,10 @@ public class RCALogOverviewAction extends VisibleAction {
 
    public String getVersionOld() {
       return versionOld;
+   }
+
+   public boolean isRedirectSubprocessOutputToFile(){
+      return redirectSubprocessOutputToFile;
    }
 
    @Override

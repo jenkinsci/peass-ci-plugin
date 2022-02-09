@@ -61,7 +61,7 @@ public class RTSActionCreator {
    private void createOverviewAction(final Map<String, File> processSuccessRuns, final Map<TestCase, RTSLogData> rtsVmRuns, final Map<TestCase, RTSLogData> rtsVmRunsPredecessor,
          final RTSInfos rtsInfos) {
       RTSLogOverviewAction overviewAction = new RTSLogOverviewAction(processSuccessRuns, rtsVmRuns, rtsVmRunsPredecessor,
-            processSuccessRunSucceeded, measurementConfig.getExecutionConfig().getVersion(), measurementConfig.getExecutionConfig().getVersionOld());
+            processSuccessRunSucceeded, measurementConfig.getExecutionConfig().getVersion(), measurementConfig.getExecutionConfig().getVersionOld(),measurementConfig.getExecutionConfig().isRedirectSubprocessOutputToFile());
       overviewAction.setStaticChanges(rtsInfos.isStaticChanges());
       overviewAction.setStaticallySelectedTests(rtsInfos.isStaticallySelectedTests());
       run.addAction(overviewAction);
