@@ -14,12 +14,14 @@ public class IncludeExcludeParser {
       if (raw != null && raw.trim().length() > 0) {
          final String nonSpaceIncludes = raw.trim();
          for (String include : nonSpaceIncludes.split(";")) {
-            try {
-               PatternParser.parseToPattern(include);
-            } catch (InvalidPatternException e) {
-               throw new RuntimeException("Can not parse pattern " + include, e);
+            if (include.length() > 0) {
+               try {
+                  PatternParser.parseToPattern(include);
+               } catch (InvalidPatternException e) {
+                  throw new RuntimeException("Can not parse pattern " + include, e);
+               }
+               includeList.add(include);
             }
-            includeList.add(include);
          }
       }
       return includeList;
