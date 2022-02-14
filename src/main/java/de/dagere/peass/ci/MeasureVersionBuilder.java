@@ -34,7 +34,6 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.ci.logs.rts.AggregatedRTSResult;
-import de.dagere.peass.ci.persistence.TestcaseKeyDeserializer;
 import de.dagere.peass.ci.process.IncludeExcludeParser;
 import de.dagere.peass.ci.process.JenkinsLogRedirector;
 import de.dagere.peass.ci.process.LocalPeassProcessManager;
@@ -44,6 +43,7 @@ import de.dagere.peass.config.ExecutionConfig;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.config.MeasurementStrategy;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.data.deserializer.TestcaseKeyDeserializer;
 import de.dagere.peass.execution.utils.EnvironmentVariables;
 import de.dagere.peass.measurement.rca.RCAStrategy;
 import de.dagere.peass.utils.Constants;

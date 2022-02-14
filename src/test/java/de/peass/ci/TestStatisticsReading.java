@@ -12,8 +12,8 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
-import de.dagere.peass.ci.persistence.TestcaseKeyDeserializer;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.data.deserializer.TestcaseKeyDeserializer;
 import de.dagere.peass.measurement.analysis.ProjectStatistics;
 import de.dagere.peass.measurement.statistics.data.TestcaseStatistic;
 import de.dagere.peass.utils.Constants;
