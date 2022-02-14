@@ -15,6 +15,7 @@ import de.dagere.peass.ci.rts.RTSVisualizationCreator;
 import de.dagere.peass.config.DependencyConfig;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.ChangedEntity;
+import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.persistence.Dependencies;
 import de.dagere.peass.dependency.persistence.ExecutionData;
 import de.dagere.peass.folders.ResultsFolders;
@@ -44,7 +45,7 @@ public class TestRTSVisualizationCreator {
 
    private void writeEmptyDependencies(final ResultsFolders localWorkspace) throws IOException, JsonGenerationException, JsonMappingException {
       Dependencies emptyDependencies = new Dependencies();
-      emptyDependencies.getInitialversion().addDependency(new ChangedEntity("Test#test"), new ChangedEntity("SomeCallee#method"));
+      emptyDependencies.getInitialversion().addDependency(new TestCase("Test#test"), new ChangedEntity("SomeCallee#method"));
       Constants.OBJECTMAPPER.writeValue(localWorkspace.getDependencyFile(), emptyDependencies);
    }
 }

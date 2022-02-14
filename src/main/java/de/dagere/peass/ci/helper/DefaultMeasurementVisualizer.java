@@ -60,7 +60,7 @@ public class DefaultMeasurementVisualizer {
             try {
                Kopemedata data = XMLDataLoader.loadData(testcaseFile);
 
-               TestCase testcase = new TestCase(data.getTestcases(), "");
+               TestCase testcase = new TestCase(data.getTestcases());
 
                KoPeMeTreeConverter treeConverter = new KoPeMeTreeConverter(detailResultsFolder, version, testcase);
                File testcaseVisualizationFile = generateJSFile(testcase, treeConverter);
