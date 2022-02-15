@@ -1,32 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
-	<Appenders>
-		<Console name="Console" target="SYSTEM_OUT">
-			<PatternLayout
-				pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36}:%L - %msg%n" />
-		</Console>
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36}:%L - %msg%n" />
+    </Console>
 
-	</Appenders>
-	<Loggers>
-		<Logger name="com.gargoylesoftware" level="fatal"
-			additivity="false">
-			<AppenderRef ref="Console" />
-		</Logger>
-		<Logger name="hidden.jth.org.apache" level="info"
-			additivity="false">
-			<AppenderRef ref="Console" />
-		</Logger>
-		<Logger name="org.apache" level="info" additivity="false">
-			<AppenderRef ref="Console" />
-		</Logger>
-		<Logger name="org.eclipse" level="info" additivity="false">
-			<AppenderRef ref="Console" />
-		</Logger>
+  </Appenders>
+  <Loggers>
+    <Logger name="com.gargoylesoftware" level="fatal" additivity="false">
+      <AppenderRef ref="Console" />
+    </Logger>
+    <Logger name="hidden.jth.org.apache" level="info" additivity="false">
+      <AppenderRef ref="Console" />
+    </Logger>
+    <Logger name="org.apache" level="info" additivity="false">
+      <AppenderRef ref="Console" />
+    </Logger>
+    <Logger name="org.eclipse" level="info" additivity="false">
+      <AppenderRef ref="Console" />
+    </Logger>
 
-		<Root level="debug">
-			<AppenderRef ref="Console" />
-		</Root>
-	</Loggers>
+    <Root level="debug">
+      <AppenderRef ref="Console" />
+    </Root>
+  </Loggers>
 
 
 </Configuration>
