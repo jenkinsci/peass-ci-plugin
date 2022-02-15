@@ -6,3 +6,5 @@ results/
 work/
 .externalToolBuilders/
 .factorypath
+.idea/
+peass-ci.iml
