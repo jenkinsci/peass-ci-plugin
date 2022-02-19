@@ -73,7 +73,7 @@ public class RCAExecutor {
                   String testclazz = testClazzName.substring(moduleSeparatorIndex + 1, testClazzName.length());
                   testCase = new TestCase(testclazz, change.getMethod(), module, change.getParams());
                } else {
-                  testCase = new TestCase(testClazzName, change.getMethod(), null, change.getParams());
+                  testCase = new TestCase(testClazzName, change.getMethod(), "", change.getParams());
                }
                boolean match = NonIncludedTestRemover.isTestIncluded(testCase, config.getExecutionConfig());
                if (match) {
