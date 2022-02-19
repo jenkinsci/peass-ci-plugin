@@ -20,6 +20,7 @@ import de.dagere.peass.analysis.changes.Changes;
 import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.ci.NonIncludedTestRemover;
 import de.dagere.peass.config.MeasurementConfig;
+import de.dagere.peass.dependency.analysis.data.ChangedEntity;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependencyprocessors.ViewNotFoundException;
 import de.dagere.peass.execution.utils.EnvironmentVariables;
@@ -64,7 +65,16 @@ public class RCAExecutor {
 
          for (Entry<String, List<Change>> testcases : versionChanges.getTestcaseChanges().entrySet()) {
             for (Change change : testcases.getValue()) {
-               final TestCase testCase = new TestCase(testcases.getKey(), change.getMethod());
+               final TestCase testCase;
+               String testClazzName = testcases.getKey();
+               if (testClazzName.contains(ChangedEntity.MODULE_SEPARATOR)) {
+                  int moduleSeparatorIndex = testClazzName.indexOf(ChangedEntity.MODULE_SEPARATOR);
+                  String module = testClazzName.substring(0, moduleSeparatorIndex);
+                  String testclazz = testClazzName.substring(moduleSeparatorIndex + 1, testClazzName.length());
+                  testCase = new TestCase(testclazz, change.getMethod(), module, change.getParams());
+               } else {
+                  testCase = new TestCase(testClazzName, change.getMethod(), null, change.getParams());
+               }
                boolean match = NonIncludedTestRemover.isTestIncluded(testCase, config.getExecutionConfig());
                if (match) {
                   try {
@@ -122,7 +132,7 @@ public class RCAExecutor {
    private File getExpectedRCAFile(final TestCase testCase) {
       CauseSearchFolders folders = new CauseSearchFolders(projectFolder);
       final File expectedResultFile = new File(folders.getRcaTreeFolder(config.getExecutionConfig().getVersion(), testCase),
-            testCase.getMethod() + ".json");
+            testCase.getMethodWithParams() + ".json");
       return expectedResultFile;
    }
 
