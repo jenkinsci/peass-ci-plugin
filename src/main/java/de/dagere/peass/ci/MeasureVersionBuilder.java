@@ -34,7 +34,6 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.ci.logs.rts.AggregatedRTSResult;
-import de.dagere.peass.ci.persistence.TestcaseKeyDeserializer;
 import de.dagere.peass.ci.process.IncludeExcludeParser;
 import de.dagere.peass.ci.process.JenkinsLogRedirector;
 import de.dagere.peass.ci.process.LocalPeassProcessManager;
@@ -44,6 +43,7 @@ import de.dagere.peass.config.ExecutionConfig;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.config.MeasurementStrategy;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.data.deserializer.TestcaseKeyDeserializer;
 import de.dagere.peass.execution.utils.EnvironmentVariables;
 import de.dagere.peass.measurement.rca.RCAStrategy;
 import de.dagere.peass.utils.Constants;
@@ -83,11 +83,16 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       Constants.OBJECTMAPPER.registerModules(keyDeserializer);
    }
 
-   private int VMs;
-   private int iterations;
-   private int warmup;
-   private int repetitions;
+   private int VMs = 30;
+   private int iterations = 5;
+   private int warmup = 5;
+   private int repetitions = 1000000;
    private int timeout = 5;
+   
+   private boolean executeRCA = true;
+   private boolean executeParallel = false;
+   private String credentialsId;
+   
    private int kiekerWaitTime = 10;
    private long kiekerQueueSize = 10000000;
    private double significanceLevel = 0.01;
@@ -110,35 +115,35 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private String properties = "";
    private String testGoal = "test";
    private String pl = "";
-   private boolean executeRCA = true;
-   private RCAStrategy measurementMode = RCAStrategy.LEVELWISE;
-   private boolean executeParallel = false;
+   
+   private RCAStrategy measurementMode = RCAStrategy.UNTIL_SOURCE_CHANGE;
+   
    private boolean executeBeforeClassInMeasurement = false;
    private boolean onlyMeasureWorkload = false;
    private boolean onlyOneCallRecording = false;
 
-   private boolean updateSnapshotDependencies = true;
+   private boolean updateSnapshotDependencies = false;
    private boolean removeSnapshots = false;
    private boolean useAlternativeBuildfile = false;
    private boolean excludeLog4j = false;
 
    private boolean useSourceInstrumentation = true;
    private boolean useAggregation = true;
-   private boolean createDefaultConstructor = true;
+   private boolean createDefaultConstructor = false;
 
    private boolean redirectSubprocessOutputToFile = true;
 
    private String testTransformer = "de.dagere.peass.testtransformation.JUnitTestTransformer";
    private String testExecutor = "default";
 
-   private String clazzFolders;
-   private String testClazzFolders;
+   private String clazzFolders = "src/main/java:src/java";
+   private String testClazzFolders = "src/test/java:src/test";
 
    private boolean failOnRtsError = false;
 
    private String excludeForTracing = "";
 
-   private String credentialsId;
+   
 
    @DataBoundConstructor
    public MeasureVersionBuilder() {
@@ -293,6 +298,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       listener.getLogger().println("Strategy: " + measurementMode + " Source Instrumentation: " + useSourceInstrumentation + " Aggregation: " + useAggregation);
       listener.getLogger().println("Create default constructor: " + createDefaultConstructor);
       listener.getLogger().println("Fail on error in RTS: " + failOnRtsError);
+      listener.getLogger().println("Redirect subprocess output to file: " + redirectSubprocessOutputToFile);
    }
 
    private String getJobName(final Run<?, ?> run) {
@@ -917,7 +923,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          ListBoxModel model = new ListBoxModel();
          model.add(new Option("Complete", "COMPLETE", "COMPLETE".equals(measurementMode)));
          model.add(new Option("Levelwise", "LEVELWISE", "LEVELWISE".equals(measurementMode)));
-         model.add(new Option("Until Source Change (Early testing)", "UNTIL_SOURCE_CHANGE", "UNTIL_SOURCE_CHANGE".equals(measurementMode)));
+         model.add(new Option("Until Source Change", "UNTIL_SOURCE_CHANGE", "UNTIL_SOURCE_CHANGE".equals(measurementMode)));
          model.add(new Option("Until Structure Change (NOT IMPLEMENTED)", "UNTIL_STRUCTURE_CHANGE", "UNTIL_STRUCTURE_CHANGE".equals(measurementMode)));
          model.add(new Option("Constant Levels(NOT IMPLEMENTED)", "CONSTANT_LEVELS", "CONSTANT_LEVELS".equals(measurementMode)));
          return model;

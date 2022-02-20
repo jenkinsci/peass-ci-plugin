@@ -36,7 +36,7 @@ public class RCAActionCreator {
       Map<TestCase, List<RCALevel>> testLevelMap = createRCALogActions(reader);
 
       RCALogOverviewAction rcaOverviewAction = new RCALogOverviewAction(testLevelMap, measurementConfig.getExecutionConfig().getVersion().substring(0, 6),
-            measurementConfig.getExecutionConfig().getVersionOld().substring(0, 6));
+            measurementConfig.getExecutionConfig().getVersionOld().substring(0, 6), measurementConfig.getExecutionConfig().isRedirectSubprocessOutputToFile());
       run.addAction(rcaOverviewAction);
    }
 

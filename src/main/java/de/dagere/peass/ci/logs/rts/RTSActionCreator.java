@@ -40,28 +40,28 @@ public class RTSActionCreator {
    public void createRTSActions(final RTSInfos staticChanges) throws IOException {
       if (reader.isLogsExisting()) {
          createOverallLogAction();
-
-         Map<String, File> processSuccessRuns = createProcessSuccessRunsActions();
-
-         Map<TestCase, RTSLogData> rtsVmRuns = createVersionRTSData(measurementConfig.getExecutionConfig().getVersion());
-         Map<TestCase, RTSLogData> rtsVmRunsPredecessor = createVersionRTSData(measurementConfig.getExecutionConfig().getVersionOld());
-
-         boolean versionContainsNonSuccess = rtsVmRuns.values().stream().anyMatch(log -> !log.isSuccess());
-         boolean predecessorContainsNonSuccess = rtsVmRunsPredecessor.values().stream().anyMatch(log -> !log.isSuccess());
-
-         LOG.debug("Errors in logs: {} {}", versionContainsNonSuccess, predecessorContainsNonSuccess);
-         logSummary = new RTSLogSummary(versionContainsNonSuccess, predecessorContainsNonSuccess);
-
-         createOverviewAction(processSuccessRuns, rtsVmRuns, rtsVmRunsPredecessor, staticChanges);
       } else {
          LOG.info("No RTS Actions existing; not creating regression test selection actions.");
       }
+
+      Map<String, File> processSuccessRuns = createProcessSuccessRunsActions();
+
+      Map<TestCase, RTSLogData> rtsVmRuns = createVersionRTSData(measurementConfig.getExecutionConfig().getVersion());
+      Map<TestCase, RTSLogData> rtsVmRunsPredecessor = createVersionRTSData(measurementConfig.getExecutionConfig().getVersionOld());
+
+      boolean versionContainsNonSuccess = rtsVmRuns.values().stream().anyMatch(log -> !log.isSuccess());
+      boolean predecessorContainsNonSuccess = rtsVmRunsPredecessor.values().stream().anyMatch(log -> !log.isSuccess());
+
+      LOG.debug("Errors in logs: {} {}", versionContainsNonSuccess, predecessorContainsNonSuccess);
+      logSummary = new RTSLogSummary(versionContainsNonSuccess, predecessorContainsNonSuccess);
+
+      createOverviewAction(processSuccessRuns, rtsVmRuns, rtsVmRunsPredecessor, staticChanges);
    }
 
    private void createOverviewAction(final Map<String, File> processSuccessRuns, final Map<TestCase, RTSLogData> rtsVmRuns, final Map<TestCase, RTSLogData> rtsVmRunsPredecessor,
          final RTSInfos rtsInfos) {
       RTSLogOverviewAction overviewAction = new RTSLogOverviewAction(processSuccessRuns, rtsVmRuns, rtsVmRunsPredecessor,
-            processSuccessRunSucceeded, measurementConfig.getExecutionConfig().getVersion(), measurementConfig.getExecutionConfig().getVersionOld());
+            processSuccessRunSucceeded, measurementConfig.getExecutionConfig().getVersion(), measurementConfig.getExecutionConfig().getVersionOld(),measurementConfig.getExecutionConfig().isRedirectSubprocessOutputToFile());
       overviewAction.setStaticChanges(rtsInfos.isStaticChanges());
       overviewAction.setStaticallySelectedTests(rtsInfos.isStaticallySelectedTests());
       run.addAction(overviewAction);

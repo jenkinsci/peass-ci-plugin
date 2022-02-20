@@ -17,15 +17,17 @@ public class RTSLogOverviewAction extends VisibleAction {
    private Map<TestCase, RTSLogData> vmRuns;
    private Map<TestCase, RTSLogData> predecessorVmRuns;
    private final String version, versionOld;
+   private boolean redirectSubprocessOutputToFile;
 
    public RTSLogOverviewAction(final Map<String, File> processSuccessRuns, final Map<TestCase, RTSLogData> vmRuns, final Map<TestCase, RTSLogData> predecessorVmRuns,
-         final Map<String, Boolean> processSuccessRunSucceeded, final String version, final String versionOld) {
+         final Map<String, Boolean> processSuccessRunSucceeded, final String version, final String versionOld, final boolean redirectSubprocessOutputToFile) {
       this.processSuccessRuns = processSuccessRuns;
       this.vmRuns = vmRuns;
       this.predecessorVmRuns = predecessorVmRuns;
       this.processSuccessRunSucceeded = processSuccessRunSucceeded;
       this.version = version;
       this.versionOld = versionOld;
+      this.redirectSubprocessOutputToFile = redirectSubprocessOutputToFile;
    }
    
    public Map<String, File> getProcessSuccessRuns() {
@@ -73,6 +75,10 @@ public class RTSLogOverviewAction extends VisibleAction {
 
    public void setStaticallySelectedTests(final boolean staticallySelectedTests) {
       this.staticallySelectedTests = staticallySelectedTests;
+   }
+
+   public boolean isRedirectSubprocessOutputToFile(){
+      return redirectSubprocessOutputToFile;
    }
 
    @Override

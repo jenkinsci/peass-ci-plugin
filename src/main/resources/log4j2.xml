@@ -7,23 +7,14 @@
 
   </Appenders>
   <Loggers>
-    <Logger name="com.gargoylesoftware" level="fatal" additivity="false">
+    <Logger name="org.apache.logging.log4j2" level="info">
       <AppenderRef ref="Console" />
     </Logger>
-    <Logger name="hidden.jth.org.apache" level="info" additivity="false">
+    <Logger name="de.dagere.requitur.Rule" level="info" additivity="false">
       <AppenderRef ref="Console" />
     </Logger>
-    <Logger name="org.apache" level="info" additivity="false">
-      <AppenderRef ref="Console" />
-    </Logger>
-    <Logger name="org.eclipse" level="info" additivity="false">
-      <AppenderRef ref="Console" />
-    </Logger>
-
     <Root level="debug">
       <AppenderRef ref="Console" />
     </Root>
   </Loggers>
-
-
 </Configuration>

@@ -7,8 +7,9 @@
 		<l:main-panel>
 
 			<h1>Performance RCA Logs Overview</h1>
-			<a href="../rcaLog">Root Cause Analysis Overall Log</a><br />
-			
+			<j:if test="${it.isRedirectSubprocessOutputToFile()}">
+			    <a href="../rcaLog">Root Cause Analysis Overall Log</a><br />
+			</j:if>
 			<j:forEach var="testcase" items="${it.getTestLevelMap().entrySet()}" >
 				<b>Test Case: ${testcase.getKey()}</b>
 				Levels: ${testcase.getValue().size()}

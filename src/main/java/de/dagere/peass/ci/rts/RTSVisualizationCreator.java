@@ -133,7 +133,8 @@ public class RTSVisualizationCreator {
          for (TestCase test : entry.getValue().getTests()) {
             tests.add(test.getExecutable());
          }
-         changesList.put(entry.getKey().toString(), tests);
+         ChangedEntity changedClazz = entry.getKey();
+         changesList.put(changedClazz.toString(), tests);
       }
    }
 }

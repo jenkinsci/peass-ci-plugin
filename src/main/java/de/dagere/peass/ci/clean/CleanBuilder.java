@@ -54,6 +54,7 @@ public class CleanBuilder extends Builder implements SimpleBuildStep, Serializab
             run.setResult(Result.FAILURE);
             return;
          }
+         CleanRTSCallable.cleanFolder(projectName, localWorkspace);
       } else {
          listener.getLogger().println("Regression Test Selection cleaning disabled");
       }
@@ -63,6 +64,7 @@ public class CleanBuilder extends Builder implements SimpleBuildStep, Serializab
             run.setResult(Result.FAILURE);
             return;
          }
+         CleanMeasurementCallable.cleanFolder(projectName, localWorkspace);
       } else {
          listener.getLogger().println("Measurement cleaning disabled");
       }

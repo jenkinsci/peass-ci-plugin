@@ -9,11 +9,11 @@ import org.apache.logging.log4j.Logger;
 
 import de.dagere.peass.analysis.changes.Change;
 import de.dagere.peass.analysis.changes.Changes;
+import de.dagere.peass.analysis.measurement.ProjectStatistics;
 import de.dagere.peass.ci.helper.HistogramValues;
 import de.dagere.peass.ci.helper.RCAVisualizer;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
-import de.dagere.peass.measurement.analysis.ProjectStatistics;
 import de.dagere.peass.measurement.statistics.StatisticUtil;
 import de.dagere.peass.measurement.statistics.data.TestcaseStatistic;
 

@@ -11,9 +11,10 @@
       <h1>Regression Test Selection Log Overview</h1>
       Version: ${it.getVersion()} Old Version: ${it.getVersionOld()}
       <br />
-      <a href="../rtsLog">Peass Regression Test Selection Log</a>
-      <br />
-
+      <j:if test="${it.isRedirectSubprocessOutputToFile()}">
+        <a href="../rtsLog">Peass Regression Test Selection Log</a>
+        <br />
+      </j:if>
       <h2>Process Success Runs</h2>
       <j:forEach var="run" items="${it.getProcessSuccessRuns().entrySet()}">
         <a href="../processSuccessRun_${run.getKey()}">${run.getKey()}</a>

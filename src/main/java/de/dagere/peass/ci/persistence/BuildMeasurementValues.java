@@ -6,8 +6,8 @@ import java.util.Map.Entry;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import de.dagere.peass.analysis.measurement.ProjectStatistics;
 import de.dagere.peass.dependency.analysis.data.TestCase;
-import de.dagere.peass.measurement.analysis.ProjectStatistics;
 import de.dagere.peass.measurement.statistics.data.TestcaseStatistic;
 
 public class BuildMeasurementValues {
