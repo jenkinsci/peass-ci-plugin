@@ -136,7 +136,7 @@
 
       <st:include page="measurements.jelly" it="${it}" optional="false" />
       <script>
-        <j:forEach var="testcase" items="${it.measurements.entrySet()}">
+        <j:forEach var="measurements" items="${it.measurements.entrySet()}">
           var layout = {
             barmode: "overlay",
             title: {
@@ -144,7 +144,7 @@
             },
             xaxis: {
               title: {
-                text: "Duration / ${testcase.getValue().getUnit()}"
+                text: "Duration / ${measurements.getValue().getUnit()}"
               }
             },
             yaxis: {
@@ -155,7 +155,7 @@
             height: 400
           };
           var version = {
-            x: ${testcase.getValue().valuesCurrentReadable},
+            x: ${measurements.getValue().valuesCurrentReadable},
             type: "histogram",
             name: "Version",
             opacity: 0.5,
@@ -164,7 +164,7 @@
             },
           };
           var predecessor = {
-            x: ${testcase.getValue().valuesBeforeReadable},
+            x: ${measurements.getValue().valuesBeforeReadable},
             type: "histogram",
             name: "Predecessor",
             opacity: 0.6,
@@ -176,7 +176,7 @@
           var config = {
             responsive: true
           };
-          Plotly.newPlot("histogramm_${testcase.getKey()}", data, layout, config);
+          Plotly.newPlot("histogramm_${measurements.getKey()}", data, layout, config);
         </j:forEach>
       </script>
     </l:main-panel>
