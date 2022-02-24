@@ -33,6 +33,8 @@
           <j:if test="${it.getUpdatedConfigurations().get(testcase.getKey()) == null}">
             <j:set var="currentRepetitions" value="${it.config.repetitions}" />
           </j:if>
+          <j:set var="factorOld" value="${it.getFactorByMean(currentStatistic.getMeanOld())}" />
+          <j:set var="unit" value="${it.getUnitByFactor(factorOld)}" />
           <tr>
             <th></th>
             <th colspan="2">
@@ -52,20 +54,10 @@
           <tr>
             <td>${%mean}<br />${%measured}</td>
             <td>
-              <j:if test="${currentStatistic.getMeanOld() &gt; 1000}">
-                ${it.round(currentStatistic.getMeanOld()/1000)} $&#x00B5;s
-              </j:if>
-              <j:if test="${currentStatistic.getMeanOld() &lt; 1000}">
-                ${it.round(currentStatistic.getMeanOld())} ns
-              </j:if>
+              ${it.round(currentStatistic.getMeanOld() / factorOld)} ${unit}
             </td>
             <td>
-              <j:if test="${currentStatistic.getMeanOld() &gt; 1000}">
-                ${it.round(currentStatistic.getMeanCurrent()/1000)} $&#x00B5;s
-              </j:if>
-              <j:if test="${currentStatistic.getMeanOld() &lt; 1000}">
-                ${it.round(currentStatistic.getMeanCurrent())} ns
-              </j:if>
+              ${it.round(currentStatistic.getMeanCurrent() / factorOld)} ${unit}
             </td>
             <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.getMeanOld()*currentRepetitions)} $&#x00B5;s</td>
             <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.getMeanCurrent()*currentRepetitions)} $&#x00B5;s</td>
@@ -73,35 +65,25 @@
           <tr>
             <td>${%standardDeviation}<br />${%measured}</td>
             <td>
-              <j:if test="${currentStatistic.getMeanOld() &gt; 1000}">
-                ${it.round(currentStatistic.deviationOld/1000)}
-              </j:if>
-              <j:if test="${currentStatistic.getMeanOld() &lt; 1000}">
-                ${it.round(currentStatistic.deviationOld)}
-              </j:if>
+              ${it.round(currentStatistic.deviationOld / factorOld)}
             </td>
             <td>
-              <j:if test="${currentStatistic.getMeanOld() &gt; 1000}">
-                ${it.round(currentStatistic.deviationCurrent/1000)}
-              </j:if>
-              <j:if test="${currentStatistic.getMeanOld() &lt; 1000}">
-                ${it.round(currentStatistic.deviationCurrent)}
-              </j:if>
+              ${it.round(currentStatistic.deviationCurrent / factorOld)}
             </td>
             <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.deviationOld*currentRepetitions)}</td>
             <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.deviationCurrent*currentRepetitions)}</td>
           </tr>
           <tr>
             <td>${%mean}<br />${%perRepetition}</td>
-            <td> ${it.round(currentStatistic.getMeanOld()/currentRepetitions/1000)} $&#x00B5;s</td>
-            <td>${it.round(currentStatistic.getMeanCurrent()/currentRepetitions/1000)} $&#x00B5;s</td>
+            <td>${it.round(currentStatistic.getMeanOld() / currentRepetitions / factorOld)} ${unit}</td>
+            <td>${it.round(currentStatistic.getMeanCurrent() / currentRepetitions / factorOld)} ${unit}</td>
             <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.getMeanOld())} $&#x00B5;s</td>
             <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.getMeanCurrent())} $&#x00B5;s</td>
           </tr>
           <tr>
             <td>${%standardDeviation}<br />${%perRepetition}</td>
-            <td>${it.round(currentStatistic.deviationOld/currentRepetitions/1000)}</td>
-            <td>${it.round(currentStatistic.deviationCurrent/currentRepetitions/1000)}</td>
+            <td>${it.round(currentStatistic.deviationOld / currentRepetitions / factorOld)}</td>
+            <td>${it.round(currentStatistic.deviationCurrent / currentRepetitions / factorOld)}</td>
             <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.deviationOld)}</td>
             <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.deviationCurrent)}</td>
           </tr>
