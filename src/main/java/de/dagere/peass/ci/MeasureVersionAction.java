@@ -12,6 +12,7 @@ import de.dagere.peass.analysis.changes.Changes;
 import de.dagere.peass.analysis.measurement.ProjectStatistics;
 import de.dagere.peass.ci.helper.HistogramValues;
 import de.dagere.peass.ci.helper.RCAVisualizer;
+import de.dagere.peass.ci.helper.UnitConverter;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.measurement.statistics.StatisticUtil;
@@ -126,6 +127,14 @@ public class MeasureVersionAction extends VisibleAction {
    }
 
    public double round(final double value) {
-      return Math.round(value * 100) / 100d;
+      return Math.round(value * 10000) / 10000d;
+   }
+
+   public int getFactorByMean(final double mean) {
+      return UnitConverter.getFactorByMean(mean);
+   }
+
+   public String getUnitByFactor(final int factor) {
+      return UnitConverter.getUnitByFactor(factor);
    }
 }

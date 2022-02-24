@@ -43,14 +43,14 @@ public class RTSVisualizationCreator {
 
    public void visualize(final Run<?, ?> run, final RTSLogSummary logSummary) {
       try {
-         Map<String, List<String>> changesList = readStaticSelection(run);
+         Map<String, List<String>> staticSelection = readStaticSelection(run);
 
          List<String> traceSelectedTests = readDynamicSelection(run);
          CoverageSelectionVersion coverageSelectedTests = readCoverageSelection(run);
 
          System.out.println("Selected: " + traceSelectedTests + " Coverage: " + coverageSelectedTests);
 
-         RTSVisualizationAction rtsVisualizationAction = new RTSVisualizationAction(peassConfig.getDependencyConfig(), changesList, traceSelectedTests, coverageSelectedTests,
+         RTSVisualizationAction rtsVisualizationAction = new RTSVisualizationAction(peassConfig.getDependencyConfig(), staticSelection, traceSelectedTests, coverageSelectedTests,
                peassConfig.getMeasurementConfig().getExecutionConfig().getVersion(), peassConfig.getMeasurementConfig().getExecutionConfig().getVersionOld(),
                logSummary);
          run.addAction(rtsVisualizationAction);
@@ -109,14 +109,14 @@ public class RTSVisualizationCreator {
    }
 
    private Map<String, List<String>> readStaticSelection(final Run<?, ?> run) throws IOException, JsonParseException, JsonMappingException {
-      Map<String, List<String>> changesList = new LinkedHashMap<String, List<String>>();
+      Map<String, List<String>> staticSelection = new LinkedHashMap<String, List<String>>();
       File dependencyfile = localWorkspace.getDependencyFile();
       if (dependencyfile.exists()) {
          Dependencies dependencies = Constants.OBJECTMAPPER.readValue(dependencyfile, Dependencies.class);
          Version version = dependencies.getVersions().get(peassConfig.getMeasurementConfig().getExecutionConfig().getVersion());
 
          if (version != null) {
-            addVersionDataToChangeliste(changesList, version);
+            addVersionDataToChangeliste(staticSelection, version);
          } else {
             LOG.info("No change has been detected in " + peassConfig.getMeasurementConfig().getExecutionConfig().getVersion());
          }
@@ -124,7 +124,7 @@ public class RTSVisualizationCreator {
       } else {
          LOG.error("File {} was not found, RTS selection seems to not have worked at all", dependencyfile);
       }
-      return changesList;
+      return staticSelection;
    }
 
    private void addVersionDataToChangeliste(final Map<String, List<String>> changesList, final Version version) {

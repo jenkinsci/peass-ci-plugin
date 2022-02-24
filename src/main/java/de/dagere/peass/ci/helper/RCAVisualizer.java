@@ -67,11 +67,16 @@ public class RCAVisualizer {
       LOG.info("Creating actions: " + versionChanges.getTestcaseChanges().size());
       for (Entry<String, List<Change>> testcases : versionChanges.getTestcaseChanges().entrySet()) {
          for (Change change : testcases.getValue()) {
-            final String name = testcases.getKey() + "_" + change.getMethod();
-            File jsFile = new File(versionVisualizationFolder, name + ".js");
+            final String actionName;
+            if (change.getParams() != null) {
+               actionName = testcases.getKey() + "_" + change.getMethod() + "(" + change.getParams() + ")";
+            } else {
+               actionName = testcases.getKey() + "_" + change.getMethod();
+            }
+            File jsFile = new File(versionVisualizationFolder, actionName + ".js");
             LOG.info("Trying to copy {} Exists: {}", jsFile.getAbsolutePath(), jsFile.exists());
             if (jsFile.exists()) {
-               createRCAAction(rcaResults, longestPrefix, testcases, change, name, jsFile);
+               createRCAAction(rcaResults, longestPrefix, testcases, change, actionName, jsFile);
             } else {
                LOG.error("An error occured: " + jsFile.getAbsolutePath() + " not found");
             }
