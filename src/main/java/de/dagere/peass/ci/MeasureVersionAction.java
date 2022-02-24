@@ -127,7 +127,7 @@ public class MeasureVersionAction extends VisibleAction {
    }
 
    public double round(final double value) {
-      return Math.round(value * 100) / 100d;
+      return Math.round(value * 10000) / 10000d;
    }
 
    public int getFactorByMean(final double mean) {
