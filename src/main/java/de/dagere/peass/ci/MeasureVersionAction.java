@@ -1,9 +1,11 @@
 package de.dagere.peass.ci;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -130,6 +132,10 @@ public class MeasureVersionAction extends VisibleAction {
       return Math.round(value * 10000) / 10000d;
    }
 
+   public double getMeanOfValues(final double[] values) {
+      return new DescriptiveStatistics(values).getMean();
+   }
+
    public int getFactorByMean(final double mean) {
       return UnitConverter.getFactorByMean(mean);
    }
@@ -137,4 +143,13 @@ public class MeasureVersionAction extends VisibleAction {
    public String getUnitByFactor(final int factor) {
       return UnitConverter.getUnitByFactor(factor);
    }
+
+   public double[] divideValuesByFactor(final double[] values, final MeasurementConfig measurementConfig, final int factor) {
+      return Arrays.stream(values).map(value -> value / measurementConfig.getRepetitions() / factor).toArray();
+   }
+
+   public String getValuesReadable(final double[] values) {
+      return Arrays.toString(values);
+   }
+
 }
