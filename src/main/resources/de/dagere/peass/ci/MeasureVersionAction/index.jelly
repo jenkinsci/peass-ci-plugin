@@ -108,7 +108,10 @@
                 </tr>
                 <tr>
                   <td>Old time</td>
-                  <td>${it.round(methodChange.oldTime/1000)} $&#x00B5;s</td>
+                  <j:set var="oldTime" value="${methodChange.oldTime}" />
+                  <j:set var="factor" value="${it.getFactorByMean(oldTime)}" />
+                  <j:set var="unit" value="${it.getUnitByFactor(factor)}" />
+                  <td>${it.round(oldTime / factor)} ${unit}</td>
                 </tr>
                 <tr>
                   <td>Change</td>
