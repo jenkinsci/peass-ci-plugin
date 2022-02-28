@@ -35,7 +35,7 @@ public class TestRTSVisualizationCreator {
       
       RTSVisualizationCreator creator = new RTSVisualizationCreator(localWorkspace, peassConfig);
       
-      creator.visualize(Mockito.mock(Run.class), new RTSLogSummary(false, false));
+      creator.visualize(Mockito.mock(Run.class), new RTSLogSummary(false, false, true, true));
    }
 
    private void writeEmptyExecutionData(final ResultsFolders localWorkspace) throws IOException, JsonGenerationException, JsonMappingException {

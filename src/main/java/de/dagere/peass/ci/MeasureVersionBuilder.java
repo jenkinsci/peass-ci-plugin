@@ -88,11 +88,11 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private int warmup = 5;
    private int repetitions = 1000000;
    private int timeout = 5;
-   
+
    private boolean executeRCA = true;
    private boolean executeParallel = false;
    private String credentialsId;
-   
+
    private int kiekerWaitTime = 10;
    private long kiekerQueueSize = 10000000;
    private double significanceLevel = 0.01;
@@ -115,9 +115,9 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private String properties = "";
    private String testGoal = "test";
    private String pl = "";
-   
+
    private RCAStrategy measurementMode = RCAStrategy.UNTIL_SOURCE_CHANGE;
-   
+
    private boolean executeBeforeClassInMeasurement = false;
    private boolean onlyMeasureWorkload = false;
    private boolean onlyOneCallRecording = false;
@@ -142,8 +142,6 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private boolean failOnRtsError = false;
 
    private String excludeForTracing = "";
-
-   
 
    @DataBoundConstructor
    public MeasureVersionBuilder() {
@@ -228,9 +226,13 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          return;
       }
 
-      if (failOnRtsError && tests.isRtsError()) {
+      if (tests.isRtsAllError() || failOnRtsError && tests.isRtsAnyError()) {
          run.setResult(Result.FAILURE);
          return;
+      }
+
+      if (!failOnRtsError && tests.isRtsAnyError()) {
+         run.setResult(Result.UNSTABLE);
       }
 
       processManager.visualizeRTSResults(run, tests.getLogSummary());
