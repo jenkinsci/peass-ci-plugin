@@ -5,9 +5,10 @@ import java.util.Arrays;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import de.dagere.peass.config.MeasurementConfig;
-import de.dagere.peass.visualization.KoPeMeTreeConverter;
 
 public class HistogramValues {
+   
+   public static final int NANO_TO_MICRO = 1000;
    
    private static final String NANOSECONDS = "ns";
    private static final String MICROSECONDS = "\u00B5s";
@@ -28,7 +29,7 @@ public class HistogramValues {
          factor = 1;
       } else {
          unit = MICROSECONDS;
-         factor = KoPeMeTreeConverter.NANO_TO_MICRO;
+         factor = NANO_TO_MICRO;
       }
       System.out.println("Unit: " + unit);
       this.valuesCurrent = Arrays.stream(valuesCurrent).map(value -> value / currentConfig.getRepetitions() / factor).toArray();
