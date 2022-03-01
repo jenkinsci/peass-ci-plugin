@@ -17,7 +17,7 @@ import de.dagere.peass.ci.logs.rts.RTSLogData;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.persistence.Dependencies;
-import de.dagere.peass.dependency.persistence.Version;
+import de.dagere.peass.dependency.persistence.VersionStaticSelection;
 import de.dagere.peass.dependency.traces.TraceWriter;
 import de.dagere.peass.utils.Constants;
 
@@ -47,7 +47,7 @@ public class RTSLogFileReader {
       if (dependencyFile.exists()) {
          try {
             Dependencies dependencies = Constants.OBJECTMAPPER.readValue(dependencyFile, Dependencies.class);
-            Version version = dependencies.getVersions().get(measurementConfig.getExecutionConfig().getVersion());
+            VersionStaticSelection version = dependencies.getVersions().get(measurementConfig.getExecutionConfig().getVersion());
             if (version != null) {
                LOG.debug("Version run success: {}", version.isRunning());
                success = version.isRunning();

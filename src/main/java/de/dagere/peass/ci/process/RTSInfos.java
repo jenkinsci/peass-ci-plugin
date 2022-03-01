@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.DatabindException;
 import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.dependency.analysis.data.TestSet;
 import de.dagere.peass.dependency.persistence.Dependencies;
-import de.dagere.peass.dependency.persistence.Version;
+import de.dagere.peass.dependency.persistence.VersionStaticSelection;
 import de.dagere.peass.folders.ResultsFolders;
 import de.dagere.peass.utils.Constants;
 
@@ -35,7 +35,7 @@ public class RTSInfos {
       if (dependencyFile.exists()) {
          boolean staticChanges = false;
          Dependencies dependencies = Constants.OBJECTMAPPER.readValue(dependencyFile, Dependencies.class);
-         Version version = dependencies.getVersions().get(peassConfig.getMeasurementConfig().getExecutionConfig().getVersion());
+         VersionStaticSelection version = dependencies.getVersions().get(peassConfig.getMeasurementConfig().getExecutionConfig().getVersion());
          boolean hasStaticallySelectedTests = false;
          if (version != null) {
             if (!version.getChangedClazzes().isEmpty()) {
