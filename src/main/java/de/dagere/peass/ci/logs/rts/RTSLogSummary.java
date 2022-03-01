@@ -9,13 +9,18 @@ package de.dagere.peass.ci.logs.rts;
  *
  */
 public class RTSLogSummary {
-   
+
    private final boolean errorInCurrentVersionOccured;
    private final boolean errorInPredecessorVersionOccured;
+   private final boolean versionContainsSuccess;
+   private final boolean predecessorContainsSuccess;
 
-   public RTSLogSummary(final boolean errorInCurrentVersionOccured, final boolean errorInPredecessorVersionOccured) {
+   public RTSLogSummary(final boolean errorInCurrentVersionOccured, final boolean errorInPredecessorVersionOccured, boolean versionContainsSuccess,
+         boolean predecessorContainsSuccess) {
       this.errorInCurrentVersionOccured = errorInCurrentVersionOccured;
       this.errorInPredecessorVersionOccured = errorInPredecessorVersionOccured;
+      this.versionContainsSuccess = versionContainsSuccess;
+      this.predecessorContainsSuccess = predecessorContainsSuccess;
    }
 
    public boolean isErrorInCurrentVersionOccured() {
@@ -24,6 +29,14 @@ public class RTSLogSummary {
 
    public boolean isErrorInPredecessorVersionOccured() {
       return errorInPredecessorVersionOccured;
+   }
+
+   public boolean isVersionContainsSuccess() {
+      return versionContainsSuccess;
+   }
+
+   public boolean isPredecessorContainsSuccess() {
+      return predecessorContainsSuccess;
    }
 
 }
