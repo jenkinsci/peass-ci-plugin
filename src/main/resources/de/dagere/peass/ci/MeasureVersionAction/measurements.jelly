@@ -59,9 +59,8 @@
             <td>
               ${it.round(currentStatistic.getMeanCurrent() / factorOld)} ${unit}
             </td>
-            <!--TODO KoPeMeTreeConverter divides by 1000, therefore value here is multiplied by 1000-->
-            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.getMeanOld()*currentRepetitions/factorOld*1000)} ${unit}</td>
-            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.getMeanCurrent()*currentRepetitions/factorOld*1000)} ${unit}</td>
+            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.getMeanOld()*currentRepetitions/factorOld)} ${unit}</td>
+            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.getMeanCurrent()*currentRepetitions/factorOld)} ${unit}</td>
           </tr>
           <tr>
             <td>${%standardDeviation}<br />${%measured}</td>
@@ -71,25 +70,22 @@
             <td>
               ${it.round(currentStatistic.deviationCurrent / factorOld)}
             </td>
-            <!--TODO KoPeMeTreeConverter divides by 1000, therefore value here is multiplied by 1000-->
-            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.deviationOld*currentRepetitions/factorOld*1000)}</td>
-            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.deviationCurrent*currentRepetitions/factorOld*1000)}</td>
+            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.deviationOld*currentRepetitions/factorOld)}</td>
+            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.deviationCurrent*currentRepetitions/factorOld)}</td>
           </tr>
           <tr>
             <td>${%mean}<br />${%perRepetition}</td>
             <td>${it.round(currentStatistic.getMeanOld() / currentRepetitions / factorOld)} ${unit}</td>
             <td>${it.round(currentStatistic.getMeanCurrent() / currentRepetitions / factorOld)} ${unit}</td>
-            <!--TODO KoPeMeTreeConverter divides by 1000, therefore value here is multiplied by 1000-->
-            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.getMeanOld()/factorOld*1000)} ${unit}</td>
-            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.getMeanCurrent()/factorOld*1000)} ${unit}</td>
+            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.getMeanOld()/factorOld)} ${unit}</td>
+            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.getMeanCurrent()/factorOld)} ${unit}</td>
           </tr>
           <tr>
             <td>${%standardDeviation}<br />${%perRepetition}</td>
             <td>${it.round(currentStatistic.deviationOld / currentRepetitions / factorOld)}</td>
             <td>${it.round(currentStatistic.deviationCurrent / currentRepetitions / factorOld)}</td>
-            <!--TODO KoPeMeTreeConverter divides by 1000, therefore value here is multiplied by 1000-->
-            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.deviationOld/factorOld*1000)}</td>
-            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.deviationCurrent/factorOld*1000)}</td>
+            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.deviationOld/factorOld)}</td>
+            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.deviationCurrent/factorOld)}</td>
           </tr>
           <tr>
             <td>T-Wert</td>
