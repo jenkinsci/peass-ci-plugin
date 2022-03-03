@@ -104,7 +104,7 @@
               <table class="data-table changes-table">
                 <tr>
                   <td>Method</td>
-                  <td><a href="../${it.getReducedName(testcaseChanges.getKey())}_${methodChange.method}">${methodChange.method}</a></td>
+                  <td><a href="../${it.getReducedName(testcaseChanges.getKey())}_${methodChange.getMethodWithParams()}">${methodChange.getMethodWithParams()}</a></td>
                 </tr>
                 <tr>
                   <td>Old time</td>
