@@ -19,7 +19,7 @@ public class TestRTSLogFileReaderMultimodule {
 
    private static final TestCase TEST1 = new TestCase("de.test.CalleeTest", "onlyCallMethod1", "moduleA");
 
-   private RTSLogFileUtil util = new RTSLogFileUtil(TEST1, "demo-vis2-multimodule");
+   private RTSLogFileTestUtil util = new RTSLogFileTestUtil(TEST1, "demo-vis2-multimodule");
 
    @BeforeEach
    public void init() throws IOException {
@@ -33,12 +33,12 @@ public class TestRTSLogFileReaderMultimodule {
       Map<String, File> testcases = reader.findProcessSuccessRuns();
 
       Assert.assertEquals(1, testcases.size());
-      File testRunningFile = testcases.get(RTSLogFileUtil.VERSION);
+      File testRunningFile = testcases.get(RTSLogFileTestUtil.VERSION);
       Assert.assertTrue(testRunningFile.exists());
 
       Assert.assertTrue(reader.isLogsExisting());
 
-      Map<TestCase, RTSLogData> rtsVmRuns = reader.getRtsVmRuns(RTSLogFileUtil.VERSION);
+      Map<TestCase, RTSLogData> rtsVmRuns = reader.getRtsVmRuns(RTSLogFileTestUtil.VERSION);
       Assert.assertEquals(2, rtsVmRuns.size());
 
       File dataFile1 = rtsVmRuns.get(TestRTSLogFileReader.TEST1).getMethodFile();
@@ -48,10 +48,10 @@ public class TestRTSLogFileReaderMultimodule {
       Assert.assertTrue(dataFile2.exists());
       Assert.assertFalse(logDataTest2.isSuccess());
 
-      Map<TestCase, RTSLogData> rtsVmRunsPredecessor = reader.getRtsVmRuns(RTSLogFileUtil.VERSION_OLD);
+      Map<TestCase, RTSLogData> rtsVmRunsPredecessor = reader.getRtsVmRuns(RTSLogFileTestUtil.VERSION_OLD);
       Assert.assertEquals(2, rtsVmRunsPredecessor.size());
       RTSLogData rtsLogData = rtsVmRunsPredecessor.get(TestRTSLogFileReader.TEST1);
-      Assert.assertEquals(RTSLogFileUtil.VERSION_OLD, rtsLogData.getVersion());
+      Assert.assertEquals(RTSLogFileTestUtil.VERSION_OLD, rtsLogData.getVersion());
       Assert.assertTrue(rtsLogData.isSuccess());
 
       String rtsLog = reader.getRTSLog();

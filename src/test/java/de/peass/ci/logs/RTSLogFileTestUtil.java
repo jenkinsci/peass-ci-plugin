@@ -16,7 +16,7 @@ import de.dagere.peass.dependency.traces.TraceWriter;
 import de.dagere.peass.folders.PeassFolders;
 import de.dagere.peass.folders.ResultsFolders;
 
-public class RTSLogFileUtil {
+public class RTSLogFileTestUtil {
 
    static final String VERSION_OLD = "33ce17c04b5218c25c40137d4d09f40fbb3e4f0f";
    static final String VERSION = "a23e385264c31def8dcda86c3cf64faa698c62d8";
@@ -27,7 +27,7 @@ public class RTSLogFileUtil {
    private final TestCase test1;
    private final String projectName;
 
-   public RTSLogFileUtil(final TestCase test1, final String projectName) {
+   public RTSLogFileTestUtil(final TestCase test1, final String projectName) {
       this.test1 = test1;
       this.projectName = projectName;
    }

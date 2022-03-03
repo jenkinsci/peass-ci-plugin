@@ -22,7 +22,7 @@ public class TestRTSLogFileReader {
    static final TestCase TEST1 = new TestCase("de.test.CalleeTest#onlyCallMethod1");
    static final TestCase TEST2 = new TestCase("de.test.CalleeTest#onlyCallMethod2");
    
-   private RTSLogFileUtil util = new RTSLogFileUtil(TEST1, "demo-vis2");
+   private RTSLogFileTestUtil util = new RTSLogFileTestUtil(TEST1, "demo-vis2");
 
    @BeforeEach
    public void init() throws IOException {
@@ -63,7 +63,7 @@ public class TestRTSLogFileReader {
 
    @Test
    public void testReadingOnlyOverviewExists() throws IOException {
-      FileUtils.deleteDirectory(RTSLogFileUtil.testFolder);
+      FileUtils.deleteDirectory(RTSLogFileTestUtil.testFolder);
 
       RTSLogFileReader reader = util.initializeReader();
       Assert.assertTrue(reader.isLogsExisting());

@@ -45,13 +45,13 @@ public class TestRCALogFileReader {
       FileUtils.copyDirectory(source, testFolder);
 
       ResultsFolders folders = new ResultsFolders(localFolder, "demo-vis2");
-      File rcaLogFile = folders.getRCALogFile(RTSLogFileUtil.VERSION, RTSLogFileUtil.VERSION_OLD);
+      File rcaLogFile = folders.getRCALogFile(RTSLogFileTestUtil.VERSION, RTSLogFileTestUtil.VERSION_OLD);
       FileUtils.write(rcaLogFile, "This is a rca log test", StandardCharsets.UTF_8);
    }
 
    @Test
    public void testReading() throws JsonParseException, JsonMappingException, IOException {
-      MeasurementConfig peassDemoConfig = new MeasurementConfig(2, RTSLogFileUtil.VERSION, RTSLogFileUtil.VERSION_OLD);
+      MeasurementConfig peassDemoConfig = new MeasurementConfig(2, RTSLogFileTestUtil.VERSION, RTSLogFileTestUtil.VERSION_OLD);
 
       VisualizationFolderManager visualizationFolders = Mockito.mock(VisualizationFolderManager.class);
       Mockito.when(visualizationFolders.getPeassFolders()).thenReturn(new PeassFolders(testFolder));

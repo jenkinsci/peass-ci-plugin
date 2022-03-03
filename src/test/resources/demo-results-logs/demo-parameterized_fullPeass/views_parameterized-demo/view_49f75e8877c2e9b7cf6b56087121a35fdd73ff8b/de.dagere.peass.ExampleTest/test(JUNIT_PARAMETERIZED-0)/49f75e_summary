@@ -1,0 +1,17 @@
+{
+  "overallScore" : 0,
+  "selected" : false,
+  "testcase" : {
+    "clazz" : "de.dagere.peass.ExampleTest",
+    "method" : "test",
+    "module" : "",
+    "params" : "JUNIT_PARAMETERIZED-0"
+  },
+  "callCounts" : {
+    "de.dagere.peass.Callee#innerMethod(int)" : 1,
+    "de.dagere.peass.ExampleClazz#calleeMethod(int)" : 1,
+    "de.dagere.peass.Callee#method1(int)" : 1,
+    "de.dagere.peass.ExampleTest#test" : 1
+  },
+  "selectedChanges" : [ ]
+}

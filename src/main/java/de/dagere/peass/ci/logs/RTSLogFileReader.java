@@ -118,23 +118,48 @@ public class RTSLogFileReader {
 
    private void addMethodLog(final String version, final Map<TestCase, RTSLogData> files, final File testClazzFolder,
          final File methodFile, final TestCase test) {
-      boolean runWasSuccessful = wasSuccessful(version, test);
+      File clazzDir = visualizationFolders.getResultsFolders().getClazzDir(version, test);
+      File viewMethodDir = new File(clazzDir, test.getMethodWithParams());
+      boolean foundAnyParameterized = false;
+      if (!viewMethodDir.exists()) {
+         foundAnyParameterized = addParameterizedMethodLogs(version, files, testClazzFolder, methodFile, test, clazzDir);
+      }
+      if (!foundAnyParameterized) {
+         addRegularMethodLog(version, files, testClazzFolder, methodFile, test, viewMethodDir);
+      }
+   }
 
+   private boolean addParameterizedMethodLogs(final String version, final Map<TestCase, RTSLogData> files, final File testClazzFolder, final File methodFile, final TestCase test,
+         File clazzDir) {
+      boolean foundAnyParameterized = false;
+      for (File potentialParameterizedFile : clazzDir.listFiles()) {
+         String fileName = potentialParameterizedFile.getName();
+         if (fileName.startsWith(test.getMethodWithParams() + "(")) {
+            foundAnyParameterized = true;
+            LOG.debug("Found parameterized trace file: {}", potentialParameterizedFile);
+
+            String params = fileName.substring(test.getMethod().length() + 1, fileName.length() - 1);
+            TestCase testWithparams = new TestCase(test.getClazz(), test.getMethod(), test.getModule(), params);
+            addMethodLogData(version, files, testClazzFolder, methodFile, testWithparams, true);
+         }
+      }
+      return foundAnyParameterized;
+   }
+
+   private void addRegularMethodLog(final String version, final Map<TestCase, RTSLogData> files, final File testClazzFolder, final File methodFile, final TestCase test,
+         File viewMethodDir) {
+      File viewMethodFile = new File(viewMethodDir, TraceWriter.getShortVersion(version));
+      boolean runWasSuccessful = viewMethodFile.exists();
+      addMethodLogData(version, files, testClazzFolder, methodFile, test, runWasSuccessful);
+   }
+
+   private void addMethodLogData(final String version, final Map<TestCase, RTSLogData> files, final File testClazzFolder, final File methodFile, final TestCase test,
+         boolean runWasSuccessful) {
       File cleanFile = new File(testClazzFolder, "clean" + File.separator + methodFile.getName());
       RTSLogData data = new RTSLogData(version, methodFile, cleanFile, runWasSuccessful);
 
       files.put(test, data);
       LOG.debug("Adding log: {}", test);
-   }
-
-   private boolean wasSuccessful(final String version, final TestCase test) {
-      boolean runWasSuccessful = false;
-      File viewMethodDir = visualizationFolders.getResultsFolders().getViewMethodDir(version, test);
-      if (viewMethodDir.exists()) {
-         File viewMethodFile = new File(viewMethodDir, TraceWriter.getShortVersion(version));
-         runWasSuccessful = viewMethodFile.exists();
-      }
-      return runWasSuccessful;
    }
 
    public String getRTSLog() {
@@ -149,7 +174,7 @@ public class RTSLogFileReader {
          return "RTS log not readable";
       }
    }
-   
+
    public String getSourceReadingLog() {
       File sourceReadLogFile = visualizationFolders.getResultsFolders().getSourceReadLogFile(measurementConfig.getExecutionConfig().getVersion(),
             measurementConfig.getExecutionConfig().getVersionOld());

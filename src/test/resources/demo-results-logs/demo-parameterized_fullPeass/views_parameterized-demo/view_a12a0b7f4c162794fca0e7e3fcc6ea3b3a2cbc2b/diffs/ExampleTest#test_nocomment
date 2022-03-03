@@ -1,0 +1,27 @@
+de.dagere.peass.ExampleTest#test                                                                       de.dagere.peass.ExampleTest#test                                                                    
+@Test                                                                                                  @Test                                                                                               
+public void test() {                                                                                   public void test() {                                                                                
+final ExampleClazz exampleClazz = new ExampleClazz();                                                  final ExampleClazz exampleClazz = new ExampleClazz();                                               
+exampleClazz.calleeMethod(value);                                                                      exampleClazz.calleeMethod(value);                                                                   
+assertNotNull(exampleClazz);                                                                           assertNotNull(exampleClazz);                                                                        
+}                                                                                                      }                                                                                                   
+de.dagere.peass.ExampleClazz#calleeMethod(int)                                                         de.dagere.peass.ExampleClazz#calleeMethod(int)                                                      
+protected void calleeMethod(final int value) {                                                         protected void calleeMethod(final int value) {                                                      
+new Callee().method1(value);                                                                           new Callee().method1(value);                                                                        
+}                                                                                                      }                                                                                                   
+de.dagere.peass.Callee#method1(int)                                                                    de.dagere.peass.Callee#method1(int)                                                                 
+protected void method1(final int value) {                                                              protected void method1(final int value) {                                                           
+innerMethod(value);                                                                                    innerMethod(value);                                                                                 
+}                                                                                                      }                                                                                                   
+de.dagere.peass.Callee#innerMethod(int)                                                                de.dagere.peass.Callee#innerMethod(int)                                                             
+private void innerMethod(final int value) {                                                            private void innerMethod(final int value) {                                                         
+try {                                                                                                  try {                                                                                               
+if (value == 0) {                                                                                      if (value == 0) {                                                                                   
+Thread.sleep(1);                                                                                       Thread.sleep(1);                                                                                    
+} else {                                                                                               } else {                                                                                            
+Thread.sleep(2);                                                                                     | Thread.sleep(20);                                                                                   
+}                                                                                                      }                                                                                                   
+} catch (final InterruptedException e) {                                                               } catch (final InterruptedException e) {                                                            
+e.printStackTrace();                                                                                   e.printStackTrace();                                                                                
+}                                                                                                      }                                                                                                   
+}                                                                                                      }                                                                                                   

@@ -1,0 +1,27 @@
+de.dagere.peass.ExampleTest#test
+@Test
+public void test() {
+    final ExampleClazz exampleClazz = new ExampleClazz();
+    exampleClazz.calleeMethod(value);
+    assertNotNull(exampleClazz);
+}
+de.dagere.peass.ExampleClazz#calleeMethod(int)
+protected void calleeMethod(final int value) {
+    new Callee().method1(value);
+}
+de.dagere.peass.Callee#method1(int)
+protected void method1(final int value) {
+    innerMethod(value);
+}
+de.dagere.peass.Callee#innerMethod(int)
+private void innerMethod(final int value) {
+    try {
+        if (value == 0) {
+            Thread.sleep(1);
+        } else {
+            Thread.sleep(20);
+        }
+    } catch (final InterruptedException e) {
+        e.printStackTrace();
+    }
+}

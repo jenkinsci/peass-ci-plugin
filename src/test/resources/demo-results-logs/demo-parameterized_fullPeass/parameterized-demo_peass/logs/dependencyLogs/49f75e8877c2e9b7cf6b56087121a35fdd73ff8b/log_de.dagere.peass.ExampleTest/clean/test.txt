@@ -1,0 +1,21 @@
+Listening for transport dt_socket at address: 8000
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by com.google.inject.internal.cglib.core.$ReflectUtils$1 (file:/usr/share/maven/lib/guice.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+WARNING: Please consider reporting this to the maintainers of com.google.inject.internal.cglib.core.$ReflectUtils$1
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -----------------------< de.dagere:demo-project >-----------------------
+[INFO] Building demo-project-parameterized 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ demo-project ---
+[INFO] Deleting /home/reichelt/nvme/workspaces/dissworkspace/permanent/peass-ci/work/workspace/parameterized-demo_fullPeass/parameterized-demo/target
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  0.120 s
+[INFO] Finished at: 2022-03-03T11:41:44+01:00
+[INFO] ------------------------------------------------------------------------
+[WARNING] The requested profile "might-produce-incrementals" could not be activated because it does not exist.
