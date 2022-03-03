@@ -132,15 +132,18 @@ public class RTSLogFileReader {
    private boolean addParameterizedMethodLogs(final String version, final Map<TestCase, RTSLogData> files, final File testClazzFolder, final File methodFile, final TestCase test,
          File clazzDir) {
       boolean foundAnyParameterized = false;
-      for (File potentialParameterizedFile : clazzDir.listFiles()) {
-         String fileName = potentialParameterizedFile.getName();
-         if (fileName.startsWith(test.getMethodWithParams() + "(")) {
-            foundAnyParameterized = true;
-            LOG.debug("Found parameterized trace file: {}", potentialParameterizedFile);
+      File[] potentialParameterFiles = clazzDir.listFiles();
+      if (potentialParameterFiles != null) {
+         for (File potentialParameterizedFile : potentialParameterFiles) {
+            String fileName = potentialParameterizedFile.getName();
+            if (fileName.startsWith(test.getMethodWithParams() + "(")) {
+               foundAnyParameterized = true;
+               LOG.debug("Found parameterized trace file: {}", potentialParameterizedFile);
 
-            String params = fileName.substring(test.getMethod().length() + 1, fileName.length() - 1);
-            TestCase testWithparams = new TestCase(test.getClazz(), test.getMethod(), test.getModule(), params);
-            addMethodLogData(version, files, testClazzFolder, methodFile, testWithparams, true);
+               String params = fileName.substring(test.getMethod().length() + 1, fileName.length() - 1);
+               TestCase testWithparams = new TestCase(test.getClazz(), test.getMethod(), test.getModule(), params);
+               addMethodLogData(version, files, testClazzFolder, methodFile, testWithparams, true);
+            }
          }
       }
       return foundAnyParameterized;
