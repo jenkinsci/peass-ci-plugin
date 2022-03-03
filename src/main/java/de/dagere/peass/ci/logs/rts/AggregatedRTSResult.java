@@ -6,6 +6,9 @@ public class AggregatedRTSResult {
    private final RTSLogSummary logSummary;
    private final RTSResult result;
    private final boolean rtsAnyError;
+   /**
+    * At least one test was run and no run was successful.
+    */
    private final boolean rtsAllError;
 
    public AggregatedRTSResult(final RTSLogSummary logSummary, final RTSResult result) {
@@ -13,7 +16,8 @@ public class AggregatedRTSResult {
       this.result = result;
       if (logSummary != null) {
          rtsAnyError = logSummary.isErrorInCurrentVersionOccured() || logSummary.isErrorInPredecessorVersionOccured();
-         rtsAllError = !logSummary.isVersionContainsSuccess() || !logSummary.isPredecessorContainsSuccess();
+         rtsAllError = logSummary.isErrorInCurrentVersionOccured() && (!logSummary.isVersionContainsSuccess()
+               || !logSummary.isPredecessorContainsSuccess());
       } else {
          rtsAnyError = true;
          rtsAllError = true;
