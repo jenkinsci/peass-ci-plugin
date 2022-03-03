@@ -1,55 +1,32 @@
 package de.dagere.peass.ci.helper;
 
-import java.util.Arrays;
-
-import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
-
 import de.dagere.peass.config.MeasurementConfig;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class HistogramValues {
-   
-   public static final int NANO_TO_MICRO = 1000;
-   
-   private static final String NANOSECONDS = "ns";
-   private static final String MICROSECONDS = "\u00B5s";
-   
-   private final double[] valuesCurrent;
+
    private final double[] valuesBefore;
+   private final double[] valuesCurrent;
+   private final MeasurementConfig currentConfig;
 
-   private String unit;
-
-   /**
-    * Creates histogram values, assuming parameters are in nanoseconds
-    */
-   public HistogramValues(final double[] valuesCurrent, final double[] valuesBefore, final MeasurementConfig currentConfig) {
-      double mean = new DescriptiveStatistics(valuesCurrent).getMean();
-      int factor;
-      if (mean < 1000) {
-         unit = NANOSECONDS;
-         factor = 1;
-      } else {
-         unit = MICROSECONDS;
-         factor = NANO_TO_MICRO;
-      }
-      System.out.println("Unit: " + unit);
-      this.valuesCurrent = Arrays.stream(valuesCurrent).map(value -> value / currentConfig.getRepetitions() / factor).toArray();
-      this.valuesBefore = Arrays.stream(valuesBefore).map(value -> value / currentConfig.getRepetitions() / factor).toArray();
+   @SuppressFBWarnings
+   public HistogramValues(final double[] valuesBefore, final double[] valuesCurrent, final MeasurementConfig currentConfig) {
+      this.valuesBefore = valuesBefore;
+      this.valuesCurrent = valuesCurrent;
+      this.currentConfig = currentConfig;
    }
 
-   /**
-    * Returns a javascript visualizable value array in the specified unit
-    * 
-    * @return A javascript visualizable value array in the specified unit
-    */
-   public String getValuesCurrentReadable() {
-      return Arrays.toString(valuesCurrent);
+   @SuppressFBWarnings
+   public double[] getValuesBefore() {
+      return valuesBefore;
    }
 
-   public String getValuesBeforeReadable() {
-      return Arrays.toString(valuesBefore);
+   @SuppressFBWarnings
+   public double[] getValuesCurrent() {
+      return valuesCurrent;
    }
-   
-   public String getUnit() {
-      return unit;
+
+   public MeasurementConfig getCurrentConfig() {
+      return currentConfig;
    }
 }

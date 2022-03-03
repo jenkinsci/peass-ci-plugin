@@ -96,19 +96,22 @@
 
       <p>Version: ${it.getConfig().getExecutionConfig().getVersion()}</p>
 
-      <j:forEach var="testcase" items="${it.getChanges().getTestcaseChanges().entrySet()}">
-        <h5>${%testcase}: ${testcase.getKey()}</h5>
+      <j:forEach var="testcaseChanges" items="${it.getChanges().getTestcaseChanges().entrySet()}">
+        <h5>${%testcase}: ${testcaseChanges.getKey()}</h5>
         <div class="changes-container">
-          <j:forEach var="methodChange" items="${testcase.getValue()}">
+          <j:forEach var="methodChange" items="${testcaseChanges.getValue()}">
             <div class="card">
               <table class="data-table changes-table">
                 <tr>
                   <td>Method</td>
-                  <td><a href="../${it.getReducedName(testcase.getKey())}_${methodChange.method}">${methodChange.method}</a></td>
+                  <td><a href="../${it.getReducedName(testcaseChanges.getKey())}_${methodChange.method}">${methodChange.method}</a></td>
                 </tr>
                 <tr>
                   <td>Old time</td>
-                  <td>${it.round(methodChange.oldTime/1000)} $&#x00B5;s</td>
+                  <j:set var="oldTime" value="${methodChange.oldTime}" />
+                  <j:set var="factor" value="${it.getFactorByMean(oldTime)}" />
+                  <j:set var="unit" value="${it.getUnitByFactor(factor)}" />
+                  <td>${it.round(oldTime / factor)} ${unit}</td>
                 </tr>
                 <tr>
                   <td>Change</td>
@@ -133,7 +136,9 @@
 
       <st:include page="measurements.jelly" it="${it}" optional="false" />
       <script>
-        <j:forEach var="testcase" items="${it.measurements.entrySet()}">
+        <j:forEach var="measurements" items="${it.measurements.entrySet()}">
+          <j:set var="meanOld" value="${it.getMeanOfValues(measurements.getValue().getValuesBefore())}" />
+          <j:set var="factor" value="${it.getFactorByMean(meanOld)}" />
           var layout = {
             barmode: "overlay",
             title: {
@@ -141,7 +146,7 @@
             },
             xaxis: {
               title: {
-                text: "Duration / ${testcase.getValue().getUnit()}"
+                text: "Duration / ${it.getUnitByFactor(factor)}"
               }
             },
             yaxis: {
@@ -151,8 +156,11 @@
             },
             height: 400
           };
+          <j:set var="histogramValues" value="${measurements.getValue()}" />
+          <j:set var="valuesCurrent" value="${histogramValues.getValuesCurrent()}" />
+          <j:set var="dividedValuesCurrent" value="${it.divideValuesByFactor(valuesCurrent, histogramValues.getCurrentConfig(), factor)}" />
           var version = {
-            x: ${testcase.getValue().valuesCurrentReadable},
+            x: ${it.getValuesReadable(dividedValuesCurrent)},
             type: "histogram",
             name: "Version",
             opacity: 0.5,
@@ -161,7 +169,9 @@
             },
           };
           var predecessor = {
-            x: ${testcase.getValue().valuesBeforeReadable},
+            <j:set var="valuesBefore" value="${histogramValues.getValuesBefore()}" />
+            <j:set var="dividedValuesBefore" value="${it.divideValuesByFactor(valuesBefore, histogramValues.getCurrentConfig(), factor)}" />
+            x: ${it.getValuesReadable(dividedValuesBefore)},
             type: "histogram",
             name: "Predecessor",
             opacity: 0.6,
@@ -173,7 +183,7 @@
           var config = {
             responsive: true
           };
-          Plotly.newPlot("histogramm_${testcase.getKey()}", data, layout, config);
+          Plotly.newPlot("histogramm_${measurements.getKey()}", data, layout, config);
         </j:forEach>
       </script>
     </l:main-panel>

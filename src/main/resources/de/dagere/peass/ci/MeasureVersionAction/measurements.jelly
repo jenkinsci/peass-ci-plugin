@@ -59,8 +59,8 @@
             <td>
               ${it.round(currentStatistic.getMeanCurrent() / factorOld)} ${unit}
             </td>
-            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.getMeanOld()*currentRepetitions)} $&#x00B5;s</td>
-            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.getMeanCurrent()*currentRepetitions)} $&#x00B5;s</td>
+            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.getMeanOld()*currentRepetitions/factorOld)} ${unit}</td>
+            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.getMeanCurrent()*currentRepetitions/factorOld)} ${unit}</td>
           </tr>
           <tr>
             <td>${%standardDeviation}<br />${%measured}</td>
@@ -70,22 +70,22 @@
             <td>
               ${it.round(currentStatistic.deviationCurrent / factorOld)}
             </td>
-            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.deviationOld*currentRepetitions)}</td>
-            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.deviationCurrent*currentRepetitions)}</td>
+            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.deviationOld*currentRepetitions/factorOld)}</td>
+            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.deviationCurrent*currentRepetitions/factorOld)}</td>
           </tr>
           <tr>
             <td>${%mean}<br />${%perRepetition}</td>
             <td>${it.round(currentStatistic.getMeanOld() / currentRepetitions / factorOld)} ${unit}</td>
             <td>${it.round(currentStatistic.getMeanCurrent() / currentRepetitions / factorOld)} ${unit}</td>
-            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.getMeanOld())} $&#x00B5;s</td>
-            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.getMeanCurrent())} $&#x00B5;s</td>
+            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.getMeanOld()/factorOld)} ${unit}</td>
+            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.getMeanCurrent()/factorOld)} ${unit}</td>
           </tr>
           <tr>
             <td>${%standardDeviation}<br />${%perRepetition}</td>
             <td>${it.round(currentStatistic.deviationOld / currentRepetitions / factorOld)}</td>
             <td>${it.round(currentStatistic.deviationCurrent / currentRepetitions / factorOld)}</td>
-            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.deviationOld)}</td>
-            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.deviationCurrent)}</td>
+            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.deviationOld/factorOld)}</td>
+            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.deviationCurrent/factorOld)}</td>
           </tr>
           <tr>
             <td>T-Wert</td>
