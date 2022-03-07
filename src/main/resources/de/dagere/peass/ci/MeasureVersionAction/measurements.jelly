@@ -54,43 +54,43 @@
           <tr>
             <td>${%mean}<br />${%measured}</td>
             <td>
-              ${it.round(currentStatistic.getMeanOld() / factorOld)} ${unit}
+              ${it.localizeAndRound(currentStatistic.getMeanOld() / factorOld)} ${unit}
             </td>
             <td>
-              ${it.round(currentStatistic.getMeanCurrent() / factorOld)} ${unit}
+              ${it.localizeAndRound(currentStatistic.getMeanCurrent() / factorOld)} ${unit}
             </td>
-            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.getMeanOld()*currentRepetitions/factorOld)} ${unit}</td>
-            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.getMeanCurrent()*currentRepetitions/factorOld)} ${unit}</td>
+            <td class="fullMeasurement" style="display: none">${it.localizeAndRound(noWarmupStatistic.getMeanOld()*currentRepetitions/factorOld)} ${unit}</td>
+            <td class="fullMeasurement" style="display: none">${it.localizeAndRound(noWarmupStatistic.getMeanCurrent()*currentRepetitions/factorOld)} ${unit}</td>
           </tr>
           <tr>
             <td>${%standardDeviation}<br />${%measured}</td>
             <td>
-              ${it.round(currentStatistic.deviationOld / factorOld)}
+              ${it.localizeAndRound(currentStatistic.deviationOld / factorOld)}
             </td>
             <td>
-              ${it.round(currentStatistic.deviationCurrent / factorOld)}
+              ${it.localizeAndRound(currentStatistic.deviationCurrent / factorOld)}
             </td>
-            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.deviationOld*currentRepetitions/factorOld)}</td>
-            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.deviationCurrent*currentRepetitions/factorOld)}</td>
+            <td class="fullMeasurement" style="display: none">${it.localizeAndRound(noWarmupStatistic.deviationOld*currentRepetitions/factorOld)}</td>
+            <td class="fullMeasurement" style="display: none">${it.localizeAndRound(noWarmupStatistic.deviationCurrent*currentRepetitions/factorOld)}</td>
           </tr>
           <tr>
             <td>${%mean}<br />${%perRepetition}</td>
-            <td>${it.round(currentStatistic.getMeanOld() / currentRepetitions / factorOld)} ${unit}</td>
-            <td>${it.round(currentStatistic.getMeanCurrent() / currentRepetitions / factorOld)} ${unit}</td>
-            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.getMeanOld()/factorOld)} ${unit}</td>
-            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.getMeanCurrent()/factorOld)} ${unit}</td>
+            <td>${it.localizeAndRound(currentStatistic.getMeanOld() / currentRepetitions / factorOld)} ${unit}</td>
+            <td>${it.localizeAndRound(currentStatistic.getMeanCurrent() / currentRepetitions / factorOld)} ${unit}</td>
+            <td class="fullMeasurement" style="display: none">${it.localizeAndRound(noWarmupStatistic.getMeanOld()/factorOld)} ${unit}</td>
+            <td class="fullMeasurement" style="display: none">${it.localizeAndRound(noWarmupStatistic.getMeanCurrent()/factorOld)} ${unit}</td>
           </tr>
           <tr>
             <td>${%standardDeviation}<br />${%perRepetition}</td>
-            <td>${it.round(currentStatistic.deviationOld / currentRepetitions / factorOld)}</td>
-            <td>${it.round(currentStatistic.deviationCurrent / currentRepetitions / factorOld)}</td>
-            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.deviationOld/factorOld)}</td>
-            <td class="fullMeasurement" style="display: none">${it.round(noWarmupStatistic.deviationCurrent/factorOld)}</td>
+            <td>${it.localizeAndRound(currentStatistic.deviationOld / currentRepetitions / factorOld)}</td>
+            <td>${it.localizeAndRound(currentStatistic.deviationCurrent / currentRepetitions / factorOld)}</td>
+            <td class="fullMeasurement" style="display: none">${it.localizeAndRound(noWarmupStatistic.deviationOld/factorOld)}</td>
+            <td class="fullMeasurement" style="display: none">${it.localizeAndRound(noWarmupStatistic.deviationCurrent/factorOld)}</td>
           </tr>
           <tr>
             <td>T-Wert</td>
             <td colspan="2">
-              ${it.round(currentStatistic.tvalue)}
+              ${it.localizeAndRound(currentStatistic.tvalue)}
               <span>(</span>
               <j:if test="${it.abs(currentStatistic.tvalue) &gt; it.getCriticalTValue()}">${%significantChange} ${AMP} </j:if>
               <j:if test="${it.abs(currentStatistic.tvalue) &lt; it.getCriticalTValue()}">${%noSignificantChange} ${AMP} </j:if>
@@ -99,7 +99,7 @@
               </a>
               <span>)</span>
             </td>
-            <td class="fullMeasurement" colspan="2" style="display: none">${it.round(noWarmupStatistic.tvalue)}</td>
+            <td class="fullMeasurement" colspan="2" style="display: none">${it.localizeAndRound(noWarmupStatistic.tvalue)}</td>
           </tr>
           <div id="dialogTValue" title="${%helpTValueTitle}">
             ${%helpTValueStart}
@@ -108,7 +108,7 @@
             ${%helpTValueSignificance}
             <b>${it.config.vms}</b> VMs (Degrees of Freedom: <b>${it.getDegreesOfFreedom()}</b>)
             ${%helpTValueMiddle}
-            <b>${it.round(it.getCriticalTValue())}</b>
+            <b>${it.localizeAndRound(it.getCriticalTValue())}</b>
             ${%helpTValueEnd}
           </div>
           <script>

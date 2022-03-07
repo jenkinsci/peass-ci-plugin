@@ -1,7 +1,9 @@
 package de.dagere.peass.ci;
 
+import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -128,8 +130,11 @@ public class MeasureVersionAction extends VisibleAction {
       return name.substring(prefix.length());
    }
 
-   public double round(final double value) {
-      return Math.round(value * 10000) / 10000d;
+   public String localizeAndRound(final double value) {
+      final NumberFormat numberFormat = NumberFormat.getInstance(Locale.getDefault(Locale.Category.FORMAT));
+      numberFormat.setMinimumFractionDigits(0);
+      numberFormat.setMaximumFractionDigits(4);
+      return (numberFormat.format(value));
    }
 
    public double getMeanOfValues(final double[] values) {
