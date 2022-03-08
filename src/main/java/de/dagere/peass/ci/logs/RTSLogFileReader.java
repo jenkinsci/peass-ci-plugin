@@ -16,7 +16,7 @@ import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.rts.RTSLogData;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
-import de.dagere.peass.dependency.persistence.StaticalTestSelection;
+import de.dagere.peass.dependency.persistence.StaticTestSelection;
 import de.dagere.peass.dependency.persistence.VersionStaticSelection;
 import de.dagere.peass.dependency.traces.TraceWriter;
 import de.dagere.peass.utils.Constants;
@@ -46,7 +46,7 @@ public class RTSLogFileReader {
       File dependencyFile = visualizationFolders.getResultsFolders().getDependencyFile();
       if (dependencyFile.exists()) {
          try {
-            StaticalTestSelection dependencies = Constants.OBJECTMAPPER.readValue(dependencyFile, StaticalTestSelection.class);
+            StaticTestSelection dependencies = Constants.OBJECTMAPPER.readValue(dependencyFile, StaticTestSelection.class);
             VersionStaticSelection version = dependencies.getVersions().get(measurementConfig.getExecutionConfig().getVersion());
             if (version != null) {
                LOG.debug("Version run success: {}", version.isRunning());

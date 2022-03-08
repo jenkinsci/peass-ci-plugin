@@ -16,7 +16,7 @@ import de.dagere.peass.config.DependencyConfig;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.ChangedEntity;
 import de.dagere.peass.dependency.analysis.data.TestCase;
-import de.dagere.peass.dependency.persistence.StaticalTestSelection;
+import de.dagere.peass.dependency.persistence.StaticTestSelection;
 import de.dagere.peass.dependency.persistence.ExecutionData;
 import de.dagere.peass.folders.ResultsFolders;
 import de.dagere.peass.utils.Constants;
@@ -44,7 +44,7 @@ public class TestRTSVisualizationCreator {
    }
 
    private void writeEmptyDependencies(final ResultsFolders localWorkspace) throws IOException, JsonGenerationException, JsonMappingException {
-      StaticalTestSelection emptyDependencies = new StaticalTestSelection();
+      StaticTestSelection emptyDependencies = new StaticTestSelection();
       emptyDependencies.getInitialversion().addDependency(new TestCase("Test#test"), new ChangedEntity("SomeCallee#method"));
       Constants.OBJECTMAPPER.writeValue(localWorkspace.getDependencyFile(), emptyDependencies);
    }
