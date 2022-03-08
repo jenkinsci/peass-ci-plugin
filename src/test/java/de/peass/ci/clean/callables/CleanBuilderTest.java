@@ -12,6 +12,7 @@ import com.google.common.io.Files;
 
 import de.dagere.peass.ci.MeasureVersionBuilder;
 import de.dagere.peass.ci.clean.CleanBuilder;
+import de.dagere.peass.folders.ResultsFolders;
 import hudson.model.FreeStyleBuild;
 import hudson.model.FreeStyleProject;
 import hudson.model.Result;
@@ -48,7 +49,7 @@ public class CleanBuilderTest {
    private void createDummyData(final FreeStyleProject project) throws IOException {
       File rootDir = new File(project.getRootDir(), MeasureVersionBuilder.PEASS_FOLDER_NAME);
       rootDir.mkdirs();
-      dependencyFile = new File(rootDir, "deps_" + project.getName() + ".json");
+      dependencyFile = new File(rootDir, ResultsFolders.STATIC_SELECTION_PREFIX + project.getName() + ".json");
       Files.touch(dependencyFile);
       
       trendFile = new File(rootDir, "trend.json");
