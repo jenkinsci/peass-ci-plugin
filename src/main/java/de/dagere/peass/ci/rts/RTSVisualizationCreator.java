@@ -20,7 +20,7 @@ import de.dagere.peass.ci.logs.rts.RTSLogSummary;
 import de.dagere.peass.dependency.analysis.data.ChangedEntity;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.analysis.data.TestSet;
-import de.dagere.peass.dependency.persistence.Dependencies;
+import de.dagere.peass.dependency.persistence.StaticalTestSelection;
 import de.dagere.peass.dependency.persistence.ExecutionData;
 import de.dagere.peass.dependency.persistence.VersionStaticSelection;
 import de.dagere.peass.dependency.traces.coverage.CoverageSelectionInfo;
@@ -112,7 +112,7 @@ public class RTSVisualizationCreator {
       Map<String, List<String>> staticSelection = new LinkedHashMap<String, List<String>>();
       File dependencyfile = localWorkspace.getDependencyFile();
       if (dependencyfile.exists()) {
-         Dependencies dependencies = Constants.OBJECTMAPPER.readValue(dependencyfile, Dependencies.class);
+         StaticalTestSelection dependencies = Constants.OBJECTMAPPER.readValue(dependencyfile, StaticalTestSelection.class);
          VersionStaticSelection version = dependencies.getVersions().get(peassConfig.getMeasurementConfig().getExecutionConfig().getVersion());
 
          if (version != null) {
