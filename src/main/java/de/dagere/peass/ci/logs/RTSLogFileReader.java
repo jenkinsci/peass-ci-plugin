@@ -43,7 +43,7 @@ public class RTSLogFileReader {
 
    private boolean isVersionRunSuccess(final VisualizationFolderManager visualizationFolders, final MeasurementConfig measurementConfig) {
       boolean success;
-      File dependencyFile = visualizationFolders.getResultsFolders().getDependencyFile();
+      File dependencyFile = visualizationFolders.getResultsFolders().getStaticTestSelectionFile();
       if (dependencyFile.exists()) {
          try {
             StaticTestSelection dependencies = Constants.OBJECTMAPPER.readValue(dependencyFile, StaticTestSelection.class);

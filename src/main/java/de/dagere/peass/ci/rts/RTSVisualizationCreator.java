@@ -79,7 +79,7 @@ public class RTSVisualizationCreator {
 
    private List<String> readDynamicSelection(final Run<?, ?> run) throws IOException, JsonParseException, JsonMappingException {
       List<String> selectedTests = new LinkedList<>();
-      File executionfile = localWorkspace.getExecutionFile();
+      File executionfile = localWorkspace.getTraceTestSelectionFile();
       if (executionfile.exists()) {
          ExecutionData executions = Constants.OBJECTMAPPER.readValue(executionfile, ExecutionData.class);
          TestSet tests = executions.getVersions().get(peassConfig.getMeasurementConfig().getExecutionConfig().getVersion());
@@ -110,7 +110,7 @@ public class RTSVisualizationCreator {
 
    private Map<String, List<String>> readStaticSelection(final Run<?, ?> run) throws IOException, JsonParseException, JsonMappingException {
       Map<String, List<String>> staticSelection = new LinkedHashMap<String, List<String>>();
-      File dependencyfile = localWorkspace.getDependencyFile();
+      File dependencyfile = localWorkspace.getStaticTestSelectionFile();
       if (dependencyfile.exists()) {
          StaticTestSelection dependencies = Constants.OBJECTMAPPER.readValue(dependencyfile, StaticTestSelection.class);
          VersionStaticSelection version = dependencies.getVersions().get(peassConfig.getMeasurementConfig().getExecutionConfig().getVersion());

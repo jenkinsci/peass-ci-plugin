@@ -20,7 +20,7 @@ public class RTSInfosTest {
    @Test
    public void testRTSInfos() throws StreamReadException, DatabindException, IOException {
       ResultsFolders folders = Mockito.mock(ResultsFolders.class);
-      Mockito.when(folders.getDependencyFile()).thenReturn(new File("src/test/resources/noSelectedTest/deps_demo.json"));
+      Mockito.when(folders.getStaticTestSelectionFile()).thenReturn(new File("src/test/resources/noSelectedTest/deps_demo.json"));
       
       PeassProcessConfiguration config = Mockito.mock(PeassProcessConfiguration.class);
       MeasurementConfig measurementConfig = new MeasurementConfig(1);

@@ -40,12 +40,12 @@ public class TestRTSVisualizationCreator {
 
    private void writeEmptyExecutionData(final ResultsFolders localWorkspace) throws IOException, JsonGenerationException, JsonMappingException {
       ExecutionData data = new ExecutionData();
-      Constants.OBJECTMAPPER.writeValue(localWorkspace.getExecutionFile(), data);
+      Constants.OBJECTMAPPER.writeValue(localWorkspace.getTraceTestSelectionFile(), data);
    }
 
    private void writeEmptyDependencies(final ResultsFolders localWorkspace) throws IOException, JsonGenerationException, JsonMappingException {
       StaticTestSelection emptyDependencies = new StaticTestSelection();
       emptyDependencies.getInitialversion().addDependency(new TestCase("Test#test"), new ChangedEntity("SomeCallee#method"));
-      Constants.OBJECTMAPPER.writeValue(localWorkspace.getDependencyFile(), emptyDependencies);
+      Constants.OBJECTMAPPER.writeValue(localWorkspace.getStaticTestSelectionFile(), emptyDependencies);
    }
 }
