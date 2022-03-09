@@ -63,7 +63,7 @@ public class HistogramReader {
    }
 
    private HistogramValues loadResults(final Chunk chunk, final MeasurementConfig currentConfig) {
-      ResultLoader loader = new ResultLoader(currentConfig, null, null, 0);
+      ResultLoader loader = new ResultLoader(currentConfig);
       loader.loadChunk(chunk);
 
       HistogramValues values = new HistogramValues(loader.getValsBefore(), loader.getValsAfter(), currentConfig);
