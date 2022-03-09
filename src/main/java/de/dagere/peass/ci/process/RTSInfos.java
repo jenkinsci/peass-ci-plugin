@@ -31,11 +31,11 @@ public class RTSInfos {
    }
 
    public static RTSInfos readInfosFromFolders(final ResultsFolders results, final PeassProcessConfiguration peassConfig) throws StreamReadException, DatabindException, IOException {
-      File dependencyFile = results.getStaticTestSelectionFile();
-      if (dependencyFile.exists()) {
+      File staticTestSelectionFile = results.getStaticTestSelectionFile();
+      if (staticTestSelectionFile.exists()) {
          boolean staticChanges = false;
-         StaticTestSelection dependencies = Constants.OBJECTMAPPER.readValue(dependencyFile, StaticTestSelection.class);
-         VersionStaticSelection version = dependencies.getVersions().get(peassConfig.getMeasurementConfig().getExecutionConfig().getVersion());
+         StaticTestSelection staticTestSelection = Constants.OBJECTMAPPER.readValue(staticTestSelectionFile, StaticTestSelection.class);
+         VersionStaticSelection version = staticTestSelection.getVersions().get(peassConfig.getMeasurementConfig().getExecutionConfig().getVersion());
          boolean hasStaticallySelectedTests = false;
          if (version != null) {
             if (!version.getChangedClazzes().isEmpty()) {

@@ -13,6 +13,8 @@ import org.apache.logging.log4j.Logger;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.exc.StreamReadException;
+import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import de.dagere.peass.analysis.changes.Changes;
@@ -81,10 +83,7 @@ public class LocalPeassProcessManager {
          peassConfig.getMeasurementConfig().getExecutionConfig().setVersionOld(versionOld);
       }
       if (peassConfig.isDisplayRTSLogs()) {
-         RTSInfos infos = RTSInfos.readInfosFromFolders(results, peassConfig);
-         RTSLogSummary summary = logActionCreator.createRTSActions(infos);
-         AggregatedRTSResult aggregatedRTSResult = new AggregatedRTSResult(summary, result);
-         return aggregatedRTSResult;
+         return displayRTSLogs(result);
       }
       if (result != null && result.getTests() != null) {
          AggregatedRTSResult aggregatedRTSResult = new AggregatedRTSResult(null, result);
@@ -93,6 +92,14 @@ public class LocalPeassProcessManager {
          return null;
       }
 
+   }
+
+   private AggregatedRTSResult displayRTSLogs(RTSResult result)
+         throws StreamReadException, DatabindException, IOException {
+      RTSInfos infos = RTSInfos.readInfosFromFolders(results, peassConfig);
+      RTSLogSummary summary = logActionCreator.createRTSActions(infos);
+      AggregatedRTSResult aggregatedRTSResult = new AggregatedRTSResult(summary, result);
+      return aggregatedRTSResult;
    }
 
    public boolean measure(final Set<TestCase> tests) throws IOException, InterruptedException {
