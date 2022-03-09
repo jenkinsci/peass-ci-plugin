@@ -3,7 +3,7 @@ package de.dagere.peass.ci;
 import java.io.Serializable;
 import java.util.regex.Pattern;
 
-import de.dagere.peass.config.DependencyConfig;
+import de.dagere.peass.config.TestSelectionConfig;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.execution.utils.EnvironmentVariables;
 
@@ -12,7 +12,7 @@ public class PeassProcessConfiguration implements Serializable {
 
    private final boolean updateSnapshotDependencies;
    private final MeasurementConfig measurementConfig;
-   private final DependencyConfig dependencyConfig;
+   private final TestSelectionConfig dependencyConfig;
    private final EnvironmentVariables envVars;
    private final Pattern pattern;
 
@@ -21,7 +21,7 @@ public class PeassProcessConfiguration implements Serializable {
    private final boolean displayLogs;
    private final boolean displayRCALogs;
 
-   public PeassProcessConfiguration(final boolean updateSnapshotDependencies, final MeasurementConfig measurementConfig, final DependencyConfig dependencyConfig, final EnvironmentVariables envVars,
+   public PeassProcessConfiguration(final boolean updateSnapshotDependencies, final MeasurementConfig measurementConfig, final TestSelectionConfig dependencyConfig, final EnvironmentVariables envVars,
          final boolean displayRTSLogs, final boolean displayLogs, final boolean displayRCALogs, final Pattern pattern) {
       this.updateSnapshotDependencies = updateSnapshotDependencies;
       this.measurementConfig = measurementConfig;
@@ -41,7 +41,7 @@ public class PeassProcessConfiguration implements Serializable {
       return measurementConfig;
    }
 
-   public DependencyConfig getDependencyConfig() {
+   public TestSelectionConfig getDependencyConfig() {
       return dependencyConfig;
    }
 

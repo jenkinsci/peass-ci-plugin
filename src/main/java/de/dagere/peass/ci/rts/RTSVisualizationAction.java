@@ -5,12 +5,12 @@ import java.util.Map;
 
 import de.dagere.peass.ci.VisibleAction;
 import de.dagere.peass.ci.logs.rts.RTSLogSummary;
-import de.dagere.peass.config.DependencyConfig;
+import de.dagere.peass.config.TestSelectionConfig;
 import de.dagere.peass.dependency.traces.coverage.CoverageSelectionVersion;
 
 public class RTSVisualizationAction extends VisibleAction {
 
-   private final DependencyConfig config;
+   private final TestSelectionConfig config;
    private final Map<String, List<String>> staticSelection;
    private final List<String> dynamicSelection;
    private final String version, versionOld;
@@ -19,7 +19,7 @@ public class RTSVisualizationAction extends VisibleAction {
    //TODO Display count of calls for each test
    private final CoverageSelectionVersion coverageSelection;
 
-   public RTSVisualizationAction(final DependencyConfig config, final Map<String, List<String>> staticSelection, final List<String> dynamicSelection, final CoverageSelectionVersion coverageSelection,
+   public RTSVisualizationAction(final TestSelectionConfig config, final Map<String, List<String>> staticSelection, final List<String> dynamicSelection, final CoverageSelectionVersion coverageSelection,
          final String version, final String versionOld, final RTSLogSummary logSummary) {
       this.config = config;
       this.staticSelection = staticSelection;
@@ -30,7 +30,7 @@ public class RTSVisualizationAction extends VisibleAction {
       this.logSummary = logSummary;
    }
    
-   public DependencyConfig getConfig() {
+   public TestSelectionConfig getConfig() {
       return config;
    }
 

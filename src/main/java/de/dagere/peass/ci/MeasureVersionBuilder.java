@@ -38,7 +38,7 @@ import de.dagere.peass.ci.process.IncludeExcludeParser;
 import de.dagere.peass.ci.process.JenkinsLogRedirector;
 import de.dagere.peass.ci.process.LocalPeassProcessManager;
 import de.dagere.peass.ci.remote.RemoteVersionReader;
-import de.dagere.peass.config.DependencyConfig;
+import de.dagere.peass.config.TestSelectionConfig;
 import de.dagere.peass.config.ExecutionConfig;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.config.MeasurementStrategy;
@@ -272,7 +272,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          peassEnv.getEnvironmentVariables().put(entry.getKey(), entry.getValue());
       }
 
-      DependencyConfig dependencyConfig = new DependencyConfig(1, false, true, generateCoverageSelection);
+      TestSelectionConfig dependencyConfig = new TestSelectionConfig(1, false, true, generateCoverageSelection);
       PeassProcessConfiguration peassConfig = new PeassProcessConfiguration(updateSnapshotDependencies, configWithRealGitVersions, dependencyConfig,
             peassEnv,
             displayRTSLogs, displayLogs, displayRCALogs, pattern);

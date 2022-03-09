@@ -1,6 +1,6 @@
 de.dagere.peass.config.MeasurementConfig
 de.dagere.peass.config.ExecutionConfig
-de.dagere.peass.config.DependencyConfig
+de.dagere.peass.config.TestSelectionConfig
 de.dagere.peass.config.KiekerConfig
 de.dagere.peass.config.StatisticsConfig
 de.dagere.peass.analysis.changes.ProjectChanges

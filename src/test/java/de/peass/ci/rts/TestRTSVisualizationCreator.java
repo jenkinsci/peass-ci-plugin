@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.ci.logs.rts.RTSLogSummary;
 import de.dagere.peass.ci.rts.RTSVisualizationCreator;
-import de.dagere.peass.config.DependencyConfig;
+import de.dagere.peass.config.TestSelectionConfig;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.ChangedEntity;
 import de.dagere.peass.dependency.analysis.data.TestCase;
@@ -26,7 +26,7 @@ public class TestRTSVisualizationCreator {
    
    @Test
    public void testEmptyCreation() throws JsonGenerationException, JsonMappingException, IOException {
-      PeassProcessConfiguration peassConfig = new PeassProcessConfiguration(true, new MeasurementConfig(15), new DependencyConfig(1, false), null, false, false, false,
+      PeassProcessConfiguration peassConfig = new PeassProcessConfiguration(true, new MeasurementConfig(15), new TestSelectionConfig(1, false), null, false, false, false,
             null);
       ResultsFolders localWorkspace = new ResultsFolders(new File("target/current"), "empty-test");
       
