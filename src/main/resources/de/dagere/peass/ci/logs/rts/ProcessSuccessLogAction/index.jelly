@@ -1,15 +1,15 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout" >
-	<l:layout title="Process Success Log Action">
-		 <l:side-panel> 
-            <st:include page="sidepanel.jelly" it="${it.run}" optional="true" /> 
-        </l:side-panel>
-		<l:main-panel>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout">
+  <l:layout title="Process Success Log Action">
+    <l:side-panel>
+      <st:include page="sidepanel.jelly" it="${it.run}" optional="true" />
+    </l:side-panel>
+    <l:main-panel>
 
-			<h1>Process Success Run Version: ${it.version}</h1>
-			<pre>${it.log}</pre>			
-			
+      <h1>Process Success Run Version: ${it.version}</h1>
+      <pre>${it.log}</pre>
 
-		</l:main-panel>
-	</l:layout>
+
+    </l:main-panel>
+  </l:layout>
 </j:jelly> 

@@ -1,38 +1,48 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout" >
-	<l:layout title="Performance Measurement Log Overview">
-		 <l:side-panel> 
-            <st:include page="sidepanel.jelly" it="${it.run}" optional="true" /> 
-        </l:side-panel>
-		<l:main-panel>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout">
+  <l:layout title="Performance Measurement Log Overview">
+    <l:side-panel>
+      <st:include page="sidepanel.jelly" it="${it.run}" optional="true" />
+    </l:side-panel>
+    <l:main-panel>
 
-			<h1>Performance RCA Logs Overview</h1>
-			<j:if test="${it.isRedirectSubprocessOutputToFile()}">
-			    <a href="../rcaLog">Root Cause Analysis Overall Log</a><br />
-			</j:if>
-			<j:forEach var="testcase" items="${it.getTestLevelMap().entrySet()}" >
-				<b>Test Case: ${testcase.getKey()}</b>
-				Levels: ${testcase.getValue().size()}
-				<j:set var="levelid" value="0"/>
-				<j:forEach var="level" items="${testcase.getValue()}">
-				  <b>Level: ${levelid}</b><br />
-				  ${level} Size: ${level.getLogFiles().size()}
-				  <table>
-				  <tr><th>VM-Id</th><th>Predecessor</th><th>Version</th></tr>
-				  <j:set var="vmid" value="0"/>
-				  <j:forEach var="logFilePair" items="${level.getLogFiles()}">
-			    	<tr>
-			    		<td>${vmid}</td>
-			    		<td><a href="../rcalog_${testcase.getKey().getLinkUsable()}_${vmid}_${it.versionOld}_${levelid}">${it.versionOld}</a></td>
-			    		<td><a href="../rcalog_${testcase.getKey().getLinkUsable()}_${vmid}_${it.version}_${levelid}">${it.version}</a></td>
-			    	</tr>
-			    	<j:set var="vmid" value="${vmid+1}"/>
-				  </j:forEach>
-				  </table>
-				  
-				  <j:set var="levelid" value="${levelid+1}"/>
-				</j:forEach>
-			</j:forEach>
-		</l:main-panel>
-	</l:layout>
+      <h1>Performance RCA Logs Overview</h1>
+      <j:if test="${it.isRedirectSubprocessOutputToFile()}">
+        <a href="../rcaLog">Root Cause Analysis Overall Log</a>
+        <br />
+      </j:if>
+      <j:forEach var="testcase" items="${it.getTestLevelMap().entrySet()}">
+        <b>Test Case: ${testcase.getKey()}</b>
+        Levels: ${testcase.getValue().size()}
+        <j:set var="levelid" value="0" />
+        <j:forEach var="level" items="${testcase.getValue()}">
+          <b>Level: ${levelid}</b>
+          <br />
+          ${level} Size: ${level.getLogFiles().size()}
+          <table>
+            <tr>
+              <th>VM-Id</th>
+              <th>Predecessor</th>
+              <th>Version</th>
+            </tr>
+            <j:set var="vmid" value="0" />
+            <j:forEach var="logFilePair" items="${level.getLogFiles()}">
+              <tr>
+                <td>${vmid}</td>
+                <td>
+                  <a href="../rcalog_${testcase.getKey().getLinkUsable()}_${vmid}_${it.versionOld}_${levelid}">${it.versionOld}</a>
+                </td>
+                <td>
+                  <a href="../rcalog_${testcase.getKey().getLinkUsable()}_${vmid}_${it.version}_${levelid}">${it.version}</a>
+                </td>
+              </tr>
+              <j:set var="vmid" value="${vmid+1}" />
+            </j:forEach>
+          </table>
+
+          <j:set var="levelid" value="${levelid+1}" />
+        </j:forEach>
+      </j:forEach>
+    </l:main-panel>
+  </l:layout>
 </j:jelly> 
