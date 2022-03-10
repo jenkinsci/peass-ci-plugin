@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -56,6 +57,7 @@ public class DefaultMeasurementVisualizer {
       File[] files = dataFolder.listFiles((FileFilter) new WildcardFileFilter("*.xml"));
       LOG.debug("Searching in {} Files: {}", dataFolder, files != null ? files.length : "no files");
       if (files != null) {
+         Arrays.sort(files);
          for (File testcaseFile : files) {
             try {
                Kopemedata data = XMLDataLoader.loadData(testcaseFile);

@@ -37,10 +37,10 @@ public class TestMeasurementVisualizer {
       Mockito.verify(run, Mockito.times(2)).addAction(captor.capture());
 
       MeasurementVisualizationAction action1 = captor.getAllValues().get(0);
-      Assert.assertEquals(action1.getDisplayName(), "measurement_ExampleTest_test(JUNIT_PARAMETERIZED-1)");
+      Assert.assertEquals(action1.getDisplayName(), "measurement_ExampleTest_test(JUNIT_PARAMETERIZED-0)");
 
       MeasurementVisualizationAction action2 = captor.getAllValues().get(1);
-      Assert.assertEquals(action2.getDisplayName(), "measurement_ExampleTest_test(JUNIT_PARAMETERIZED-0)");
+      Assert.assertEquals(action2.getDisplayName(), "measurement_ExampleTest_test(JUNIT_PARAMETERIZED-1)");
 
       Map<String, TestcaseStatistic> noWarmupStatistics = visualizer.getNoWarmupStatistics();
       Assert.assertTrue(noWarmupStatistics.containsKey("de.dagere.peass.ExampleTest#test(JUNIT_PARAMETERIZED-0)"));
