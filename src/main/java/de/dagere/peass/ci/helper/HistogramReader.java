@@ -13,6 +13,7 @@ import de.dagere.kopeme.generated.Kopemedata;
 import de.dagere.kopeme.generated.TestcaseType;
 import de.dagere.kopeme.generated.TestcaseType.Datacollector.Chunk;
 import de.dagere.peass.config.MeasurementConfig;
+import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.measurement.dataloading.MultipleVMTestUtil;
 import de.dagere.peass.measurement.dataloading.ResultLoader;
 import io.jenkins.cli.shaded.org.apache.commons.io.filefilter.WildcardFileFilter;
@@ -53,7 +54,7 @@ public class HistogramReader {
       // This assumes measurements are only executed once; if this is not the case, the matching result would need to be searched
       final TestcaseType testcase = data.getTestcases().getTestcase().get(0);
       Chunk chunk = testcase.getDatacollector().get(0).getChunk().get(0);
-      String testcaseKey = data.getTestcases().getClazz() + "#" + testcase.getName();
+      String testcaseKey = new TestCase(data.getTestcases()).toString();
       
       MeasurementConfig currentConfig = getUpdatedConfiguration(testcaseKey, testcase, chunk);
       

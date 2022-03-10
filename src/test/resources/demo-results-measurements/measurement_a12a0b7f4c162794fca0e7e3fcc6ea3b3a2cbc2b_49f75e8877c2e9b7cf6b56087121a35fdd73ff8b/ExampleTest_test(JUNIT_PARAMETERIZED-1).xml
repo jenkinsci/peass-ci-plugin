@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<kopemedata>
+ <testcases class="de.dagere.peass.ExampleTest">
+  <testcase name="test">
+   <datacollector name="de.dagere.kopeme.datacollection.TimeDataCollectorNoGC">
+    <chunk chunkStartTime="1646926954150">
+     <result date="1646926961046">
+      <value>4202639.833333333</value>
+      <deviation>155812.57920131698</deviation>
+      <warmup>0</warmup>
+      <iterations>6</iterations>
+      <repetitions>2</repetitions>
+      <version>
+       <gitversion>49f75e8877c2e9b7cf6b56087121a35fdd73ff8b</gitversion>
+      </version>
+      <min>4133571.0</min>
+      <max>4520618.0</max>
+      <params>
+       <param key="JUNIT_PARAMETERIZED">1</param>
+      </params>
+     </result>
+     <result date="1646926968493">
+      <value>4.0257574166666664E7</value>
+      <deviation>162075.73924855777</deviation>
+      <warmup>0</warmup>
+      <iterations>6</iterations>
+      <repetitions>2</repetitions>
+      <version>
+       <gitversion>a12a0b7f4c162794fca0e7e3fcc6ea3b3a2cbc2b</gitversion>
+      </version>
+      <min>4.0186406E7</min>
+      <max>4.0588344E7</max>
+      <params>
+       <param key="JUNIT_PARAMETERIZED">1</param>
+      </params>
+     </result>
+     <result date="1646926976713">
+      <value>4231442.666666667</value>
+      <deviation>216931.7982626491</deviation>
+      <warmup>0</warmup>
+      <iterations>6</iterations>
+      <repetitions>2</repetitions>
+      <version>
+       <gitversion>49f75e8877c2e9b7cf6b56087121a35fdd73ff8b</gitversion>
+      </version>
+      <min>4123990.0</min>
+      <max>4670927.0</max>
+      <params>
+       <param key="JUNIT_PARAMETERIZED">1</param>
+      </params>
+     </result>
+     <result date="1646926983984">
+      <value>4.0323622666666664E7</value>
+      <deviation>323251.0710501459</deviation>
+      <warmup>0</warmup>
+      <iterations>6</iterations>
+      <repetitions>2</repetitions>
+      <version>
+       <gitversion>a12a0b7f4c162794fca0e7e3fcc6ea3b3a2cbc2b</gitversion>
+      </version>
+      <min>4.0180001E7</min>
+      <max>4.0982818E7</max>
+      <params>
+       <param key="JUNIT_PARAMETERIZED">1</param>
+      </params>
+     </result>
+    </chunk>
+   </datacollector>
+  </testcase>
+ </testcases>
+</kopemedata>

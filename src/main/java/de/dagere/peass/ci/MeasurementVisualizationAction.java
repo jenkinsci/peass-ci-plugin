@@ -38,6 +38,6 @@ public class MeasurementVisualizationAction extends VisibleAction {
 
    @Override
    public String getDisplayName() {
-      return null;
+      return displayName;
    }
 }

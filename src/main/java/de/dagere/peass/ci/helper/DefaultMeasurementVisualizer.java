@@ -65,9 +65,9 @@ public class DefaultMeasurementVisualizer {
                KoPeMeTreeConverter treeConverter = new KoPeMeTreeConverter(detailResultsFolder, version, testcase);
                File testcaseVisualizationFile = generateJSFile(testcase, treeConverter);
 
-               LOG.debug("Adding action: " + testcase.getExecutable());
+               LOG.debug("Adding action: " + testcase.toString());
 
-               String name = testcase.getExecutable().replace("#", "_").substring(longestPrefix.length());
+               String name = testcase.toString().replace("#", "_").substring(longestPrefix.length());
 
                final String content = FileUtils.readFileToString(testcaseVisualizationFile, StandardCharsets.UTF_8);
                run.addAction(new MeasurementVisualizationAction("measurement_" + name, content));
@@ -88,14 +88,14 @@ public class DefaultMeasurementVisualizer {
       GraphNode kopemeDataNode = treeConverter.getData();
 
       LOG.info("Statistic: {}", kopemeDataNode.getStatistic());
-      noWarmupStatistics.put(testcase.getExecutable(), kopemeDataNode.getStatistic());
+      noWarmupStatistics.put(testcase.toString(), kopemeDataNode.getStatistic());
 
       File versionVisualizationFolder = new File(visualizationFolders.getVisualizationFolder(), version);
       File kopemeVisualizationFolder = new File(versionVisualizationFolder, "pure_kopeme");
       if (!kopemeVisualizationFolder.mkdirs()) {
          LOG.error("Creating file {} was not possibley", kopemeVisualizationFolder);
       }
-      File testcaseVisualizationFile = new File(kopemeVisualizationFolder, testcase.getClazz() + "_" + testcase.getMethod() + ".json");
+      File testcaseVisualizationFile = new File(kopemeVisualizationFolder, testcase.getClazz() + "_" + testcase.getMethodWithParams() + ".json");
       writeDataJS(testcaseVisualizationFile, kopemeDataNode);
       return testcaseVisualizationFile;
    }

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<kopemedata>
+ <testcases class="de.dagere.peass.ExampleTest">
+  <testcase name="test">
+   <datacollector name="de.dagere.kopeme.datacollection.TimeDataCollectorNoGC">
+    <chunk chunkStartTime="1646926923411">
+     <result date="1646926930371">
+      <value>2206310.333333333</value>
+      <deviation>176974.49749799166</deviation>
+      <warmup>0</warmup>
+      <iterations>6</iterations>
+      <repetitions>2</repetitions>
+      <version>
+       <gitversion>49f75e8877c2e9b7cf6b56087121a35fdd73ff8b</gitversion>
+      </version>
+      <min>2121461.0</min>
+      <max>2566669.0</max>
+      <params>
+       <param key="JUNIT_PARAMETERIZED">0</param>
+      </params>
+     </result>
+     <result date="1646926937654">
+      <value>2187388.1666666665</value>
+      <deviation>132355.09744987788</deviation>
+      <warmup>0</warmup>
+      <iterations>6</iterations>
+      <repetitions>2</repetitions>
+      <version>
+       <gitversion>a12a0b7f4c162794fca0e7e3fcc6ea3b3a2cbc2b</gitversion>
+      </version>
+      <min>2122490.0</min>
+      <max>2456978.0</max>
+      <params>
+       <param key="JUNIT_PARAMETERIZED">0</param>
+      </params>
+     </result>
+     <result date="1646926945720">
+      <value>2198334.833333333</value>
+      <deviation>177074.01528447543</deviation>
+      <warmup>0</warmup>
+      <iterations>6</iterations>
+      <repetitions>2</repetitions>
+      <version>
+       <gitversion>49f75e8877c2e9b7cf6b56087121a35fdd73ff8b</gitversion>
+      </version>
+      <min>2121491.0</min>
+      <max>2559638.0</max>
+      <params>
+       <param key="JUNIT_PARAMETERIZED">0</param>
+      </params>
+     </result>
+     <result date="1646926952883">
+      <value>2410060.166666667</value>
+      <deviation>453693.50361776917</deviation>
+      <warmup>0</warmup>
+      <iterations>6</iterations>
+      <repetitions>2</repetitions>
+      <version>
+       <gitversion>a12a0b7f4c162794fca0e7e3fcc6ea3b3a2cbc2b</gitversion>
+      </version>
+      <min>2119190.0</min>
+      <max>3235344.0</max>
+      <params>
+       <param key="JUNIT_PARAMETERIZED">0</param>
+      </params>
+     </result>
+    </chunk>
+   </datacollector>
+  </testcase>
+ </testcases>
+</kopemedata>
