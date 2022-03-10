@@ -20,8 +20,8 @@ import de.dagere.peass.ci.logs.rts.RTSLogSummary;
 import de.dagere.peass.dependency.analysis.data.ChangedEntity;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.analysis.data.TestSet;
-import de.dagere.peass.dependency.persistence.StaticTestSelection;
 import de.dagere.peass.dependency.persistence.ExecutionData;
+import de.dagere.peass.dependency.persistence.StaticTestSelection;
 import de.dagere.peass.dependency.persistence.VersionStaticSelection;
 import de.dagere.peass.dependency.traces.coverage.CoverageSelectionInfo;
 import de.dagere.peass.dependency.traces.coverage.CoverageSelectionVersion;
@@ -45,7 +45,7 @@ public class RTSVisualizationCreator {
       try {
          Map<String, List<String>> staticSelection = readStaticSelection(run);
 
-         List<String> traceSelectedTests = readDynamicSelection(run);
+         List<String> traceSelectedTests = readTraceBasedSelection(run);
          CoverageSelectionVersion coverageSelectedTests = readCoverageSelection(run);
 
          System.out.println("Selected: " + traceSelectedTests + " Coverage: " + coverageSelectedTests);
@@ -77,20 +77,20 @@ public class RTSVisualizationCreator {
       run.addAction(traceAction);
    }
 
-   private List<String> readDynamicSelection(final Run<?, ?> run) throws IOException, JsonParseException, JsonMappingException {
+   private List<String> readTraceBasedSelection(final Run<?, ?> run) throws IOException, JsonParseException, JsonMappingException {
       List<String> selectedTests = new LinkedList<>();
-      File executionfile = localWorkspace.getTraceTestSelectionFile();
-      if (executionfile.exists()) {
-         ExecutionData executions = Constants.OBJECTMAPPER.readValue(executionfile, ExecutionData.class);
-         TestSet tests = executions.getVersions().get(peassConfig.getMeasurementConfig().getExecutionConfig().getVersion());
+      File traceTestSelectionFile = localWorkspace.getTraceTestSelectionFile();
+      if (traceTestSelectionFile.exists()) {
+         ExecutionData traceSelections = Constants.OBJECTMAPPER.readValue(traceTestSelectionFile, ExecutionData.class);
+         TestSet tests = traceSelections.getVersions().get(peassConfig.getMeasurementConfig().getExecutionConfig().getVersion());
 
          if (tests != null) {
             for (TestCase test : tests.getTests()) {
-               selectedTests.add(test.getExecutable());
+               selectedTests.add(test.toString());
             }
          }
       } else {
-         LOG.info("File {} was not found, RTS execution info might be incomplete", executionfile.getAbsoluteFile());
+         LOG.info("File {} was not found, RTS execution info might be incomplete", traceTestSelectionFile.getAbsoluteFile());
       }
       return selectedTests;
    }
@@ -112,8 +112,8 @@ public class RTSVisualizationCreator {
       Map<String, List<String>> staticSelection = new LinkedHashMap<String, List<String>>();
       File dependencyfile = localWorkspace.getStaticTestSelectionFile();
       if (dependencyfile.exists()) {
-         StaticTestSelection dependencies = Constants.OBJECTMAPPER.readValue(dependencyfile, StaticTestSelection.class);
-         VersionStaticSelection version = dependencies.getVersions().get(peassConfig.getMeasurementConfig().getExecutionConfig().getVersion());
+         StaticTestSelection staticTestSelection = Constants.OBJECTMAPPER.readValue(dependencyfile, StaticTestSelection.class);
+         VersionStaticSelection version = staticTestSelection.getVersions().get(peassConfig.getMeasurementConfig().getExecutionConfig().getVersion());
 
          if (version != null) {
             addVersionDataToChangeliste(staticSelection, version);
@@ -131,7 +131,7 @@ public class RTSVisualizationCreator {
       for (Map.Entry<ChangedEntity, TestSet> entry : version.getChangedClazzes().entrySet()) {
          List<String> tests = new LinkedList<>();
          for (TestCase test : entry.getValue().getTests()) {
-            tests.add(test.getExecutable());
+            tests.add(test.toString());
          }
          ChangedEntity changedClazz = entry.getKey();
          changesList.put(changedClazz.toString(), tests);
