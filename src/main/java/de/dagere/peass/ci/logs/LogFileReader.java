@@ -66,7 +66,7 @@ public class LogFileReader {
          LOG.debug("Log folder: {} {}", logFolder, logFolder.listFiles());
 
          int tryIndex = 0;
-         String filenameSuffix = "log_" + testcase.getClazz() + File.separator + testcase.getMethod() + ".txt";
+         String filenameSuffix = "log_" + testcase.getClazz() + File.separator + testcase.getMethodWithParams() + ".txt";
          File predecessorFile = getVersionFile(testcase, logFolder, tryIndex, filenameSuffix, measurementConfig.getExecutionConfig().getVersionOld());
 
          LOG.debug("Trying whether {} exists {}", predecessorFile, predecessorFile.exists());
