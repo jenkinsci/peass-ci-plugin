@@ -16,7 +16,11 @@
       <j:forEach var="testcase" items="${it.getLogFiles().entrySet()}">
         <h2>Test Case: ${testcase.getKey()}</h2>
         VMs: ${testcase.getValue().size()}
-
+        <j:if test="${testcase.getValue().size() &lt; it.vms}">
+          <i class="fa fa-exclamation-triangle"
+            title="Less VMs than specified where executed (${testcase.getValue().size()} instead of ${it.vms}). This normally happens after 4 VM runs if Peass is not able to get any performance data (i.e. because of failing test when repeating or timeout)."
+            style="color: red">Less VMs than specified where executed (${testcase.getValue().size()} instead of ${it.vms}). This normally happens after 4 VM runs if Peass is not able to get any performance data (i.e. because of failing test when repeating or timeout).</i>
+        </j:if>
         <table class="data-table">
           <tr>
             <th>VM-Id</th>

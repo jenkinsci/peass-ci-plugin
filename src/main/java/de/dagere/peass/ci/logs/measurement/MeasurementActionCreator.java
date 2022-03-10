@@ -21,9 +21,9 @@ import de.dagere.peass.dependency.analysis.data.TestCase;
 import hudson.model.Run;
 
 public class MeasurementActionCreator {
-   
+
    private static final Logger LOG = LogManager.getLogger(MeasurementActionCreator.class);
-   
+
    private final LogFileReader reader;
    private final Run<?, ?> run;
    private final MeasurementConfig measurementConfig;
@@ -36,14 +36,17 @@ public class MeasurementActionCreator {
       this.pattern = pattern;
    }
 
-   public void createMeasurementActions(final Set<TestCase> tests ) throws IOException {
+   public void createMeasurementActions(final Set<TestCase> tests) throws IOException {
       createOverallLogAction();
-      
+
       Map<TestCase, List<LogFiles>> logFiles = reader.readAllTestcases(tests);
       createLogActions(run, logFiles);
 
       ExecutionConfig executionConfig = measurementConfig.getExecutionConfig();
-      LogOverviewAction logOverviewAction = new LogOverviewAction(logFiles, executionConfig.getVersion().substring(0, 6), executionConfig.getVersionOld().substring(0, 6), executionConfig.isRedirectSubprocessOutputToFile());
+      String shortVersion = executionConfig.getVersion().substring(0, 6);
+      String shortVersionOld = executionConfig.getVersionOld().substring(0, 6);
+      LogOverviewAction logOverviewAction = new LogOverviewAction(logFiles, shortVersion, shortVersionOld, measurementConfig.getVms(),
+            executionConfig.isRedirectSubprocessOutputToFile());
       run.addAction(logOverviewAction);
    }
 
