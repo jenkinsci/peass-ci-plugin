@@ -2,6 +2,7 @@ package de.peass.ci.helper;
 
 import java.io.File;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 
 import org.junit.Assert;
@@ -19,7 +20,7 @@ public class TestMeasurementVisualizer {
 
    @Test
    public void testParameterizedVisualization() {
-      HashSet<String> tests = new HashSet<>();
+      HashSet<String> tests = new LinkedHashSet<>();
       tests.add("de.dagere.peass.ExampleTest#test(JUNIT_PARAMETERIZED-0)");
       tests.add("de.dagere.peass.ExampleTest#test(JUNIT_PARAMETERIZED-1)");
 
