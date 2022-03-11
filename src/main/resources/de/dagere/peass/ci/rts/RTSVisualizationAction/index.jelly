@@ -89,11 +89,20 @@
         <script>
           $( "#dialogTraceSelected" ).dialog({ autoOpen: false });
         </script>
-        
+
         <j:if test="${it.getLogSummary().isErrorInCurrentVersionOccured() || it.getLogSummary().isErrorInPredecessorVersionOccured()}">
-          <i class="fa fa-exclamation-triangle" title="Regression test selection had error" style="color: red"></i>
-          Warning: An error occured during trace getting execution. Please check the logs for details and consider fixing the configuration or excluding the erroneous test cases.
-          <br />
+           <j:choose>
+               <j:when test="${it.getLogSummary().isVersionContainsParametrizedwhithoutIndex() || it.getLogSummary().isPredecessorContainsParametrizedwhithoutIndex()}">
+                <i class="fa fa-exclamation-triangle" title="Regression test selection contains parameterizedTest" style="color: orange"></i>
+                 Info: Regression test selection contains parameterizedTest.
+                  <br />
+             </j:when>
+             <j:otherwise>
+              <i class="fa fa-exclamation-triangle" title="Regression test selection had error" style="color: red"></i>
+               Warning: An error occured during trace getting execution. Please check the logs for details and consider fixing the configuration or excluding the erroneous test cases.
+                <br />
+              </j:otherwise>
+           </j:choose>
         </j:if>
         
         <j:forEach var="testcase" items="${it.dynamicSelection}">

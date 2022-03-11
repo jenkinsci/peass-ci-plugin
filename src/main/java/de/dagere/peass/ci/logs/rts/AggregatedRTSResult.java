@@ -15,9 +15,10 @@ public class AggregatedRTSResult {
       this.logSummary = logSummary;
       this.result = result;
       if (logSummary != null) {
-         rtsAnyError = logSummary.isErrorInCurrentVersionOccured() || logSummary.isErrorInPredecessorVersionOccured();
-         rtsAllError = logSummary.isErrorInCurrentVersionOccured() && (!logSummary.isVersionContainsSuccess()
-               || !logSummary.isPredecessorContainsSuccess());
+
+         rtsAnyError = logSummary.isErrorInCurrentVersionOccured() || logSummary.isErrorInPredecessorVersionOccured() && !(logSummary.isPredecessorContainsParametrizedwhithoutIndex() || logSummary.isVersionContainsParametrizedwhithoutIndex());
+         rtsAllError = logSummary.isErrorInCurrentVersionOccured() && !logSummary.isVersionContainsSuccess() || !logSummary.isPredecessorContainsSuccess() && !(logSummary.isPredecessorContainsParametrizedwhithoutIndex() || logSummary.isVersionContainsParametrizedwhithoutIndex());
+
       } else {
          rtsAnyError = true;
          rtsAllError = true;
