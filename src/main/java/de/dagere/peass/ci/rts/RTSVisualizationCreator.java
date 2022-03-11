@@ -110,9 +110,9 @@ public class RTSVisualizationCreator {
 
    private Map<String, List<String>> readStaticSelection(final Run<?, ?> run) throws IOException, JsonParseException, JsonMappingException {
       Map<String, List<String>> staticSelection = new LinkedHashMap<String, List<String>>();
-      File dependencyfile = localWorkspace.getStaticTestSelectionFile();
-      if (dependencyfile.exists()) {
-         StaticTestSelection staticTestSelection = Constants.OBJECTMAPPER.readValue(dependencyfile, StaticTestSelection.class);
+      File staticSelectionFile = localWorkspace.getStaticTestSelectionFile();
+      if (staticSelectionFile.exists()) {
+         StaticTestSelection staticTestSelection = Constants.OBJECTMAPPER.readValue(staticSelectionFile, StaticTestSelection.class);
          VersionStaticSelection version = staticTestSelection.getVersions().get(peassConfig.getMeasurementConfig().getExecutionConfig().getVersion());
 
          if (version != null) {
@@ -122,7 +122,7 @@ public class RTSVisualizationCreator {
          }
 
       } else {
-         LOG.error("File {} was not found, RTS selection seems to not have worked at all", dependencyfile);
+         LOG.error("File {} was not found, RTS selection seems to not have worked at all", staticSelectionFile);
       }
       return staticSelection;
    }
