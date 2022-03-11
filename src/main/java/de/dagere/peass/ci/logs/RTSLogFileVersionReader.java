@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -21,6 +22,7 @@ public class RTSLogFileVersionReader {
    private File testClazzFolder;
    private File methodFile;
    private TestCase test;
+   private boolean isParameterizedWithoutIndex = false;
 
    public RTSLogFileVersionReader(VisualizationFolderManager visualizationFolders, String version) {
       this.visualizationFolders = visualizationFolders;
@@ -34,7 +36,8 @@ public class RTSLogFileVersionReader {
 
    private void getClazzLog(File testClazzFolder, String module) {
       LOG.debug("Looking for method files in {}", testClazzFolder.getAbsolutePath());
-      File[] methodFiles = testClazzFolder.listFiles();
+      File[] methodFiles;
+      methodFiles = testClazzFolder.listFiles();
       if (methodFiles != null) {
          for (File methodFile : methodFiles) {
             LOG.debug("Looking for method log file in {}", methodFile.getAbsolutePath());
@@ -44,6 +47,14 @@ public class RTSLogFileVersionReader {
                String clazz = testClazzFolder.getName().substring("log_".length());
                String method = methodFile.getName().substring(0, methodFile.getName().length() - ".txt".length());
                test = new TestCase(clazz, method, module);
+
+               long count = Arrays.stream(methodFiles)
+                     .map(File::getName)
+                     .filter(methode -> methode.contains("("))
+                     .map(methode -> methode.substring(0, methode.indexOf("(")))
+                     .filter(methode -> methode.equals(test.getMethod()))
+                     .count();
+               isParameterizedWithoutIndex = count <= 1;
 
                addMethodLog();
             }
@@ -55,7 +66,8 @@ public class RTSLogFileVersionReader {
       File clazzDir = visualizationFolders.getResultsFolders().getClazzDir(version, test);
       File viewMethodDir = new File(clazzDir, test.getMethodWithParams());
       boolean foundAnyParameterized = false;
-      if (!viewMethodDir.exists()) {
+
+      if ((!viewMethodDir.exists()) && !isParameterizedWithoutIndex) {
          foundAnyParameterized = addParameterizedMethodLogs(clazzDir);
       }
       if (!foundAnyParameterized) {
@@ -90,7 +102,7 @@ public class RTSLogFileVersionReader {
 
    private void addMethodLogData(boolean runWasSuccessful) {
       File cleanFile = new File(testClazzFolder, "clean" + File.separator + methodFile.getName());
-      RTSLogData data = new RTSLogData(version, methodFile, cleanFile, runWasSuccessful);
+      RTSLogData data = new RTSLogData(version, methodFile, cleanFile, runWasSuccessful, isParameterizedWithoutIndex);
 
       files.put(test, data);
       LOG.debug("Adding log: {}", test);

@@ -9,12 +9,14 @@ public class RTSLogData {
    private final File methodFile;
    private final File cleanFile;
    private final boolean success;
+   private final boolean isParameterizedWithoutIndex;
 
-   public RTSLogData(final String version, final File methodFile, final File cleanFile, final boolean success) {
+   public RTSLogData(final String version, final File methodFile, final File cleanFile, final boolean success, boolean isParameterizedWithoutIndex) {
       this.version = version;
       this.methodFile = methodFile;
       this.cleanFile = cleanFile;
       this.success = success;
+      this.isParameterizedWithoutIndex = isParameterizedWithoutIndex;
    }
 
    public String getVersion() {
@@ -35,5 +37,9 @@ public class RTSLogData {
 
    public boolean isSuccess() {
       return success;
+   }
+
+   public boolean isParameterizedWithoutIndex() {
+      return isParameterizedWithoutIndex;
    }
 }
