@@ -105,7 +105,7 @@ To install the latest Peass-CI to your Jenkins installation, you may either uplo
 
 # License
 
-Peass-CI is **licensed** under the **[MIT License]** and **[AGPL License]**.
+Peass-CI is **licensed** under the **[MIT License]** and **[AGPL License]**. This means you can use Peass-CI under the conditions of one of this licenses, but future forks might choose to only continue using one of these licenses.
 
 [MIT License]: https://github.com/DaGeRe/peass-ci/blob/main/LICSENSE.MIT
 [AGPL License]: https://github.com/DaGeRe/peass-ci/blob/main/LICENSE.AGPL
