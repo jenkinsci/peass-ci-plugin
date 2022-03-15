@@ -3,13 +3,17 @@ package de.dagere.peass.ci.rts;
 import java.util.List;
 import java.util.Map;
 
+import de.dagere.peass.ci.Messages;
 import de.dagere.peass.ci.VisibleAction;
 import de.dagere.peass.ci.logs.rts.RTSLogSummary;
 import de.dagere.peass.config.TestSelectionConfig;
 import de.dagere.peass.dependency.traces.coverage.CoverageSelectionVersion;
+import io.jenkins.cli.shaded.org.jvnet.localizer.ResourceBundleHolder;
 
 public class RTSVisualizationAction extends VisibleAction {
 
+   private final static ResourceBundleHolder holder = ResourceBundleHolder.get(Messages.class); 
+   
    private final TestSelectionConfig config;
    private final Map<String, List<String>> staticSelection;
    private final List<String> dynamicSelection;
@@ -66,7 +70,7 @@ public class RTSVisualizationAction extends VisibleAction {
 
    @Override
    public String getDisplayName() {
-      return "Regression Test Selection Results";
+      return Messages.RTSVisualizationAction_DisplayName();
    }
 
    @Override

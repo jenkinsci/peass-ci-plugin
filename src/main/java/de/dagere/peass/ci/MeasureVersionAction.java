@@ -55,7 +55,7 @@ public class MeasureVersionAction extends VisibleAction {
 
    @Override
    public String getDisplayName() {
-      return "Performance Measurement";
+      return Messages.MeasureVersionAction_DisplayName();
    }
 
    @Override

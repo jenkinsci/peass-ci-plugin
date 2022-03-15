@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import de.dagere.peass.ci.Messages;
 import de.dagere.peass.ci.VisibleAction;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 
@@ -88,7 +89,7 @@ public class RTSLogOverviewAction extends VisibleAction {
 
    @Override
    public String getDisplayName() {
-      return "Regression Test Selection Log Overview";
+      return Messages.RTSLogOverviewAction_DisplayName();
    }
 
    @Override
