@@ -50,7 +50,7 @@ public class TestRTSLogFileReaderParameterized {
       Mockito.when(measurementConfig.getExecutionConfig()).thenReturn(executionConfig);
       RTSLogFileReader reader = new RTSLogFileReader(visualizationFoldersMock, measurementConfig);
 
-      Map<TestCase, RTSLogData> rtsVmRuns = reader.getRtsVmRuns(VERSION_OLD);
+      Map<TestCase, RTSLogData> rtsVmRuns = reader.getRtsVmRuns(VERSION);
 
       RTSLogData data = rtsVmRuns.get(new TestCase("de.dagere.peass.ExampleTest", "test", "", "JUNIT_PARAMETERIZED-1"));
       Assert.assertNotNull(data);

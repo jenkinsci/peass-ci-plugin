@@ -26,7 +26,7 @@ public class RTSActionCreator {
    private final RTSLogFileReader reader;
    private final Run<?, ?> run;
    private final MeasurementConfig measurementConfig;
-   private Map<String, Boolean> processSuccessRunSucceeded = new HashMap<>();
+   private final Map<String, Boolean> processSuccessRunSucceeded = new HashMap<>();
    private RTSLogSummary logSummary;
    private final Pattern pattern;
 
@@ -55,8 +55,12 @@ public class RTSActionCreator {
       boolean versionContainsSuccess = rtsVmRuns.values().stream().anyMatch(log -> log.isSuccess());
       boolean predecessorContainsSuccess = rtsVmRunsPredecessor.values().stream().anyMatch(log -> log.isSuccess());
 
+      boolean versionContainsParametrizedwhithoutIndex = rtsVmRuns.values().stream().anyMatch(log -> log.isParameterizedWithoutIndex());
+      boolean predecessorContainsParametrizedwhithoutIndex = rtsVmRunsPredecessor.values().stream().anyMatch(log -> log.isParameterizedWithoutIndex());
+
       LOG.debug("Errors in logs: {} {}", versionContainsNonSuccess, predecessorContainsNonSuccess);
-      logSummary = new RTSLogSummary(versionContainsNonSuccess, predecessorContainsNonSuccess, versionContainsSuccess, predecessorContainsSuccess);
+      logSummary = new RTSLogSummary(versionContainsNonSuccess, predecessorContainsNonSuccess, versionContainsSuccess, predecessorContainsSuccess,
+            versionContainsParametrizedwhithoutIndex, predecessorContainsParametrizedwhithoutIndex);
 
       createOverviewAction(processSuccessRuns, rtsVmRuns, rtsVmRunsPredecessor, staticChanges);
    }
@@ -64,7 +68,8 @@ public class RTSActionCreator {
    private void createOverviewAction(final Map<String, File> processSuccessRuns, final Map<TestCase, RTSLogData> rtsVmRuns, final Map<TestCase, RTSLogData> rtsVmRunsPredecessor,
          final RTSInfos rtsInfos) {
       RTSLogOverviewAction overviewAction = new RTSLogOverviewAction(processSuccessRuns, rtsVmRuns, rtsVmRunsPredecessor,
-            processSuccessRunSucceeded, measurementConfig.getExecutionConfig().getVersion(), measurementConfig.getExecutionConfig().getVersionOld(),measurementConfig.getExecutionConfig().isRedirectSubprocessOutputToFile());
+            processSuccessRunSucceeded, measurementConfig.getExecutionConfig().getVersion(), measurementConfig.getExecutionConfig().getVersionOld(),
+            measurementConfig.getExecutionConfig().isRedirectSubprocessOutputToFile());
       overviewAction.setStaticChanges(rtsInfos.isStaticChanges());
       overviewAction.setStaticallySelectedTests(rtsInfos.isStaticallySelectedTests());
       run.addAction(overviewAction);

@@ -23,19 +23,19 @@ import de.dagere.peass.utils.Constants;
 import hudson.model.Run;
 
 public class TestRTSVisualizationCreator {
-   
+
    @Test
    public void testEmptyCreation() throws JsonGenerationException, JsonMappingException, IOException {
       PeassProcessConfiguration peassConfig = new PeassProcessConfiguration(true, new MeasurementConfig(15), new TestSelectionConfig(1, false), null, false, false, false,
             null);
       ResultsFolders localWorkspace = new ResultsFolders(new File("target/current"), "empty-test");
-      
+
       writeEmptyDependencies(localWorkspace);
       writeEmptyExecutionData(localWorkspace);
-      
+
       RTSVisualizationCreator creator = new RTSVisualizationCreator(localWorkspace, peassConfig);
-      
-      creator.visualize(Mockito.mock(Run.class), new RTSLogSummary(false, false, true, true));
+
+      creator.visualize(Mockito.mock(Run.class), new RTSLogSummary(false, false, true, true, false, false));
    }
 
    private void writeEmptyExecutionData(final ResultsFolders localWorkspace) throws IOException, JsonGenerationException, JsonMappingException {
