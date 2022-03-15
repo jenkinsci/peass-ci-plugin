@@ -1,13 +1,16 @@
 package de.dagere.peass.ci;
 
+import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jvnet.localizer.LocaleProvider;
 
 import de.dagere.peass.analysis.changes.Change;
 import de.dagere.peass.analysis.changes.Changes;
@@ -128,8 +131,10 @@ public class MeasureVersionAction extends VisibleAction {
       return name.substring(prefix.length());
    }
 
-   public double round(final double value) {
-      return Math.round(value * 10000) / 10000d;
+   public String round(final double value) {
+      double roundedValue = Math.round(value * 10000) / 10000d;
+      Locale locale = LocaleProvider.getLocale();
+      return NumberFormat.getInstance(locale).format(roundedValue);
    }
 
    public double getMeanOfValues(final double[] values) {
