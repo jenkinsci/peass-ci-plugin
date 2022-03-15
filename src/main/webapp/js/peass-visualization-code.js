@@ -222,14 +222,27 @@ function diffUsingJS(text1, text2, outputDiv) {
 }
 
 function shownode(node) {
+  var minValue = Math.min(node.statistic.meanCurrent, node.statistic.meanOld);
+  var factor, unit;
+  if (minValue <= 1000) {
+    unit = "&micro;";
+    factor = 1;
+  } else if (minValue <= 1000000) {
+    unit = "m";
+    factor = 1000;
+  } else {
+    unit = ""
+    factor = 1000000;
+  }
+
   if (node.statistic != null){
 	  infos.innerHTML="<table class='data-table'>" +
       "<tr><th>Property</th><th>Predecessor</th><th>Current</th></tr>"+
-      "<tr><td>Mean</td><td>" + round(node.statistic.meanOld) +    " &micro;s</td><td>" + round(node.statistic.meanCurrent)+" &micro;s</td></tr>"+
-      "<tr><td>Deviation</td><td>" + round(node.statistic.deviationOld)+"</td><td>" + round(node.statistic.deviationCurrent)+"</td></tr>"+
-      "<tr><td>In-VM-Deviation</td><td>" + round(node.inVMDeviationPredecessor) + "</td><td>" + round(node.inVMDeviation)+ "</td></tr>" +
+      "<tr><td>Mean</td><td>" + round(node.statistic.meanOld / factor).toLocaleString() + " " + unit + "s</td><td>" + round(node.statistic.meanCurrent / factor).toLocaleString() + " " + unit + "s</td></tr>"+
+      "<tr><td>Deviation</td><td>" + round(node.statistic.deviationOld / factor).toLocaleString() +"</td><td>" + round(node.statistic.deviationCurrent / factor).toLocaleString() +"</td></tr>"+
+      "<tr><td>In-VM-Deviation</td><td>" + round(node.inVMDeviationPredecessor).toLocaleString() + "</td><td>" + round(node.inVMDeviation).toLocaleString() + "</td></tr>" +
       "</table> VMs: " + node.statistic.vms +
-      " T=" + round(node.statistic.tvalue);
+      " T=" + round(node.statistic.tvalue).toLocaleString();
   } else {
 	  infos.innerHTML = "No statistic";
   }
