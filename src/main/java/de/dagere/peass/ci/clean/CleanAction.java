@@ -1,5 +1,6 @@
 package de.dagere.peass.ci.clean;
 
+import de.dagere.peass.ci.Messages;
 import hudson.model.Action;
 
 public class CleanAction implements Action {
@@ -11,7 +12,7 @@ public class CleanAction implements Action {
 
    @Override
    public String getDisplayName() {
-      return "Clean Peass-CI Cache";
+      return Messages.CleanAction_DisplayName();
    }
 
    @Override

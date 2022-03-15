@@ -119,7 +119,7 @@ public class TrendAction implements Action {
 
    @Override
    public String getDisplayName() {
-      return "Project Statistics";
+      return Messages.TrendAction_DisplayName();
    }
 
    @Override
