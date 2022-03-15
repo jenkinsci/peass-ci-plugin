@@ -310,6 +310,10 @@ function get_t_score(t_array1, t_array2) {
 	return t_score;
 }
 
+function round(value){
+	return Math.round(value*1000)/1000;
+}
+
 function printTTvalue(averagesPredecessor, averagesCurrent) {
 	var predecessorStat = new jStat(averagesPredecessor);
 	var currentStat = new jStat(averagesCurrent);
@@ -322,16 +326,37 @@ function printTTvalue(averagesPredecessor, averagesCurrent) {
        var diff = predecessorStat.mean()-currentStat.mean();
        var relativeDifference = 2.0*diff / (predecessorStat.mean()+currentStat.mean());
        console.log(mannWhitneyP);
+       
+	var minValue = Math.min(predecessorStat.mean(), currentStat.mean());
+	var factor, unit;
+	if (minValue <= 1000) {
+	    unit = "n";
+	    factor = 1;
+	} else if (minValue <= 1000000) {
+	    unit = "&micro;";
+	    factor = 1000;
+	} else if (minValue <= 1000000000) {
+	  unit = "m";
+	  factor = 1000000;
+	} else {
+	  unit = ""
+	  factor = 1000000000;
+	}
+       
 	document.getElementById("tValueTable").innerHTML = "<b>Properties without outlier removal</b>"
 		+ "<table class='data-table properties-table'><tr><th>Property</th><th>Predecessor</th><th>Current</th></tr>"
-		+ "<tr><td>Mean</td><td>" + Math.round(predecessorStat.mean() * 1000) / 1000 + "</td><td>" + Math.round(currentStat.mean() * 1000) / 1000 + "</td></tr>"
-		+ "<tr><td>Difference</td><td colspan='2'>" + Math.round(diff * 1000) / 1000 + " (" + Math.round(100*relativeDifference*1000)/1000 + "%)</td></tr>"
-		+ "<tr><td>Deviation</td><td>" + Math.round(predecessorStat.stdev() * 1000) / 1000 + "</td><td>" + Math.round(currentStat.stdev() * 1000) / 1000 + "</td></tr>"
-		+ "<tr><td>Rel. Deviation</td><td>" + Math.round(100*predecessorStat.stdev()/predecessorStat.mean() * 1000) / 1000 + " %</td><td>" + Math.round(100*currentStat.stdev()/currentStat.mean() * 1000) / 1000 + " %</td></tr>"
+		+ "<tr>"  
+		  +  "<td>Mean</td><td>" + round(predecessorStat.mean() / factor).toLocaleString()  + " " + unit + "s</td>" 
+		  +  "<td>" + round(currentStat.mean()/ factor).toLocaleString()  + " " + unit + "s</td></tr>"
+		+ "<tr><td>Difference</td><td colspan='2'>" + round(diff/factor) + " " + unit + "s " + " (" + round(100*relativeDifference) + "%)</td></tr>"
+		+ "<tr><td>Deviation</td><td>" + round(predecessorStat.stdev()/ factor).toLocaleString()  + "</td><td>" + round(currentStat.stdev()/ factor).toLocaleString()  + "</td></tr>"
+		+ "<tr>"
+		  + "<td>Rel. Deviation</td><td>" + round(100*predecessorStat.stdev()/predecessorStat.mean()).toLocaleString() + " %</td>"
+		  + "<td>" + round(100*currentStat.stdev()/currentStat.mean()).toLocaleString() + " %</td></tr>"
 		+ "<tr><td>VMs</td><td>" + averagesPredecessor.length +"</td><td>" + averagesCurrent.length + "</td></tr>"
-		+ "<tr><td>T-Score</td><td>" + Math.round(tscore*1000)/1000 + "</td></tr>"
+		+ "<tr><td>T-Score</td><td>" + round(tscore).toLocaleString() + "</td></tr>"
 		+ "<tr><td>Change T-Test</td><td>" + (pval < error) + "</td></tr>"
-		+ "<tr><td>Mann-Whitney p-score</td><td>" + Math.round(mannWhitneyP*1000)/1000 + "</td></tr>"
+		+ "<tr><td>Mann-Whitney p-score</td><td>" + round(mannWhitneyP).toLocaleString() + "</td></tr>"
 		+ "<tr><td>Change Mann-Whitney-Test</td><td>" + (mannWhitneyP < error) + "</td></tr>"
 		+ "</table>";
 

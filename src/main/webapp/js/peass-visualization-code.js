@@ -225,14 +225,17 @@ function shownode(node) {
   var minValue = Math.min(node.statistic.meanCurrent, node.statistic.meanOld);
   var factor, unit;
   if (minValue <= 1000) {
-    unit = "&micro;";
+    unit = "n";
     factor = 1;
   } else if (minValue <= 1000000) {
-    unit = "m";
+    unit = "&micro;";
     factor = 1000;
+  } else if (minValue <= 1000000000) {
+    unit = "m";
+    factor = 1000000;
   } else {
     unit = ""
-    factor = 1000000;
+    factor = 1000000000;
   }
 
   if (node.statistic != null){
