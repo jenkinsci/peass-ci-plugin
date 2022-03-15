@@ -217,7 +217,7 @@ var xstart = null, xend = null, histStart = null, histEnd = null;
 
 function plotVMGraph(divName, node, ids, idsPredecessor, name) {
 	var data = [];
-	console.log(ids.length);
+	console.log("IDs: " + ids.length);
 	for (idIndex = 0; idIndex < ids.length; idIndex++) {
 		var currentId = ids[idIndex];
 		data[idIndex] = getVmGraph(node.vmValues.values[currentId], currentId);
@@ -325,7 +325,7 @@ function printTTvalue(averagesPredecessor, averagesCurrent) {
        var mannWhitneyP = mannwhitneyu.test(x, y, alternative = 'two-sided').p;
        var diff = predecessorStat.mean()-currentStat.mean();
        var relativeDifference = 2.0*diff / (predecessorStat.mean()+currentStat.mean());
-       console.log(mannWhitneyP);
+       console.log("Mann-Whitney: " + mannWhitneyP);
        
 	var minValue = Math.min(predecessorStat.mean(), currentStat.mean());
 	var factor, unit;
@@ -376,15 +376,59 @@ function filterAverages(averages){
 	return averagesFiltered;
 }
 
+function getNodeMin(averagesPredecessor, averagesCurrent){
+  var minValue = Number.MAX_VALUE;
+  for (i = 0; i < averagesPredecessor.length; i++){
+        minValue = Math.min(minValue, averagesPredecessor[i]);
+  }
+  for (i = 0; i < averagesCurrent.length; i++){
+	minValue = Math.min(minValue, averagesCurrent[i]);
+  }
+  
+  return minValue;
+}
+
 function visualizeHistogram() {
 	var averagesPredecessor = getAverage("predecessorSelect", currentNode.vmValuesPredecessor, xstart, xend);
 	var averagesCurrent = getAverage("predecessorSelect", currentNode.vmValues, xstart, xend);
 
+	var minValue = getNodeMin(currentNode, currentNode.vmValuesPredecessor);
+
 	var averagesPredecessorFiltered = filterAverages(averagesPredecessor);
 	var averagesCurrentFiltered = filterAverages(averagesCurrent);
 
+	var currentValues = new Array();
+	var predecessorValues = new Array();
+	
+	if (currentNode.vmValuesPredecessor != null && currentNode.vmValues != null) {
+		var minValue = getNodeMin(averagesPredecessor, averagesCurrent);
+		  
+		var factor, unit;
+		if (minValue <= 1000) {
+		  unit = "n";
+		  factor = 1;
+		} else if (minValue <= 1000000) {
+		  unit = "&micro;";
+		  factor = 1000;
+		} else if (minValue <= 1000000000) {
+		  unit = "m";
+		  factor = 1000000;
+		} else {
+		  unit = ""
+		  factor = 1000000000;
+		}
+		
+		for (var i=0; i<averagesPredecessorFiltered.length; i++) {
+			predecessorValues[i] = averagesPredecessorFiltered[i] / factor;
+		}
+		
+		for (var i=0; i<averagesCurrent.length; i++) {
+		  	currentValues[i] = averagesCurrent[i] / factor;
+		}
+	}
+
 	var version = {
-		x: averagesCurrentFiltered,
+		x: predecessorValues,
 		type: "histogram",
 		name: "Version",
 		opacity: 0.5,
@@ -393,7 +437,7 @@ function visualizeHistogram() {
 		},
 	};
 	var predecessor = {
-		x: averagesPredecessorFiltered,
+		x: currentValues,
 		type: "histogram",
 		name: "Predecessor",
 		opacity: 0.6,
@@ -406,7 +450,7 @@ function visualizeHistogram() {
 	  layout: {autosize: false, height: "400px"},
 		barmode: "overlay",
 		title: { text: "Histogramm" },
-		xaxis: { title: { text: "Duration / &#x00B5;s" } },
+		xaxis: { title: { text: "Duration / " + unit + "s" } },
 		yaxis: { title: { text: "Frequency" } }
 	};
 	var config = {

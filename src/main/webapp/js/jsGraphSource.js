@@ -1,6 +1,48 @@
+function getMin(node){
+  var minValue = Number.MAX_VALUE;
+  for (const value of node.valuesPredecessor) {
+	minValue = Math.min(minValue, value);
+  }
+  for (const value of node.values) {
+	minValue = Math.min(minValue, value);
+  }
+  
+  return minValue;
+}
+
 function plotOverallHistogram(divName, node) {
+  
+  var predecessorValues = new Array();
+  var currentValues = new Array();
+  if (node.valuesPredecessor != null && node.values != null) {
+    var minValue = getMin(node);
+  
+    var factor, unit;
+    if (minValue <= 1000) {
+      unit = "n";
+      factor = 1;
+    } else if (minValue <= 1000000) {
+      unit = "&micro;";
+      factor = 1000;
+    } else if (minValue <= 1000000000) {
+      unit = "m";
+      factor = 1000000;
+    } else {
+      unit = ""
+      factor = 1000000000;
+    }
+  
+    for (var i=0; i<node.valuesPredecessor.length; i++) {
+  	predecessorValues[i] = node.valuesPredecessor[i] / factor;
+    }
+  
+    for (var i=0; i<node.values.length; i++) {
+  	currentValues[i] = node.values[i] / factor;
+    }
+  }
+  
   var version = {
-    x: node.values,
+    x: currentValues,
     type: "histogram",
     name: "Version",
     opacity: 0.5,
@@ -9,7 +51,7 @@ function plotOverallHistogram(divName, node) {
     }
   };
   var predecessor = {
-    x: node.valuesPredecessor,
+    x: predecessorValues,
     type: "histogram",
     name: "Predecessor",
     opacity: 0.6,
@@ -21,7 +63,7 @@ function plotOverallHistogram(divName, node) {
   var layout = {
     barmode: "overlay",
     title: { text: "Histogramm" },
-    xaxis: { title: { text: "Duration / &#x00B5;s" } },
+    xaxis: { title: { text: "Duration / " + unit + "s" } },
     yaxis: { title: { text: "Frequency" } },
     margin: { t: 30, b: 35 },
     height: 400
