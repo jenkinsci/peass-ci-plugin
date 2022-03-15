@@ -348,7 +348,7 @@ function printTTvalue(averagesPredecessor, averagesCurrent) {
 		+ "<tr>"  
 		  +  "<td>Mean</td><td>" + round(predecessorStat.mean() / factor).toLocaleString()  + " " + unit + "s</td>" 
 		  +  "<td>" + round(currentStat.mean()/ factor).toLocaleString()  + " " + unit + "s</td></tr>"
-		+ "<tr><td>Difference</td><td colspan='2'>" + round(diff/factor) + " " + unit + "s " + " (" + round(100*relativeDifference) + "%)</td></tr>"
+		+ "<tr><td>Difference</td><td colspan='2'>" + round(diff/factor).toLocaleString() + " " + unit + "s " + " (" + round(100*relativeDifference).toLocaleString() + "%)</td></tr>"
 		+ "<tr><td>Deviation</td><td>" + round(predecessorStat.stdev()/ factor).toLocaleString()  + "</td><td>" + round(currentStat.stdev()/ factor).toLocaleString()  + "</td></tr>"
 		+ "<tr>"
 		  + "<td>Rel. Deviation</td><td>" + round(100*predecessorStat.stdev()/predecessorStat.mean()).toLocaleString() + " %</td>"
