@@ -4,14 +4,18 @@
     <l:main-panel>
       <div>
         <h1>
-          Clean Peass Results
+          ${%CleanAction_DisplayName}
         </h1>
 
         <p>Cleaning deletes the contents of Peass internal folders, which contain regression test selection, measurement and root cause analysis results.
-          This means if you run new jobs, Peass will not be able to use old regression test selection results for faster regression test selection and Peass will not be
+          This
+          means if you run new jobs, Peass will not be able to use old regression test selection results for faster regression test selection and Peass will not
+          be
           able to re-render your old measurement and root cause analysis results.
-          This makes sense if you want to try experimental features of Peass or if you want to save hard disk space.
-          This will not affect old builds, i.e. your performance measurements will stay visible after cleaning (which fills the RAM of your Jenkins instance).
+          This makes sense if you want to try experimental features of Peass or if you
+          want to save hard disk space.
+          This will not affect old builds, i.e. your performance measurements will stay visible after cleaning (which fills the RAM
+          of your Jenkins instance).
           If you want to delete those, please delete them using Jenkins regular interface.
         </p>
         <p>

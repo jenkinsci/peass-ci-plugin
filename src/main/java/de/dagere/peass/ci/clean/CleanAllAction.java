@@ -9,6 +9,7 @@ import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import de.dagere.peass.ci.MeasureVersionBuilder;
+import de.dagere.peass.ci.Messages;
 import de.dagere.peass.utils.Constants;
 import hudson.FilePath;
 import hudson.model.Action;
@@ -61,7 +62,7 @@ public class CleanAllAction implements Action {
          }
          boolean cleaningWorked = path.act(new CleanAllCallable());
          if (cleaningWorked) {
-            return new CleaningResult(CleaningResult.SUCCESS_COLOR, "Cleaning succeeded");
+            return new CleaningResult(CleaningResult.SUCCESS_COLOR, Messages.CleanAction_Success());
          } else {
             return new CleaningResult(CleaningResult.FAILURE_COLOR, "Some error appeared during cleanup, please check Jenkins server logs");
          }
@@ -77,7 +78,7 @@ public class CleanAllAction implements Action {
 
    @Override
    public String getDisplayName() {
-      return "Clean Peass-CI Cache";
+      return Messages.CleanAllAction_DisplayName();
    }
 
    @Override

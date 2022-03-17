@@ -9,6 +9,7 @@ import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import de.dagere.peass.ci.Messages;
 import de.dagere.peass.ci.clean.callables.CleanMeasurementCallable;
 import de.dagere.peass.utils.Constants;
 import hudson.FilePath;
@@ -72,7 +73,7 @@ public class CleanMeasurementAction implements Action {
 
          boolean cleaningWorked = path.act(new CleanMeasurementCallable(fakeListener));
          if (cleaningWorked) {
-            return new CleaningResult(CleaningResult.SUCCESS_COLOR, "Cleaning succeeded");
+            return new CleaningResult(CleaningResult.SUCCESS_COLOR, Messages.CleanAction_Success());
          } else {
             return new CleaningResult(CleaningResult.FAILURE_COLOR, "Some error appeared during cleanup, please check Jenkins server logs");
          }
@@ -88,7 +89,7 @@ public class CleanMeasurementAction implements Action {
 
    @Override
    public String getDisplayName() {
-      return "Clean Peass-CI Measurement Cache";
+      return Messages.CleanMeasurementAction_DisplayName();
    }
 
    @Override
