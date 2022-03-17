@@ -27,13 +27,17 @@
 			<script type="text/javascript">
 			  function cleanAll() {
 			    $.get("../cleanAll", function ( data ){
-			      document.getElementById("result").innerHTML=data;
+                  const jsonData = JSON.parse(data);
+			      document.getElementById("result").innerHTML=jsonData.message;
+                  document.getElementById("result").style.backgroundColor=jsonData.color;
 			    });
 			  }
 			  
 			  function cleanMeasurements() {
 			    $.get("../cleanMeasurements", function ( data ){
-			      document.getElementById("result").innerHTML=data;
+			      const jsonData = JSON.parse(data);
+			      document.getElementById("result").innerHTML=jsonData.message;
+                  document.getElementById("result").style.backgroundColor=jsonData.color;
 			    });
 			  }
 			  
@@ -45,7 +49,7 @@
 			<br />
 			(This will not remove your old runs, but for new runs, the data will be deleted and measurement and/or regression test selection needs to be re-executed).
 			
-			<div id="result">
+			<div id="result" style='right-margin: 2em; border-radius: 8px; hidden: true'>
 			
 			</div>
 		</l:main-panel>

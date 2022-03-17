@@ -7,7 +7,10 @@ import java.io.PrintStream;
 import org.apache.commons.io.FileUtils;
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import de.dagere.peass.ci.clean.callables.CleanMeasurementCallable;
+import de.dagere.peass.utils.Constants;
 import hudson.FilePath;
 import hudson.model.Action;
 import hudson.model.FreeStyleProject;
@@ -25,7 +28,8 @@ public class CleanMeasurementAction implements Action {
       this.project = project;
    }
 
-   public String clean() {
+   public String clean() throws JsonProcessingException {
+      CleaningResult result;
       if (project instanceof WorkflowJob || project instanceof Project) {
          try {
             File persistentWorkspace = new File(project.getRootDir(), "peass-data");
@@ -33,46 +37,47 @@ public class CleanMeasurementAction implements Action {
 
             if (project instanceof WorkflowJob) {
                WorkflowJob job = (WorkflowJob) project;
-               return tryCleaning(job);
+               result = tryCleaning(job);
             } else if (project instanceof FreeStyleProject) {
                FreeStyleProject job = (FreeStyleProject) project;
-               return tryCleaning(job);
+               result = tryCleaning(job);
             } else {
-               return "Full cleaning currently imposible, not implemented for job type: " + project.getClass();
+               result = new CleaningResult(CleaningResult.FAILURE_COLOR, "Full cleaning currently imposible, not implemented for job type: " + project.getClass());
             }
          } catch (IOException | InterruptedException e) {
             e.printStackTrace();
-            return "Some error appeared during cleanup, please check Jenkins server logs";
+            result = new CleaningResult(CleaningResult.FAILURE_COLOR, "Some error appeared during cleanup, please check Jenkins server logs");
          }
       } else {
-         return "Unexpected project type";
+         result = new CleaningResult(CleaningResult.FAILURE_COLOR, "Unexpected project type");
       }
+      return Constants.OBJECTMAPPER.writeValueAsString(result);
    }
 
-   private String tryCleaning(final TopLevelItem job) throws IOException, InterruptedException {
+   private CleaningResult tryCleaning(final TopLevelItem job) throws IOException, InterruptedException {
       Jenkins jenkinsInstance = Jenkins.getInstanceOrNull();
       if (jenkinsInstance != null) {
          FilePath path = jenkinsInstance.getWorkspaceFor(job);
          if (path == null) {
-            return "There exists no workspace for job " + job.toString();
+            return new CleaningResult(CleaningResult.FAILURE_COLOR, "There exists no workspace for job " + job.toString());
          }
-         
+
          TaskListener fakeListener = new TaskListener() {
-            
+
             @Override
             public PrintStream getLogger() {
                return System.out;
             }
          };
-         
+
          boolean cleaningWorked = path.act(new CleanMeasurementCallable(fakeListener));
          if (cleaningWorked) {
-            return "Cleaning succeeded";
+            return new CleaningResult(CleaningResult.SUCCESS_COLOR, "Cleaning succeeded");
          } else {
-            return "Some error appeared during cleanup, please check Jenkins server logs";
+            return new CleaningResult(CleaningResult.FAILURE_COLOR, "Some error appeared during cleanup, please check Jenkins server logs");
          }
       } else {
-         return "Jenkins was not available";
+         return new CleaningResult(CleaningResult.FAILURE_COLOR, "Jenkins was not available");
       }
    }
 
