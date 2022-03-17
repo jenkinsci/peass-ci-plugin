@@ -408,7 +408,7 @@ function visualizeHistogram() {
 		  unit = "n";
 		  factor = 1;
 		} else if (minValue <= 1000000) {
-		  unit = "&micro;";
+		  unit = "&#x00B5;";
 		  factor = 1000;
 		} else if (minValue <= 1000000000) {
 		  unit = "m";
