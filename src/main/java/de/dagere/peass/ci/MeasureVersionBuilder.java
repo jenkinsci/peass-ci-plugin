@@ -38,13 +38,14 @@ import de.dagere.peass.ci.process.IncludeExcludeParser;
 import de.dagere.peass.ci.process.JenkinsLogRedirector;
 import de.dagere.peass.ci.process.LocalPeassProcessManager;
 import de.dagere.peass.ci.remote.RemoteVersionReader;
-import de.dagere.peass.config.TestSelectionConfig;
 import de.dagere.peass.config.ExecutionConfig;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.config.MeasurementStrategy;
+import de.dagere.peass.config.TestSelectionConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.analysis.data.deserializer.TestcaseKeyDeserializer;
 import de.dagere.peass.execution.utils.EnvironmentVariables;
+import de.dagere.peass.measurement.rca.CauseSearcherConfig;
 import de.dagere.peass.measurement.rca.RCAStrategy;
 import de.dagere.peass.utils.Constants;
 import hudson.EnvVars;
@@ -116,7 +117,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private String testGoal = "test";
    private String pl = "";
 
-   private RCAStrategy measurementMode = RCAStrategy.UNTIL_SOURCE_CHANGE;
+   private RCAStrategy rcaStrategy = RCAStrategy.UNTIL_SOURCE_CHANGE;
 
    private boolean executeBeforeClassInMeasurement = false;
    private boolean onlyMeasureWorkload = false;
@@ -254,7 +255,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       ProjectChanges changes = processManager.visualizeMeasurementResults(run);
 
       if (executeRCA) {
-         boolean rcaWorked = processManager.rca(changes, measurementMode);
+         final CauseSearcherConfig causeSearcherConfig = generateCauseSearchConfig();
+         boolean rcaWorked = processManager.rca(changes, causeSearcherConfig);
          if (!rcaWorked) {
             run.setResult(Result.FAILURE);
             return;
@@ -278,6 +280,12 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
             displayRTSLogs, displayLogs, displayRCALogs, pattern);
       return peassConfig;
    }
+   
+   private CauseSearcherConfig generateCauseSearchConfig() {
+      boolean ignoreEOIs = useAggregation;
+      final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(null, ignoreEOIs, 0.01, false, ignoreEOIs, rcaStrategy, 1);
+      return causeSearcherConfig;
+   }
 
    private MeasurementConfig generateMeasurementConfig(final FilePath workspace, final TaskListener listener)
          throws IOException, InterruptedException {
@@ -297,7 +305,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       listener.getLogger().println("measureJMH: " + measureJMH);
       listener.getLogger().println("Includes: " + includes + " RCA: " + executeRCA);
       listener.getLogger().println("Excludes: " + excludes);
-      listener.getLogger().println("Strategy: " + measurementMode + " Source Instrumentation: " + useSourceInstrumentation + " Aggregation: " + useAggregation);
+      listener.getLogger().println("Strategy: " + rcaStrategy + " Source Instrumentation: " + useSourceInstrumentation + " Aggregation: " + useAggregation);
       listener.getLogger().println("Create default constructor: " + createDefaultConstructor);
       listener.getLogger().println("Fail on error in RTS: " + failOnRtsError);
       listener.getLogger().println("Redirect subprocess output to file: " + redirectSubprocessOutputToFile);
@@ -640,12 +648,12 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    }
 
    public RCAStrategy getMeasurementMode() {
-      return measurementMode;
+      return rcaStrategy;
    }
 
    @DataBoundSetter
    public void setMeasurementMode(final RCAStrategy measurementMode) {
-      this.measurementMode = measurementMode;
+      this.rcaStrategy = measurementMode;
    }
 
    public boolean isUseSourceInstrumentation() {

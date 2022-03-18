@@ -40,7 +40,6 @@ import de.dagere.peass.ci.rts.RTSVisualizationCreator;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.folders.ResultsFolders;
 import de.dagere.peass.measurement.rca.CauseSearcherConfig;
-import de.dagere.peass.measurement.rca.RCAStrategy;
 import de.dagere.peass.measurement.statistics.data.TestcaseStatistic;
 import de.dagere.peass.utils.Constants;
 import hudson.FilePath;
@@ -113,9 +112,7 @@ public class LocalPeassProcessManager {
       return worked;
    }
 
-   public boolean rca(final ProjectChanges changes, final RCAStrategy rcaStrategy) throws IOException, InterruptedException, Exception {
-      final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(null, true, 0.01, false, true, rcaStrategy, 1);
-
+   public boolean rca(final ProjectChanges changes, CauseSearcherConfig causeSearcherConfig) throws IOException, InterruptedException, Exception {
       RemoteRCA remoteRCAExecutor = new RemoteRCA(peassConfig, causeSearcherConfig, changes, listener);
       boolean rcaWorked = workspace.act(remoteRCAExecutor);
       copyFromRemote();
