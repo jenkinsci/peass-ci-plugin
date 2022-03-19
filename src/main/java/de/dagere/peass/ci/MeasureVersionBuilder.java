@@ -353,13 +353,13 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          config.getKiekerConfig().setUseSourceInstrumentation(true);
          config.getKiekerConfig().setUseSelectiveInstrumentation(true);
          config.getKiekerConfig().setUseCircularQueue(true);
-         if (useAggregation) {
-            config.getKiekerConfig().setUseAggregation(true);
-            config.getKiekerConfig().setRecord(AllowedKiekerRecord.DURATION);
-         } else {
-            config.getKiekerConfig().setUseAggregation(false);
-            config.getKiekerConfig().setRecord(AllowedKiekerRecord.OPERATIONEXECUTION);
-         }
+      }
+      if (useAggregation) {
+         config.getKiekerConfig().setUseAggregation(true);
+         config.getKiekerConfig().setRecord(AllowedKiekerRecord.DURATION);
+      } else {
+         config.getKiekerConfig().setUseAggregation(false);
+         config.getKiekerConfig().setRecord(AllowedKiekerRecord.OPERATIONEXECUTION);
       }
       if (!"".equals(excludeForTracing)) {
          LinkedHashSet<String> excludeSet = IncludeExcludeParser.getStringSet(excludeForTracing);
