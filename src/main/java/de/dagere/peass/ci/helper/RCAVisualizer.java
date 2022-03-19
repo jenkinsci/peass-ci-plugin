@@ -17,7 +17,7 @@ import de.dagere.peass.analysis.changes.Changes;
 import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.ci.RCAVisualizationAction;
 import de.dagere.peass.config.MeasurementConfig;
-import de.dagere.peass.visualization.VisualizeRCA;
+import de.dagere.peass.visualization.VisualizeRCAStarter;
 import hudson.model.Run;
 
 public class RCAVisualizer {
@@ -39,7 +39,7 @@ public class RCAVisualizer {
    public void visualizeRCA() throws Exception {
       final File visualizationFolder = visualizationFolders.getVisualizationFolder();
 
-      VisualizeRCA visualizer = preparePeassVisualizer(visualizationFolder);
+      VisualizeRCAStarter visualizer = preparePeassVisualizer(visualizationFolder);
       visualizer.call();
 
       File rcaResults = visualizationFolders.getRcaResultFolder();
@@ -50,8 +50,8 @@ public class RCAVisualizer {
       createVisualizationActions(rcaResults, versionChanges, versionVisualizationFolder);
    }
 
-   private VisualizeRCA preparePeassVisualizer(final File resultFolder) {
-      VisualizeRCA visualizer = new VisualizeRCA();
+   private VisualizeRCAStarter preparePeassVisualizer(final File resultFolder) {
+      VisualizeRCAStarter visualizer = new VisualizeRCAStarter();
       File dataFolder = visualizationFolders.getDataFolder();
       visualizer.setData(new File[] { dataFolder });
       File propertyFolder = visualizationFolders.getPropertyFolder();
