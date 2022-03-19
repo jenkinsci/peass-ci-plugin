@@ -356,6 +356,9 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          if (useAggregation) {
             config.getKiekerConfig().setUseAggregation(true);
             config.getKiekerConfig().setRecord(AllowedKiekerRecord.DURATION);
+         } else {
+            config.getKiekerConfig().setUseAggregation(false);
+            config.getKiekerConfig().setRecord(AllowedKiekerRecord.OPERATIONEXECUTION);
          }
       }
       if (!"".equals(excludeForTracing)) {
