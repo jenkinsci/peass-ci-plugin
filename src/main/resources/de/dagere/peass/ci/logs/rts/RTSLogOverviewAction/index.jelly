@@ -60,14 +60,14 @@
                 <j:if test='${it.getVmRuns().get(run) != null}'>
                   <a href="../rtsLog_${run.getLinkUsable()}_${it.getVmRuns().get(run).getVersion()}">${it.getVmRuns().get(run).getShortVersion()}</a>
                   <j:if test="${!it.getVmRuns().get(run).isSuccess() }">
-                       <j:choose>
-                          <j:when test="${it.getVmRuns().get(run).isParameterizedWithoutIndex()}">
-                             <i class="fa fa-exclamation-triangle" title="Regression test selection contains parameterizedTest" style="color: orange"></i>
-                          </j:when>
-                          <j:otherwise>
-                               <i class="fa fa-exclamation-triangle" title="Regression test selection had error" style="color: red"></i>
-                          </j:otherwise>
-                      </j:choose>
+                    <j:choose>
+                      <j:when test="${it.getVmRuns().get(run).isParameterizedWithoutIndex()}">
+                        <i class="fa fa-exclamation-triangle" title="Regression test selection contains parameterizedTest" style="color: orange"></i>
+                      </j:when>
+                      <j:otherwise>
+                        <i class="fa fa-exclamation-triangle" title="Regression test selection had error" style="color: red"></i>
+                      </j:otherwise>
+                    </j:choose>
 
                   </j:if>
                 </j:if>
@@ -76,14 +76,14 @@
                 <td>
                   <a href="../rtsLog_${run.getLinkUsable()}_${it.getPredecessorVmRuns().get(run).getVersion()}">${it.getPredecessorVmRuns().get(run).getShortVersion()}</a>
                   <j:if test="${!it.getPredecessorVmRuns().get(run).isSuccess()}">
-                   <j:choose>
-                     <j:when test="${it.getPredecessorVmRuns().get(run).isParameterizedWithoutIndex()}">
+                    <j:choose>
+                      <j:when test="${it.getPredecessorVmRuns().get(run).isParameterizedWithoutIndex()}">
                         <i class="fa fa-exclamation-triangle" title="Regression test selection contains parameterizedTest" style="color: orange"></i>
-                     </j:when>
-                     <j:otherwise>
-                       <i class="fa fa-exclamation-triangle" title="Regression test selection had error" style="color: red"></i>
-                     </j:otherwise>
-                   </j:choose>
+                      </j:when>
+                      <j:otherwise>
+                        <i class="fa fa-exclamation-triangle" title="Regression test selection had error" style="color: red"></i>
+                      </j:otherwise>
+                    </j:choose>
 
                   </j:if>
                 </td>
