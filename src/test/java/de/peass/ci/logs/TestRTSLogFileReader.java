@@ -44,21 +44,31 @@ public class TestRTSLogFileReader {
       Map<TestCase, RTSLogData> rtsVmRuns = reader.getRtsVmRuns("a23e385264c31def8dcda86c3cf64faa698c62d8");
       Assert.assertEquals(2, rtsVmRuns.size());
 
+      checkFirstTest(rtsVmRuns);
+
+      checkSecondTest(reader);
+
+      String rtsLog = reader.getRTSLog();
+      Assert.assertEquals("This is a rts log test", rtsLog);
+   }
+
+   private void checkSecondTest(RTSLogFileReader reader) {
+      Map<TestCase, RTSLogData> rtsVmRunsPredecessor = reader.getRtsVmRuns("33ce17c04b5218c25c40137d4d09f40fbb3e4f0f");
+      Assert.assertEquals(2, rtsVmRunsPredecessor.size());
+      RTSLogData rtsLogData = rtsVmRunsPredecessor.get(TEST1);
+      Assert.assertEquals("33ce17c04b5218c25c40137d4d09f40fbb3e4f0f", rtsLogData.getVersion());
+      Assert.assertTrue(rtsLogData.isSuccess());
+      Assert.assertFalse(rtsLogData.isParameterizedWithoutIndex());
+   }
+
+   private void checkFirstTest(Map<TestCase, RTSLogData> rtsVmRuns) {
       File dataFile1 = rtsVmRuns.get(TEST1).getMethodFile();
       Assert.assertTrue(dataFile1.exists());
       RTSLogData logDataTest2 = rtsVmRuns.get(TEST2);
       File dataFile2 = logDataTest2.getMethodFile();
       Assert.assertTrue(dataFile2.exists());
       Assert.assertFalse(logDataTest2.isSuccess());
-
-      Map<TestCase, RTSLogData> rtsVmRunsPredecessor = reader.getRtsVmRuns("33ce17c04b5218c25c40137d4d09f40fbb3e4f0f");
-      Assert.assertEquals(2, rtsVmRunsPredecessor.size());
-      RTSLogData rtsLogData = rtsVmRunsPredecessor.get(TEST1);
-      Assert.assertEquals("33ce17c04b5218c25c40137d4d09f40fbb3e4f0f", rtsLogData.getVersion());
-      Assert.assertTrue(rtsLogData.isSuccess());
-
-      String rtsLog = reader.getRTSLog();
-      Assert.assertEquals("This is a rts log test", rtsLog);
+      Assert.assertFalse(logDataTest2.isParameterizedWithoutIndex());
    }
 
    @Test

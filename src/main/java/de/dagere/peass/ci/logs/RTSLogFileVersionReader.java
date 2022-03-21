@@ -1,16 +1,16 @@
 package de.dagere.peass.ci.logs;
 
+import java.io.File;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.rts.RTSLogData;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.traces.TraceWriter;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.io.File;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class RTSLogFileVersionReader {
 
@@ -22,19 +22,18 @@ public class RTSLogFileVersionReader {
    private File testClazzFolder;
    private File methodFile;
    private TestCase test;
-   private boolean isParameterizedWithoutIndex = false;
 
-   public RTSLogFileVersionReader(VisualizationFolderManager visualizationFolders, String version) {
+   public RTSLogFileVersionReader(final VisualizationFolderManager visualizationFolders, final String version) {
       this.visualizationFolders = visualizationFolders;
       this.version = version;
    }
 
-   public Map<TestCase, RTSLogData> getClazzLogs(Map<File, String> testClazzFolders) {
+   public Map<TestCase, RTSLogData> getClazzLogs(final Map<File, String> testClazzFolders) {
       testClazzFolders.forEach(this::getClazzLog);
       return files;
    }
 
-   private void getClazzLog(File testClazzFolder, String module) {
+   private void getClazzLog(final File testClazzFolder, final String module) {
       LOG.debug("Looking for method files in {}", testClazzFolder.getAbsolutePath());
       File[] methodFiles;
       methodFiles = testClazzFolder.listFiles();
@@ -48,14 +47,6 @@ public class RTSLogFileVersionReader {
                String method = methodFile.getName().substring(0, methodFile.getName().length() - ".txt".length());
                test = new TestCase(clazz, method, module);
 
-               long count = Arrays.stream(methodFiles)
-                     .map(File::getName)
-                     .filter(methode -> methode.contains("("))
-                     .map(methode -> methode.substring(0, methode.indexOf("(")))
-                     .filter(methode -> methode.equals(test.getMethod()))
-                     .count();
-               isParameterizedWithoutIndex = count <= 1;
-
                addMethodLog();
             }
          }
@@ -67,7 +58,7 @@ public class RTSLogFileVersionReader {
       File viewMethodDir = new File(clazzDir, test.getMethodWithParams());
       boolean foundAnyParameterized = false;
 
-      if ((!viewMethodDir.exists()) && !isParameterizedWithoutIndex) {
+      if ((!viewMethodDir.exists())) {
          foundAnyParameterized = addParameterizedMethodLogs(clazzDir);
       }
       if (!foundAnyParameterized) {
@@ -75,7 +66,7 @@ public class RTSLogFileVersionReader {
       }
    }
 
-   private boolean addParameterizedMethodLogs(File clazzDir) {
+   private boolean addParameterizedMethodLogs(final File clazzDir) {
       boolean foundAnyParameterized = false;
       File[] potentialParameterFiles = clazzDir.listFiles();
       if (potentialParameterFiles != null) {
@@ -85,22 +76,27 @@ public class RTSLogFileVersionReader {
                foundAnyParameterized = true;
                LOG.debug("Found parameterized trace file: {}", potentialParameterizedFile);
 
-               String params = fileName.substring(test.getMethod().length() + 1, fileName.length() - 1);
-               test = new TestCase(test.getClazz(), test.getMethod(), test.getModule(), params);
-               addMethodLogData(true);
+               if (methodFile.getName().contains("(")) {
+                  String params = fileName.substring(test.getMethod().length() + 1, fileName.length() - 1);
+                  test = new TestCase(test.getClazz(), test.getMethod(), test.getModule(), params);
+                  addMethodLogData(true, false);
+               } else {
+                  test = new TestCase(test.getClazz(), test.getMethod(), test.getModule());
+                  addMethodLogData(true, true);
+               }
             }
          }
       }
       return foundAnyParameterized;
    }
 
-   private void addRegularMethodLog(File viewMethodDir) {
+   private void addRegularMethodLog(final File viewMethodDir) {
       File viewMethodFile = new File(viewMethodDir, TraceWriter.getShortVersion(version));
       boolean runWasSuccessful = viewMethodFile.exists();
-      addMethodLogData(runWasSuccessful);
+      addMethodLogData(runWasSuccessful, false);
    }
 
-   private void addMethodLogData(boolean runWasSuccessful) {
+   private void addMethodLogData(final boolean runWasSuccessful, final boolean isParameterizedWithoutIndex) {
       File cleanFile = new File(testClazzFolder, "clean" + File.separator + methodFile.getName());
       RTSLogData data = new RTSLogData(version, methodFile, cleanFile, runWasSuccessful, isParameterizedWithoutIndex);
 
