@@ -41,6 +41,7 @@ import de.dagere.peass.ci.remote.RemoteVersionReader;
 import de.dagere.peass.config.ExecutionConfig;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.config.MeasurementStrategy;
+import de.dagere.peass.config.StatisticalTests;
 import de.dagere.peass.config.TestSelectionConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.analysis.data.deserializer.TestcaseKeyDeserializer;
@@ -118,6 +119,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private String pl = "";
 
    private RCAStrategy rcaStrategy = RCAStrategy.UNTIL_SOURCE_CHANGE;
+   private StatisticalTests statisticalTest = StatisticalTests.T_TEST;
 
    private boolean executeBeforeClassInMeasurement = false;
    private boolean onlyMeasureWorkload = false;
@@ -324,6 +326,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       config.getExecutionConfig().setKiekerWaitTime(kiekerWaitTime);
       config.getKiekerConfig().setKiekerQueueSize(kiekerQueueSize);
       config.getStatisticsConfig().setType1error(significanceLevel);
+      config.getStatisticsConfig().setStatisticTest(statisticalTest);
       config.setIterations(iterations);
       config.setWarmup(warmup);
       config.setRepetitions(repetitions);
@@ -658,6 +661,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public void setMeasurementMode(final RCAStrategy measurementMode) {
       this.rcaStrategy = measurementMode;
    }
+   
+   public StatisticalTests getStatisticalTest() {
+      return statisticalTest;
+   }
+   
+   @DataBoundSetter
+   public void setStatisticalTest(final StatisticalTests statisticalTest) {
+      this.statisticalTest = statisticalTest;
+   }
 
    public boolean isUseSourceInstrumentation() {
       return useSourceInstrumentation;
@@ -937,8 +949,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          model.add(new Option("Complete", "COMPLETE", "COMPLETE".equals(measurementMode)));
          model.add(new Option("Levelwise", "LEVELWISE", "LEVELWISE".equals(measurementMode)));
          model.add(new Option("Until Source Change", "UNTIL_SOURCE_CHANGE", "UNTIL_SOURCE_CHANGE".equals(measurementMode)));
-         model.add(new Option("Until Structure Change (NOT IMPLEMENTED)", "UNTIL_STRUCTURE_CHANGE", "UNTIL_STRUCTURE_CHANGE".equals(measurementMode)));
-         model.add(new Option("Constant Levels(NOT IMPLEMENTED)", "CONSTANT_LEVELS", "CONSTANT_LEVELS".equals(measurementMode)));
+         model.add(new Option("Constant Levels (NOT IMPLEMENTED)", "CONSTANT_LEVELS", "CONSTANT_LEVELS".equals(measurementMode)));
+         return model;
+      }
+      
+      public ListBoxModel doFillStatisticalTestItems(@QueryParameter final String statisticalTest) {
+         ListBoxModel model = new ListBoxModel();
+         model.add(new Option("T-Test", "T_TEST", "T_TEST".equals(statisticalTest)));
+         model.add(new Option("Mann-Whitney-Test", "MANN_WHITNEY_TEST", "MANN_WHITNEY_TEST".equals(statisticalTest)));
+         model.add(new Option("Confidence Interval Comparison", "CONFIDENCE_INTERVAL", "CONFIDENCE_INTERVAL".equals(statisticalTest)));
          return model;
       }
    }
