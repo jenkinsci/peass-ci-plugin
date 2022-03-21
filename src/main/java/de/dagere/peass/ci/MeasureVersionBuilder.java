@@ -415,6 +415,10 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       if (pl != null && !"".equals(pl)) {
          config.getExecutionConfig().setPl(pl);
       }
+      
+      if (config.getExecutionConfig().isExecuteBeforeClassInMeasurement() && config.getExecutionConfig().isOnlyMeasureWorkload()) {
+         throw new RuntimeException("executeBeforeClassInMeasurement may only be activated if onlyMeasureWorkload is deactivated!");
+      }
 
       config.getKiekerConfig().setOnlyOneCallRecording(onlyOneCallRecording);
 
