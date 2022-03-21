@@ -516,9 +516,11 @@ if (currentNode == null) {
 	currentNode = treeData[0];
 }
 
-document.getElementById("currentNode").innerHTML = "Current Node: " + currentNode.call
+if (currentNode.call != "overall"){
+	document.getElementById("currentNode").innerHTML = "Current Node: " + currentNode.call
+	plotOverallHistogram("overallHistogram", currentNode);
+}
 
-plotOverallHistogram("overallHistogram", currentNode);
 
 addOptionSelectbox('predecessorOptions', 'predecessorSelect', currentNode.vmValuesPredecessor.values);
 addOptionSelectbox('currentOptions', 'currentSelect', currentNode.vmValues.values);

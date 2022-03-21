@@ -14,10 +14,6 @@
 
 			<div class="dashboard-container">
 				<div class="card">
-					<div id="currentNode"></div>
-					<div id="overallHistogram"></div>
-				</div>
-				<div class="card">
 					<div id="selectedHistogram"></div>
 				</div>
 				<div id="selection" class="card selection-card">
