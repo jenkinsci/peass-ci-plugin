@@ -519,6 +519,18 @@ if (currentNode == null) {
 if (currentNode.call != "overall"){
 	document.getElementById("currentNode").innerHTML = "Current Node: " + currentNode.call
 	plotOverallHistogram("overallHistogram", currentNode);
+} else {
+	var nodeDiv = document.getElementById("currentNode");
+	console.log(nodeDiv);
+	if (nodeDiv !== null) {
+		var parentDiv = nodeDiv.parentElement;
+		parentDiv.style.display='none';
+	}
+	
+	var selectionDiv = document.getElementById("selection");
+	if (selectionDiv !== null) {
+		selectionDiv.style.gridRow='unset';
+	}
 }
 
 
