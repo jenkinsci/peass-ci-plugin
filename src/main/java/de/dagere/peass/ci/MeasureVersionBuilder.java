@@ -128,7 +128,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private boolean updateSnapshotDependencies = false;
    private boolean removeSnapshots = false;
    private boolean useAlternativeBuildfile = false;
-   private boolean excludeLog4j = false;
+   private boolean excludeLog4jSlf4jImpl = false;
+   private boolean excludeLog4jToSlf4j = false;
 
    private boolean useSourceInstrumentation = true;
    private boolean useAggregation = true;
@@ -273,6 +274,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
       EnvironmentVariables peassEnv = new EnvironmentVariables(properties);
       for (Map.Entry<String, String> entry : env.entrySet()) {
+         System.out.println("Adding enviroenment: " + entry.getKey() + " " + entry.getValue());
          peassEnv.getEnvironmentVariables().put(entry.getKey(), entry.getValue());
       }
 
@@ -282,7 +284,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
             displayRTSLogs, displayLogs, displayRCALogs, pattern);
       return peassConfig;
    }
-   
+
    private CauseSearcherConfig generateCauseSearchConfig() {
       boolean ignoreEOIs = useAggregation;
       final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(null, ignoreEOIs, 0.01, false, ignoreEOIs, rcaStrategy, 1);
@@ -341,7 +343,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       config.getExecutionConfig().setRedirectToNull(redirectToNull);
       config.setShowStart(showStart);
       config.getExecutionConfig().setRemoveSnapshots(removeSnapshots);
-      config.getExecutionConfig().setExcludeLog4j(excludeLog4j);
+      config.getExecutionConfig().setExcludeLog4j(excludeLog4jSlf4jImpl);
+      config.getExecutionConfig().setExcludeLog4jToSlf4j(excludeLog4jToSlf4j);
       if (executeParallel) {
          System.out.println("Measuring parallel");
          config.setMeasurementStrategy(MeasurementStrategy.PARALLEL);
@@ -415,7 +418,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       if (pl != null && !"".equals(pl)) {
          config.getExecutionConfig().setPl(pl);
       }
-      
+
       if (config.getExecutionConfig().isExecuteBeforeClassInMeasurement() && config.getExecutionConfig().isOnlyMeasureWorkload()) {
          throw new RuntimeException("executeBeforeClassInMeasurement may only be activated if onlyMeasureWorkload is deactivated!");
       }
@@ -665,11 +668,11 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public void setMeasurementMode(final RCAStrategy measurementMode) {
       this.rcaStrategy = measurementMode;
    }
-   
+
    public StatisticalTests getStatisticalTest() {
       return statisticalTest;
    }
-   
+
    @DataBoundSetter
    public void setStatisticalTest(final StatisticalTests statisticalTest) {
       this.statisticalTest = statisticalTest;
@@ -738,15 +741,24 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       this.useAlternativeBuildfile = useAlternativeBuildfile;
    }
 
-   public boolean isExcludeLog4j() {
-      return excludeLog4j;
+   public boolean isExcludeLog4jSlf4jImpl() {
+      return excludeLog4jSlf4jImpl;
    }
-
+   
    @DataBoundSetter
-   public void setExcludeLog4j(final boolean excludeLog4j) {
-      this.excludeLog4j = excludeLog4j;
+   public void setExcludeLog4jSlf4jImpl(final boolean excludeLog4jSlf4jImpl) {
+      this.excludeLog4jSlf4jImpl = excludeLog4jSlf4jImpl;
    }
-
+   
+   public boolean isExcludeLog4jToSlf4j() {
+      return excludeLog4jToSlf4j;
+   }
+   
+   @DataBoundSetter
+   public void setExcludeLog4jToSlf4j(final boolean excludeLog4jToSlf4j) {
+      this.excludeLog4jToSlf4j = excludeLog4jToSlf4j;
+   }
+   
    public boolean isRedirectToNull() {
       return redirectToNull;
    }
@@ -956,7 +968,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          model.add(new Option("Constant Levels (NOT IMPLEMENTED)", "CONSTANT_LEVELS", "CONSTANT_LEVELS".equals(measurementMode)));
          return model;
       }
-      
+
       public ListBoxModel doFillStatisticalTestItems(@QueryParameter final String statisticalTest) {
          ListBoxModel model = new ListBoxModel();
          model.add(new Option("T-Test", "T_TEST", "T_TEST".equals(statisticalTest)));
