@@ -298,24 +298,22 @@
             <f:checkbox />
           </f:entry>
         </td>
+        <td>
+          <f:entry title="${%statisticalTest}" field="statisticalTest" description="${%statisticalTestDescr}">
+            <f:select default="T_TEST" />
+          </f:entry>
+        </td>
       </tr>
       <tr>
         <td>
-          <td>
-            <f:entry title="${%excludeLog4jSlf4jImpl}" field="excludeLog4jSlf4jImpl" description="${%excludeLog4jSlf4jImplDescr}">
-              <f:checkbox />
-            </f:entry>
-          </td>
-          <td>
-            <f:entry title="${%excludeLog4jToSlf4j}" field="excludeLog4jToSlf4j" description="${%excludeLog4jToSlf4jDescr}">
-              <f:checkbox />
-            </f:entry>
-          </td>
-          <td>
-            <f:entry title="${%statisticalTest}" field="statisticalTest" description="${%statisticalTestDescr}">
-              <f:select default="T_TEST" />
-            </f:entry>
-          </td>
+          <f:entry title="${%excludeLog4jSlf4jImpl}" field="excludeLog4jSlf4jImpl" description="${%excludeLog4jSlf4jImplDescr}">
+            <f:checkbox />
+          </f:entry>
+        </td>
+        <td>
+          <f:entry title="${%excludeLog4jToSlf4j}" field="excludeLog4jToSlf4j" description="${%excludeLog4jToSlf4jDescr}">
+            <f:checkbox />
+          </f:entry>
         </td>
       </tr>
     </table>
