@@ -5,7 +5,6 @@ var kopemeData = [
   "call" : "overall",
   "kiekerPattern" : "public overall.overall()",
   "otherKiekerPattern" : "public overall.overall()",
-  "module" : null,
   "name" : null,
   "key" : "overall.overall_",
   "otherKey" : "overall.overall_",
