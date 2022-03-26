@@ -103,6 +103,10 @@ For testing, run `mvn hpi:run` and access `localhost:8080/jenkins`.
 
 To install the latest Peass-CI to your Jenkins installation, you may either upload it through the website (Manage Jenkins -> Manage Plugins -> Advanced -> Upload Plugin) or stop Jenkins, copy `target/peass-ci.hpi` to `~/.jenkins/plugins` (or wherever your Jenkins home is) and restart Jenkins. Afterwards, when configuring your project, the `measure`-step is available. 
 
+# Funding
+
+The creation of this project was funded by the research project "PermanEnt" by the Federal Ministry of Education and Research of Germany.
+
 # License
 
 Peass-CI is **licensed** under the **[MIT License]** and **[AGPL License]**. This means you can use Peass-CI under the conditions of one of these licenses, but future forks might choose to only continue using one of these licenses.
