@@ -39,6 +39,7 @@ import de.dagere.peass.ci.process.JenkinsLogRedirector;
 import de.dagere.peass.ci.process.LocalPeassProcessManager;
 import de.dagere.peass.ci.remote.RemoteVersionReader;
 import de.dagere.peass.config.ExecutionConfig;
+import de.dagere.peass.config.KiekerConfig;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.config.MeasurementStrategy;
 import de.dagere.peass.config.StatisticalTests;
@@ -324,9 +325,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          significanceLevel = 0.01;
       }
       final MeasurementConfig config = new MeasurementConfig(VMs);
-      config.getExecutionConfig().setTimeout(timeout * 60l * 1000);
-      config.getExecutionConfig().setKiekerWaitTime(kiekerWaitTime);
-      config.getKiekerConfig().setKiekerQueueSize(kiekerQueueSize);
+      
       config.getStatisticsConfig().setType1error(significanceLevel);
       config.getStatisticsConfig().setStatisticTest(statisticalTest);
       config.setIterations(iterations);
@@ -334,44 +333,17 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       config.setRepetitions(repetitions);
       config.setUseGC(useGC);
       config.setEarlyStop(false);
-      config.getExecutionConfig().setCreateDefaultConstructor(createDefaultConstructor);
-      config.getExecutionConfig().setExecuteBeforeClassInMeasurement(executeBeforeClassInMeasurement);
-      config.getExecutionConfig().setOnlyMeasureWorkload(onlyMeasureWorkload);
-      if (onlyMeasureWorkload && repetitions != 1) {
-         throw new RuntimeException("If onlyMeasureWorkload is set, repetitions should be 1, but are " + repetitions);
-      }
-      config.getExecutionConfig().setRedirectToNull(redirectToNull);
       config.setShowStart(showStart);
-      config.getExecutionConfig().setRemoveSnapshots(removeSnapshots);
-      config.getExecutionConfig().setExcludeLog4j(excludeLog4jSlf4jImpl);
-      config.getExecutionConfig().setExcludeLog4jToSlf4j(excludeLog4jToSlf4j);
+      
       if (executeParallel) {
          System.out.println("Measuring parallel");
          config.setMeasurementStrategy(MeasurementStrategy.PARALLEL);
       } else {
          System.out.println("executeparallel is false");
       }
-      if (measureJMH) {
-         config.getExecutionConfig().setTestTransformer("de.dagere.peass.dependency.jmh.JmhTestTransformer");
-         config.getExecutionConfig().setTestExecutor("de.dagere.peass.dependency.jmh.JmhTestExecutor");
-      }
-      if (useSourceInstrumentation) {
-         config.getKiekerConfig().setUseSourceInstrumentation(true);
-         config.getKiekerConfig().setUseSelectiveInstrumentation(true);
-         config.getKiekerConfig().setUseCircularQueue(true);
-      }
-      if (useAggregation) {
-         config.getKiekerConfig().setUseAggregation(true);
-         config.getKiekerConfig().setRecord(AllowedKiekerRecord.DURATION);
-      } else {
-         config.getKiekerConfig().setUseAggregation(false);
-         config.getKiekerConfig().setRecord(AllowedKiekerRecord.OPERATIONEXECUTION);
-      }
-      if (!"".equals(excludeForTracing)) {
-         LinkedHashSet<String> excludeSet = IncludeExcludeParser.getStringSet(excludeForTracing);
-         config.getKiekerConfig().setExcludeForTracing(excludeSet);
-      }
-
+      
+      parameterizeKiekerConfig(config.getKiekerConfig());
+      
       if (useAggregation && !useSourceInstrumentation) {
          throw new RuntimeException("Aggregation may only be used with source instrumentation currently.");
       }
@@ -382,51 +354,95 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       if (nightlyBuild && versionDiff != 1) {
          throw new RuntimeException("If nightly build is set, do not set versionDiff! nightlyBuild will automatically select the last tested version.");
       }
-      config.getKiekerConfig().setTraceSizeInMb(traceSizeInMb);
+      
+      parameterizeExecutionConfig(config.getExecutionConfig());
 
-      config.getExecutionConfig().setVersion("HEAD");
+      System.out.println("Building, iterations: " + iterations + " test goal: " + testGoal);
+      return config;
+   }
+
+   private void parameterizeExecutionConfig(final ExecutionConfig executionConfig) throws IOException, JsonParseException, JsonMappingException {
+      if (measureJMH) {
+         executionConfig.setTestTransformer("de.dagere.peass.dependency.jmh.JmhTestTransformer");
+         executionConfig.setTestExecutor("de.dagere.peass.dependency.jmh.JmhTestExecutor");
+      }
+      
+      executionConfig.setTimeout(timeout * 60l * 1000);
+      executionConfig.setKiekerWaitTime(kiekerWaitTime);
+      
+      
+      executionConfig.setCreateDefaultConstructor(createDefaultConstructor);
+      executionConfig.setExecuteBeforeClassInMeasurement(executeBeforeClassInMeasurement);
+      executionConfig.setOnlyMeasureWorkload(onlyMeasureWorkload);
+      if (onlyMeasureWorkload && repetitions != 1) {
+         throw new RuntimeException("If onlyMeasureWorkload is set, repetitions should be 1, but are " + repetitions);
+      }
+      executionConfig.setRedirectToNull(redirectToNull);
+      
+      executionConfig.setRemoveSnapshots(removeSnapshots);
+      executionConfig.setExcludeLog4j(excludeLog4jSlf4jImpl);
+      executionConfig.setExcludeLog4jToSlf4j(excludeLog4jToSlf4j);
+
+      executionConfig.setVersion("HEAD");
       final String oldVersion = getOldVersion();
-      config.getExecutionConfig().setVersionOld(oldVersion);
+      executionConfig.setVersionOld(oldVersion);
 
-      config.getExecutionConfig().setIncludes(IncludeExcludeParser.getStringList(includes));
-      config.getExecutionConfig().setExcludes(IncludeExcludeParser.getStringList(excludes));
+      executionConfig.setIncludes(IncludeExcludeParser.getStringList(includes));
+      executionConfig.setExcludes(IncludeExcludeParser.getStringList(excludes));
 
-      config.getExecutionConfig().setUseAlternativeBuildfile(useAlternativeBuildfile);
-      config.getExecutionConfig().setRedirectSubprocessOutputToFile(redirectSubprocessOutputToFile);
+      executionConfig.setUseAlternativeBuildfile(useAlternativeBuildfile);
+      executionConfig.setRedirectSubprocessOutputToFile(redirectSubprocessOutputToFile);
 
-      config.getExecutionConfig().setTestTransformer(testTransformer);
-      config.getExecutionConfig().setTestExecutor(testExecutor);
+      executionConfig.setTestTransformer(testTransformer);
+      executionConfig.setTestExecutor(testExecutor);
 
       if (clazzFolders != null && !"".equals(clazzFolders.trim())) {
          List<String> pathes = ExecutionConfig.buildFolderList(clazzFolders);
-         List<String> clazzFolders2 = config.getExecutionConfig().getClazzFolders();
+         List<String> clazzFolders2 = executionConfig.getClazzFolders();
          clazzFolders2.clear();
          clazzFolders2.addAll(pathes);
       }
 
       if (testClazzFolders != null && !"".equals(testClazzFolders.trim())) {
          List<String> testPathes = ExecutionConfig.buildFolderList(testClazzFolders);
-         List<String> testClazzFolders2 = config.getExecutionConfig().getTestClazzFolders();
+         List<String> testClazzFolders2 = executionConfig.getTestClazzFolders();
          testClazzFolders2.clear();
          testClazzFolders2.addAll(testPathes);
       }
 
       if (testGoal != null && !"".equals(testGoal)) {
-         config.getExecutionConfig().setTestGoal(testGoal);
+         executionConfig.setTestGoal(testGoal);
       }
 
       if (pl != null && !"".equals(pl)) {
-         config.getExecutionConfig().setPl(pl);
+         executionConfig.setPl(pl);
       }
 
-      if (config.getExecutionConfig().isExecuteBeforeClassInMeasurement() && config.getExecutionConfig().isOnlyMeasureWorkload()) {
+      if (executionConfig.isExecuteBeforeClassInMeasurement() && executionConfig.isOnlyMeasureWorkload()) {
          throw new RuntimeException("executeBeforeClassInMeasurement may only be activated if onlyMeasureWorkload is deactivated!");
       }
+   }
 
-      config.getKiekerConfig().setOnlyOneCallRecording(onlyOneCallRecording);
-
-      System.out.println("Building, iterations: " + iterations + " test goal: " + testGoal);
-      return config;
+   private void parameterizeKiekerConfig(final KiekerConfig kiekerConfig) {
+      kiekerConfig.setKiekerQueueSize(kiekerQueueSize);
+      if (useSourceInstrumentation) {
+         kiekerConfig.setUseSourceInstrumentation(true);
+         kiekerConfig.setUseSelectiveInstrumentation(true);
+         kiekerConfig.setUseCircularQueue(true);
+      }
+      if (useAggregation) {
+         kiekerConfig.setUseAggregation(true);
+         kiekerConfig.setRecord(AllowedKiekerRecord.DURATION);
+      } else {
+         kiekerConfig.setUseAggregation(false);
+         kiekerConfig.setRecord(AllowedKiekerRecord.OPERATIONEXECUTION);
+      }
+      if (!"".equals(excludeForTracing)) {
+         LinkedHashSet<String> excludeSet = IncludeExcludeParser.getStringSet(excludeForTracing);
+         kiekerConfig.setExcludeForTracing(excludeSet);
+      }
+      kiekerConfig.setTraceSizeInMb(traceSizeInMb);
+      kiekerConfig.setOnlyOneCallRecording(onlyOneCallRecording);
    }
 
    private String getOldVersion() throws IOException, JsonParseException, JsonMappingException {
