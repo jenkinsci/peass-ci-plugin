@@ -55,7 +55,7 @@ public class LogFileReader {
    private void readTestcase(final PeassFolders folders, final Map<TestCase, List<LogFiles>> logFiles, final TestCase testcase) {
       LOG.info("Reading testcase " + testcase);
 
-      File logFolder = folders.getExistingMeasureLogFolder(measurementConfig.getExecutionConfig().getVersion(), testcase);
+      File logFolder = folders.getExistingMeasureLogFolder(measurementConfig.getExecutionConfig().getCommit(), testcase);
       List<LogFiles> currentFiles = tryLocalLogFolderVMIds(testcase, logFolder, folders);
       logFiles.put(testcase, currentFiles);
    }
@@ -67,18 +67,18 @@ public class LogFileReader {
 
          int tryIndex = 0;
          String filenameSuffix = "log_" + testcase.getClazz() + File.separator + testcase.getMethodWithParams() + ".txt";
-         File predecessorFile = getVersionFile(testcase, logFolder, tryIndex, filenameSuffix, measurementConfig.getExecutionConfig().getVersionOld());
+         File predecessorFile = getVersionFile(testcase, logFolder, tryIndex, filenameSuffix, measurementConfig.getExecutionConfig().getCommitOld());
 
          LOG.debug("Trying whether {} exists {}", predecessorFile, predecessorFile.exists());
          while (predecessorFile.exists()) {
             CorrectRunChecker checker = new CorrectRunChecker(testcase, tryIndex, measurementConfig, visualizationFolders);
 
-            File currentFile = getVersionFile(testcase, logFolder, tryIndex, filenameSuffix, measurementConfig.getExecutionConfig().getVersion());
+            File currentFile = getVersionFile(testcase, logFolder, tryIndex, filenameSuffix, measurementConfig.getExecutionConfig().getCommit());
             LogFiles vmidLogFile = new LogFiles(predecessorFile, currentFile, checker.isPredecessorRunning(), checker.isCurrentRunning());
             currentFiles.add(vmidLogFile);
 
             tryIndex++;
-            predecessorFile = getVersionFile(testcase, logFolder, tryIndex, filenameSuffix, measurementConfig.getExecutionConfig().getVersionOld());
+            predecessorFile = getVersionFile(testcase, logFolder, tryIndex, filenameSuffix, measurementConfig.getExecutionConfig().getCommitOld());
             LOG.debug("Trying whether {} exists: {}", predecessorFile, predecessorFile.exists());
          }
       } else {
@@ -99,8 +99,8 @@ public class LogFileReader {
    }
 
    public String getMeasureLog() {
-      File measureLogFile = visualizationFolders.getResultsFolders().getMeasurementLogFile(measurementConfig.getExecutionConfig().getVersion(),
-            measurementConfig.getExecutionConfig().getVersionOld());
+      File measureLogFile = visualizationFolders.getResultsFolders().getMeasurementLogFile(measurementConfig.getExecutionConfig().getCommit(),
+            measurementConfig.getExecutionConfig().getCommitOld());
       try {
          if (measureLogFile.exists()) {
             LOG.debug("Reading {}", measureLogFile.getAbsolutePath());
@@ -116,8 +116,8 @@ public class LogFileReader {
    }
 
    public String getRCALog() {
-      File rcaLogFile = visualizationFolders.getResultsFolders().getRCALogFile(measurementConfig.getExecutionConfig().getVersion(),
-            measurementConfig.getExecutionConfig().getVersionOld());
+      File rcaLogFile = visualizationFolders.getResultsFolders().getRCALogFile(measurementConfig.getExecutionConfig().getCommit(),
+            measurementConfig.getExecutionConfig().getCommitOld());
       try {
          LOG.debug("Reading {}", rcaLogFile.getAbsolutePath());
          String rcaLog = FileUtils.readFileToString(rcaLogFile, StandardCharsets.UTF_8);
@@ -130,7 +130,7 @@ public class LogFileReader {
 
    public Map<TestCase, List<RCALevel>> getRCATestcases() {
       CauseSearchFolders causeFolders = visualizationFolders.getPeassRCAFolders();
-      File versionTreeFolder = new File(causeFolders.getRcaTreeFolder(), measurementConfig.getExecutionConfig().getVersion());
+      File versionTreeFolder = new File(causeFolders.getRcaTreeFolder(), measurementConfig.getExecutionConfig().getCommit());
       Map<TestCase, List<RCALevel>> testcases = new HashMap<>();
       File[] versionFiles = versionTreeFolder.listFiles();
       if (versionFiles != null) {
@@ -160,7 +160,7 @@ public class LogFileReader {
       int levelId = 0;
       List<RCALevel> levels = new LinkedList<>();
       while (lastHadLogs) {
-         File logFolder = causeFolders.getExistingRCALogFolder(measurementConfig.getExecutionConfig().getVersion(), test, levelId);
+         File logFolder = causeFolders.getExistingRCALogFolder(measurementConfig.getExecutionConfig().getCommit(), test, levelId);
          List<LogFiles> currentFiles = tryLocalLogFolderVMIds(test, logFolder, causeFolders);
          if (currentFiles.size() > 0) {
             RCALevel level = new RCALevel(currentFiles);

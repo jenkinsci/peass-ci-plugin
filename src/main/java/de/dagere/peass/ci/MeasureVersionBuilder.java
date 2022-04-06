@@ -209,8 +209,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
    private boolean checkVersion(final Run<?, ?> run, final TaskListener listener, final PeassProcessConfiguration peassConfig) {
       boolean versionIsUsable;
-      String version = peassConfig.getMeasurementConfig().getExecutionConfig().getVersion();
-      String versionOld = peassConfig.getMeasurementConfig().getExecutionConfig().getVersionOld();
+      String version = peassConfig.getMeasurementConfig().getExecutionConfig().getCommit();
+      String versionOld = peassConfig.getMeasurementConfig().getExecutionConfig().getCommitOld();
       if (version.equals(versionOld)) {
          listener.getLogger().print("Version " + version + " equals " + versionOld + "; please check your configuration");
          run.setResult(Result.FAILURE);
@@ -300,7 +300,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       final RemoteVersionReader remoteVersionReader = new RemoteVersionReader(measurementConfig, listener);
       final MeasurementConfig configWithRealGitVersions = workspace.act(remoteVersionReader);
       listener.getLogger()
-            .println("Read version: " + configWithRealGitVersions.getExecutionConfig().getVersion() + " " + configWithRealGitVersions.getExecutionConfig().getVersionOld());
+            .println("Read version: " + configWithRealGitVersions.getExecutionConfig().getCommit() + " " + configWithRealGitVersions.getExecutionConfig().getCommitOld());
       return configWithRealGitVersions;
    }
 
@@ -384,9 +384,9 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       executionConfig.setExcludeLog4j(excludeLog4jSlf4jImpl);
       executionConfig.setExcludeLog4jToSlf4j(excludeLog4jToSlf4j);
 
-      executionConfig.setVersion("HEAD");
+      executionConfig.setCommit("HEAD");
       final String oldVersion = getOldVersion();
-      executionConfig.setVersionOld(oldVersion);
+      executionConfig.setCommitOld(oldVersion);
 
       executionConfig.setIncludes(IncludeExcludeParser.getStringList(includes));
       executionConfig.setExcludes(IncludeExcludeParser.getStringList(excludes));

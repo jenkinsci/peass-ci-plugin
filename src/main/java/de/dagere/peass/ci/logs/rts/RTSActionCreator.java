@@ -46,8 +46,8 @@ public class RTSActionCreator {
 
       Map<String, File> processSuccessRuns = createProcessSuccessRunsActions();
 
-      Map<TestCase, RTSLogData> rtsVmRuns = createVersionRTSData(measurementConfig.getExecutionConfig().getVersion());
-      Map<TestCase, RTSLogData> rtsVmRunsPredecessor = createVersionRTSData(measurementConfig.getExecutionConfig().getVersionOld());
+      Map<TestCase, RTSLogData> rtsVmRuns = createVersionRTSData(measurementConfig.getExecutionConfig().getCommit());
+      Map<TestCase, RTSLogData> rtsVmRunsPredecessor = createVersionRTSData(measurementConfig.getExecutionConfig().getCommitOld());
 
       boolean versionContainsNonSuccess = rtsVmRuns.values().stream().anyMatch(log -> !log.isSuccess());
       boolean predecessorContainsNonSuccess = rtsVmRunsPredecessor.values().stream().anyMatch(log -> !log.isSuccess());
@@ -68,7 +68,7 @@ public class RTSActionCreator {
    private void createOverviewAction(final Map<String, File> processSuccessRuns, final Map<TestCase, RTSLogData> rtsVmRuns, final Map<TestCase, RTSLogData> rtsVmRunsPredecessor,
          final RTSInfos rtsInfos) {
       RTSLogOverviewAction overviewAction = new RTSLogOverviewAction(processSuccessRuns, rtsVmRuns, rtsVmRunsPredecessor,
-            processSuccessRunSucceeded, measurementConfig.getExecutionConfig().getVersion(), measurementConfig.getExecutionConfig().getVersionOld(),
+            processSuccessRunSucceeded, measurementConfig.getExecutionConfig().getCommit(), measurementConfig.getExecutionConfig().getCommitOld(),
             measurementConfig.getExecutionConfig().isRedirectSubprocessOutputToFile());
       overviewAction.setStaticChanges(rtsInfos.isStaticChanges());
       overviewAction.setStaticallySelectedTests(rtsInfos.isStaticallySelectedTests());

@@ -31,11 +31,11 @@ public class CorrectRunChecker {
       File basicResultFolder = visualizationFolders.getResultsFolders().getVersionFullResultsFolder(measurementConfig);
       File detailResultsFolder = new File(basicResultFolder, "measurements");
       
-      String pathCurrent = PeassFolders.getRelativeFullResultPath(testcase, measurementConfig.getExecutionConfig().getVersion(), measurementConfig.getExecutionConfig().getVersion(), vmId);
+      String pathCurrent = PeassFolders.getRelativeFullResultPath(testcase, measurementConfig.getExecutionConfig().getCommit(), measurementConfig.getExecutionConfig().getCommit(), vmId);
       File resultFileCurrent = new File(detailResultsFolder, pathCurrent); 
       currentRunning = checkIsRunning(vmId, resultFileCurrent);
 
-      String pathPredecessor = PeassFolders.getRelativeFullResultPath(testcase, measurementConfig.getExecutionConfig().getVersion(), measurementConfig.getExecutionConfig().getVersionOld(), vmId);
+      String pathPredecessor = PeassFolders.getRelativeFullResultPath(testcase, measurementConfig.getExecutionConfig().getCommit(), measurementConfig.getExecutionConfig().getCommitOld(), vmId);
       File resultFilePredecessor = new File(detailResultsFolder, pathPredecessor); 
       predecessorRunning = checkIsRunning(vmId, resultFilePredecessor);
    }
