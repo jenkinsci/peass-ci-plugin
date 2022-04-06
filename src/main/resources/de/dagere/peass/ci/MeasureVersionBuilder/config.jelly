@@ -316,6 +316,13 @@
           </f:entry>
         </td>
       </tr>
+      <tr>
+        <td>
+          <f:entry title="${%gradleJavaPluginName}" field="gradleJavaPluginName" description="${%gradleJavaPluginNameDescr}">
+            <f:textbox default="java" />
+          </f:entry>
+        </td>
+      </tr>
     </table>
   </f:advanced>
 </j:jelly>

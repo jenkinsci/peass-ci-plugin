@@ -143,6 +143,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
    private String clazzFolders = "src/main/java:src/java";
    private String testClazzFolders = "src/test/java:src/test";
+   private String gradleJavaPluginName = "java";
 
    private boolean failOnRtsError = false;
 
@@ -395,6 +396,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
       executionConfig.setTestTransformer(testTransformer);
       executionConfig.setTestExecutor(testExecutor);
+      executionConfig.setGradleJavaPluginName(gradleJavaPluginName);
 
       if (clazzFolders != null && !"".equals(clazzFolders.trim())) {
          List<String> pathes = ExecutionConfig.buildFolderList(clazzFolders);
@@ -881,6 +883,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    @DataBoundSetter
    public void setCredentialsId(final String credentialsId) {
       this.credentialsId = credentialsId;
+   }
+   
+   public String getGradleJavaPluginName() {
+      return gradleJavaPluginName;
+   }
+   
+   @DataBoundSetter
+   public void setGradleJavaPluginName(String gradleJavaPluginName) {
+      this.gradleJavaPluginName = gradleJavaPluginName;
    }
 
    @Symbol("measure")
