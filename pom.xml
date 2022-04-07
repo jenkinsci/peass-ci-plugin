@@ -96,7 +96,7 @@
     <dependency>
       <groupId>de.dagere.peass</groupId>
       <artifactId>analysis</artifactId>
-      <version>0.1.13-SNAPSHOT</version>
+      <version>0.1.13</version>
       <classifier>tests</classifier>
       <scope>test</scope>
     </dependency>
