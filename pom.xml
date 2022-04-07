@@ -96,11 +96,7 @@
     <dependency>
       <groupId>de.dagere.peass</groupId>
       <artifactId>analysis</artifactId>
-<<<<<<< HEAD
-      <version>0.1.12</version>
-=======
       <version>0.1.13-SNAPSHOT</version>
->>>>>>> develop
       <classifier>tests</classifier>
       <scope>test</scope>
     </dependency>
