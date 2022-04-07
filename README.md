@@ -105,7 +105,7 @@ To install the latest Peass-CI to your Jenkins installation, you may either uplo
 
 # Funding
 
-The creation of this project was funded by the research project "PermanEnt" by the Federal Ministry of Education and Research of Germany.
+The creation of this project was funded by the research project "PermanEnt" (01IS20032A) by the Federal Ministry of Education and Research of Germany.
 
 # License
 

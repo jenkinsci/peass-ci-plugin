@@ -15,8 +15,8 @@
      },
      "executionConfig" : {
        "timeout" : 300000,
-       "version" : "b02c92af73e3297be617f4c973a7a63fb603565b",
-       "versionOld" : "e80d8a1bf747d1f70dc52260616b36cac9e44561"
+       "commit" : "b02c92af73e3297be617f4c973a7a63fb603565b",
+       "commitOld" : "e80d8a1bf747d1f70dc52260616b36cac9e44561"
      }
   },
   "causeConfig" : {

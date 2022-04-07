@@ -53,7 +53,7 @@ public class RCAExecutor {
 
    public void executeRCAs()
          throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException, JAXBException {
-      Changes versionChanges = changes.getVersion(config.getExecutionConfig().getVersion());
+      Changes versionChanges = changes.getVersion(config.getExecutionConfig().getCommit());
 
       boolean needsRCA = checkNeedsRCA(versionChanges);
 
@@ -104,12 +104,12 @@ public class RCAExecutor {
                   needsRCA = true;
                } else {
                   CauseSearchData lastData = Constants.OBJECTMAPPER.readValue(expectedResultFile, CauseSearchData.class);
-                  if (lastData.getMeasurementConfig().getExecutionConfig().getVersion().equals(config.getExecutionConfig().getVersion())
-                        && lastData.getMeasurementConfig().getExecutionConfig().getVersionOld().equals(config.getExecutionConfig().getVersionOld())) {
-                     LOG.debug("Found version {} vs {} of testcase {}", config.getExecutionConfig().getVersion(), config.getExecutionConfig().getVersionOld(), testCase);
+                  if (lastData.getMeasurementConfig().getExecutionConfig().getCommit().equals(config.getExecutionConfig().getCommit())
+                        && lastData.getMeasurementConfig().getExecutionConfig().getCommitOld().equals(config.getExecutionConfig().getCommitOld())) {
+                     LOG.debug("Found version {} vs {} of testcase {}", config.getExecutionConfig().getCommit(), config.getExecutionConfig().getCommitOld(), testCase);
                      LOG.debug("RCA-file: {}", expectedResultFile.getAbsolutePath());
                   } else {
-                     LOG.debug("Did not find version {} vs {} of testcase {}", config.getExecutionConfig().getVersion(), config.getExecutionConfig().getVersionOld(), testCase);
+                     LOG.debug("Did not find version {} vs {} of testcase {}", config.getExecutionConfig().getCommit(), config.getExecutionConfig().getCommitOld(), testCase);
                      needsRCA = true;
                   }
                }
@@ -131,7 +131,7 @@ public class RCAExecutor {
 
    private File getExpectedRCAFile(final TestCase testCase) {
       CauseSearchFolders folders = new CauseSearchFolders(projectFolder);
-      final File expectedResultFile = new File(folders.getRcaTreeFolder(config.getExecutionConfig().getVersion(), testCase),
+      final File expectedResultFile = new File(folders.getRcaTreeFolder(config.getExecutionConfig().getCommit(), testCase),
             testCase.getMethodWithParams() + ".json");
       return expectedResultFile;
    }

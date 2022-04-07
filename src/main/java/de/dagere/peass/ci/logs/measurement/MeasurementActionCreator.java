@@ -43,8 +43,8 @@ public class MeasurementActionCreator {
       createLogActions(run, logFiles);
 
       ExecutionConfig executionConfig = measurementConfig.getExecutionConfig();
-      String shortVersion = executionConfig.getVersion().substring(0, 6);
-      String shortVersionOld = executionConfig.getVersionOld().substring(0, 6);
+      String shortVersion = executionConfig.getCommit().substring(0, 6);
+      String shortVersionOld = executionConfig.getCommitOld().substring(0, 6);
       LogOverviewAction logOverviewAction = new LogOverviewAction(logFiles, shortVersion, shortVersionOld, measurementConfig.getVms(),
             executionConfig.isRedirectSubprocessOutputToFile());
       run.addAction(logOverviewAction);
@@ -65,9 +65,9 @@ public class MeasurementActionCreator {
          int vmId = 0;
          for (LogFiles files : entry.getValue()) {
             String logData = FileUtils.readFileToString(files.getCurrent(), StandardCharsets.UTF_8);
-            run.addAction(new LogAction(testcase, vmId, measurementConfig.getExecutionConfig().getVersion(), logData));
+            run.addAction(new LogAction(testcase, vmId, measurementConfig.getExecutionConfig().getCommit(), logData));
             String logDataOld = FileUtils.readFileToString(files.getPredecessor(), StandardCharsets.UTF_8);
-            run.addAction(new LogAction(testcase, vmId, measurementConfig.getExecutionConfig().getVersionOld(), logDataOld));
+            run.addAction(new LogAction(testcase, vmId, measurementConfig.getExecutionConfig().getCommitOld(), logDataOld));
             vmId++;
          }
       }

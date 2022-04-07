@@ -51,7 +51,7 @@ public class RTSVisualizationCreator {
          System.out.println("Selected: " + traceSelectedTests + " Coverage: " + coverageSelectedTests);
 
          RTSVisualizationAction rtsVisualizationAction = new RTSVisualizationAction(peassConfig.getDependencyConfig(), staticSelection, traceSelectedTests, coverageSelectedTests,
-               peassConfig.getMeasurementConfig().getExecutionConfig().getVersion(), peassConfig.getMeasurementConfig().getExecutionConfig().getVersionOld(),
+               peassConfig.getMeasurementConfig().getExecutionConfig().getCommit(), peassConfig.getMeasurementConfig().getExecutionConfig().getCommitOld(),
                logSummary);
          run.addAction(rtsVisualizationAction);
 
@@ -65,7 +65,7 @@ public class RTSVisualizationCreator {
 
    private void visualizeTest(final Run<?, ?> run, final String traceSelectedTest) throws IOException {
       TestCase testcase = new TestCase(traceSelectedTest);
-      File traceFolder = localWorkspace.getVersionDiffFolder(peassConfig.getMeasurementConfig().getExecutionConfig().getVersion());
+      File traceFolder = localWorkspace.getVersionDiffFolder(peassConfig.getMeasurementConfig().getExecutionConfig().getCommit());
       File traceFile = new File(traceFolder, testcase.getShortClazz() + "#" + testcase.getMethod() + ".txt");
       System.out.println("Trace file: " + traceFile.getAbsolutePath());
       String traceSource = "";
@@ -82,7 +82,7 @@ public class RTSVisualizationCreator {
       File traceTestSelectionFile = localWorkspace.getTraceTestSelectionFile();
       if (traceTestSelectionFile.exists()) {
          ExecutionData traceSelections = Constants.OBJECTMAPPER.readValue(traceTestSelectionFile, ExecutionData.class);
-         TestSet tests = traceSelections.getVersions().get(peassConfig.getMeasurementConfig().getExecutionConfig().getVersion());
+         TestSet tests = traceSelections.getVersions().get(peassConfig.getMeasurementConfig().getExecutionConfig().getCommit());
 
          if (tests != null) {
             for (TestCase test : tests.getTests()) {
@@ -100,7 +100,7 @@ public class RTSVisualizationCreator {
       if (coverageInfoFile.exists()) {
          LOG.info("Reading {}", coverageInfoFile);
          CoverageSelectionInfo executions = Constants.OBJECTMAPPER.readValue(coverageInfoFile, CoverageSelectionInfo.class);
-         CoverageSelectionVersion currentVersion = executions.getVersions().get(peassConfig.getMeasurementConfig().getExecutionConfig().getVersion());
+         CoverageSelectionVersion currentVersion = executions.getVersions().get(peassConfig.getMeasurementConfig().getExecutionConfig().getCommit());
          return currentVersion;
       } else {
          LOG.info("File {} was not found, RTS coverage based selection info might be incomplete", coverageInfoFile.getAbsoluteFile());
@@ -113,12 +113,12 @@ public class RTSVisualizationCreator {
       File staticSelectionFile = localWorkspace.getStaticTestSelectionFile();
       if (staticSelectionFile.exists()) {
          StaticTestSelection staticTestSelection = Constants.OBJECTMAPPER.readValue(staticSelectionFile, StaticTestSelection.class);
-         VersionStaticSelection version = staticTestSelection.getVersions().get(peassConfig.getMeasurementConfig().getExecutionConfig().getVersion());
+         VersionStaticSelection version = staticTestSelection.getVersions().get(peassConfig.getMeasurementConfig().getExecutionConfig().getCommit());
 
          if (version != null) {
             addVersionDataToChangeliste(staticSelection, version);
          } else {
-            LOG.info("No change has been detected in " + peassConfig.getMeasurementConfig().getExecutionConfig().getVersion());
+            LOG.info("No change has been detected in " + peassConfig.getMeasurementConfig().getExecutionConfig().getCommit());
          }
 
       } else {

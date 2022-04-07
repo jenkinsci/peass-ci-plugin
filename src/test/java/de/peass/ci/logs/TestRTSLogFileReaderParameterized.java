@@ -45,8 +45,8 @@ public class TestRTSLogFileReaderParameterized {
       Mockito.when(visualizationFoldersMock.getPeassFolders()).thenReturn(new PeassFolders(new File(currentDir, "parameterized-demo_peass")));
       MeasurementConfig measurementConfig = Mockito.mock(MeasurementConfig.class);
       ExecutionConfig executionConfig = new ExecutionConfig();
-      executionConfig.setVersion(VERSION);
-      executionConfig.setVersionOld(VERSION_OLD);
+      executionConfig.setCommit(VERSION);
+      executionConfig.setCommitOld(VERSION_OLD);
       Mockito.when(measurementConfig.getExecutionConfig()).thenReturn(executionConfig);
       RTSLogFileReader reader = new RTSLogFileReader(visualizationFoldersMock, measurementConfig);
 
