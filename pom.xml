@@ -60,6 +60,12 @@
       <version>0.1.6</version>
     </dependency>
 
+	<dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13.2</version>
+    </dependency>
+    
     <!-- To avoid enforcer problems -->
     <dependency>
       <groupId>org.apache.commons</groupId>
