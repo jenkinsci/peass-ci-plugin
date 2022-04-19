@@ -60,6 +60,7 @@
       <version>0.1.6</version>
     </dependency>
 
+    <!-- This should never be removed, since Jenkins internally ignores JUnit 4, but it is required on the classpath for parsing -->
 	<dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
