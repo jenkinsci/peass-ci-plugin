@@ -6,8 +6,6 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 
-import javax.xml.bind.JAXBException;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -46,6 +44,7 @@ import hudson.FilePath;
 import hudson.model.Run;
 import hudson.model.TaskListener;
 import hudson.util.DirScanner;
+import jakarta.xml.bind.JAXBException;
 
 public class LocalPeassProcessManager {
 

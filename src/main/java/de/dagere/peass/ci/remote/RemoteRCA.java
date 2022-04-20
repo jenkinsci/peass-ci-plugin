@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.Serializable;
 
-import javax.xml.bind.JAXBException;
-
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.jenkinsci.remoting.RoleChecker;
 
@@ -23,6 +21,7 @@ import de.dagere.peass.measurement.rca.CauseSearcherConfig;
 import hudson.FilePath.FileCallable;
 import hudson.model.TaskListener;
 import hudson.remoting.VirtualChannel;
+import jakarta.xml.bind.JAXBException;
 import kieker.analysis.exception.AnalysisConfigurationException;
 
 public class RemoteRCA implements FileCallable<Boolean>, Serializable {
