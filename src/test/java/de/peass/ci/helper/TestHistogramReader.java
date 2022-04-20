@@ -6,8 +6,6 @@ import static org.mockito.Mockito.when;
 import java.io.File;
 import java.util.Map;
 
-import javax.xml.bind.JAXBException;
-
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -16,6 +14,7 @@ import de.dagere.peass.ci.MeasureVersionAction;
 import de.dagere.peass.ci.helper.HistogramReader;
 import de.dagere.peass.ci.helper.HistogramValues;
 import de.dagere.peass.config.MeasurementConfig;
+import jakarta.xml.bind.JAXBException;
 
 public class TestHistogramReader {
 

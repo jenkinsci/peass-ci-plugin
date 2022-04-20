@@ -14,7 +14,6 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
-import javax.xml.bind.JAXBException;
 
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.AncestorInPath;
@@ -71,6 +70,7 @@ import hudson.util.FormValidation;
 import hudson.util.ListBoxModel;
 import hudson.util.ListBoxModel.Option;
 import io.jenkins.cli.shaded.org.apache.commons.lang.StringUtils;
+import jakarta.xml.bind.JAXBException;
 import jenkins.model.Jenkins;
 import jenkins.tasks.SimpleBuildStep;
 import net.kieker.sourceinstrumentation.AllowedKiekerRecord;

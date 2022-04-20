@@ -2,8 +2,6 @@ package de.dagere.peass.ci.logs;
 
 import java.io.File;
 
-import javax.xml.bind.JAXBException;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,6 +12,7 @@ import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.folders.PeassFolders;
+import jakarta.xml.bind.JAXBException;
 
 /**
  * Checks wether a measurement run is correct by checking the XML result files
