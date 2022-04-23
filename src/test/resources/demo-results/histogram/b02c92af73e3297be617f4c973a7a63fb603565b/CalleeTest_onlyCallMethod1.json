@@ -1,0 +1,70 @@
+{
+  "clazz" : "de.test.CalleeTest",
+  "methods" : [ {
+    "method" : "onlyCallMethod1",
+    "datacollectorResults" : [ {
+      "name" : "de.dagere.kopeme.datacollection.TimeDataCollectorNoGC",
+      "chunks" : [ {
+        "chunkStartTime" : 1605103588856,
+        "results" : [ {
+          "value" : 2219819.0,
+          "deviation" : 0.0,
+          "min" : 2219819.0,
+          "max" : 2219819.0,
+          "warmup" : 0,
+          "iterations" : 4,
+          "repetitions" : 2,
+          "commit" : "e80d8a1bf747d1f70dc52260616b36cac9e44561",
+          "vmRunConfiguration" : { },
+          "parameters" : null,
+          "cpu" : null,
+          "memory" : null,
+          "date" : 1605103598163
+        }, {
+          "value" : 4.0449198E7,
+          "deviation" : 0.0,
+          "min" : 4.0449198E7,
+          "max" : 4.0449198E7,
+          "warmup" : 0,
+          "iterations" : 4,
+          "repetitions" : 2,
+          "commit" : "b02c92af73e3297be617f4c973a7a63fb603565b",
+          "vmRunConfiguration" : { },
+          "parameters" : null,
+          "cpu" : null,
+          "memory" : null,
+          "date" : 1605103608158
+        }, {
+          "value" : 2199813.0,
+          "deviation" : 0.0,
+          "min" : 2199813.0,
+          "max" : 2199813.0,
+          "warmup" : 0,
+          "iterations" : 4,
+          "repetitions" : 2,
+          "commit" : "e80d8a1bf747d1f70dc52260616b36cac9e44561",
+          "vmRunConfiguration" : { },
+          "parameters" : null,
+          "cpu" : null,
+          "memory" : null,
+          "date" : 1605103617870
+        }, {
+          "value" : 4.0277088E7,
+          "deviation" : 0.0,
+          "min" : 4.0277088E7,
+          "max" : 4.0277088E7,
+          "warmup" : 0,
+          "iterations" : 4,
+          "repetitions" : 2,
+          "commit" : "b02c92af73e3297be617f4c973a7a63fb603565b",
+          "vmRunConfiguration" : { },
+          "parameters" : null,
+          "cpu" : null,
+          "memory" : null,
+          "date" : 1605103627848
+        } ]
+      } ],
+      "results" : [ ]
+    } ]
+  } ]
+}

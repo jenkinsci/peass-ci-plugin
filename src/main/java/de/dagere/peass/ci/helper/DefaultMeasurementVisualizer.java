@@ -16,8 +16,8 @@ import org.apache.logging.log4j.Logger;
 
 import com.google.common.io.Files;
 
-import de.dagere.kopeme.datastorage.XMLDataLoader;
-import de.dagere.kopeme.generated.Kopemedata;
+import de.dagere.kopeme.datastorage.JSONDataLoader;
+import de.dagere.kopeme.kopemedata.Kopemedata;
 import de.dagere.peass.ci.MeasurementVisualizationAction;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.measurement.statistics.data.TestcaseStatistic;
@@ -53,15 +53,19 @@ public class DefaultMeasurementVisualizer {
 
       File detailResultsFolder = new File(dataFolder, "measurements");
 
-      File[] files = dataFolder.listFiles((FileFilter) new WildcardFileFilter("*.xml"));
+      File[] files = dataFolder.listFiles((FileFilter) new WildcardFileFilter("*.json"));
       LOG.debug("Searching in {} Files: {}", dataFolder, files != null ? files.length : "no files");
+      readFiles(longestPrefix, detailResultsFolder, files);
+   }
+
+   private void readFiles(String longestPrefix, File detailResultsFolder, File[] files) {
       if (files != null) {
          Arrays.sort(files);
          for (File testcaseFile : files) {
             try {
-               Kopemedata data = XMLDataLoader.loadData(testcaseFile);
+               Kopemedata data = JSONDataLoader.loadData(testcaseFile);
 
-               TestCase testcase = new TestCase(data.getTestcases());
+               TestCase testcase = new TestCase(data);
 
                KoPeMeTreeConverter treeConverter = new KoPeMeTreeConverter(detailResultsFolder, version, testcase);
                File testcaseVisualizationFile = generateJSFile(testcase, treeConverter);
@@ -72,8 +76,6 @@ public class DefaultMeasurementVisualizer {
 
                final String content = FileUtils.readFileToString(testcaseVisualizationFile, StandardCharsets.UTF_8);
                run.addAction(new MeasurementVisualizationAction("measurement_" + name, content));
-            } catch (JAXBException e) {
-               e.printStackTrace();
             } catch (IOException e) {
                e.printStackTrace();
             }

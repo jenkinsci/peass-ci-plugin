@@ -6,10 +6,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-import de.dagere.kopeme.datastorage.XMLDataLoader;
-import de.dagere.kopeme.generated.Kopemedata;
-import de.dagere.kopeme.generated.TestcaseType;
-import de.dagere.kopeme.generated.TestcaseType.Datacollector.Chunk;
+import de.dagere.kopeme.datastorage.JSONDataLoader;
+import de.dagere.kopeme.kopemedata.Kopemedata;
+import de.dagere.kopeme.kopemedata.TestMethod;
+import de.dagere.kopeme.kopemedata.VMResultChunk;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.measurement.dataloading.MultipleVMTestUtil;
@@ -49,11 +49,11 @@ public class HistogramReader {
    }
 
    private void readFile(final Map<String, HistogramValues> measurements, final File xmlResultFile) throws JAXBException {
-      Kopemedata data = XMLDataLoader.loadData(xmlResultFile);
+      Kopemedata data = JSONDataLoader.loadData(xmlResultFile);
       // This assumes measurements are only executed once; if this is not the case, the matching result would need to be searched
-      final TestcaseType testcase = data.getTestcases().getTestcase().get(0);
-      Chunk chunk = testcase.getDatacollector().get(0).getChunk().get(0);
-      String testcaseKey = new TestCase(data.getTestcases()).toString();
+      final TestMethod testcase = data.getMethods().get(0);
+      VMResultChunk chunk = testcase.getDatacollectorResults().get(0).getChunks().get(0);
+      String testcaseKey = new TestCase(data).toString();
       
       MeasurementConfig currentConfig = getUpdatedConfiguration(testcaseKey, testcase, chunk);
       
@@ -62,7 +62,7 @@ public class HistogramReader {
       measurements.put(testcaseKey, values);
    }
 
-   private HistogramValues loadResults(final Chunk chunk, final MeasurementConfig currentConfig) {
+   private HistogramValues loadResults(final VMResultChunk chunk, final MeasurementConfig currentConfig) {
       ResultLoader loader = new ResultLoader(currentConfig);
       loader.loadChunk(chunk);
 
@@ -70,15 +70,15 @@ public class HistogramReader {
       return values;
    }
 
-   private MeasurementConfig getUpdatedConfiguration(final String testcaseKey, final TestcaseType testcase, final Chunk chunk) {
+   private MeasurementConfig getUpdatedConfiguration(final String testcaseKey, final TestMethod testcase, final VMResultChunk chunk) {
       MeasurementConfig currentConfig = new MeasurementConfig(measurementConfig);
-      int iterations = (int) MultipleVMTestUtil.getMinIterationCount(chunk.getResult());
+      int iterations = (int) MultipleVMTestUtil.getMinIterationCount(chunk.getResults());
       if (iterations != currentConfig.getAllIterations()) {
          currentConfig.setIterations((int) Math.ceil(iterations/2d));
          currentConfig.setWarmup(iterations/2);
       }
       
-      currentConfig.setRepetitions((int) MultipleVMTestUtil.getMinRepetitionCount(chunk.getResult()));
+      currentConfig.setRepetitions((int) MultipleVMTestUtil.getMinRepetitionCount(chunk.getResults()));
       
       if (currentConfig.getAllIterations() != measurementConfig.getAllIterations() ||
             currentConfig.getRepetitions() != measurementConfig.getRepetitions()) {

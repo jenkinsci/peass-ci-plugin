@@ -1,0 +1,78 @@
+{
+  "clazz" : "de.dagere.peass.ExampleTest",
+  "methods" : [ {
+    "method" : "test",
+    "datacollectorResults" : [ {
+      "name" : "de.dagere.kopeme.datacollection.TimeDataCollectorNoGC",
+      "chunks" : [ {
+        "chunkStartTime" : 1646926954150,
+        "results" : [ {
+          "value" : 4202639.833333333,
+          "deviation" : 155812.57920131698,
+          "min" : 4133571.0,
+          "max" : 4520618.0,
+          "warmup" : 0,
+          "iterations" : 6,
+          "repetitions" : 2,
+          "commit" : "49f75e8877c2e9b7cf6b56087121a35fdd73ff8b",
+          "vmRunConfiguration" : { },
+          "parameters" : {
+            "JUNIT_PARAMETERIZED" : "1"
+          },
+          "cpu" : null,
+          "memory" : null,
+          "date" : 1646926961046
+        }, {
+          "value" : 4.0257574166666664E7,
+          "deviation" : 162075.73924855777,
+          "min" : 4.0186406E7,
+          "max" : 4.0588344E7,
+          "warmup" : 0,
+          "iterations" : 6,
+          "repetitions" : 2,
+          "commit" : "a12a0b7f4c162794fca0e7e3fcc6ea3b3a2cbc2b",
+          "vmRunConfiguration" : { },
+          "parameters" : {
+            "JUNIT_PARAMETERIZED" : "1"
+          },
+          "cpu" : null,
+          "memory" : null,
+          "date" : 1646926968493
+        }, {
+          "value" : 4231442.666666667,
+          "deviation" : 216931.7982626491,
+          "min" : 4123990.0,
+          "max" : 4670927.0,
+          "warmup" : 0,
+          "iterations" : 6,
+          "repetitions" : 2,
+          "commit" : "49f75e8877c2e9b7cf6b56087121a35fdd73ff8b",
+          "vmRunConfiguration" : { },
+          "parameters" : {
+            "JUNIT_PARAMETERIZED" : "1"
+          },
+          "cpu" : null,
+          "memory" : null,
+          "date" : 1646926976713
+        }, {
+          "value" : 4.0323622666666664E7,
+          "deviation" : 323251.0710501459,
+          "min" : 4.0180001E7,
+          "max" : 4.0982818E7,
+          "warmup" : 0,
+          "iterations" : 6,
+          "repetitions" : 2,
+          "commit" : "a12a0b7f4c162794fca0e7e3fcc6ea3b3a2cbc2b",
+          "vmRunConfiguration" : { },
+          "parameters" : {
+            "JUNIT_PARAMETERIZED" : "1"
+          },
+          "cpu" : null,
+          "memory" : null,
+          "date" : 1646926983984
+        } ]
+      } ],
+      "results" : [ ]
+    } ]
+  } ]
+}
