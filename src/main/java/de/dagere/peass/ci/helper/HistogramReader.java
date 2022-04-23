@@ -31,7 +31,7 @@ public class HistogramReader {
    public Map<String, HistogramValues> readMeasurements() throws JAXBException {
       final Map<String, HistogramValues> measurements = new TreeMap<>();
       if (fullResultsFolder.exists() && fullResultsFolder.isDirectory()) {
-         File[] xmlFiles = fullResultsFolder.listFiles((FileFilter) new WildcardFileFilter("*.xml"));
+         File[] xmlFiles = fullResultsFolder.listFiles((FileFilter) new WildcardFileFilter("*.json"));
          if (xmlFiles == null) {
             System.out.println("No xml-Files were found, measurements is empty!");
             return measurements;
