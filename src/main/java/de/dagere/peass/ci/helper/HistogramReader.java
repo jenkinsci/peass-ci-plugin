@@ -15,7 +15,6 @@ import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.measurement.dataloading.MultipleVMTestUtil;
 import de.dagere.peass.measurement.dataloading.ResultLoader;
 import io.jenkins.cli.shaded.org.apache.commons.io.filefilter.WildcardFileFilter;
-import jakarta.xml.bind.JAXBException;
 
 public class HistogramReader {
 
@@ -28,7 +27,7 @@ public class HistogramReader {
       this.fullResultsFolder = fullResultsFolder;
    }
 
-   public Map<String, HistogramValues> readMeasurements() throws JAXBException {
+   public Map<String, HistogramValues> readMeasurements() {
       final Map<String, HistogramValues> measurements = new TreeMap<>();
       if (fullResultsFolder.exists() && fullResultsFolder.isDirectory()) {
          File[] xmlFiles = fullResultsFolder.listFiles((FileFilter) new WildcardFileFilter("*.json"));
@@ -48,7 +47,7 @@ public class HistogramReader {
       return updatedConfigurations;
    }
 
-   private void readFile(final Map<String, HistogramValues> measurements, final File xmlResultFile) throws JAXBException {
+   private void readFile(final Map<String, HistogramValues> measurements, final File xmlResultFile) {
       Kopemedata data = JSONDataLoader.loadData(xmlResultFile);
       // This assumes measurements are only executed once; if this is not the case, the matching result would need to be searched
       final TestMethod testcase = data.getMethods().get(0);

@@ -70,7 +70,6 @@ import hudson.util.FormValidation;
 import hudson.util.ListBoxModel;
 import hudson.util.ListBoxModel.Option;
 import io.jenkins.cli.shaded.org.apache.commons.lang.StringUtils;
-import jakarta.xml.bind.JAXBException;
 import jenkins.model.Jenkins;
 import jenkins.tasks.SimpleBuildStep;
 import net.kieker.sourceinstrumentation.AllowedKiekerRecord;
@@ -223,7 +222,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    }
 
    private void runAllSteps(final Run<?, ?> run, final FilePath workspace, final TaskListener listener, final File localWorkspace, final PeassProcessConfiguration peassConfig)
-         throws IOException, InterruptedException, JAXBException, JsonParseException, JsonMappingException, JsonGenerationException, Exception {
+         throws IOException, InterruptedException, JsonParseException, JsonMappingException, JsonGenerationException, Exception {
       final LocalPeassProcessManager processManager = new LocalPeassProcessManager(peassConfig, workspace, localWorkspace, listener, run);
 
       AggregatedRTSResult tests = processManager.rts();
@@ -252,7 +251,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    }
 
    private void measure(final Run<?, ?> run, final LocalPeassProcessManager processManager, final Set<TestCase> tests)
-         throws IOException, InterruptedException, JAXBException, JsonParseException, JsonMappingException, JsonGenerationException, Exception {
+         throws IOException, InterruptedException, JsonParseException, JsonMappingException, JsonGenerationException, Exception {
       boolean worked = processManager.measure(tests);
       if (!worked) {
          run.setResult(Result.FAILURE);

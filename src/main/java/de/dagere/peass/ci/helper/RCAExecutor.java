@@ -28,7 +28,6 @@ import de.dagere.peass.measurement.rca.data.CauseSearchData;
 import de.dagere.peass.measurement.rca.kieker.BothTreeReader;
 import de.dagere.peass.measurement.rca.searcher.CauseSearcher;
 import de.dagere.peass.utils.Constants;
-import jakarta.xml.bind.JAXBException;
 import kieker.analysis.exception.AnalysisConfigurationException;
 
 public class RCAExecutor {
@@ -51,7 +50,7 @@ public class RCAExecutor {
    }
 
    public void executeRCAs()
-         throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException, JAXBException {
+         throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException {
       Changes versionChanges = changes.getVersion(config.getExecutionConfig().getCommit());
 
       boolean needsRCA = checkNeedsRCA(versionChanges);
@@ -119,7 +118,7 @@ public class RCAExecutor {
    }
 
    private void analyseChange(final MeasurementConfig currentConfig, final TestCase testCase)
-         throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException, JAXBException {
+         throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException {
       final File expectedResultFile = getExpectedRCAFile(testCase);
       LOG.info("Testing {}", expectedResultFile);
       if (!expectedResultFile.exists()) {
@@ -136,7 +135,7 @@ public class RCAExecutor {
    }
 
    private void executeRCA(final MeasurementConfig config, final TestCase testCase)
-         throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException, JAXBException {
+         throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException {
       final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(testCase, causeConfig);
       config.setUseKieker(true);
 

@@ -44,7 +44,6 @@ import hudson.FilePath;
 import hudson.model.Run;
 import hudson.model.TaskListener;
 import hudson.util.DirScanner;
-import jakarta.xml.bind.JAXBException;
 
 public class LocalPeassProcessManager {
 
@@ -134,7 +133,7 @@ public class LocalPeassProcessManager {
    }
 
    public ProjectChanges visualizeMeasurementResults(final Run<?, ?> run)
-         throws JAXBException, IOException, JsonParseException, JsonMappingException, JsonGenerationException {
+         throws IOException, JsonParseException, JsonMappingException, JsonGenerationException {
       File dataFolder = results.getVersionFullResultsFolder(peassConfig.getMeasurementConfig());
       final HistogramReader histogramReader = new HistogramReader(peassConfig.getMeasurementConfig(), dataFolder);
       final Map<String, HistogramValues> measurements = histogramReader.readMeasurements();

@@ -21,7 +21,6 @@ import de.dagere.peass.measurement.rca.CauseSearcherConfig;
 import hudson.FilePath.FileCallable;
 import hudson.model.TaskListener;
 import hudson.remoting.VirtualChannel;
-import jakarta.xml.bind.JAXBException;
 import kieker.analysis.exception.AnalysisConfigurationException;
 
 public class RemoteRCA implements FileCallable<Boolean>, Serializable {
@@ -56,7 +55,7 @@ public class RemoteRCA implements FileCallable<Boolean>, Serializable {
          try (LogRedirector director = new LogRedirector(logFile)) {
             executeRCA(workspaceFolder, localFolder, resultsFolder);
             return true;
-         } catch (XmlPullParserException | AnalysisConfigurationException | ViewNotFoundException | JAXBException e) {
+         } catch (XmlPullParserException | AnalysisConfigurationException | ViewNotFoundException e) {
             File test = new File(workspaceFolder, "error.txt"); // Workaround, since error redirection on Jenkins agents currently does not work
             PrintStream writer = new PrintStream(test, "UTF-8");
             e.printStackTrace(writer);
@@ -70,7 +69,7 @@ public class RemoteRCA implements FileCallable<Boolean>, Serializable {
          try {
             executeRCA(workspaceFolder, localFolder, resultsFolder);
             return true;
-         } catch (IOException | InterruptedException | XmlPullParserException | AnalysisConfigurationException | ViewNotFoundException | JAXBException e) {
+         } catch (IOException | InterruptedException | XmlPullParserException | AnalysisConfigurationException | ViewNotFoundException e) {
             e.printStackTrace();
             return false;
          }
@@ -78,7 +77,7 @@ public class RemoteRCA implements FileCallable<Boolean>, Serializable {
    }
 
    private void executeRCA(final File workspaceFolder, final File localFolder, final ResultsFolders resultsFolder)
-         throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException, JAXBException {
+         throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException {
       final File projectFolderLocal = new File(localFolder, workspaceFolder.getName());
       File propertyFolder = resultsFolder.getPropertiesFolder();
       causeConfig.setPropertyFolder(propertyFolder);

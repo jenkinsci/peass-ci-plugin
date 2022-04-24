@@ -26,7 +26,6 @@ import de.dagere.peass.visualization.GraphNode;
 import de.dagere.peass.visualization.KoPeMeTreeConverter;
 import hudson.model.Run;
 import io.jenkins.cli.shaded.org.apache.commons.io.filefilter.WildcardFileFilter;
-import jakarta.xml.bind.JAXBException;
 
 public class DefaultMeasurementVisualizer {
    private static final Logger LOG = LogManager.getLogger(DefaultMeasurementVisualizer.class);

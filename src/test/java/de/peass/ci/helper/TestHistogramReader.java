@@ -14,14 +14,13 @@ import de.dagere.peass.ci.MeasureVersionAction;
 import de.dagere.peass.ci.helper.HistogramReader;
 import de.dagere.peass.ci.helper.HistogramValues;
 import de.dagere.peass.config.MeasurementConfig;
-import jakarta.xml.bind.JAXBException;
 
 public class TestHistogramReader {
 
    private static final File EXAMPLE_DATA_FOLDER = new File("src/test/resources/demo-results/histogram");
 
    @Test
-   public void testHistogramCreation() throws JAXBException {
+   public void testHistogramCreation() {
       MeasurementConfig measurementConfig = new MeasurementConfig(2);
       measurementConfig.getExecutionConfig().setCommit("b02c92af73e3297be617f4c973a7a63fb603565b");
       measurementConfig.getExecutionConfig().setCommitOld("e80d8a1bf747d1f70dc52260616b36cac9e44561");
@@ -45,7 +44,7 @@ public class TestHistogramReader {
    }
 
    @Test
-   public void testEmptyHistogram() throws JAXBException {
+   public void testEmptyHistogram() {
       MeasurementConfig measurementConfig = new MeasurementConfig(2);
       measurementConfig.getExecutionConfig().setCommit("e80d8a1bf747d1f70dc52260616b36cac9e44561");
       measurementConfig.getExecutionConfig().setCommitOld("e80d8a1bf747d1f70dc52260616b36cac9e44561~1");
@@ -59,7 +58,7 @@ public class TestHistogramReader {
    }
 
    @Test
-   public void testUpdatedConfiguration() throws JAXBException {
+   public void testUpdatedConfiguration() {
       MeasurementConfig measurementConfig = new MeasurementConfig(2);
       measurementConfig.getExecutionConfig().setCommit("a23e385264c31def8dcda86c3cf64faa698c62d8");
       measurementConfig.getExecutionConfig().setCommitOld("33ce17c04b5218c25c40137d4d09f40fbb3e4f0f");
