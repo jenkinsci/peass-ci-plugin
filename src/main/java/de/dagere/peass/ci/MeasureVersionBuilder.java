@@ -43,6 +43,7 @@ import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.config.MeasurementStrategy;
 import de.dagere.peass.config.StatisticalTests;
 import de.dagere.peass.config.TestSelectionConfig;
+import de.dagere.peass.config.parameters.MeasurementConfigurationMixin;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.analysis.data.deserializer.TestcaseKeyDeserializer;
 import de.dagere.peass.execution.utils.EnvironmentVariables;
@@ -85,11 +86,11 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       Constants.OBJECTMAPPER.registerModules(keyDeserializer);
    }
 
-   private int VMs = 30;
-   private int iterations = 5;
-   private int warmup = 5;
-   private int repetitions = 1000000;
-   private int timeout = 5;
+   private int VMs = MeasurementConfigurationMixin.DEFAULT_VMS;
+   private int iterations = MeasurementConfigurationMixin.DEFAULT_ITERATIONS;
+   private int warmup = MeasurementConfigurationMixin.DEFAULT_WARMUP;
+   private int repetitions = MeasurementConfigurationMixin.DEFAULT_REPETITIONS;
+   private int timeout = MeasurementConfigurationMixin.DEFAULT_TIMEOUT;
 
    private boolean executeRCA = true;
    private boolean executeParallel = false;
