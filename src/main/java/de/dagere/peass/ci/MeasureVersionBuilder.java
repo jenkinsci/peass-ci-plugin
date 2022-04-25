@@ -381,7 +381,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       executionConfig.setRedirectToNull(redirectToNull);
       
       executionConfig.setRemoveSnapshots(removeSnapshots);
-      executionConfig.setExcludeLog4j(excludeLog4jSlf4jImpl);
+      executionConfig.setExcludeLog4jSlf4jImpl(excludeLog4jSlf4jImpl);
       executionConfig.setExcludeLog4jToSlf4j(excludeLog4jToSlf4j);
 
       executionConfig.setCommit("HEAD");
