@@ -41,6 +41,14 @@
   </licenses>
 
   <dependencies>
+    <!-- Higher import order needed for tests (do not remove, even if current hamcrest version is imported elsewhere, dependening on the build system, this might 
+      be interpreted differently. Especially GH Actions tends to choose different import orders, which results in hard-to-fix errors, since they do not happen locally -->
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-core</artifactId>
+      <version>2.2</version>
+      <scope>test</scope>
+    </dependency>
 
     <dependency>
       <groupId>de.dagere.peass</groupId>
@@ -62,12 +70,12 @@
     </dependency>
 
     <!-- This should never be removed, since Jenkins internally ignores JUnit 4, but it is required on the classpath for parsing -->
-	<dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.13.2</version>
     </dependency>
-    
+
     <!-- To avoid enforcer problems -->
     <dependency>
       <groupId>org.apache.commons</groupId>
@@ -84,8 +92,8 @@
       <artifactId>org.osgi.core</artifactId>
       <version>6.0.0</version>
     </dependency>
-    
-    
+
+
 
     <dependency>
       <groupId>de.dagere.peass</groupId>
