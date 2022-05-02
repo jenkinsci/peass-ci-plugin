@@ -373,7 +373,6 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       executionConfig.setKiekerWaitTime(kiekerWaitTime);
       
       
-      executionConfig.setCreateDefaultConstructor(createDefaultConstructor);
       executionConfig.setExecuteBeforeClassInMeasurement(executeBeforeClassInMeasurement);
       executionConfig.setOnlyMeasureWorkload(onlyMeasureWorkload);
       if (onlyMeasureWorkload && repetitions != 1) {
@@ -447,6 +446,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       }
       kiekerConfig.setTraceSizeInMb(traceSizeInMb);
       kiekerConfig.setOnlyOneCallRecording(onlyOneCallRecording);
+      kiekerConfig.setCreateDefaultConstructor(createDefaultConstructor);
    }
 
    private String getOldVersion() throws IOException, JsonParseException, JsonMappingException {
@@ -892,7 +892,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    }
    
    @DataBoundSetter
-   public void setGradleJavaPluginName(String gradleJavaPluginName) {
+   public void setGradleJavaPluginName(final String gradleJavaPluginName) {
       this.gradleJavaPluginName = gradleJavaPluginName;
    }
    
@@ -901,7 +901,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    }
    
    @DataBoundSetter
-   public void setGradleSpringBootPluginName(String gradleSpringBootPluginName) {
+   public void setGradleSpringBootPluginName(final String gradleSpringBootPluginName) {
       this.gradleSpringBootPluginName = gradleSpringBootPluginName;
    }
 
