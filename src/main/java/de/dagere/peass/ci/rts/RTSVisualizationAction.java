@@ -75,6 +75,6 @@ public class RTSVisualizationAction extends VisibleAction {
 
    @Override
    public String getUrlName() {
-      return "rtsResults";
+      return "rtsResults_" + id;
    }
 }

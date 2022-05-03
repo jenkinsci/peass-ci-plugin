@@ -63,7 +63,7 @@ public class MeasureVersionAction extends VisibleAction {
 
    @Override
    public String getUrlName() {
-      return "measurement";
+      return "measurement_" + id;
    }
 
    public MeasurementConfig getConfig() {

@@ -57,7 +57,7 @@ public class LogOverviewAction extends VisibleAction {
 
    @Override
    public String getUrlName() {
-      return "measurementLogOverview";
+      return "measurementLogOverview_" + id;
    }
 
 

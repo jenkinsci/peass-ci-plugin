@@ -49,6 +49,6 @@ public class RCALogOverviewAction extends VisibleAction {
 
    @Override
    public String getUrlName() {
-      return "rcaLogOverview";
+      return "rcaLogOverview_" + id;
    }
 }

@@ -94,7 +94,7 @@ public class RTSLogOverviewAction extends VisibleAction {
 
    @Override
    public String getUrlName() {
-      return "rtsLogOverview";
+      return "rtsLogOverview_" + id;
    }
 
 }
