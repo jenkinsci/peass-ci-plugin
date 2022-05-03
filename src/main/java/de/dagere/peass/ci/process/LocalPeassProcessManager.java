@@ -25,6 +25,7 @@ import de.dagere.peass.ci.RTSResult;
 import de.dagere.peass.ci.helper.DefaultMeasurementVisualizer;
 import de.dagere.peass.ci.helper.HistogramReader;
 import de.dagere.peass.ci.helper.HistogramValues;
+import de.dagere.peass.ci.helper.IdHelper;
 import de.dagere.peass.ci.helper.RCAVisualizer;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.LogActionCreator;
@@ -148,7 +149,7 @@ public class LocalPeassProcessManager {
 
       Changes versionChanges = changes.getVersion(peassConfig.getMeasurementConfig().getExecutionConfig().getCommit());
 
-      final MeasureVersionAction action = new MeasureVersionAction(peassConfig.getMeasurementConfig(), versionChanges, statistics,
+      final MeasureVersionAction action = new MeasureVersionAction(IdHelper.getId(), peassConfig.getMeasurementConfig(), versionChanges, statistics,
             noWarmupStatistics, measurements, histogramReader.getUpdatedConfigurations());
       run.addAction(action);
 

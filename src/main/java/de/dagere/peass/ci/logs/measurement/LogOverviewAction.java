@@ -17,7 +17,8 @@ public class LogOverviewAction extends VisibleAction {
    private int vms;
    private boolean redirectSubprocessOutputToFile;
 
-   public LogOverviewAction(final Map<TestCase, List<LogFiles>> logFiles, final String version, final String versionOld, int vms, final boolean redirectSubprocessOutputToFile) {
+   public LogOverviewAction(int id, final Map<TestCase, List<LogFiles>> logFiles, final String version, final String versionOld, int vms, final boolean redirectSubprocessOutputToFile) {
+      super(id);
       this.logFiles = logFiles;
       this.version = version;
       this.versionOld = versionOld;

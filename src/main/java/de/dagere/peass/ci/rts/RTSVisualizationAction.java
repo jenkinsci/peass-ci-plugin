@@ -23,8 +23,9 @@ public class RTSVisualizationAction extends VisibleAction {
    //TODO Display count of calls for each test
    private final CoverageSelectionVersion coverageSelection;
 
-   public RTSVisualizationAction(final TestSelectionConfig config, final Map<String, List<String>> staticSelection, final List<String> dynamicSelection, final CoverageSelectionVersion coverageSelection,
+   public RTSVisualizationAction(int id, final TestSelectionConfig config, final Map<String, List<String>> staticSelection, final List<String> dynamicSelection, final CoverageSelectionVersion coverageSelection,
          final String version, final String versionOld, final RTSLogSummary logSummary) {
+      super(id);
       this.config = config;
       this.staticSelection = staticSelection;
       this.dynamicSelection = dynamicSelection;

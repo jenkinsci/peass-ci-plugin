@@ -7,7 +7,8 @@ public class RTSTraceAction extends VisibleAction {
    private final String testName;
    private final String trace;
    
-   public RTSTraceAction(final String displayName, final String trace) {
+   public RTSTraceAction(int id, final String displayName, final String trace) {
+      super(id);
       this.testName = displayName;
       this.trace = trace;
       System.out.println("Added: " + displayName);

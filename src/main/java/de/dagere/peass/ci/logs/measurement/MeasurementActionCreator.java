@@ -11,6 +11,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import de.dagere.peass.ci.helper.IdHelper;
 import de.dagere.peass.ci.logs.InternalLogAction;
 import de.dagere.peass.ci.logs.LogFileReader;
 import de.dagere.peass.ci.logs.LogFiles;
@@ -45,7 +46,7 @@ public class MeasurementActionCreator {
       ExecutionConfig executionConfig = measurementConfig.getExecutionConfig();
       String shortVersion = executionConfig.getCommit().substring(0, 6);
       String shortVersionOld = executionConfig.getCommitOld().substring(0, 6);
-      LogOverviewAction logOverviewAction = new LogOverviewAction(logFiles, shortVersion, shortVersionOld, measurementConfig.getVms(),
+      LogOverviewAction logOverviewAction = new LogOverviewAction(IdHelper.getId(), logFiles, shortVersion, shortVersionOld, measurementConfig.getVms(),
             executionConfig.isRedirectSubprocessOutputToFile());
       run.addAction(logOverviewAction);
    }
@@ -54,7 +55,7 @@ public class MeasurementActionCreator {
       if (measurementConfig.getExecutionConfig().isRedirectSubprocessOutputToFile()) {
          String measureLog = reader.getMeasureLog();
          String maskedLog = LogUtil.mask(measureLog, pattern);
-         run.addAction(new InternalLogAction("measurementLog", "Measurement Log", maskedLog));
+         run.addAction(new InternalLogAction(IdHelper.getId(), "measurementLog", "Measurement Log", maskedLog));
       }
    }
 
@@ -65,9 +66,9 @@ public class MeasurementActionCreator {
          int vmId = 0;
          for (LogFiles files : entry.getValue()) {
             String logData = FileUtils.readFileToString(files.getCurrent(), StandardCharsets.UTF_8);
-            run.addAction(new LogAction(testcase, vmId, measurementConfig.getExecutionConfig().getCommit(), logData));
+            run.addAction(new LogAction(IdHelper.getId(), testcase, vmId, measurementConfig.getExecutionConfig().getCommit(), logData));
             String logDataOld = FileUtils.readFileToString(files.getPredecessor(), StandardCharsets.UTF_8);
-            run.addAction(new LogAction(testcase, vmId, measurementConfig.getExecutionConfig().getCommitOld(), logDataOld));
+            run.addAction(new LogAction(IdHelper.getId(), testcase, vmId, measurementConfig.getExecutionConfig().getCommitOld(), logDataOld));
             vmId++;
          }
       }

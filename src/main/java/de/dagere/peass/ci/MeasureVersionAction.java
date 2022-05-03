@@ -35,9 +35,10 @@ public class MeasureVersionAction extends VisibleAction {
    private String prefix;
    private Map<String, MeasurementConfig> updatedConfigurations;
 
-   public MeasureVersionAction(final MeasurementConfig config, final Changes changes, final ProjectStatistics statistics,
+   public MeasureVersionAction(int id, final MeasurementConfig config, final Changes changes, final ProjectStatistics statistics,
          final Map<String, TestcaseStatistic> noWarmupStatistics, final Map<String, HistogramValues> measurements,
          final Map<String, MeasurementConfig> updatedConfigurations) {
+      super(id);
       this.config = config;
       this.changes = changes;
       this.statistics = statistics;

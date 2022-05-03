@@ -95,7 +95,7 @@ public class RCAVisualizer {
       final String displayName = name.substring(longestPrefix.length());
 
       final String content = FileUtils.readFileToString(rcaDestFile, StandardCharsets.UTF_8);
-      run.addAction(new RCAVisualizationAction(displayName, content));
+      run.addAction(new RCAVisualizationAction(IdHelper.getId(), displayName, content));
    }
 
    public static String getLongestPrefix(final Set<String> tests) {

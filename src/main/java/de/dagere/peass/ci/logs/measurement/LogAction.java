@@ -13,11 +13,12 @@ public class LogAction extends VisibleAction {
    private final String version;
    private final String logData;
 
-   public LogAction(final TestCase test, final int vmId, final String version, final String logData) {
-      this("measurelog_" + test.toString().replace("#", "_") + "_" + vmId + "_" + version.substring(0, 6), test, vmId, version, logData);
+   public LogAction(int id, final TestCase test, final int vmId, final String version, final String logData) {
+      this(id, "measurelog_" + test.toString().replace("#", "_") + "_" + vmId + "_" + version.substring(0, 6), test, vmId, version, logData);
    }
 
-   protected LogAction(final String displayName, final TestCase test, final int vmId, final String version, final String logData) {
+   protected LogAction(int id, final String displayName, final TestCase test, final int vmId, final String version, final String logData) {
+      super(id);
       this.displayName = displayName;
       this.test = test;
       this.vmId = vmId;

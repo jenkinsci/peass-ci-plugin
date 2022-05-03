@@ -74,7 +74,7 @@ public class DefaultMeasurementVisualizer {
                String name = testcase.toString().replace("#", "_").substring(longestPrefix.length());
 
                final String content = FileUtils.readFileToString(testcaseVisualizationFile, StandardCharsets.UTF_8);
-               run.addAction(new MeasurementVisualizationAction("measurement_" + name, content));
+               run.addAction(new MeasurementVisualizationAction(IdHelper.getId(), "measurement_" + name, content));
             } catch (IOException e) {
                e.printStackTrace();
             }

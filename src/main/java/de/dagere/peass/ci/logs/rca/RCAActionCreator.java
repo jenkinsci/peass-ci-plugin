@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
 
+import de.dagere.peass.ci.helper.IdHelper;
 import de.dagere.peass.ci.logs.InternalLogAction;
 import de.dagere.peass.ci.logs.LogFileReader;
 import de.dagere.peass.ci.logs.LogFiles;
@@ -35,7 +36,7 @@ public class RCAActionCreator {
 
       Map<TestCase, List<RCALevel>> testLevelMap = createRCALogActions(reader);
 
-      RCALogOverviewAction rcaOverviewAction = new RCALogOverviewAction(testLevelMap, measurementConfig.getExecutionConfig().getCommit().substring(0, 6),
+      RCALogOverviewAction rcaOverviewAction = new RCALogOverviewAction(IdHelper.getId(), testLevelMap, measurementConfig.getExecutionConfig().getCommit().substring(0, 6),
             measurementConfig.getExecutionConfig().getCommitOld().substring(0, 6), measurementConfig.getExecutionConfig().isRedirectSubprocessOutputToFile());
       run.addAction(rcaOverviewAction);
    }
@@ -44,7 +45,7 @@ public class RCAActionCreator {
       if (measurementConfig.getExecutionConfig().isRedirectSubprocessOutputToFile()) {
          String rcaLog = reader.getRCALog();
          String maskedLog = LogUtil.mask(rcaLog, pattern);
-         run.addAction(new InternalLogAction("rcaLog", "RCA Log", maskedLog));
+         run.addAction(new InternalLogAction(IdHelper.getId(), "rcaLog", "RCA Log", maskedLog));
       }
    }
 
@@ -81,6 +82,6 @@ public class RCAActionCreator {
          logData = "Log file could not be found";
       }
       
-      run.addAction(new RCALogAction(testcase.getKey(), vmId, levelId, version, logData));
+      run.addAction(new RCALogAction(IdHelper.getId(), testcase.getKey(), vmId, levelId, version, logData));
    }
 }

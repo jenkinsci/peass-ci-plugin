@@ -14,7 +14,8 @@ public class RCALogOverviewAction extends VisibleAction {
    private String versionOld;
    private boolean redirectSubprocessOutputToFile;
 
-   public RCALogOverviewAction(final Map<TestCase, List<RCALevel>> testLevelMap, final String version, final String versionOld, final boolean redirectSubprocessOutputToFile) {
+   public RCALogOverviewAction(int id, final Map<TestCase, List<RCALevel>> testLevelMap, final String version, final String versionOld, final boolean redirectSubprocessOutputToFile) {
+      super(id);
       this.testLevelMap = testLevelMap;
       this.version = version;
       this.versionOld = versionOld;

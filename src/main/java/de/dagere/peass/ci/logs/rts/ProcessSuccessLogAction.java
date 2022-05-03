@@ -7,7 +7,8 @@ public class ProcessSuccessLogAction extends VisibleAction {
    private final String log;
    private final String version;
 
-   public ProcessSuccessLogAction(final String displayName, final String log, final String version) {
+   public ProcessSuccessLogAction(int id, final String displayName, final String log, final String version) {
+      super(id);
       this.displayName = displayName;
       this.log = log;
       this.version = version;

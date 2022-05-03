@@ -11,6 +11,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import de.dagere.peass.ci.helper.IdHelper;
 import de.dagere.peass.ci.logs.InternalLogAction;
 import de.dagere.peass.ci.logs.LogUtil;
 import de.dagere.peass.ci.logs.RTSLogFileReader;
@@ -67,7 +68,7 @@ public class RTSActionCreator {
 
    private void createOverviewAction(final Map<String, File> processSuccessRuns, final Map<TestCase, RTSLogData> rtsVmRuns, final Map<TestCase, RTSLogData> rtsVmRunsPredecessor,
          final RTSInfos rtsInfos) {
-      RTSLogOverviewAction overviewAction = new RTSLogOverviewAction(processSuccessRuns, rtsVmRuns, rtsVmRunsPredecessor,
+      RTSLogOverviewAction overviewAction = new RTSLogOverviewAction(IdHelper.getId(), processSuccessRuns, rtsVmRuns, rtsVmRunsPredecessor,
             processSuccessRunSucceeded, measurementConfig.getExecutionConfig().getCommit(), measurementConfig.getExecutionConfig().getCommitOld(),
             measurementConfig.getExecutionConfig().isRedirectSubprocessOutputToFile());
       overviewAction.setStaticChanges(rtsInfos.isStaticChanges());
@@ -79,10 +80,10 @@ public class RTSActionCreator {
       if (measurementConfig.getExecutionConfig().isRedirectSubprocessOutputToFile()) {
          String rtsLog = reader.getRTSLog();
          String maskedLog = LogUtil.mask(rtsLog, pattern);
-         run.addAction(new InternalLogAction("rtsLog", "Regression Test Selection Log", maskedLog));
+         run.addAction(new InternalLogAction(IdHelper.getId(), "rtsLog", "Regression Test Selection Log", maskedLog));
 
          String sourceReadingLog = reader.getSourceReadingLog();
-         run.addAction(new InternalLogAction("sourceLog", "Source Reading Log", sourceReadingLog));
+         run.addAction(new InternalLogAction(IdHelper.getId(), "sourceLog", "Source Reading Log", sourceReadingLog));
       }
    }
 
@@ -95,7 +96,7 @@ public class RTSActionCreator {
           * should be obtained for both versions
           */
          processSuccessRunSucceeded.put(processSuccessRun.getKey(), reader.isVersionRunWasSuccess());
-         ProcessSuccessLogAction processSuccessAction = new ProcessSuccessLogAction("processSuccessRun_" + processSuccessRun.getKey(), logData, processSuccessRun.getKey());
+         ProcessSuccessLogAction processSuccessAction = new ProcessSuccessLogAction(IdHelper.getId(), "processSuccessRun_" + processSuccessRun.getKey(), logData, processSuccessRun.getKey());
          run.addAction(processSuccessAction);
       }
       return processSuccessRuns;
@@ -107,7 +108,7 @@ public class RTSActionCreator {
       for (Map.Entry<TestCase, RTSLogData> rtsLogData : rtsVmRuns.entrySet()) {
          String methodLogData = getLogData(rtsLogData.getValue().getMethodFile());
          String cleanLogData = getLogData(rtsLogData.getValue().getCleanFile());
-         RTSLogAction logAction = new RTSLogAction(rtsLogData.getValue().getVersion(), rtsLogData.getKey(), cleanLogData, methodLogData);
+         RTSLogAction logAction = new RTSLogAction(IdHelper.getId(), rtsLogData.getValue().getVersion(), rtsLogData.getKey(), cleanLogData, methodLogData);
          run.addAction(logAction);
       }
       return rtsVmRuns;

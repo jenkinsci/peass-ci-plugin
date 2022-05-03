@@ -14,7 +14,8 @@ public class InternalLogAction extends VisibleAction {
    private final String title;
    private final String text;
 
-   public InternalLogAction(final String displayName, final String title, final String text) {
+   public InternalLogAction(int id, final String displayName, final String title, final String text) {
+      super(id);
       this.displayName = displayName;
       this.title = title;
       this.text = text;

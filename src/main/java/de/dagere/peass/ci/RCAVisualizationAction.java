@@ -11,7 +11,8 @@ public class RCAVisualizationAction extends VisibleAction {
    private String displayName;
    private final String jsData;
    
-   public RCAVisualizationAction(final String displayName, final String jsData) {
+   public RCAVisualizationAction(int id, final String displayName, final String jsData) {
+      super(id);
       this.displayName = displayName;
       this.jsData = jsData;
    }

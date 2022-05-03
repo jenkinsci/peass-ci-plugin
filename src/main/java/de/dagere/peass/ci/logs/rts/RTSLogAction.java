@@ -9,7 +9,8 @@ public class RTSLogAction extends VisibleAction {
    private final String cleanLog;
    private final String log;
 
-   public RTSLogAction(final String version, final TestCase testcase, final String cleanLog, final String log) {
+   public RTSLogAction(int id, final String version, final TestCase testcase, final String cleanLog, final String log) {
+      super(id);
       this.version = version;
       this.testcase = testcase;
       this.cleanLog = cleanLog;

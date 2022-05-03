@@ -16,6 +16,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import de.dagere.peass.ci.PeassProcessConfiguration;
+import de.dagere.peass.ci.helper.IdHelper;
 import de.dagere.peass.ci.logs.rts.RTSLogSummary;
 import de.dagere.peass.dependency.analysis.data.ChangedEntity;
 import de.dagere.peass.dependency.analysis.data.TestCase;
@@ -50,7 +51,7 @@ public class RTSVisualizationCreator {
 
          System.out.println("Selected: " + traceSelectedTests + " Coverage: " + coverageSelectedTests);
 
-         RTSVisualizationAction rtsVisualizationAction = new RTSVisualizationAction(peassConfig.getDependencyConfig(), staticSelection, traceSelectedTests, coverageSelectedTests,
+         RTSVisualizationAction rtsVisualizationAction = new RTSVisualizationAction(IdHelper.getId(), peassConfig.getDependencyConfig(), staticSelection, traceSelectedTests, coverageSelectedTests,
                peassConfig.getMeasurementConfig().getExecutionConfig().getCommit(), peassConfig.getMeasurementConfig().getExecutionConfig().getCommitOld(),
                logSummary);
          run.addAction(rtsVisualizationAction);
@@ -73,7 +74,7 @@ public class RTSVisualizationCreator {
          traceSource = FileUtils.readFileToString(traceFile, StandardCharsets.UTF_8);
       }
 
-      RTSTraceAction traceAction = new RTSTraceAction(traceSelectedTest, traceSource);
+      RTSTraceAction traceAction = new RTSTraceAction(IdHelper.getId(), traceSelectedTest, traceSource);
       run.addAction(traceAction);
    }
 

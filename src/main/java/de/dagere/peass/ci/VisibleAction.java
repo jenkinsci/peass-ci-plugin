@@ -5,14 +5,11 @@ import jenkins.model.RunAction2;
 
 public abstract class VisibleAction implements RunAction2 {
 
-   private static int idCounter = 0;
-   
    protected final int id;
    private transient Run<?, ?> run;
    
-   public VisibleAction() {
-      id = idCounter;
-      idCounter++;
+   public VisibleAction(int id) {
+      this.id = id;
    }
    
    @Override
