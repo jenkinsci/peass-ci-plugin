@@ -1,0 +1,27 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:st="jelly:stapler">
+  <l:layout title="Regression Test Selection">
+    <l:side-panel>
+      <st:include page="sidepanel.jelly" it="${it.run}" optional="true" />
+    </l:side-panel>
+    <l:main-panel>
+      <st:include page="/style.jelly" optional="false" />
+
+      <h1>Peass Analysis Results</h1>
+      <table>
+        <j:forEach var="change" items="${it.getChangeLines()}">
+          <th>Version</th>
+          <th>Change</th>
+          <th>Testcase</th>
+          <th>Change Measured</th>
+          <tr>
+            <td>${change.getVersion()}</td>
+            <td>${change.getChange()}</td>
+            <td>${change.getTestcase()}</td>
+            <td>${change.isMeasured()}</td>
+          </tr>
+        </j:forEach>
+      </table>
+    </l:main-panel>
+  </l:layout>
+</j:jelly>

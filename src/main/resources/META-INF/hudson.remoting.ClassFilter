@@ -6,6 +6,11 @@ de.dagere.peass.config.StatisticsConfig
 de.dagere.peass.analysis.changes.ProjectChanges
 de.dagere.peass.analysis.measurement.ProjectStatistics
 de.dagere.peass.dependencyprocessors.VersionComparator
+de.dagere.peass.dependency.persistence.StaticTestSelection
+de.dagere.peass.dependency.persistence.InitialVersion
+de.dagere.peass.dependency.persistence.InitialCallList
+de.dagere.peass.dependency.persistence.VersionStaticSelection
+de.dagere.peass.dependency.analysis.data.ChangedEntity
 de.dagere.peass.ci.RTSResult
 de.dagere.peass.analysis.changes.Changes
 de.dagere.peass.analysis.changes.Change
@@ -13,3 +18,4 @@ de.dagere.peass.measurement.statistics.data.TestcaseStatistic
 de.dagere.peass.dependency.analysis.data.TestCase
 de.dagere.peass.dependency.traces.coverage.CoverageSelectionVersion
 de.dagere.peass.dependency.traces.coverage.TraceCallSummary
+de.dagere.peass.dependency.analysis.data.TestSet

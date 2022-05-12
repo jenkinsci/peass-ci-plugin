@@ -32,7 +32,7 @@ public class RTSLogFileReader {
       this.visualizationFolders = visualizationFolders;
       this.measurementConfig = measurementConfig;
 
-      File rtsLogOverviewFile = visualizationFolders.getResultsFolders().getDependencyLogFile(measurementConfig.getExecutionConfig().getCommit(),
+      File rtsLogOverviewFile = visualizationFolders.getResultsFolders().getRTSLogFile(measurementConfig.getExecutionConfig().getCommit(),
             measurementConfig.getExecutionConfig().getCommitOld());
       LOG.info("RTS log overview file: {} Exists: {}", rtsLogOverviewFile, rtsLogOverviewFile.exists());
       logsExisting = rtsLogOverviewFile.exists();
@@ -97,7 +97,7 @@ public class RTSLogFileReader {
    }
 
    public String getRTSLog() {
-      File rtsLogFile = visualizationFolders.getResultsFolders().getDependencyLogFile(measurementConfig.getExecutionConfig().getCommit(),
+      File rtsLogFile = visualizationFolders.getResultsFolders().getRTSLogFile(measurementConfig.getExecutionConfig().getCommit(),
             measurementConfig.getExecutionConfig().getCommitOld());
       try {
          LOG.debug("Reading RTS Log {}", rtsLogFile.getAbsolutePath());

@@ -49,7 +49,7 @@ public class RTSLogFileTestUtil {
 
    private ResultsFolders initExampleLogFile(final String projectName) throws IOException {
       ResultsFolders folders = new ResultsFolders(localFolder, projectName);
-      File rtsLogFile = folders.getDependencyLogFile(VERSION, VERSION_OLD);
+      File rtsLogFile = folders.getRTSLogFile(VERSION, VERSION_OLD);
       FileUtils.write(rtsLogFile, "This is a rts log test", StandardCharsets.UTF_8);
       return folders;
    }
