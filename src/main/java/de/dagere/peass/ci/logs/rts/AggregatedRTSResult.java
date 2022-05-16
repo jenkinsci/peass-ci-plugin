@@ -14,14 +14,12 @@ public class AggregatedRTSResult {
    public AggregatedRTSResult(final RTSLogSummary logSummary, final RTSResult result) {
       this.logSummary = logSummary;
       this.result = result;
-      boolean containsParametrizedwhithoutIndex = false;
       boolean isContainsSuccess = false;
       if (logSummary != null) {
-         containsParametrizedwhithoutIndex = logSummary.isPredecessorContainsParametrizedwhithoutIndex() || logSummary.isVersionContainsParametrizedwhithoutIndex();
          isContainsSuccess = logSummary.isVersionContainsSuccess() || logSummary.isPredecessorContainsSuccess();
 
-         rtsAnyError = logSummary.isErrorInCurrentVersionOccured() || logSummary.isErrorInPredecessorVersionOccured() && !containsParametrizedwhithoutIndex;
-         rtsAllError = logSummary.isErrorInCurrentVersionOccured() && !isContainsSuccess && !containsParametrizedwhithoutIndex;
+         rtsAnyError = logSummary.isErrorInCurrentVersionOccured() || logSummary.isErrorInPredecessorVersionOccured();
+         rtsAllError = logSummary.isErrorInCurrentVersionOccured() && !isContainsSuccess;
 
       } else {
          rtsAnyError = true;
