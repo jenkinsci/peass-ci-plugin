@@ -137,7 +137,7 @@ public class RCAExecutor {
    private void executeRCA(final MeasurementConfig config, final TestCase testCase)
          throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException {
       final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(testCase, causeConfig);
-      config.setUseKieker(true);
+      config.getKiekerConfig().setUseKieker(true);
 
       final CauseSearchFolders alternateFolders = new CauseSearchFolders(projectFolder);
       final BothTreeReader reader = new BothTreeReader(causeSearcherConfig, config, alternateFolders, env);
