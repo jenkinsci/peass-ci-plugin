@@ -1,5 +1,12 @@
 package de.dagere.peass.ci.logs.rts;
 
+import java.util.Map;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import de.dagere.peass.dependency.analysis.data.TestCase;
+
 /**
  * This summarizes logs for showing information in the regular step action.
  *
@@ -9,6 +16,24 @@ package de.dagere.peass.ci.logs.rts;
  *
  */
 public class RTSLogSummary {
+   
+   private static final Logger LOG = LogManager.getLogger(RTSLogSummary.class);
+
+   public static RTSLogSummary createLogSummary(Map<TestCase, RTSLogData> rtsVmRuns, Map<TestCase, RTSLogData> rtsVmRunsPredecessor) {
+      boolean versionContainsNonSuccess = rtsVmRuns.values().stream().anyMatch(log -> !log.isSuccess());
+      boolean predecessorContainsNonSuccess = rtsVmRunsPredecessor.values().stream().anyMatch(log -> !log.isSuccess());
+
+      boolean versionContainsSuccess = rtsVmRuns.values().stream().anyMatch(log -> log.isSuccess());
+      boolean predecessorContainsSuccess = rtsVmRunsPredecessor.values().stream().anyMatch(log -> log.isSuccess());
+
+      boolean versionContainsParametrizedwhithoutIndex = rtsVmRuns.values().stream().anyMatch(log -> log.isParameterizedWithoutIndex());
+      boolean predecessorContainsParametrizedwhithoutIndex = rtsVmRunsPredecessor.values().stream().anyMatch(log -> log.isParameterizedWithoutIndex());
+
+      LOG.debug("Errors in logs: {} {}", versionContainsNonSuccess, predecessorContainsNonSuccess);
+      RTSLogSummary logSummary = new RTSLogSummary(versionContainsNonSuccess, predecessorContainsNonSuccess, versionContainsSuccess, predecessorContainsSuccess,
+            versionContainsParametrizedwhithoutIndex, predecessorContainsParametrizedwhithoutIndex);
+      return logSummary;
+   }
 
    private final boolean errorInCurrentVersionOccured;
    private final boolean errorInPredecessorVersionOccured;
