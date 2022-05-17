@@ -8,6 +8,9 @@
       <st:include page="/style.jelly" optional="false" />
 
       <h1>Peass Analysis Results</h1>
+      <j:if test="${it.getChangeLines().isEmpty()}">
+        No change was detected by Peass, therefore, no change table is created.
+      </j:if>
       <table>
         <j:forEach var="change" items="${it.getChangeLines()}">
           <th>Version</th>
