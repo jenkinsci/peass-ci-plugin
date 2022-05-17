@@ -43,10 +43,16 @@ public class PeassAnalysisAction extends VisibleAction {
       String version = selection.getNewestVersion();
       Map<ChangedEntity, TestSet> changedClazzes = selection.getVersions().get(version).getChangedClazzes();
       for (Map.Entry<ChangedEntity, TestSet> entry : changedClazzes.entrySet()) {
-         for (TestCase test : entry.getValue().getTests()) {
-            Change change = changes.getVersion(version).getChange(test);
-            boolean changeMeasured = (change != null);
-            ChangeLine line = new ChangeLine(version, entry.getKey().toString(), test.toString(), changeMeasured);
+
+         if (entry.getValue().getTests().size() > 0) {
+            for (TestCase test : entry.getValue().getTests()) {
+               Change change = changes.getVersion(version).getChange(test);
+               boolean changeMeasured = (change != null);
+               ChangeLine line = new ChangeLine(version, entry.getKey().toString(), test.toString(), changeMeasured);
+               result.add(line);
+            }
+         } else {
+            ChangeLine line = new ChangeLine(version, entry.getKey().toString(), "none", false);
             result.add(line);
          }
 

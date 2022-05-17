@@ -1,0 +1,32 @@
+{
+  "versions" : {
+    "6ce9d6a3154c4ce8f617c357cf466fab222d27ef" : {
+      "testcases" : {
+        "de.dagere.peass.ExampleTest#test" : {
+          "overallScore" : 1,
+          "selected" : true,
+          "testcase" : {
+            "clazz" : "de.dagere.peass.ExampleTest",
+            "method" : "test",
+            "module" : "",
+            "params" : null
+          },
+          "callCounts" : {
+            "de.dagere.peass.Callee#method1" : 1,
+            "de.dagere.peass.ExampleTest#doAfterEach" : 2,
+            "de.dagere.peass.ExampleTest#doAfterAll" : 1,
+            "de.dagere.peass.ExampleTest#doSomeBeforeEach" : 1,
+            "de.dagere.peass.Callee#innerMethod" : 1,
+            "de.dagere.peass.ExampleTest#test" : 1,
+            "de.dagere.peass.ExampleTest#doSomeBeforeAll" : 1,
+            "de.dagere.peass.ExampleClazz#calleeMethod" : 1
+          },
+          "selectedChanges" : [ "de.dagere.peass.Callee#innerMethod" ]
+        }
+      }
+    },
+    "702a487488f7fad83c80097b8968a0f2c3d193f0" : {
+      "testcases" : { }
+    }
+  }
+}

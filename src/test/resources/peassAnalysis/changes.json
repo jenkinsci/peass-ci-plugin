@@ -1,0 +1,25 @@
+{
+  "versionCount" : 1,
+  "changeCount" : 1,
+  "testcaseCount" : 1,
+  "statisticsConfig" : {
+    "type1error" : 0.01,
+    "type2error" : 0.01,
+    "outlierFactor" : 3.29,
+    "statisticTest" : "T_TEST"
+  },
+  "versionChanges" : {
+    "6ce9d6a3154c4ce8f617c357cf466fab222d27ef" : {
+      "testcaseChanges" : {
+        "de.dagere.peass.ExampleTest" : [ {
+          "diff" : "view_6ce9d6a3154c4ce8f617c357cf466fab222d27ef/diffs/ExampleTest#test.txt",
+          "method" : "test",
+          "oldTime" : 1.1416708200000001E7,
+          "changePercent" : -837.8011556197374,
+          "tvalue" : -112.79181800957224,
+          "vms" : 5
+        } ]
+      }
+    }
+  }
+}

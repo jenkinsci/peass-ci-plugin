@@ -1,0 +1,78 @@
+{
+  "url" : "/home/reichelt/nvme/workspaces/dissworkspace/permanent/workshop/demo-project",
+  "testGoal" : null,
+  "initialversion" : {
+    "version" : "dc90ca044d1aa98688ef2a7142f9019560df7a24",
+    "jdk" : 8,
+    "initialDependencies" : {
+      "de.dagere.peass.ExampleTest#test" : {
+        "entities" : [ {
+          "clazz" : "de.dagere.peass.Callee",
+          "method" : "innerMethod",
+          "parameters" : [ ]
+        }, {
+          "clazz" : "de.dagere.peass.Callee",
+          "method" : "method1",
+          "parameters" : [ ]
+        }, {
+          "clazz" : "de.dagere.peass.ExampleClazz",
+          "method" : "calleeMethod",
+          "parameters" : [ ]
+        }, {
+          "clazz" : "de.dagere.peass.ExampleTest",
+          "method" : "doAfterAll",
+          "parameters" : [ ]
+        }, {
+          "clazz" : "de.dagere.peass.ExampleTest",
+          "method" : "doAfterEach",
+          "parameters" : [ ]
+        }, {
+          "clazz" : "de.dagere.peass.ExampleTest",
+          "method" : "doSomeBeforeAll",
+          "parameters" : [ ]
+        }, {
+          "clazz" : "de.dagere.peass.ExampleTest",
+          "method" : "doSomeBeforeEach",
+          "parameters" : [ ]
+        }, {
+          "clazz" : "de.dagere.peass.ExampleTest",
+          "method" : "test",
+          "parameters" : [ ]
+        } ]
+      }
+    }
+  },
+  "versions" : {
+    "6ce9d6a3154c4ce8f617c357cf466fab222d27ef" : {
+      "running" : true,
+      "jdk" : 8,
+      "predecessor" : "dc90ca044d1aa98688ef2a7142f9019560df7a24",
+      "changedClazzes" : {
+        "de.dagere.peass.Callee#innerMethod" : {
+          "testcases" : {
+            "de.dagere.peass.ExampleTest" : [ "test" ]
+          }
+        }
+      }
+    },
+    "bcc9ec1ac3716e4d00d85db38e0cd81ad1b1a251" : {
+      "running" : true,
+      "jdk" : 8,
+      "predecessor" : "6ce9d6a3154c4ce8f617c357cf466fab222d27ef",
+      "changedClazzes" : { }
+    },
+    "702a487488f7fad83c80097b8968a0f2c3d193f0" : {
+      "running" : true,
+      "jdk" : 8,
+      "predecessor" : "bcc9ec1ac3716e4d00d85db38e0cd81ad1b1a251",
+      "changedClazzes" : {
+        "de.dagere.peass.Callee" : {
+          "testcases" : {
+            "de.dagere.peass.ExampleTest" : [ "test" ]
+          }
+        }
+      }
+    }
+  },
+  "android" : false
+}
