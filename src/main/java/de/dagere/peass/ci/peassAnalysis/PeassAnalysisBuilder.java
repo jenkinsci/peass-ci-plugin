@@ -42,9 +42,16 @@ public class PeassAnalysisBuilder extends Builder implements SimpleBuildStep, Se
       ResultsFolders resultsFolders = new ResultsFolders(localWorkspace, projectName);
       
       StaticTestSelection selection = Constants.OBJECTMAPPER.readValue(resultsFolders.getStaticTestSelectionFile(), StaticTestSelection.class);
-      ProjectChanges changes = Constants.OBJECTMAPPER.readValue(resultsFolders.getChangeFile(), ProjectChanges.class);
       
-      PeassAnalysisAction action = new PeassAnalysisAction(IdHelper.getId(), selection, changes);
+      ProjectChanges projectChanges = new ProjectChanges();
+      final File changeFile = resultsFolders.getChangeFile();
+      if (changeFile.exists()) {
+         projectChanges = Constants.OBJECTMAPPER.readValue(resultsFolders.getChangeFile(), ProjectChanges.class);
+      } else {
+         listener.getLogger().println(changeFile.getAbsolutePath() + " does not exist! If there are no Trace-based Selected Tests, that's ok.");
+      }
+
+      PeassAnalysisAction action = new PeassAnalysisAction(IdHelper.getId(), selection, projectChanges);
       run.addAction(action);
    }
    
