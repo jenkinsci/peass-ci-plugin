@@ -22,7 +22,6 @@ import hudson.model.Run;
 import hudson.model.TaskListener;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
-import hudson.util.FormValidation;
 import jenkins.tasks.SimpleBuildStep;
 
 public class PeassAnalysisBuilder extends Builder implements SimpleBuildStep, Serializable {
