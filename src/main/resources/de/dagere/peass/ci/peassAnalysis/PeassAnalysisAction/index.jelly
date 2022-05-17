@@ -9,14 +9,14 @@
 
       <h1>Peass Analysis Results</h1>
       <j:if test="${it.getChangeLines().isEmpty()}">
-        No change was detected by Peass, therefore, no change table is created.
+        ${%notSelectedMessage}
       </j:if>
       <table>
         <j:forEach var="change" items="${it.getChangeLines()}">
           <th>Version</th>
-          <th>Change</th>
-          <th>Testcase</th>
-          <th>Change Measured</th>
+          <th>${%change}</th>
+          <th>${%testcase}</th>
+          <th>${%changeMeasured}</th>
           <tr>
             <td>${change.getVersion()}</td>
             <td>${change.getChange()}</td>
