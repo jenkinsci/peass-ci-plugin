@@ -316,18 +316,6 @@
           </f:entry>
         </td>
       </tr>
-      <tr>
-        <td>
-          <f:entry title="${%gradleJavaPluginName}" field="gradleJavaPluginName" description="${%gradleJavaPluginNameDescr}">
-            <f:textbox default="java" />
-          </f:entry>
-        </td>
-        <td>
-          <f:entry title="${%gradleSpringBootPluginName}" field="gradleSpringBootPluginName" description="${%gradleSpringBootPluginNameDescr}">
-            <f:textbox default="org.springframework.boot" />
-          </f:entry>
-        </td>
-      </tr>
     </table>
   </f:advanced>
 </j:jelly>
