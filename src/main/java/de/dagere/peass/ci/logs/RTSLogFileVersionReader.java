@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.rts.RTSLogData;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.traces.TraceFileManager;
 import de.dagere.peass.dependency.traces.TraceWriter;
 
 public class RTSLogFileVersionReader {
@@ -91,8 +92,9 @@ public class RTSLogFileVersionReader {
    }
 
    private void addRegularMethodLog(final File viewMethodDir) {
-      File viewMethodFile = new File(viewMethodDir, TraceWriter.getShortVersion(version));
-      boolean runWasSuccessful = viewMethodFile.exists();
+      File viewMethodFile = new File(viewMethodDir, TraceWriter.getShortVersion(version) + TraceFileManager.TXT_ENDING);
+      File viewMethodFileZip = new File(viewMethodDir, TraceWriter.getShortVersion(version) + TraceFileManager.ZIP_ENDING);
+      boolean runWasSuccessful = viewMethodFile.exists() || viewMethodFileZip.exists();
       addMethodLogData(runWasSuccessful, false);
    }
 

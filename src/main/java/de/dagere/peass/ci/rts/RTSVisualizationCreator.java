@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
@@ -24,6 +25,8 @@ import de.dagere.peass.dependency.analysis.data.TestSet;
 import de.dagere.peass.dependency.persistence.ExecutionData;
 import de.dagere.peass.dependency.persistence.StaticTestSelection;
 import de.dagere.peass.dependency.persistence.VersionStaticSelection;
+import de.dagere.peass.dependency.traces.DiffUtil;
+import de.dagere.peass.dependency.traces.TraceFileManager;
 import de.dagere.peass.dependency.traces.coverage.CoverageSelectionInfo;
 import de.dagere.peass.dependency.traces.coverage.CoverageSelectionVersion;
 import de.dagere.peass.folders.ResultsFolders;
@@ -51,7 +54,8 @@ public class RTSVisualizationCreator {
 
          System.out.println("Selected: " + traceSelectedTests + " Coverage: " + coverageSelectedTests);
 
-         RTSVisualizationAction rtsVisualizationAction = new RTSVisualizationAction(IdHelper.getId(), peassConfig.getDependencyConfig(), staticSelection, traceSelectedTests, coverageSelectedTests,
+         RTSVisualizationAction rtsVisualizationAction = new RTSVisualizationAction(IdHelper.getId(), peassConfig.getDependencyConfig(), staticSelection, traceSelectedTests,
+               coverageSelectedTests,
                peassConfig.getMeasurementConfig().getExecutionConfig().getCommit(), peassConfig.getMeasurementConfig().getExecutionConfig().getCommitOld(),
                logSummary);
          run.addAction(rtsVisualizationAction);
@@ -67,15 +71,25 @@ public class RTSVisualizationCreator {
    private void visualizeTest(final Run<?, ?> run, final String traceSelectedTest) throws IOException {
       TestCase testcase = new TestCase(traceSelectedTest);
       File traceFolder = localWorkspace.getVersionDiffFolder(peassConfig.getMeasurementConfig().getExecutionConfig().getCommit());
-      File traceFile = new File(traceFolder, testcase.getShortClazz() + "#" + testcase.getMethod() + ".txt");
-      System.out.println("Trace file: " + traceFile.getAbsolutePath());
-      String traceSource = "";
-      if (traceFile.exists()) {
-         traceSource = FileUtils.readFileToString(traceFile, StandardCharsets.UTF_8);
-      }
+      String traceSource = readText(testcase, traceFolder);
 
       RTSTraceAction traceAction = new RTSTraceAction(IdHelper.getId(), traceSelectedTest, traceSource);
       run.addAction(traceAction);
+   }
+
+   private String readText(TestCase testcase, File traceFolder) throws IOException {
+      File traceFile = new File(traceFolder, testcase.getShortClazz() + "#" + testcase.getMethod() + TraceFileManager.TXT_ENDING);
+      System.out.println("Trace file: " + traceFile.getAbsolutePath());
+      String traceSource = "";
+      if (traceFile.exists()) {
+         traceSource = DiffUtil.getText(traceFile).stream().collect(Collectors.joining("\n"));
+      } else {
+         File zipTraceFile = new File(traceFolder, testcase.getShortClazz() + "#" + testcase.getMethod() + TraceFileManager.ZIP_ENDING);
+         if (zipTraceFile.exists()) {
+            traceSource = DiffUtil.getText(zipTraceFile).stream().collect(Collectors.joining("\n"));
+         }
+      }
+      return traceSource;
    }
 
    private List<String> readTraceBasedSelection(final Run<?, ?> run) throws IOException, JsonParseException, JsonMappingException {

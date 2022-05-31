@@ -137,6 +137,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private boolean createDefaultConstructor = false;
 
    private boolean redirectSubprocessOutputToFile = true;
+   private boolean writeAsZip = true;
 
    private String testTransformer = "de.dagere.peass.testtransformation.JUnitTestTransformer";
    private String testExecutor = "default";
@@ -279,7 +280,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          peassEnv.getEnvironmentVariables().put(entry.getKey(), entry.getValue());
       }
 
-      TestSelectionConfig dependencyConfig = new TestSelectionConfig(1, false, true, generateCoverageSelection);
+      TestSelectionConfig dependencyConfig = new TestSelectionConfig(1, false, true, generateCoverageSelection, writeAsZip);
       PeassProcessConfiguration peassConfig = new PeassProcessConfiguration(updateSnapshotDependencies, configWithRealGitVersions, dependencyConfig,
             peassEnv,
             displayRTSLogs, displayLogs, displayRCALogs, pattern);
@@ -881,6 +882,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    @DataBoundSetter
    public void setCredentialsId(final String credentialsId) {
       this.credentialsId = credentialsId;
+   }
+   
+   public boolean isWriteAsZip() {
+      return writeAsZip;
+   }
+   
+   @DataBoundSetter
+   public void setWriteAsZip(boolean writeAsZip) {
+      this.writeAsZip = writeAsZip;
    }
    
    @Symbol("measure")
