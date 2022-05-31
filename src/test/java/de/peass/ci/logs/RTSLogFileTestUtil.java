@@ -56,7 +56,7 @@ public class RTSLogFileTestUtil {
 
    private void initExampleTraceDiffFile(final ResultsFolders folders) throws IOException {
       File viewMethodDir = folders.getViewMethodDir(VERSION_OLD, test1);
-      File methodFile = new File(viewMethodDir, TraceWriter.getShortVersion(VERSION_OLD));
+      File methodFile = new File(viewMethodDir, TraceWriter.getShortVersion(VERSION_OLD) + ".txt");
       FileUtils.write(methodFile, "This is a trace generated for rts trace diff", StandardCharsets.UTF_8);
    }
 
