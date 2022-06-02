@@ -6,18 +6,18 @@ public class ChangeLine implements Serializable {
    private static final long serialVersionUID = 1L;
 
    private String version;
-   private String change;
+   private String changedEntity;
    private String testcase;
-   private boolean measured;
+   private double changePercent;
 
    public ChangeLine() {
    }
 
-   public ChangeLine(String version, String change, String testcase, boolean measured) {
+   public ChangeLine(String version, String changedEntity, String testcase, double changePercent) {
       this.version = version;
-      this.change = change;
+      this.changedEntity = changedEntity;
       this.testcase = testcase;
-      this.measured = measured;
+      this.changePercent = changePercent;
    }
 
    public String getVersion() {
@@ -29,11 +29,11 @@ public class ChangeLine implements Serializable {
    }
 
    public String getChange() {
-      return change;
+      return changedEntity;
    }
 
    public void setChange(String change) {
-      this.change = change;
+      this.changedEntity = change;
    }
 
    public String getTestcase() {
@@ -43,13 +43,12 @@ public class ChangeLine implements Serializable {
    public void setTestcase(String testcase) {
       this.testcase = testcase;
    }
-
-   public boolean isMeasured() {
-      return measured;
+   
+   public double getChangePercent() {
+      return changePercent;
    }
-
-   public void setMeasured(boolean measured) {
-      this.measured = measured;
+   
+   public void setChangePercent(double changePercent) {
+      this.changePercent = changePercent;
    }
-
 }

@@ -1,4 +1,4 @@
-package de.dagere.peass.ci.peassAnalysis;
+package de.dagere.peass.ci.peassOverview;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -6,38 +6,29 @@ import java.util.Map;
 
 import de.dagere.peass.analysis.changes.Change;
 import de.dagere.peass.analysis.changes.ProjectChanges;
-import de.dagere.peass.ci.VisibleAction;
+import de.dagere.peass.ci.peassAnalysis.ChangeLine;
 import de.dagere.peass.dependency.analysis.data.ChangedEntity;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.analysis.data.TestSet;
 import de.dagere.peass.dependency.persistence.StaticTestSelection;
 
-public class PeassAnalysisAction extends VisibleAction {
-
-   private StaticTestSelection selection;
-   private ProjectChanges changes;
-
-   public PeassAnalysisAction(int id, StaticTestSelection selection, ProjectChanges changes) {
-      super(id);
+public class ProjectData {
+   private final StaticTestSelection selection;
+   private final ProjectChanges changes;
+   
+   public ProjectData(StaticTestSelection selection, ProjectChanges changes) {
       this.selection = selection;
       this.changes = changes;
    }
 
-   @Override
-   public String getIconFileName() {
-      return "notepad.png";
+   public StaticTestSelection getSelection() {
+      return selection;
    }
-
-   @Override
-   public String getDisplayName() {
-      return "Peass Analysis";
+   
+   public ProjectChanges getChanges() {
+      return changes;
    }
-
-   @Override
-   public String getUrlName() {
-      return "peassAnalysis_" + id;
-   }
-
+   
    public List<ChangeLine> getChangeLines() {
       List<ChangeLine> result = new LinkedList<>();
       String version = selection.getNewestVersion();
@@ -58,25 +49,4 @@ public class PeassAnalysisAction extends VisibleAction {
       }
       return result;
    }
-
-   public String getVersion() {
-      return selection.getNewestVersion();
-   }
-
-   public StaticTestSelection getSelection() {
-      return selection;
-   }
-
-   public void setSelection(StaticTestSelection selection) {
-      this.selection = selection;
-   }
-
-   public ProjectChanges getChanges() {
-      return changes;
-   }
-
-   public void setChanges(ProjectChanges changes) {
-      this.changes = changes;
-   }
-
 }

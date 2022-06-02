@@ -77,7 +77,7 @@ public class PeassAnalysisBuilder extends Builder implements SimpleBuildStep, Se
       return action;
    }
 
-   private static void removeNotTraceSelectedTests(StaticTestSelection selection, ExecutionData data) {
+   public static void removeNotTraceSelectedTests(StaticTestSelection selection, ExecutionData data) {
       String newestVersion = selection.getNewestVersion();
       TestSet newestVersionTraceSelection = data.getVersions().get(newestVersion);
       if (newestVersionTraceSelection != null) {

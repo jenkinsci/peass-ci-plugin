@@ -1,0 +1,53 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:st="jelly:stapler">
+  <l:layout title="Regression Test Selection">
+    <l:side-panel>
+      <st:include page="sidepanel.jelly" it="${it.run}" optional="true" />
+    </l:side-panel>
+    <l:main-panel>
+      <st:include page="/style.jelly" optional="false" />
+
+      <h1>Peass Overview Results</h1>
+
+      <j:forEach var="project" items="${it.getProjects()}">
+        <h2>${project.getKey()}</h2>
+
+        <j:set var="data" value="${project.getValue()}" />
+
+        <j:if test="${data.getChangeLines().isEmpty()}">
+          ${%notSelectedMessage}
+        </j:if>
+        <table class="data-table">
+          <j:forEach var="change" items="${data.getChangeLines()}">
+            <th>Version</th>
+            <th>${%change}</th>
+            <th>${%testcase}</th>
+            <th>${%changeMeasured}</th>
+            <tr>
+              <td>${change.getVersion()}</td>
+              <td>${change.getChange()}</td>
+              <td>${change.getTestcase()}</td>
+              <td>
+                <j:if test="${change.getChangePercent() &lt; 0}">
+                  <div style="background-color:red;padding:2%;">
+                    ${it.round(change.getChangePercent())} %
+                  </div>
+                </j:if>
+                <j:if test="${change.getChangePercent() &gt; 0}">
+                  <div style="background-color:green;padding:2%;">
+                    ${it.round(change.getChangePercent())} %
+                  </div>
+                </j:if>
+                <j:if test="${change.getChangePercent() == 0}">
+                  Unchanged
+                </j:if>
+                ${change.isMeasured()}
+              </td>
+            </tr>
+          </j:forEach>
+        </table>
+      </j:forEach>
+
+    </l:main-panel>
+  </l:layout>
+</j:jelly>
