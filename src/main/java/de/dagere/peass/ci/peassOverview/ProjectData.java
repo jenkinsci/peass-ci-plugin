@@ -48,7 +48,6 @@ public class ProjectData {
                ChangeLine line = new ChangeLine(version, entry.getKey().toString(), "none", 0);
                result.add(line);
             }
-
          }
       }
       
