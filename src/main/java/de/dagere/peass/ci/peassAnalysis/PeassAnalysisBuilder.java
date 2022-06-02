@@ -82,15 +82,17 @@ public class PeassAnalysisBuilder extends Builder implements SimpleBuildStep, Se
       TestSet newestVersionTraceSelection = data.getVersions().get(newestVersion);
       if (newestVersionTraceSelection != null) {
          VersionStaticSelection versionStaticSelection = selection.getVersions().get(newestVersion);
-         for (Map.Entry<ChangedEntity, TestSet> changedEntity : versionStaticSelection.getChangedClazzes().entrySet()) {
-            Set<TestCase> tests = new HashSet<>(changedEntity.getValue().getTests());
+         if (versionStaticSelection != null) {
+            for (Map.Entry<ChangedEntity, TestSet> changedEntity : versionStaticSelection.getChangedClazzes().entrySet()) {
+               Set<TestCase> tests = new HashSet<>(changedEntity.getValue().getTests());
 
-            for (TestCase test : tests) {
-               if (!newestVersionTraceSelection.getTests().contains(test)) {
-                  if (test.getMethod() != null) {
-                     changedEntity.getValue().removeTest(test.onlyClazz(), test.getMethod());
-                  } else {
-                     changedEntity.getValue().removeTest(test);
+               for (TestCase test : tests) {
+                  if (!newestVersionTraceSelection.getTests().contains(test)) {
+                     if (test.getMethod() != null) {
+                        changedEntity.getValue().removeTest(test.onlyClazz(), test.getMethod());
+                     } else {
+                        changedEntity.getValue().removeTest(test);
+                     }
                   }
                }
             }

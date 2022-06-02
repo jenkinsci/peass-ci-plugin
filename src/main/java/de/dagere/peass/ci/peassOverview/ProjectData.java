@@ -11,6 +11,7 @@ import de.dagere.peass.dependency.analysis.data.ChangedEntity;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.analysis.data.TestSet;
 import de.dagere.peass.dependency.persistence.StaticTestSelection;
+import de.dagere.peass.dependency.persistence.VersionStaticSelection;
 
 public class ProjectData {
    private final StaticTestSelection selection;
@@ -32,21 +33,25 @@ public class ProjectData {
    public List<ChangeLine> getChangeLines() {
       List<ChangeLine> result = new LinkedList<>();
       String version = selection.getNewestVersion();
-      Map<ChangedEntity, TestSet> changedClazzes = selection.getVersions().get(version).getChangedClazzes();
-      for (Map.Entry<ChangedEntity, TestSet> entry : changedClazzes.entrySet()) {
+      VersionStaticSelection versionStaticSelection = selection.getVersions().get(version);
+      if (versionStaticSelection != null) {
+         Map<ChangedEntity, TestSet> changedClazzes = versionStaticSelection.getChangedClazzes();
+         for (Map.Entry<ChangedEntity, TestSet> entry : changedClazzes.entrySet()) {
 
-         if (entry.getValue().getTests().size() > 0) {
-            for (TestCase test : entry.getValue().getTests()) {
-               Change change = changes.getVersion(version).getChange(test);
-               ChangeLine line = new ChangeLine(version, entry.getKey().toString(), test.toString(), change.getChangePercent());
+            if (entry.getValue().getTests().size() > 0) {
+               for (TestCase test : entry.getValue().getTests()) {
+                  Change change = changes.getVersion(version).getChange(test);
+                  ChangeLine line = new ChangeLine(version, entry.getKey().toString(), test.toString(), change.getChangePercent());
+                  result.add(line);
+               }
+            } else {
+               ChangeLine line = new ChangeLine(version, entry.getKey().toString(), "none", 0);
                result.add(line);
             }
-         } else {
-            ChangeLine line = new ChangeLine(version, entry.getKey().toString(), "none", 0);
-            result.add(line);
-         }
 
+         }
       }
+      
       return result;
    }
 }
