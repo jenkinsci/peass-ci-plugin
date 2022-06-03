@@ -1,0 +1,19 @@
+{
+  "statistics" : {
+    "6ce9d6a3154c4ce8f617c357cf466fab222d27ef" : {
+      "de.dagere.peass.ExampleTest#test" : {
+        "meanOld" : 1.0159184766666668E7,
+        "meanCurrent" : 1.0689887873333333E8,
+        "deviationOld" : 479074.85207422316,
+        "deviationCurrent" : 319576.97322847124,
+        "vms" : 5,
+        "callsOld" : 5,
+        "calls" : 5,
+        "tvalue" : -375.6253090120721,
+        "predecessor" : "dc90ca044d1aa98688ef2a7142f9019560df7a24",
+        "isBimodal" : false,
+        "change" : true
+      }
+    }
+  }
+}

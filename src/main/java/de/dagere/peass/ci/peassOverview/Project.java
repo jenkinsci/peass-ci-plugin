@@ -16,7 +16,8 @@ public class Project extends AbstractDescribableImpl<Project> implements Seriali
    private String project = "../MY-PROJECT";
 
    @DataBoundConstructor
-   public Project() {
+   public Project(String project) {
+      this.project = project;
    }
 
    public String getProject() {
