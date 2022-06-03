@@ -10,7 +10,7 @@
       </td>
       <td>
         <f:entry title="${%ReferencePoint}" field="ReferencePoint" description="${%ReferencePointDescr}">
-          <f:textbox default="LAST" />
+          <f:textbox default="LAST_DAY" />
         </f:entry>
       </td>
     </tr>
