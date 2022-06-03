@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.Serializable;
+import java.util.List;
 
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.jenkinsci.remoting.RoleChecker;
@@ -14,6 +15,7 @@ import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.ci.helper.RCAExecutor;
 import de.dagere.peass.ci.logHandling.LogRedirector;
 import de.dagere.peass.config.MeasurementConfig;
+import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependencyprocessors.ViewNotFoundException;
 import de.dagere.peass.execution.utils.EnvironmentVariables;
 import de.dagere.peass.folders.ResultsFolders;
@@ -32,6 +34,7 @@ public class RemoteRCA implements FileCallable<Boolean>, Serializable {
    private final ProjectChanges changes;
    private final EnvironmentVariables env;
    private final TaskListener listener;
+   private List<TestCase> failedTests;
 
    public RemoteRCA(final PeassProcessConfiguration peassConfig, final CauseSearcherConfig causeConfig, final ProjectChanges changes, final TaskListener listener) {
       this.measurementConfig = peassConfig.getMeasurementConfig();
@@ -88,6 +91,12 @@ public class RemoteRCA implements FileCallable<Boolean>, Serializable {
       listener.getLogger().println("Setting property folder: " + propertyFolder.getAbsolutePath());
       final RCAExecutor rcaExecutor = new RCAExecutor(measurementConfig, projectFolderLocal, changes, causeConfig, env);
       rcaExecutor.executeRCAs();
+      
+      failedTests = rcaExecutor.getFailedTests();
+   }
+   
+   public List<TestCase> getFailedTests() {
+      return failedTests;
    }
 
 }

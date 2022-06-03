@@ -115,6 +115,9 @@ public class LocalPeassProcessManager {
       RemoteRCA remoteRCAExecutor = new RemoteRCA(peassConfig, causeSearcherConfig, changes, listener);
       boolean rcaWorked = workspace.act(remoteRCAExecutor);
       copyFromRemote();
+      if (remoteRCAExecutor.getFailedTests().size() > 0) {
+         return false;
+      }
       return rcaWorked;
    }
 

@@ -262,11 +262,12 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       if (executeRCA) {
          final CauseSearcherConfig causeSearcherConfig = generateCauseSearchConfig();
          boolean rcaWorked = processManager.rca(changes, causeSearcherConfig);
+         processManager.visualizeRCAResults(run, changes);
          if (!rcaWorked) {
             run.setResult(Result.FAILURE);
             return;
          }
-         processManager.visualizeRCAResults(run, changes);
+         
       }
    }
 

@@ -2,6 +2,7 @@ package de.dagere.peass.ci.helper;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -39,6 +40,7 @@ public class RCAExecutor {
    private final ProjectChanges changes;
    private final CauseSearcherConfig causeConfig;
    private final EnvironmentVariables env;
+   private List<TestCase> failedTests = new LinkedList<>();
 
    public RCAExecutor(final MeasurementConfig config, final File workspaceFolder, final ProjectChanges changes, final CauseSearcherConfig causeConfig,
          final EnvironmentVariables env) {
@@ -78,6 +80,7 @@ public class RCAExecutor {
                   try {
                      analyseChange(currentConfig, testCase);
                   } catch (Exception e) {
+                     failedTests.add(testCase);
                      System.out.println("Was unable to analyze: " + change.getMethod());
                      e.printStackTrace();
                   }
@@ -144,5 +147,9 @@ public class RCAExecutor {
 
       CauseSearcher tester = SearchCauseStarter.getCauseSeacher(config, causeSearcherConfig, alternateFolders, reader);
       tester.search();
+   }
+   
+   public List<TestCase> getFailedTests() {
+      return failedTests;
    }
 }
