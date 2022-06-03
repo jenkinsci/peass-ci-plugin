@@ -35,7 +35,7 @@ public class TestProjectDataCreation {
 
    @Test
    public void testFindInSimpleCreation() throws StreamReadException, DatabindException, IOException {
-      Map<String, ProjectData> projectData = mockAndCreateProjectData(SIMPLE_CREATION_PROJECT, new DateTime(2022, 3, 21, 17, 22));
+      Map<String, ProjectData> projectData = mockAndCreateProjectData(SIMPLE_CREATION_PROJECT, new DateTime(2022, 3, 21, 17, 22), PeassOverviewBuilder.LAST_DAY);
 
       MatcherAssert.assertThat(projectData.keySet(), IsIterableContaining.hasItem(SIMPLE_CREATION_PROJECT));
       ProjectData simpleCreationProjectData = projectData.get(SIMPLE_CREATION_PROJECT);
@@ -45,17 +45,36 @@ public class TestProjectDataCreation {
 
    @Test
    public void testTooLateInSimpleCreation() throws StreamReadException, DatabindException, IOException {
-      Map<String, ProjectData> projectData = mockAndCreateProjectData(SIMPLE_CREATION_PROJECT, new DateTime(2022, 3, 23, 17, 22));
+      Map<String, ProjectData> projectData = mockAndCreateProjectData(SIMPLE_CREATION_PROJECT, new DateTime(2022, 3, 23, 17, 22), PeassOverviewBuilder.LAST_DAY);
 
       MatcherAssert.assertThat(projectData.keySet(), IsIterableContaining.hasItem(SIMPLE_CREATION_PROJECT));
       ProjectData simpleCreationProjectData = projectData.get(SIMPLE_CREATION_PROJECT);
       MatcherAssert.assertThat(simpleCreationProjectData.getChangeLines(), IsIterableWithSize.iterableWithSize(0));
    }
+   
+   @Test
+   public void testDayOnMonthBorderCreation() throws StreamReadException, DatabindException, IOException {
+      Map<String, ProjectData> projectData = mockAndCreateProjectData(DAY_ON_MONTH_BORDER_PROJECT, new DateTime(2022, 4, 1, 12, 22), PeassOverviewBuilder.LAST_DAY);
 
-   private Map<String, ProjectData> mockAndCreateProjectData(String project, DateTime date) throws IOException, StreamReadException, DatabindException {
+      MatcherAssert.assertThat(projectData.keySet(), IsIterableContaining.hasItem(DAY_ON_MONTH_BORDER_PROJECT));
+      ProjectData simpleCreationProjectData = projectData.get(DAY_ON_MONTH_BORDER_PROJECT);
+      MatcherAssert.assertThat(simpleCreationProjectData.getChangeLines(), IsIterableWithSize.iterableWithSize(1));
+   }
+
+   @Test
+   public void testLastWeekCreation() throws StreamReadException, DatabindException, IOException {
+      Map<String, ProjectData> projectData = mockAndCreateProjectData(SIMPLE_CREATION_PROJECT, new DateTime(2022, 3, 25, 17, 22), PeassOverviewBuilder.LAST_WEEK);
+
+      MatcherAssert.assertThat(projectData.keySet(), IsIterableContaining.hasItem(SIMPLE_CREATION_PROJECT));
+      ProjectData simpleCreationProjectData = projectData.get(SIMPLE_CREATION_PROJECT);
+
+      Assert.assertEquals("6ce9d6a3154c4ce8f617c357cf466fab222d27ef", simpleCreationProjectData.getChangeLines().get(0).getVersion());
+   }
+
+   private Map<String, ProjectData> mockAndCreateProjectData(String project, DateTime date, String referencePoint) throws IOException, StreamReadException, DatabindException {
       LinkedList<Project> projects = new LinkedList<>();
       projects.add(new Project(project));
-      ProjectDataCreator creator = new ProjectDataCreator(projects, PeassOverviewBuilder.LAST_DAY);
+      ProjectDataCreator creator = new ProjectDataCreator(projects, referencePoint);
       Run runMock = Mockito.mock(Run.class);
       Mockito.when(runMock.getRootDir()).thenReturn(virtualProjectFolder);
 
@@ -65,17 +84,5 @@ public class TestProjectDataCreation {
       return projectData;
    }
 
-   @Test
-   public void testDayOnMonthBorderCreation() throws StreamReadException, DatabindException, IOException {
-      Map<String, ProjectData> projectData = mockAndCreateProjectData(DAY_ON_MONTH_BORDER_PROJECT, new DateTime(2022, 4, 1, 12, 22));
-
-      MatcherAssert.assertThat(projectData.keySet(), IsIterableContaining.hasItem(DAY_ON_MONTH_BORDER_PROJECT));
-      ProjectData simpleCreationProjectData = projectData.get(DAY_ON_MONTH_BORDER_PROJECT);
-      MatcherAssert.assertThat(simpleCreationProjectData.getChangeLines(), IsIterableWithSize.iterableWithSize(1));
-   }
-
-   @Test
-   public void testLastWeekCreation() {
-
-   }
+   
 }

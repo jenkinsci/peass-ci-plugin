@@ -27,10 +27,10 @@ import hudson.model.Run;
 import hudson.model.TaskListener;
 
 public class ProjectDataCreator {
-   
+
    private final List<Project> projects;
    private final String referencePoint;
-   
+
    public ProjectDataCreator(List<Project> projects, String referencePoint) {
       this.projects = projects;
       this.referencePoint = referencePoint;
@@ -53,14 +53,10 @@ public class ProjectDataCreator {
          throws IOException, StreamReadException, DatabindException {
       File projectWorkspace = new File(run.getRootDir(),
             ".." + File.separator + ".." + File.separator + projectPath + File.separator + MeasureVersionBuilder.PEASS_FOLDER_NAME);
-      
-      System.out.println(projectWorkspace.getAbsolutePath());
       if (!projectWorkspace.exists()) {
          throw new RuntimeException("Expected folder " + projectWorkspace.getAbsolutePath() + " did not exist");
       }
-      
-      System.out.println(projectWorkspace.getAbsolutePath());
-      
+
       ResultsFolders resultsFolders = new ResultsFolders(projectWorkspace, projectName);
 
       List<String> includedCommits = findIncludedVersions(resultsFolders);
@@ -96,26 +92,36 @@ public class ProjectDataCreator {
    }
 
    private static final DateTimeFormatter DATE_PARSER = ISODateTimeFormat.date();
-   
+
    private List<String> findIncludedVersions(ResultsFolders resultsFolders) throws IOException, StreamReadException, DatabindException {
       DateTime currentDate = new DateTime().withTimeAtStartOfDay();
       DateTime yesterday = currentDate.minusDays(1).withTimeAtStartOfDay();
-      
+      DateTime oneWeekBefore = currentDate.minusDays(7).withTimeAtStartOfDay();
+
       List<String> includedCommits = new LinkedList<>();
       List<LinkedHashMap<String, String>> commitMetadata = Constants.OBJECTMAPPER.readValue(resultsFolders.getCommitMetadataFile(), List.class);
-      if (referencePoint.equals("LAST_DAY")) {
-         for (Map<String, String> commit : commitMetadata) {
-            
-            String jtdate = commit.get("date");
-            String onlyDay = jtdate.substring(0, jtdate.indexOf(' ') );
-            
-            DateTime dateTime = DATE_PARSER.parseDateTime(onlyDay);
-            
-            if (dateTime.isEqual(currentDate) || dateTime.isEqual(yesterday)) {
+
+      for (Map<String, String> commit : commitMetadata) {
+         DateTime commitDate = getCommitDate(commit);
+
+         if (referencePoint.equals(PeassOverviewBuilder.LAST_DAY)) {
+            if (commitDate.isEqual(currentDate) || commitDate.isEqual(yesterday)) {
+               includedCommits.add(commit.get("tag"));
+            }
+         } else if (referencePoint.equals(PeassOverviewBuilder.LAST_WEEK)) {
+            if (commitDate.isEqual(currentDate) || (commitDate.isAfter(oneWeekBefore) && commitDate.isBefore(currentDate))) {
                includedCommits.add(commit.get("tag"));
             }
          }
       }
+
       return includedCommits;
+   }
+
+   private DateTime getCommitDate(Map<String, String> commit) {
+      String jtdate = commit.get("date");
+      String onlyDay = jtdate.substring(0, jtdate.indexOf(' '));
+      DateTime commitDate = DATE_PARSER.parseDateTime(onlyDay);
+      return commitDate;
    }
 }
