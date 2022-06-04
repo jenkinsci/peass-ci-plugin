@@ -1,11 +1,16 @@
-[ {
-  "tag" : "dc90ca044d1aa98688ef2a7142f9019560df7a24",
-  "comitter" : "David Georg Reichelt <davidgeorg_reichelt@dagere.de>",
-  "date" : "2021-10-29 16:10:44 +0200",
-  "message" : "     Initial version "
-}, {
-  "tag" : "6ce9d6a3154c4ce8f617c357cf466fab222d27ef",
-  "comitter" : "David Georg Reichelt <davidgeorg_reichelt@dagere.de>",
-  "date" : "2022-03-21 17:22:49 +0100",
-  "message" : "     Slow version "
-} ]
+{
+    "commits": [
+        {
+            "comitter": "David Georg Reichelt <davidgeorg_reichelt@dagere.de>",
+            "date": "2021-10-29 16:10:44 +0200",
+            "message": "     Initial version ",
+            "tag": "dc90ca044d1aa98688ef2a7142f9019560df7a24"
+        },
+        {
+            "comitter": "David Georg Reichelt <davidgeorg_reichelt@dagere.de>",
+            "date": "2022-03-21 17:22:49 +0100",
+            "message": "     Slow version ",
+            "tag": "6ce9d6a3154c4ce8f617c357cf466fab222d27ef"
+        }
+    ]
+}
