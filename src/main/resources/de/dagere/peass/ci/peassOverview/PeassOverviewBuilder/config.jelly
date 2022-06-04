@@ -1,15 +1,15 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
 
-  This creates overview of the results of Peass since the given time amount (i.e. LAST - overview over last builds).
+  This creates overview of the results of Peass since the given time amount (i.e. LAST_DAY - overview over last builds).
 
   <table>
     <tr>
       <td>
-        <f:repeatableProperty add="${%Add Project}" header="${%Projects}" field="projects" />
+        <f:repeatableProperty add="${%AddProject}" header="${%Projects}" field="projects" />
       </td>
       <td>
-        <f:entry title="${%ReferencePoint}" field="ReferencePoint" description="${%ReferencePointDescr}">
+        <f:entry title="${%referencePoint}" field="referencePoint" description="${%referencePointDescr}">
           <f:textbox default="LAST_DAY" />
         </f:entry>
       </td>
