@@ -23,6 +23,8 @@ import de.dagere.peass.dependency.persistence.ExecutionData;
 import de.dagere.peass.dependency.persistence.StaticTestSelection;
 import de.dagere.peass.folders.ResultsFolders;
 import de.dagere.peass.utils.Constants;
+import de.dagere.peass.vcs.CommitList;
+import de.dagere.peass.vcs.GitCommit;
 import hudson.model.Run;
 import hudson.model.TaskListener;
 
@@ -59,7 +61,7 @@ public class ProjectDataCreator {
 
       ResultsFolders resultsFolders = new ResultsFolders(projectWorkspace, projectName);
 
-      List<String> includedCommits = findIncludedVersions(resultsFolders);
+      List<String> includedCommits = findIncludedCommits(resultsFolders);
 
       StaticTestSelection selection = Constants.OBJECTMAPPER.readValue(resultsFolders.getStaticTestSelectionFile(), StaticTestSelection.class);
 
@@ -93,24 +95,24 @@ public class ProjectDataCreator {
 
    private static final DateTimeFormatter DATE_PARSER = ISODateTimeFormat.date();
 
-   private List<String> findIncludedVersions(ResultsFolders resultsFolders) throws IOException, StreamReadException, DatabindException {
+   private List<String> findIncludedCommits(ResultsFolders resultsFolders) throws IOException, StreamReadException, DatabindException {
       DateTime currentDate = new DateTime().withTimeAtStartOfDay();
       DateTime yesterday = currentDate.minusDays(1).withTimeAtStartOfDay();
       DateTime oneWeekBefore = currentDate.minusDays(7).withTimeAtStartOfDay();
 
       List<String> includedCommits = new LinkedList<>();
-      List<LinkedHashMap<String, String>> commitMetadata = Constants.OBJECTMAPPER.readValue(resultsFolders.getCommitMetadataFile(), List.class);
+      CommitList commitMetadata = Constants.OBJECTMAPPER.readValue(resultsFolders.getCommitMetadataFile(), CommitList.class);
 
-      for (Map<String, String> commit : commitMetadata) {
+      for (GitCommit commit : commitMetadata.getCommits()) {
          DateTime commitDate = getCommitDate(commit);
 
          if (referencePoint.equals(PeassOverviewBuilder.LAST_DAY)) {
             if (commitDate.isEqual(currentDate) || commitDate.isEqual(yesterday)) {
-               includedCommits.add(commit.get("tag"));
+               includedCommits.add(commit.getTag());
             }
          } else if (referencePoint.equals(PeassOverviewBuilder.LAST_WEEK)) {
             if (commitDate.isEqual(currentDate) || (commitDate.isAfter(oneWeekBefore) && commitDate.isBefore(currentDate))) {
-               includedCommits.add(commit.get("tag"));
+               includedCommits.add(commit.getTag());
             }
          }
       }
@@ -118,8 +120,8 @@ public class ProjectDataCreator {
       return includedCommits;
    }
 
-   private DateTime getCommitDate(Map<String, String> commit) {
-      String jtdate = commit.get("date");
+   private DateTime getCommitDate(GitCommit commit) {
+      String jtdate = commit.getDate();
       String onlyDay = jtdate.substring(0, jtdate.indexOf(' '));
       DateTime commitDate = DATE_PARSER.parseDateTime(onlyDay);
       return commitDate;
