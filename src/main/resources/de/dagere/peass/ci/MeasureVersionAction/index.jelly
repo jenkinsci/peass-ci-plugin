@@ -94,7 +94,7 @@
         jq$( "#dialogChanges" ).dialog({ autoOpen: false });
       </script>
 
-      <p>Version: ${it.getConfig().getExecutionConfig().getVersion()}</p>
+      <p>Commit: ${it.getConfig().getExecutionConfig().getCommit()}</p>
 
       <j:forEach var="testcaseChanges" items="${it.getChanges().getTestcaseChanges().entrySet()}">
         <h5>${%testcase}: ${testcaseChanges.getKey()}</h5>
