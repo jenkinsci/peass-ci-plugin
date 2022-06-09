@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
@@ -25,7 +26,7 @@ import hudson.model.TaskListener;
 import hudson.remoting.VirtualChannel;
 import kieker.analysis.exception.AnalysisConfigurationException;
 
-public class RemoteRCA implements FileCallable<Boolean>, Serializable {
+public class RemoteRCA implements FileCallable<RCAResult>, Serializable {
 
    private static final long serialVersionUID = 5375409887559433077L;
 
@@ -34,7 +35,7 @@ public class RemoteRCA implements FileCallable<Boolean>, Serializable {
    private final ProjectChanges changes;
    private final EnvironmentVariables env;
    private final TaskListener listener;
-   private List<TestCase> failedTests;
+   private final List<TestCase> failedTests = new LinkedList<>();
 
    public RemoteRCA(final PeassProcessConfiguration peassConfig, final CauseSearcherConfig causeConfig, final ProjectChanges changes, final TaskListener listener) {
       this.measurementConfig = peassConfig.getMeasurementConfig();
@@ -49,7 +50,7 @@ public class RemoteRCA implements FileCallable<Boolean>, Serializable {
    }
 
    @Override
-   public Boolean invoke(final File workspaceFolder, final VirtualChannel channel) throws IOException, InterruptedException {
+   public RCAResult invoke(final File workspaceFolder, final VirtualChannel channel) throws IOException, InterruptedException {
       final File localFolder = ContinuousFolderUtil.getLocalFolder(workspaceFolder);
       ResultsFolders resultsFolder = new ResultsFolders(localFolder, workspaceFolder.getName());
       final File logFile = resultsFolder.getRCALogFile(measurementConfig.getExecutionConfig().getCommit(), measurementConfig.getExecutionConfig().getCommitOld());
@@ -57,7 +58,7 @@ public class RemoteRCA implements FileCallable<Boolean>, Serializable {
          listener.getLogger().println("Executing root cause analysis - Log goes to " + logFile.getAbsolutePath());
          try (LogRedirector director = new LogRedirector(logFile)) {
             executeRCA(workspaceFolder, localFolder, resultsFolder);
-            return true;
+            return new RCAResult(true, failedTests);
          } catch (XmlPullParserException | AnalysisConfigurationException | ViewNotFoundException e) {
             File test = new File(workspaceFolder, "error.txt"); // Workaround, since error redirection on Jenkins agents currently does not work
             PrintStream writer = new PrintStream(test, "UTF-8");
@@ -66,15 +67,15 @@ public class RemoteRCA implements FileCallable<Boolean>, Serializable {
             listener.getLogger().println("Exception thrown");
             e.printStackTrace(listener.getLogger());
             e.printStackTrace();
-            return false;
+            return new RCAResult(false, failedTests);
          }
       } else {
          try {
             executeRCA(workspaceFolder, localFolder, resultsFolder);
-            return true;
+            return new RCAResult(true, failedTests);
          } catch (IOException | InterruptedException | XmlPullParserException | AnalysisConfigurationException | ViewNotFoundException e) {
             e.printStackTrace();
-            return false;
+            return  new RCAResult(false, failedTests);
          }
       }
    }
@@ -92,7 +93,7 @@ public class RemoteRCA implements FileCallable<Boolean>, Serializable {
       final RCAExecutor rcaExecutor = new RCAExecutor(measurementConfig, projectFolderLocal, changes, causeConfig, env);
       rcaExecutor.executeRCAs();
       
-      failedTests = rcaExecutor.getFailedTests();
+      failedTests.addAll(rcaExecutor.getFailedTests());
    }
    
    public List<TestCase> getFailedTests() {
