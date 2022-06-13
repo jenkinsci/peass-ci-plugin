@@ -25,10 +25,11 @@ import de.dagere.peass.dependency.analysis.data.TestSet;
 import de.dagere.peass.dependency.persistence.ExecutionData;
 import de.dagere.peass.dependency.persistence.StaticTestSelection;
 import de.dagere.peass.dependency.persistence.VersionStaticSelection;
-import de.dagere.peass.dependency.traces.DiffUtil;
 import de.dagere.peass.dependency.traces.TraceFileManager;
 import de.dagere.peass.dependency.traces.coverage.CoverageSelectionInfo;
 import de.dagere.peass.dependency.traces.coverage.CoverageSelectionVersion;
+import de.dagere.peass.dependency.traces.diff.DiffUtilJava;
+import de.dagere.peass.dependency.traces.diff.TraceFileUtil;
 import de.dagere.peass.folders.ResultsFolders;
 import de.dagere.peass.utils.Constants;
 import hudson.model.Run;
@@ -82,11 +83,11 @@ public class RTSVisualizationCreator {
       System.out.println("Trace file: " + traceFile.getAbsolutePath());
       String traceSource = "";
       if (traceFile.exists()) {
-         traceSource = DiffUtil.getText(traceFile).stream().collect(Collectors.joining("\n"));
+         traceSource = TraceFileUtil.getText(traceFile).stream().collect(Collectors.joining("\n"));
       } else {
          File zipTraceFile = new File(traceFolder, testcase.getShortClazz() + "#" + testcase.getMethod() + TraceFileManager.ZIP_ENDING);
          if (zipTraceFile.exists()) {
-            traceSource = DiffUtil.getText(zipTraceFile).stream().collect(Collectors.joining("\n"));
+            traceSource = TraceFileUtil.getText(zipTraceFile).stream().collect(Collectors.joining("\n"));
          }
       }
       return traceSource;
