@@ -43,6 +43,7 @@ import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.config.MeasurementStrategy;
 import de.dagere.peass.config.StatisticalTests;
 import de.dagere.peass.config.TestSelectionConfig;
+import de.dagere.peass.config.parameters.ExecutionConfigMixin;
 import de.dagere.peass.config.parameters.MeasurementConfigurationMixin;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.analysis.data.deserializer.TestcaseKeyDeserializer;
@@ -142,8 +143,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private String testTransformer = "de.dagere.peass.testtransformation.JUnitTestTransformer";
    private String testExecutor = "default";
 
-   private String clazzFolders = "src/main/java:src/java";
-   private String testClazzFolders = "src/test/java:src/test";
+   private String clazzFolders = ExecutionConfigMixin.CLAZZ_FOLDERS_DEFAULT;
+   private String testClazzFolders = ExecutionConfigMixin.TEST_FOLDERS_DEFAULT;
 
    private boolean failOnRtsError = false;
 
