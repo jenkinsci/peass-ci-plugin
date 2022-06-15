@@ -48,4 +48,15 @@ public class IncludeExcludeParser {
       }
       return includeList;
    }
+   
+   public static List<String> getStringListSimple(final String raw) {
+      List<String> includeList = new LinkedList<>();
+      if (raw != null && raw.trim().length() > 0) {
+         final String nonSpaceIncludes = raw.replaceAll(" ", "");
+         for (String include : nonSpaceIncludes.split(";")) {
+            includeList.add(include);
+         }
+      }
+      return includeList;
+   }
 }

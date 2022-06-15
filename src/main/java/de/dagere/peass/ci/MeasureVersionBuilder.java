@@ -394,8 +394,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       executionConfig.setIncludes(IncludeExcludeParser.getStringList(includes));
       executionConfig.setExcludes(IncludeExcludeParser.getStringList(excludes));
       
-      executionConfig.setIncludeByRule(IncludeExcludeParser.getStringList(includeByRule));
-      executionConfig.setExcludeByRule(IncludeExcludeParser.getStringList(excludeByRule));
+      executionConfig.setIncludeByRule(IncludeExcludeParser.getStringListSimple(includeByRule));
+      executionConfig.setExcludeByRule(IncludeExcludeParser.getStringListSimple(excludeByRule));
       
       executionConfig.setUseAlternativeBuildfile(useAlternativeBuildfile);
       executionConfig.setRedirectSubprocessOutputToFile(redirectSubprocessOutputToFile);
