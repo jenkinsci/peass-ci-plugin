@@ -116,6 +116,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
    private String includes = "";
    private String excludes = "";
+   private String includeByRule = "";
+   private String excludeByRule = "";
    private String properties = "";
    private String testGoal = "test";
    private String pl = "";
@@ -391,7 +393,10 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
       executionConfig.setIncludes(IncludeExcludeParser.getStringList(includes));
       executionConfig.setExcludes(IncludeExcludeParser.getStringList(excludes));
-
+      
+      executionConfig.setIncludeByRule(IncludeExcludeParser.getStringList(includeByRule));
+      executionConfig.setExcludeByRule(IncludeExcludeParser.getStringList(excludeByRule));
+      
       executionConfig.setUseAlternativeBuildfile(useAlternativeBuildfile);
       executionConfig.setRedirectSubprocessOutputToFile(redirectSubprocessOutputToFile);
 
@@ -615,7 +620,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public void setIncludes(final String includes) {
       this.includes = includes;
    }
-
+   
    public String getExcludes() {
       return excludes;
    }
@@ -625,6 +630,24 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       this.excludes = excludes;
    }
 
+   public String getIncludeByRule() {
+      return includeByRule;
+   }
+   
+   @DataBoundSetter
+   public void setIncludeByRule(String includeByRule) {
+      this.includeByRule = includeByRule;
+   }
+   
+   public String getExcludeByRule() {
+      return excludeByRule;
+   }
+   
+   @DataBoundSetter
+   public void setExcludeByRule(String excludeByRule) {
+      this.excludeByRule = excludeByRule;
+   }
+   
    public boolean isExecuteRCA() {
       return executeRCA;
    }

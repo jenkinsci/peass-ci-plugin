@@ -86,6 +86,18 @@
       </tr>
       <tr>
         <td>
+          <f:entry title="${%includeByRule}" field="includeByRule" description="${%includeByRuleDescr}">
+            <f:textbox default="" />
+          </f:entry>
+        </td>
+        <td>
+          <f:entry title="${%excludeByRule}" field="excludeByRule" description="${%excludeByRuleDescr}">
+            <f:textbox default="" />
+          </f:entry>
+        </td>
+      </tr>
+      <tr>
+        <td>
           <f:entry title="${%testGoal}" field="testGoal" description="${%testGoalDescr}">
             <f:textbox default="test" />
           </f:entry>
