@@ -92,10 +92,14 @@ public class RTSLogFileVersionReader {
    }
 
    private void addRegularMethodLog(final File viewMethodDir) {
+      boolean runWasSuccessful = checkRunWasSuccessful(viewMethodDir);
+      addMethodLogData(runWasSuccessful, false);
+   }
+
+   private boolean checkRunWasSuccessful(final File viewMethodDir) {
       File viewMethodFile = new File(viewMethodDir, TraceWriter.getShortVersion(version) + TraceFileManager.TXT_ENDING);
       File viewMethodFileZip = new File(viewMethodDir, TraceWriter.getShortVersion(version) + TraceFileManager.ZIP_ENDING);
-      boolean runWasSuccessful = viewMethodFile.exists() || viewMethodFileZip.exists();
-      addMethodLogData(runWasSuccessful, false);
+      return (viewMethodFile.exists() || viewMethodFileZip.exists());
    }
 
    private void addMethodLogData(final boolean runWasSuccessful, final boolean isParameterizedWithoutIndex) {
