@@ -83,7 +83,7 @@ public class RTSLogFileVersionReader {
                   addMethodLogData(true, false);
                } else {
                   test = new TestCase(test.getClazz(), test.getMethod(), test.getModule());
-                  addMethodLogData(false, true);
+                  addMethodLogData(true, true);
                }
             }
          }
