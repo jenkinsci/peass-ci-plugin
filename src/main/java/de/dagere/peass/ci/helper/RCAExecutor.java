@@ -2,6 +2,7 @@ package de.dagere.peass.ci.helper;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -21,6 +22,7 @@ import de.dagere.peass.ci.NonIncludedTestRemover;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.ChangedEntity;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependencyprocessors.VersionComparatorInstance;
 import de.dagere.peass.dependencyprocessors.ViewNotFoundException;
 import de.dagere.peass.execution.utils.EnvironmentVariables;
 import de.dagere.peass.folders.CauseSearchFolders;
@@ -40,6 +42,7 @@ public class RCAExecutor {
    private final ProjectChanges changes;
    private final CauseSearcherConfig causeConfig;
    private final EnvironmentVariables env;
+   private final VersionComparatorInstance comparator;
    private List<TestCase> failedTests = new LinkedList<>();
 
    public RCAExecutor(final MeasurementConfig config, final File workspaceFolder, final ProjectChanges changes, final CauseSearcherConfig causeConfig,
@@ -49,6 +52,7 @@ public class RCAExecutor {
       this.changes = changes;
       this.causeConfig = causeConfig;
       this.env = env;
+      this.comparator = new VersionComparatorInstance(Arrays.asList(config.getExecutionConfig().getCommitOld(), config.getExecutionConfig().getCommit()));
    }
 
    public void executeRCAs()
@@ -145,7 +149,7 @@ public class RCAExecutor {
       final CauseSearchFolders alternateFolders = new CauseSearchFolders(projectFolder);
       final BothTreeReader reader = new BothTreeReader(causeSearcherConfig, config, alternateFolders, env);
 
-      CauseSearcher tester = SearchCauseStarter.getCauseSeacher(config, causeSearcherConfig, alternateFolders, reader);
+      CauseSearcher tester = SearchCauseStarter.getCauseSeacher(config, causeSearcherConfig, alternateFolders, reader, comparator);
       tester.search();
    }
    

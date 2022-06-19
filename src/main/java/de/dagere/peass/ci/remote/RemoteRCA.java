@@ -90,6 +90,7 @@ public class RemoteRCA implements FileCallable<RCAResult>, Serializable {
       measurementConfig.getKiekerConfig().setOnlyOneCallRecording(false);
       
       listener.getLogger().println("Setting property folder: " + propertyFolder.getAbsolutePath());
+      
       final RCAExecutor rcaExecutor = new RCAExecutor(measurementConfig, projectFolderLocal, changes, causeConfig, env);
       rcaExecutor.executeRCAs();
       
