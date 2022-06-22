@@ -13,7 +13,7 @@
   <version>${revision}-${changelist}</version>
   <packaging>hpi</packaging>
   <properties>
-    <jenkins.version>2.319.1</jenkins.version>
+    <jenkins.version>2.332.3</jenkins.version>
     <java.level>8</java.level>
     <maven.test.redirectTestOutputToFile>false</maven.test.redirectTestOutputToFile>
     <!-- The revision reflects the Peass core version, 2.1.11 uses Peass 0.1.11. -->
@@ -191,19 +191,9 @@
       <dependency>
         <groupId>io.jenkins.tools.bom</groupId>
         <artifactId>bom-2.303.x</artifactId>
-        <version>987.v4ade2e49fe70</version>
+        <version>1438.v6a_2c29d73f82</version>
         <type>pom</type>
         <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.jenkins-ci.plugins</groupId>
-        <artifactId>script-security</artifactId>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.jenkins-ci.plugins</groupId>
-        <artifactId>scm-api</artifactId>
-        <scope>test</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
