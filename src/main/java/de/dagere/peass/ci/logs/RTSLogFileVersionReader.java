@@ -60,14 +60,18 @@ public class RTSLogFileVersionReader {
       boolean foundAnyParameterized = false;
 
       if ((!viewMethodDir.exists())) {
-         foundAnyParameterized = addParameterizedMethodLogs(clazzDir);
+         foundAnyParameterized = addParameterizedMethodLogs(clazzDir, null);
       }
+      else {
+         foundAnyParameterized = addParameterizedMethodLogs(clazzDir, viewMethodDir);
+      }
+
       if (!foundAnyParameterized) {
          addRegularMethodLog(viewMethodDir);
       }
    }
 
-   private boolean addParameterizedMethodLogs(final File clazzDir) {
+   private boolean addParameterizedMethodLogs(final File clazzDir, final File viewMethodDir) {
       boolean foundAnyParameterized = false;
       File[] potentialParameterFiles = clazzDir.listFiles();
       if (potentialParameterFiles != null) {
@@ -80,9 +84,15 @@ public class RTSLogFileVersionReader {
                if (methodFile.getName().contains("(")) {
                   String params = fileName.substring(test.getMethod().length() + 1, fileName.length() - 1);
                   test = new TestCase(test.getClazz(), test.getMethod(), test.getModule(), params);
-                  addMethodLogData(true, false);
+                  boolean runWasSuccessful = checkRunWasSuccessful(viewMethodDir);
+                  addMethodLogData(runWasSuccessful, false);
                } else {
                   test = new TestCase(test.getClazz(), test.getMethod(), test.getModule());
+                  /*
+                   * runWasSuccessful is always true in this case
+                   * we can't use checkRunWasSuccessful because no viewMethodDir exists
+                   * if TestCase isParameterizedWithoutIndex
+                   */
                   addMethodLogData(true, true);
                }
             }
