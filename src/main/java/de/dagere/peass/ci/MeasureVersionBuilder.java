@@ -344,6 +344,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          System.out.println("Measuring parallel");
          config.setMeasurementStrategy(MeasurementStrategy.PARALLEL);
       } else {
+         config.setMeasurementStrategy(MeasurementStrategy.SEQUENTIAL);
          System.out.println("executeparallel is false");
       }
       
