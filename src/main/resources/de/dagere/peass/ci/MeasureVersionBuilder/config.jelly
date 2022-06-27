@@ -58,6 +58,11 @@
             <f:checkbox />
           </f:entry>
         </td>
+        <td>
+          <f:entry title="${%directlyMeasureKieker}" field="directlyMeasureKieker" description="${%directlyMeasureKiekerDescr}">
+            <f:checkbox />
+          </f:entry>
+        </td>
       </tr>
       <tr>
         <td>
@@ -329,7 +334,7 @@
         </td>
         <td>
           <f:entry title="${%writeAsZip}" field="writeAsZip" description="${%writeAsZipDescr}">
-            <f:checkbox default="true"/>
+            <f:checkbox default="true" />
           </f:entry>
         </td>
       </tr>

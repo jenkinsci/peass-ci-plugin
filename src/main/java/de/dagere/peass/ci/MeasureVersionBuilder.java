@@ -138,6 +138,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private boolean useSourceInstrumentation = true;
    private boolean useAggregation = true;
    private boolean createDefaultConstructor = false;
+   private boolean directlyMeasureKieker = false;
 
    private boolean redirectSubprocessOutputToFile = true;
    private boolean writeAsZip = true;
@@ -339,6 +340,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       config.setUseGC(useGC);
       config.setEarlyStop(false);
       config.setShowStart(showStart);
+      config.setDirectlyMeasureKieker(directlyMeasureKieker);
       
       if (executeParallel) {
          System.out.println("Measuring parallel");
@@ -403,7 +405,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
       executionConfig.setTestTransformer(testTransformer);
       executionConfig.setTestExecutor(testExecutor);
-
+      
       if (clazzFolders != null && !"".equals(clazzFolders.trim())) {
          List<String> pathes = ExecutionConfig.buildFolderList(clazzFolders);
          List<String> clazzFolders2 = executionConfig.getClazzFolders();
@@ -917,6 +919,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    @DataBoundSetter
    public void setWriteAsZip(boolean writeAsZip) {
       this.writeAsZip = writeAsZip;
+   }
+   
+   public boolean isDirectlyMeasureKieker() {
+      return directlyMeasureKieker;
+   }
+   
+   @DataBoundSetter
+   public void setDirectlyMeasureKieker(boolean directlyMeasureKieker) {
+      this.directlyMeasureKieker = directlyMeasureKieker;
    }
    
    @Symbol("measure")
