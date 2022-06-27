@@ -66,6 +66,7 @@ public class RCAExecutor {
          // saveOldPeassFolder();
 
          MeasurementConfig currentConfig = new MeasurementConfig(config);
+         currentConfig.setDirectlyMeasureKieker(false);
 
          for (Entry<String, List<Change>> testcases : versionChanges.getTestcaseChanges().entrySet()) {
             for (Change change : testcases.getValue()) {
