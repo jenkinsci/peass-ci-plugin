@@ -61,6 +61,6 @@ public class TestRTSLogFileReaderParameterized {
       RTSLogData dataImplicitParameterized = rtsVmRunsPredecessor.get(new TestCase("de.dagere.peass.ExampleTest", "test", ""));
       Assert.assertNotNull(dataImplicitParameterized);
       Assert.assertTrue(dataImplicitParameterized.isParameterizedWithoutIndex());
-      Assert.assertFalse(dataImplicitParameterized.isSuccess());
+      Assert.assertTrue(dataImplicitParameterized.isSuccess());
    }
 }
