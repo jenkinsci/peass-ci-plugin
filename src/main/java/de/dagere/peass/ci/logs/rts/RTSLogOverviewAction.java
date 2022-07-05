@@ -21,14 +21,14 @@ public class RTSLogOverviewAction extends VisibleAction {
    private boolean redirectSubprocessOutputToFile;
 
    public RTSLogOverviewAction(int id, final Map<String, File> processSuccessRuns, final Map<TestCase, RTSLogData> vmRuns, final Map<TestCase, RTSLogData> predecessorVmRuns,
-         final Map<String, Boolean> processSuccessRunSucceeded, final String version, final String versionOld, final boolean redirectSubprocessOutputToFile) {
+         final Map<String, Boolean> processSuccessRunSucceeded, final String commit, final String commitOld, final boolean redirectSubprocessOutputToFile) {
       super(id);
       this.processSuccessRuns = processSuccessRuns;
       this.vmRuns = vmRuns;
       this.predecessorVmRuns = predecessorVmRuns;
       this.processSuccessRunSucceeded = processSuccessRunSucceeded;
-      this.version = version;
-      this.versionOld = versionOld;
+      this.version = commit;
+      this.versionOld = commitOld;
       this.redirectSubprocessOutputToFile = redirectSubprocessOutputToFile;
    }
    

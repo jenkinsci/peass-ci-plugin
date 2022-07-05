@@ -112,8 +112,13 @@ public class RTSLogFileReader {
       File sourceReadLogFile = visualizationFolders.getResultsFolders().getSourceReadLogFile(measurementConfig.getExecutionConfig().getCommit(),
             measurementConfig.getExecutionConfig().getCommitOld());
       try {
-         LOG.debug("Reading Source Read Log{}", sourceReadLogFile.getAbsolutePath());
-         return FileUtils.readFileToString(sourceReadLogFile, StandardCharsets.UTF_8);
+         if (sourceReadLogFile.exists()) {
+            LOG.debug("Reading Source Read Log {}", sourceReadLogFile.getAbsolutePath());
+            return FileUtils.readFileToString(sourceReadLogFile, StandardCharsets.UTF_8);
+         } else {
+            LOG.error("No source reading log available");
+            return "No source reading log available";
+         }
       } catch (IOException e) {
          e.printStackTrace();
          return "RTS log not readable";
@@ -121,17 +126,17 @@ public class RTSLogFileReader {
    }
 
    public Map<String, File> findProcessSuccessRuns() {
-      Map<String, File> processSuccessTestRuns = new LinkedHashMap<>();
-      addVersionRun(processSuccessTestRuns, measurementConfig.getExecutionConfig().getCommit());
-      addVersionRun(processSuccessTestRuns, measurementConfig.getExecutionConfig().getCommitOld());
-      return processSuccessTestRuns;
+      Map<String, File> commitSuccessTestRuns = new LinkedHashMap<>();
+      addCommitSuccessRun(commitSuccessTestRuns, measurementConfig.getExecutionConfig().getCommit());
+      addCommitSuccessRun(commitSuccessTestRuns, measurementConfig.getExecutionConfig().getCommitOld());
+      return commitSuccessTestRuns;
    }
 
-   private void addVersionRun(final Map<String, File> processSuccessTestRuns, final String checkSuccessRunVersion) {
+   private void addCommitSuccessRun(final Map<String, File> commitSuccessTestRuns, final String checkSuccessRunVersion) {
       File candidate = visualizationFolders.getPeassFolders().getDependencyLogSuccessRunFile(checkSuccessRunVersion);
       if (candidate.exists()) {
          LOG.info("RTS process success run {} exists", candidate.getAbsolutePath());
-         processSuccessTestRuns.put(checkSuccessRunVersion, candidate);
+         commitSuccessTestRuns.put(checkSuccessRunVersion, candidate);
       } else {
          LOG.info("RTS process success run {} did not exist", candidate.getAbsolutePath());
       }
