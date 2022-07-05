@@ -45,7 +45,7 @@ public class TestRTSVisualizationCreator {
 
    private void writeEmptyDependencies(final ResultsFolders localWorkspace) throws IOException, JsonGenerationException, JsonMappingException {
       StaticTestSelection emptyDependencies = new StaticTestSelection();
-      emptyDependencies.getInitialversion().addDependency(new TestCase("Test#test"), new ChangedEntity("SomeCallee#method"));
+      emptyDependencies.getInitialcommit().addDependency(new TestCase("Test#test"), new ChangedEntity("SomeCallee#method"));
       Constants.OBJECTMAPPER.writeValue(localWorkspace.getStaticTestSelectionFile(), emptyDependencies);
    }
 }
