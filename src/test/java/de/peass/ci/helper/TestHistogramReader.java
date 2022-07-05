@@ -10,7 +10,7 @@ import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import de.dagere.peass.ci.MeasureVersionAction;
+import de.dagere.peass.ci.MeasurementOverviewAction;
 import de.dagere.peass.ci.helper.HistogramReader;
 import de.dagere.peass.ci.helper.HistogramValues;
 import de.dagere.peass.config.MeasurementConfig;
@@ -34,7 +34,7 @@ public class TestHistogramReader {
       double[] valuesBefore = measurements.get("de.test.CalleeTest#onlyCallMethod1").getValuesBefore();
       double[] valuesCurrent = measurements.get("de.test.CalleeTest#onlyCallMethod1").getValuesCurrent();
 
-      MeasureVersionAction measureVersionActionMock = Mockito.mock(MeasureVersionAction.class);
+      MeasurementOverviewAction measureVersionActionMock = Mockito.mock(MeasurementOverviewAction.class);
       when(measureVersionActionMock.getValuesReadable(any(double[].class))).thenCallRealMethod();
 
       Assert.assertEquals(2, measureVersionActionMock.getValuesReadable(valuesBefore).split(",").length);
@@ -70,7 +70,7 @@ public class TestHistogramReader {
       double[] valuesBefore = measurements.get("de.test.CalleeTest#onlyCallMethod2").getValuesBefore();
       double[] valuesCurrent = measurements.get("de.test.CalleeTest#onlyCallMethod2").getValuesCurrent();
 
-      MeasureVersionAction measureVersionActionMock = Mockito.mock(MeasureVersionAction.class);
+      MeasurementOverviewAction measureVersionActionMock = Mockito.mock(MeasurementOverviewAction.class);
       when(measureVersionActionMock.getValuesReadable(any(double[].class))).thenCallRealMethod();
 
       Assert.assertEquals(measureVersionActionMock.getValuesReadable(valuesBefore).split(",").length, 2);

@@ -9,7 +9,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
 
-import de.dagere.peass.ci.MeasureVersionAction;
+import de.dagere.peass.ci.MeasurementOverviewAction;
 import de.dagere.peass.ci.MeasureVersionBuilder;
 import de.dagere.peass.ci.helper.GitProjectBuilder;
 import de.dagere.peass.execution.utils.EnvironmentVariables;
@@ -58,7 +58,7 @@ public class MeasureVersionBuilderTest {
 
       FreeStyleBuild build = jenkins.buildAndAssertSuccess(project);
 
-      MeasureVersionAction action = build.getActions(MeasureVersionAction.class).get(0);
+      MeasurementOverviewAction action = build.getActions(MeasurementOverviewAction.class).get(0);
 
       Assert.assertEquals(ITERATIONS, action.getConfig().getIterations());
       Assert.assertEquals(VMS, action.getConfig().getVms());

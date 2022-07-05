@@ -23,9 +23,9 @@ import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.measurement.statistics.StatisticUtil;
 import de.dagere.peass.measurement.statistics.data.TestcaseStatistic;
 
-public class MeasureVersionAction extends VisibleAction {
+public class MeasurementOverviewAction extends VisibleAction {
 
-   private static final Logger LOG = LogManager.getLogger(MeasureVersionAction.class);
+   private static final Logger LOG = LogManager.getLogger(MeasurementOverviewAction.class);
 
    private MeasurementConfig config;
    private Changes changes;
@@ -35,7 +35,7 @@ public class MeasureVersionAction extends VisibleAction {
    private String prefix;
    private Map<String, MeasurementConfig> updatedConfigurations;
 
-   public MeasureVersionAction(int id, final MeasurementConfig config, final Changes changes, final ProjectStatistics statistics,
+   public MeasurementOverviewAction(int id, final MeasurementConfig config, final Changes changes, final ProjectStatistics statistics,
          final Map<String, TestcaseStatistic> noWarmupStatistics, final Map<String, HistogramValues> measurements,
          final Map<String, MeasurementConfig> updatedConfigurations) {
       super(id);
@@ -59,7 +59,7 @@ public class MeasureVersionAction extends VisibleAction {
 
    @Override
    public String getDisplayName() {
-      return Messages.MeasureVersionAction_DisplayName();
+      return Messages.MeasurementOverviewAction_DisplayName();
    }
 
    @Override
