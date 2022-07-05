@@ -32,7 +32,7 @@ public class HistogramReader {
       if (fullResultsFolder.exists() && fullResultsFolder.isDirectory()) {
          File[] xmlFiles = fullResultsFolder.listFiles((FileFilter) new WildcardFileFilter("*.json"));
          if (xmlFiles == null) {
-            System.out.println("No xml-Files were found, measurements is empty!");
+            System.out.println("No json-Files were found, measurements is empty!");
             return measurements;
          }
 
@@ -61,7 +61,7 @@ public class HistogramReader {
       
       boolean moreThanOneMeasurement = values.getValuesCurrent().length > 1 || values.getValuesBefore().length > 1;
       
-      if (!moreThanOneMeasurement) {
+      if (moreThanOneMeasurement) {
          measurements.put(testcaseKey, values);
       }
    }
