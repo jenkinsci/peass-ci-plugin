@@ -52,13 +52,18 @@ public class HistogramReader {
       // This assumes measurements are only executed once; if this is not the case, the matching result would need to be searched
       final TestMethod testcase = data.getMethods().get(0);
       VMResultChunk chunk = testcase.getDatacollectorResults().get(0).getChunks().get(0);
+      
       String testcaseKey = new TestCase(data).toString();
       
       MeasurementConfig currentConfig = getUpdatedConfiguration(testcaseKey, testcase, chunk);
       
       HistogramValues values = loadResults(chunk, currentConfig);
-        
-      measurements.put(testcaseKey, values);
+      
+      boolean moreThanOneMeasurement = values.getValuesCurrent().length > 1 || values.getValuesBefore().length > 1;
+      
+      if (!moreThanOneMeasurement) {
+         measurements.put(testcaseKey, values);
+      }
    }
 
    private HistogramValues loadResults(final VMResultChunk chunk, final MeasurementConfig currentConfig) {
