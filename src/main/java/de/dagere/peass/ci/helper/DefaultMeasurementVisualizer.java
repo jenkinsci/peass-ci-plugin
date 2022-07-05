@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.math3.exception.NumberIsTooSmallException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -75,8 +76,8 @@ public class DefaultMeasurementVisualizer {
 
                final String content = FileUtils.readFileToString(testcaseVisualizationFile, StandardCharsets.UTF_8);
                run.addAction(new MeasurementVisualizationAction(IdHelper.getId(), "measurement_" + name, content));
-            } catch (IOException e) {
-               e.printStackTrace();
+            } catch (IOException | NumberIsTooSmallException e) {
+               LOG.error(e);
             }
          }
       }
