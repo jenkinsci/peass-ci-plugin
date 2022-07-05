@@ -32,7 +32,7 @@ public class ProjectData {
    
    public List<ChangeLine> getChangeLines() {
       List<ChangeLine> result = new LinkedList<>();
-      String version = selection.getNewestVersion();
+      String version = selection.getNewestCommit();
       VersionStaticSelection versionStaticSelection = selection.getVersions().get(version);
       if (versionStaticSelection != null) {
          Map<ChangedEntity, TestSet> changedClazzes = versionStaticSelection.getChangedClazzes();

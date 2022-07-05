@@ -40,7 +40,7 @@ public class PeassAnalysisAction extends VisibleAction {
 
    public List<ChangeLine> getChangeLines() {
       List<ChangeLine> result = new LinkedList<>();
-      String version = selection.getNewestVersion();
+      String version = selection.getNewestCommit();
       Map<ChangedEntity, TestSet> changedClazzes = selection.getVersions().get(version).getChangedClazzes();
       for (Map.Entry<ChangedEntity, TestSet> entry : changedClazzes.entrySet()) {
 
@@ -60,7 +60,7 @@ public class PeassAnalysisAction extends VisibleAction {
    }
 
    public String getVersion() {
-      return selection.getNewestVersion();
+      return selection.getNewestCommit();
    }
 
    public StaticTestSelection getSelection() {
