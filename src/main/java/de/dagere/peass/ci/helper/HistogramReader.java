@@ -59,7 +59,7 @@ public class HistogramReader {
       
       HistogramValues values = loadResults(chunk, currentConfig);
       
-      boolean moreThanOneMeasurement = values.getValuesCurrent().length > 1 || values.getValuesBefore().length > 1;
+      boolean moreThanOneMeasurement = values.getValuesCurrent().length > 1 && values.getValuesBefore().length > 1;
       
       if (moreThanOneMeasurement) {
          measurements.put(testcaseKey, values);
