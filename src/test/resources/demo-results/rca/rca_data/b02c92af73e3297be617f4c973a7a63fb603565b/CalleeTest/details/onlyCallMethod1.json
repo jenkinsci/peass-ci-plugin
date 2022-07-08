@@ -13,8 +13,7 @@
     	"type1error" : 0.01,
         "type2error" : 0.01
      },
-     "executionConfig" : {
-       "timeout" : 300000,
+     "fixedCommitConfig" : {
        "commit" : "b02c92af73e3297be617f4c973a7a63fb603565b",
        "commitOld" : "e80d8a1bf747d1f70dc52260616b36cac9e44561"
      }
