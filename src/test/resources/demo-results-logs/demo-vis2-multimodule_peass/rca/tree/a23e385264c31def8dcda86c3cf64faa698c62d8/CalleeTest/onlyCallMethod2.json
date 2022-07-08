@@ -27,12 +27,14 @@
       "outlierFactor" : 3.29,
       "statisticTest" : "BIMODAL_T_TEST"
     },
+    "fixedCommitConfig" :{
+      "commit" : "a23e385264c31def8dcda86c3cf64faa698c62d8",
+      "commitOld" : "33ce17c04b5218c25c40137d4d09f40fbb3e4f0f"
+    },
     "executionConfig" : {
       "includes" : [ ],
       "testGoal" : "test",
       "timeout" : 300000,
-      "commit" : "a23e385264c31def8dcda86c3cf64faa698c62d8",
-      "commitOld" : "33ce17c04b5218c25c40137d4d09f40fbb3e4f0f",
       "pl" : null,
       "redirectSubprocessOutputToFile" : true,
       "useTieredCompilation" : false,
