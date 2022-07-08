@@ -25,7 +25,7 @@ public class RTSInfosTest {
 
       PeassProcessConfiguration config = Mockito.mock(PeassProcessConfiguration.class);
       MeasurementConfig measurementConfig = new MeasurementConfig(1);
-      measurementConfig.getExecutionConfig().setCommit("15f345835d2a0c85070c9d2ffbbb0f098f68adb5");
+      measurementConfig.getFixedCommitConfig().setCommit("15f345835d2a0c85070c9d2ffbbb0f098f68adb5");
       Mockito.when(config.getMeasurementConfig()).thenReturn(measurementConfig);
 
       RTSInfos infos = RTSInfos.readInfosFromFolders(folders, config);

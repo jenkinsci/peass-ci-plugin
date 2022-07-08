@@ -17,6 +17,7 @@ import de.dagere.peass.ci.logs.LogFileReader;
 import de.dagere.peass.ci.logs.LogFiles;
 import de.dagere.peass.ci.logs.LogUtil;
 import de.dagere.peass.config.ExecutionConfig;
+import de.dagere.peass.config.FixedCommitConfig;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import hudson.model.Run;
@@ -43,11 +44,11 @@ public class MeasurementActionCreator {
       Map<TestCase, List<LogFiles>> logFiles = reader.readAllTestcases(tests);
       createLogActions(run, logFiles);
 
-      ExecutionConfig executionConfig = measurementConfig.getExecutionConfig();
-      String shortVersion = executionConfig.getCommit().substring(0, 6);
-      String shortVersionOld = executionConfig.getCommitOld().substring(0, 6);
+      FixedCommitConfig fixedCommitConfig = measurementConfig.getFixedCommitConfig();
+      String shortVersion = fixedCommitConfig.getCommit().substring(0, 6);
+      String shortVersionOld = fixedCommitConfig.getCommitOld().substring(0, 6);
       LogOverviewAction logOverviewAction = new LogOverviewAction(IdHelper.getId(), logFiles, shortVersion, shortVersionOld, measurementConfig.getVms(),
-            executionConfig.isRedirectSubprocessOutputToFile());
+            measurementConfig.getExecutionConfig().isRedirectSubprocessOutputToFile());
       run.addAction(logOverviewAction);
    }
 
@@ -66,9 +67,9 @@ public class MeasurementActionCreator {
          int vmId = 0;
          for (LogFiles files : entry.getValue()) {
             String logData = FileUtils.readFileToString(files.getCurrent(), StandardCharsets.UTF_8);
-            run.addAction(new LogAction(IdHelper.getId(), testcase, vmId, measurementConfig.getExecutionConfig().getCommit(), logData));
+            run.addAction(new LogAction(IdHelper.getId(), testcase, vmId, measurementConfig.getFixedCommitConfig().getCommit(), logData));
             String logDataOld = FileUtils.readFileToString(files.getPredecessor(), StandardCharsets.UTF_8);
-            run.addAction(new LogAction(IdHelper.getId(), testcase, vmId, measurementConfig.getExecutionConfig().getCommitOld(), logDataOld));
+            run.addAction(new LogAction(IdHelper.getId(), testcase, vmId, measurementConfig.getFixedCommitConfig().getCommitOld(), logDataOld));
             vmId++;
          }
       }

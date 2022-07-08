@@ -213,8 +213,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
    private boolean checkVersion(final Run<?, ?> run, final TaskListener listener, final PeassProcessConfiguration peassConfig) {
       boolean versionIsUsable;
-      String version = peassConfig.getMeasurementConfig().getExecutionConfig().getCommit();
-      String versionOld = peassConfig.getMeasurementConfig().getExecutionConfig().getCommitOld();
+      String version = peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit();
+      String versionOld = peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommitOld();
       if (version.equals(versionOld)) {
          listener.getLogger().print("Version " + version + " equals " + versionOld + "; please check your configuration");
          run.setResult(Result.FAILURE);
@@ -305,7 +305,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       final RemoteVersionReader remoteVersionReader = new RemoteVersionReader(measurementConfig, listener);
       final MeasurementConfig configWithRealGitVersions = workspace.act(remoteVersionReader);
       listener.getLogger()
-            .println("Read version: " + configWithRealGitVersions.getExecutionConfig().getCommit() + " " + configWithRealGitVersions.getExecutionConfig().getCommitOld());
+            .println("Read version: " + configWithRealGitVersions.getFixedCommitConfig().getCommit() + " " + configWithRealGitVersions.getFixedCommitConfig().getCommitOld());
       return configWithRealGitVersions;
    }
 
@@ -363,6 +363,10 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          throw new RuntimeException("If nightly build is set, do not set versionDiff! nightlyBuild will automatically select the last tested version.");
       }
       
+      config.getFixedCommitConfig().setCommit("HEAD");
+      final String oldVersion = getOldVersion();
+      config.getFixedCommitConfig().setCommitOld(oldVersion);
+      
       parameterizeExecutionConfig(config.getExecutionConfig());
 
       System.out.println("Building, iterations: " + iterations + " test goal: " + testGoal);
@@ -389,10 +393,6 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       executionConfig.setRemoveSnapshots(removeSnapshots);
       executionConfig.setExcludeLog4jSlf4jImpl(excludeLog4jSlf4jImpl);
       executionConfig.setExcludeLog4jToSlf4j(excludeLog4jToSlf4j);
-
-      executionConfig.setCommit("HEAD");
-      final String oldVersion = getOldVersion();
-      executionConfig.setCommitOld(oldVersion);
 
       executionConfig.setIncludes(IncludeExcludeParser.getStringList(includes));
       executionConfig.setExcludes(IncludeExcludeParser.getStringList(excludes));

@@ -35,7 +35,7 @@ public class RTSInfos {
       if (staticTestSelectionFile.exists()) {
          boolean staticChanges = false;
          StaticTestSelection staticTestSelection = Constants.OBJECTMAPPER.readValue(staticTestSelectionFile, StaticTestSelection.class);
-         VersionStaticSelection version = staticTestSelection.getVersions().get(peassConfig.getMeasurementConfig().getExecutionConfig().getCommit());
+         VersionStaticSelection version = staticTestSelection.getVersions().get(peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit());
          boolean hasStaticallySelectedTests = false;
          if (version != null) {
             if (!version.getChangedClazzes().isEmpty()) {

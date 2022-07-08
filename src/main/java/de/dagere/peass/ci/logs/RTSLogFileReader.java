@@ -32,8 +32,8 @@ public class RTSLogFileReader {
       this.visualizationFolders = visualizationFolders;
       this.measurementConfig = measurementConfig;
 
-      File rtsLogOverviewFile = visualizationFolders.getResultsFolders().getRTSLogFile(measurementConfig.getExecutionConfig().getCommit(),
-            measurementConfig.getExecutionConfig().getCommitOld());
+      File rtsLogOverviewFile = visualizationFolders.getResultsFolders().getRTSLogFile(measurementConfig.getFixedCommitConfig().getCommit(),
+            measurementConfig.getFixedCommitConfig().getCommitOld());
       LOG.info("RTS log overview file: {} Exists: {}", rtsLogOverviewFile, rtsLogOverviewFile.exists());
       logsExisting = rtsLogOverviewFile.exists();
 
@@ -46,7 +46,7 @@ public class RTSLogFileReader {
       if (dependencyFile.exists()) {
          try {
             StaticTestSelection dependencies = Constants.OBJECTMAPPER.readValue(dependencyFile, StaticTestSelection.class);
-            VersionStaticSelection version = dependencies.getVersions().get(measurementConfig.getExecutionConfig().getCommit());
+            VersionStaticSelection version = dependencies.getVersions().get(measurementConfig.getFixedCommitConfig().getCommit());
             if (version != null) {
                LOG.debug("Version run success: {}", version.isRunning());
                success = version.isRunning();
@@ -97,8 +97,8 @@ public class RTSLogFileReader {
    }
 
    public String getRTSLog() {
-      File rtsLogFile = visualizationFolders.getResultsFolders().getRTSLogFile(measurementConfig.getExecutionConfig().getCommit(),
-            measurementConfig.getExecutionConfig().getCommitOld());
+      File rtsLogFile = visualizationFolders.getResultsFolders().getRTSLogFile(measurementConfig.getFixedCommitConfig().getCommit(),
+            measurementConfig.getFixedCommitConfig().getCommitOld());
       try {
          LOG.debug("Reading RTS Log {}", rtsLogFile.getAbsolutePath());
          return FileUtils.readFileToString(rtsLogFile, StandardCharsets.UTF_8);
@@ -109,8 +109,8 @@ public class RTSLogFileReader {
    }
 
    public String getSourceReadingLog() {
-      File sourceReadLogFile = visualizationFolders.getResultsFolders().getSourceReadLogFile(measurementConfig.getExecutionConfig().getCommit(),
-            measurementConfig.getExecutionConfig().getCommitOld());
+      File sourceReadLogFile = visualizationFolders.getResultsFolders().getSourceReadLogFile(measurementConfig.getFixedCommitConfig().getCommit(),
+            measurementConfig.getFixedCommitConfig().getCommitOld());
       try {
          if (sourceReadLogFile.exists()) {
             LOG.debug("Reading Source Read Log {}", sourceReadLogFile.getAbsolutePath());
@@ -127,8 +127,8 @@ public class RTSLogFileReader {
 
    public Map<String, File> findProcessSuccessRuns() {
       Map<String, File> commitSuccessTestRuns = new LinkedHashMap<>();
-      addCommitSuccessRun(commitSuccessTestRuns, measurementConfig.getExecutionConfig().getCommit());
-      addCommitSuccessRun(commitSuccessTestRuns, measurementConfig.getExecutionConfig().getCommitOld());
+      addCommitSuccessRun(commitSuccessTestRuns, measurementConfig.getFixedCommitConfig().getCommit());
+      addCommitSuccessRun(commitSuccessTestRuns, measurementConfig.getFixedCommitConfig().getCommitOld());
       return commitSuccessTestRuns;
    }
 

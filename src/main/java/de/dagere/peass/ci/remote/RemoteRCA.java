@@ -53,7 +53,7 @@ public class RemoteRCA implements FileCallable<RCAResult>, Serializable {
    public RCAResult invoke(final File workspaceFolder, final VirtualChannel channel) throws IOException, InterruptedException {
       final File localFolder = ContinuousFolderUtil.getLocalFolder(workspaceFolder);
       ResultsFolders resultsFolder = new ResultsFolders(localFolder, workspaceFolder.getName());
-      final File logFile = resultsFolder.getRCALogFile(measurementConfig.getExecutionConfig().getCommit(), measurementConfig.getExecutionConfig().getCommitOld());
+      final File logFile = resultsFolder.getRCALogFile(measurementConfig.getFixedCommitConfig().getCommit(), measurementConfig.getFixedCommitConfig().getCommitOld());
       if (measurementConfig.getExecutionConfig().isRedirectSubprocessOutputToFile()) {
          listener.getLogger().println("Executing root cause analysis - Log goes to " + logFile.getAbsolutePath());
          try (LogRedirector director = new LogRedirector(logFile)) {

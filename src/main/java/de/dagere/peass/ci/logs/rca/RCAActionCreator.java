@@ -36,8 +36,8 @@ public class RCAActionCreator {
 
       Map<TestCase, List<RCALevel>> testLevelMap = createRCALogActions(reader);
 
-      RCALogOverviewAction rcaOverviewAction = new RCALogOverviewAction(IdHelper.getId(), testLevelMap, measurementConfig.getExecutionConfig().getCommit().substring(0, 6),
-            measurementConfig.getExecutionConfig().getCommitOld().substring(0, 6), measurementConfig.getExecutionConfig().isRedirectSubprocessOutputToFile());
+      RCALogOverviewAction rcaOverviewAction = new RCALogOverviewAction(IdHelper.getId(), testLevelMap, measurementConfig.getFixedCommitConfig().getCommit().substring(0, 6),
+            measurementConfig.getFixedCommitConfig().getCommitOld().substring(0, 6), measurementConfig.getExecutionConfig().isRedirectSubprocessOutputToFile());
       run.addAction(rcaOverviewAction);
    }
 
@@ -70,8 +70,8 @@ public class RCAActionCreator {
    }
 
    private void createVMLogActions(final Map.Entry<TestCase, List<RCALevel>> testcase, final int levelId, final int vmId, final LogFiles files) throws IOException {
-      addLog(testcase, levelId, vmId, files.getCurrent(), measurementConfig.getExecutionConfig().getCommit());
-      addLog(testcase, levelId, vmId, files.getPredecessor(), measurementConfig.getExecutionConfig().getCommitOld());
+      addLog(testcase, levelId, vmId, files.getCurrent(), measurementConfig.getFixedCommitConfig().getCommit());
+      addLog(testcase, levelId, vmId, files.getPredecessor(), measurementConfig.getFixedCommitConfig().getCommitOld());
    }
 
    private void addLog(final Map.Entry<TestCase, List<RCALevel>> testcase, final int levelId, final int vmId, final File logFile, final String version) throws IOException {

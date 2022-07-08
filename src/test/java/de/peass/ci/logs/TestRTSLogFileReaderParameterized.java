@@ -14,6 +14,7 @@ import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.RTSLogFileReader;
 import de.dagere.peass.ci.logs.rts.RTSLogData;
 import de.dagere.peass.config.ExecutionConfig;
+import de.dagere.peass.config.FixedCommitConfig;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.folders.PeassFolders;
@@ -44,10 +45,10 @@ public class TestRTSLogFileReaderParameterized {
       Mockito.when(visualizationFoldersMock.getResultsFolders()).thenReturn(new ResultsFolders(currentDir, "parameterized-demo"));
       Mockito.when(visualizationFoldersMock.getPeassFolders()).thenReturn(new PeassFolders(new File(currentDir, "parameterized-demo_peass")));
       MeasurementConfig measurementConfig = Mockito.mock(MeasurementConfig.class);
-      ExecutionConfig executionConfig = new ExecutionConfig();
-      executionConfig.setCommit(VERSION);
-      executionConfig.setCommitOld(VERSION_OLD);
-      Mockito.when(measurementConfig.getExecutionConfig()).thenReturn(executionConfig);
+      FixedCommitConfig fixedCommitConfig = new FixedCommitConfig();
+      fixedCommitConfig.setCommit(VERSION);
+      fixedCommitConfig.setCommitOld(VERSION_OLD);
+      Mockito.when(measurementConfig.getFixedCommitConfig()).thenReturn(fixedCommitConfig);
       RTSLogFileReader reader = new RTSLogFileReader(visualizationFoldersMock, measurementConfig);
 
       Map<TestCase, RTSLogData> rtsVmRuns = reader.getRtsVmRuns(VERSION);

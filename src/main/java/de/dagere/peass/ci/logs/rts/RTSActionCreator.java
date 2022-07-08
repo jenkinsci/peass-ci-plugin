@@ -47,8 +47,8 @@ public class RTSActionCreator {
 
       Map<String, File> processSuccessRuns = createProcessSuccessRunsActions();
 
-      Map<TestCase, RTSLogData> rtsVmRuns = createVersionRTSData(measurementConfig.getExecutionConfig().getCommit());
-      Map<TestCase, RTSLogData> rtsVmRunsPredecessor = createVersionRTSData(measurementConfig.getExecutionConfig().getCommitOld());
+      Map<TestCase, RTSLogData> rtsVmRuns = createVersionRTSData(measurementConfig.getFixedCommitConfig().getCommit());
+      Map<TestCase, RTSLogData> rtsVmRunsPredecessor = createVersionRTSData(measurementConfig.getFixedCommitConfig().getCommitOld());
 
       logSummary = RTSLogSummary.createLogSummary(rtsVmRuns, rtsVmRunsPredecessor);
 
@@ -58,7 +58,7 @@ public class RTSActionCreator {
    private void createOverviewAction(final Map<String, File> processSuccessRuns, final Map<TestCase, RTSLogData> rtsVmRuns, final Map<TestCase, RTSLogData> rtsVmRunsPredecessor,
          final RTSInfos rtsInfos) {
       RTSLogOverviewAction overviewAction = new RTSLogOverviewAction(IdHelper.getId(), processSuccessRuns, rtsVmRuns, rtsVmRunsPredecessor,
-            processSuccessRunSucceeded, measurementConfig.getExecutionConfig().getCommit(), measurementConfig.getExecutionConfig().getCommitOld(),
+            processSuccessRunSucceeded, measurementConfig.getFixedCommitConfig().getCommit(), measurementConfig.getFixedCommitConfig().getCommitOld(),
             measurementConfig.getExecutionConfig().isRedirectSubprocessOutputToFile());
       overviewAction.setStaticChanges(rtsInfos.isStaticChanges());
       overviewAction.setStaticallySelectedTests(rtsInfos.isStaticallySelectedTests());

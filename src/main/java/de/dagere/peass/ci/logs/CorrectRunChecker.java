@@ -9,6 +9,7 @@ import de.dagere.kopeme.datastorage.JSONDataLoader;
 import de.dagere.kopeme.kopemedata.DatacollectorResult;
 import de.dagere.kopeme.kopemedata.Kopemedata;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
+import de.dagere.peass.config.FixedCommitConfig;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.folders.PeassFolders;
@@ -30,13 +31,14 @@ public class CorrectRunChecker {
       File basicResultFolder = visualizationFolders.getResultsFolders().getVersionFullResultsFolder(measurementConfig);
       File detailResultsFolder = new File(basicResultFolder, "measurements");
 
-      String pathCurrent = PeassFolders.getRelativeFullResultPath(testcase, measurementConfig.getExecutionConfig().getCommit(), measurementConfig.getExecutionConfig().getCommit(),
+      FixedCommitConfig fixedCommitConfig = measurementConfig.getFixedCommitConfig();
+      String pathCurrent = PeassFolders.getRelativeFullResultPath(testcase, fixedCommitConfig.getCommit(), fixedCommitConfig.getCommit(),
             vmId);
       File resultFileCurrent = new File(detailResultsFolder, pathCurrent);
       currentRunning = checkIsRunning(vmId, resultFileCurrent);
 
-      String pathPredecessor = PeassFolders.getRelativeFullResultPath(testcase, measurementConfig.getExecutionConfig().getCommit(),
-            measurementConfig.getExecutionConfig().getCommitOld(), vmId);
+      String pathPredecessor = PeassFolders.getRelativeFullResultPath(testcase, fixedCommitConfig.getCommit(),
+            fixedCommitConfig.getCommitOld(), vmId);
       File resultFilePredecessor = new File(detailResultsFolder, pathPredecessor);
       predecessorRunning = checkIsRunning(vmId, resultFilePredecessor);
    }

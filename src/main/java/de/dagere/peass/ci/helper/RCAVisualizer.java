@@ -44,8 +44,8 @@ public class RCAVisualizer {
 
       File rcaResults = visualizationFolders.getRcaResultFolder();
 
-      Changes versionChanges = changes.getVersion(measurementConfig.getExecutionConfig().getCommit());
-      File versionVisualizationFolder = new File(visualizationFolder, measurementConfig.getExecutionConfig().getCommit());
+      Changes versionChanges = changes.getVersion(measurementConfig.getFixedCommitConfig().getCommit());
+      File versionVisualizationFolder = new File(visualizationFolder, measurementConfig.getFixedCommitConfig().getCommit());
 
       createVisualizationActions(rcaResults, versionChanges, versionVisualizationFolder);
    }
