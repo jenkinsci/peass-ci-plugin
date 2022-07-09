@@ -380,8 +380,6 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       }
       
       executionConfig.setTimeout(timeout * 60l * 1000);
-      executionConfig.setKiekerWaitTime(kiekerWaitTime);
-      
       
       executionConfig.setExecuteBeforeClassInMeasurement(executeBeforeClassInMeasurement);
       executionConfig.setOnlyMeasureWorkload(onlyMeasureWorkload);
@@ -454,6 +452,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       kiekerConfig.setTraceSizeInMb(traceSizeInMb);
       kiekerConfig.setOnlyOneCallRecording(onlyOneCallRecording);
       kiekerConfig.setCreateDefaultConstructor(createDefaultConstructor);
+      kiekerConfig.setKiekerWaitTime(kiekerWaitTime);
    }
 
    private String getOldVersion() throws IOException, JsonParseException, JsonMappingException {
