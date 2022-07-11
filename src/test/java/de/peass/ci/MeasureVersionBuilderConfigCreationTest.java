@@ -1,6 +1,5 @@
 package de.peass.ci;
 
-import java.io.File;
 import java.io.IOException;
 
 import org.hamcrest.MatcherAssert;
@@ -17,8 +16,6 @@ import de.dagere.peass.ci.MeasureVersionBuilder;
 import de.dagere.peass.config.MeasurementConfig;
 
 public class MeasureVersionBuilderConfigCreationTest {
-
-   private static final File CURRENT_FOLDER = new File("target/current");
 
    @Test
    public void testConfigCreation() throws JsonParseException, JsonMappingException, IOException {
