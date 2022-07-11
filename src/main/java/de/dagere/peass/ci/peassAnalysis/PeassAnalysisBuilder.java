@@ -16,7 +16,6 @@ import com.fasterxml.jackson.databind.DatabindException;
 import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.ci.MeasureVersionBuilder;
 import de.dagere.peass.ci.helper.IdHelper;
-import de.dagere.peass.config.ExecutionConfig;
 import de.dagere.peass.dependency.analysis.data.ChangedEntity;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.analysis.data.TestSet;

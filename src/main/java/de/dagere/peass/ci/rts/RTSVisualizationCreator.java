@@ -2,14 +2,12 @@ package de.dagere.peass.ci.rts;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,7 +27,6 @@ import de.dagere.peass.dependency.persistence.VersionStaticSelection;
 import de.dagere.peass.dependency.traces.TraceFileManager;
 import de.dagere.peass.dependency.traces.coverage.CoverageSelectionInfo;
 import de.dagere.peass.dependency.traces.coverage.CoverageSelectionVersion;
-import de.dagere.peass.dependency.traces.diff.DiffUtilJava;
 import de.dagere.peass.dependency.traces.diff.TraceFileUtil;
 import de.dagere.peass.folders.ResultsFolders;
 import de.dagere.peass.utils.Constants;

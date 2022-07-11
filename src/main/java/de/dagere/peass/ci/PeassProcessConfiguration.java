@@ -3,8 +3,8 @@ package de.dagere.peass.ci;
 import java.io.Serializable;
 import java.util.regex.Pattern;
 
-import de.dagere.peass.config.TestSelectionConfig;
 import de.dagere.peass.config.MeasurementConfig;
+import de.dagere.peass.config.TestSelectionConfig;
 import de.dagere.peass.execution.utils.EnvironmentVariables;
 
 public class PeassProcessConfiguration implements Serializable {

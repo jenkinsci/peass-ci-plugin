@@ -16,7 +16,6 @@ import de.dagere.peass.ci.logs.InternalLogAction;
 import de.dagere.peass.ci.logs.LogFileReader;
 import de.dagere.peass.ci.logs.LogFiles;
 import de.dagere.peass.ci.logs.LogUtil;
-import de.dagere.peass.config.ExecutionConfig;
 import de.dagere.peass.config.FixedCommitConfig;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
