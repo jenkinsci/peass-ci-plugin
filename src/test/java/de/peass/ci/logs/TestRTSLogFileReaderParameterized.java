@@ -22,8 +22,8 @@ import de.dagere.peass.folders.ResultsFolders;
 
 public class TestRTSLogFileReaderParameterized {
    
-   private static final String VERSION = "a12a0b7f4c162794fca0e7e3fcc6ea3b3a2cbc2b";
-   private static final String VERSION_OLD = "49f75e8877c2e9b7cf6b56087121a35fdd73ff8b";
+   private static final String COMMIT = "a12a0b7f4c162794fca0e7e3fcc6ea3b3a2cbc2b";
+   private static final String COMMIT_OLD = "49f75e8877c2e9b7cf6b56087121a35fdd73ff8b";
 
    static final TestCase TEST1 = new TestCase("de.dagere.peass.ExampleTest#test");
 
@@ -46,19 +46,19 @@ public class TestRTSLogFileReaderParameterized {
       Mockito.when(visualizationFoldersMock.getPeassFolders()).thenReturn(new PeassFolders(new File(currentDir, "parameterized-demo_peass")));
       MeasurementConfig measurementConfig = Mockito.mock(MeasurementConfig.class);
       FixedCommitConfig fixedCommitConfig = new FixedCommitConfig();
-      fixedCommitConfig.setCommit(VERSION);
-      fixedCommitConfig.setCommitOld(VERSION_OLD);
+      fixedCommitConfig.setCommit(COMMIT);
+      fixedCommitConfig.setCommitOld(COMMIT_OLD);
       Mockito.when(measurementConfig.getFixedCommitConfig()).thenReturn(fixedCommitConfig);
       RTSLogFileReader reader = new RTSLogFileReader(visualizationFoldersMock, measurementConfig);
 
-      Map<TestCase, RTSLogData> rtsVmRuns = reader.getRtsVmRuns(VERSION);
+      Map<TestCase, RTSLogData> rtsVmRuns = reader.getRtsVmRuns(COMMIT);
 
       RTSLogData data = rtsVmRuns.get(new TestCase("de.dagere.peass.ExampleTest", "test", "", "JUNIT_PARAMETERIZED-1"));
       Assert.assertNotNull(data);
       Assert.assertFalse(data.isParameterizedWithoutIndex());
       Assert.assertTrue(data.isSuccess());
       
-      Map<TestCase, RTSLogData> rtsVmRunsPredecessor = reader.getRtsVmRuns(VERSION_OLD);
+      Map<TestCase, RTSLogData> rtsVmRunsPredecessor = reader.getRtsVmRuns(COMMIT_OLD);
       RTSLogData dataImplicitParameterized = rtsVmRunsPredecessor.get(new TestCase("de.dagere.peass.ExampleTest", "test", ""));
       Assert.assertNotNull(dataImplicitParameterized);
       Assert.assertTrue(dataImplicitParameterized.isParameterizedWithoutIndex());

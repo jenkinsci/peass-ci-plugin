@@ -91,8 +91,8 @@ public class RTSActionCreator {
       return processSuccessRuns;
    }
 
-   private Map<TestCase, RTSLogData> createVersionRTSData(final String version) throws IOException {
-      Map<TestCase, RTSLogData> rtsVmRuns = reader.getRtsVmRuns(version);
+   private Map<TestCase, RTSLogData> createVersionRTSData(final String commit) throws IOException {
+      Map<TestCase, RTSLogData> rtsVmRuns = reader.getRtsVmRuns(commit);
       LOG.info("RTS Runs: {}", rtsVmRuns.size());
       for (Map.Entry<TestCase, RTSLogData> rtsLogData : rtsVmRuns.entrySet()) {
          String methodLogData = getLogData(rtsLogData.getValue().getMethodFile());

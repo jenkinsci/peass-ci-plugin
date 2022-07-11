@@ -18,15 +18,15 @@ public class RTSLogFileVersionReader {
    private static final Logger LOG = LogManager.getLogger(RTSLogFileVersionReader.class);
    private final VisualizationFolderManager visualizationFolders;
 
-   private final String version;
+   private final String commit;
    private final Map<TestCase, RTSLogData> files = new LinkedHashMap<>();
    private File testClazzFolder;
    private File methodFile;
    private TestCase test;
 
-   public RTSLogFileVersionReader(final VisualizationFolderManager visualizationFolders, final String version) {
+   public RTSLogFileVersionReader(final VisualizationFolderManager visualizationFolders, final String commit) {
       this.visualizationFolders = visualizationFolders;
-      this.version = version;
+      this.commit = commit;
    }
 
    public Map<TestCase, RTSLogData> getClazzLogs(final Map<File, String> testClazzFolders) {
@@ -55,7 +55,7 @@ public class RTSLogFileVersionReader {
    }
 
    private void addMethodLog() {
-      File clazzDir = visualizationFolders.getResultsFolders().getClazzDir(version, test);
+      File clazzDir = visualizationFolders.getResultsFolders().getClazzDir(commit, test);
       File viewMethodDir = new File(clazzDir, test.getMethodWithParams());
       boolean foundAnyParameterized = false;
 
@@ -107,14 +107,14 @@ public class RTSLogFileVersionReader {
    }
 
    private boolean checkRunWasSuccessful(final File viewMethodDir) {
-      File viewMethodFile = new File(viewMethodDir, TraceWriter.getShortVersion(version) + TraceFileManager.TXT_ENDING);
-      File viewMethodFileZip = new File(viewMethodDir, TraceWriter.getShortVersion(version) + TraceFileManager.ZIP_ENDING);
+      File viewMethodFile = new File(viewMethodDir, TraceWriter.getShortCommit(commit) + TraceFileManager.TXT_ENDING);
+      File viewMethodFileZip = new File(viewMethodDir, TraceWriter.getShortCommit(commit) + TraceFileManager.ZIP_ENDING);
       return (viewMethodFile.exists() || viewMethodFileZip.exists());
    }
 
    private void addMethodLogData(final boolean runWasSuccessful, final boolean isParameterizedWithoutIndex) {
       File cleanFile = new File(testClazzFolder, "clean" + File.separator + methodFile.getName());
-      RTSLogData data = new RTSLogData(version, methodFile, cleanFile, runWasSuccessful, isParameterizedWithoutIndex);
+      RTSLogData data = new RTSLogData(commit, methodFile, cleanFile, runWasSuccessful, isParameterizedWithoutIndex);
 
       files.put(test, data);
       LOG.debug("Adding log: {}", test);

@@ -48,7 +48,7 @@ public class RTSLogFileReader {
             StaticTestSelection dependencies = Constants.OBJECTMAPPER.readValue(dependencyFile, StaticTestSelection.class);
             CommitStaticSelection commitSelection = dependencies.getVersions().get(measurementConfig.getFixedCommitConfig().getCommit());
             if (commitSelection != null) {
-               LOG.debug("Version run success: {}", commitSelection.isRunning());
+               LOG.debug("Commit run success: {}", commitSelection.isRunning());
                success = commitSelection.isRunning();
             }
          } catch (IOException e) {
@@ -69,9 +69,9 @@ public class RTSLogFileReader {
       return logsExisting;
    }
 
-   public Map<TestCase, RTSLogData> getRtsVmRuns(final String version) {
-      File versionFolder = new File(visualizationFolders.getPeassFolders().getDependencyLogFolder(), version);
-      File[] allFiles = versionFolder.listFiles();
+   public Map<TestCase, RTSLogData> getRtsVmRuns(final String commit) {
+      File commitFolder = new File(visualizationFolders.getPeassFolders().getDependencyLogFolder(), commit);
+      File[] allFiles = commitFolder.listFiles();
       Map<File, String> testClazzFolders = new LinkedHashMap<>();
 
       if (allFiles != null) {
@@ -89,9 +89,9 @@ public class RTSLogFileReader {
             }
          }
       } else {
-         LOG.info("Expected rts version folder {} did not exist", versionFolder);
+         LOG.info("Expected rts commit folder {} did not exist", commitFolder);
       }
-      RTSLogFileVersionReader RTSLogFileVersionReader = new RTSLogFileVersionReader(visualizationFolders, version);
+      RTSLogFileVersionReader RTSLogFileVersionReader = new RTSLogFileVersionReader(visualizationFolders, commit);
       return RTSLogFileVersionReader.getClazzLogs(testClazzFolders);
 
    }
@@ -132,11 +132,11 @@ public class RTSLogFileReader {
       return commitSuccessTestRuns;
    }
 
-   private void addCommitSuccessRun(final Map<String, File> commitSuccessTestRuns, final String checkSuccessRunVersion) {
-      File candidate = visualizationFolders.getPeassFolders().getDependencyLogSuccessRunFile(checkSuccessRunVersion);
+   private void addCommitSuccessRun(final Map<String, File> commitSuccessTestRuns, final String checkSuccessRunCommit) {
+      File candidate = visualizationFolders.getPeassFolders().getDependencyLogSuccessRunFile(checkSuccessRunCommit);
       if (candidate.exists()) {
          LOG.info("RTS process success run {} exists", candidate.getAbsolutePath());
-         commitSuccessTestRuns.put(checkSuccessRunVersion, candidate);
+         commitSuccessTestRuns.put(checkSuccessRunCommit, candidate);
       } else {
          LOG.info("RTS process success run {} did not exist", candidate.getAbsolutePath());
       }
