@@ -17,7 +17,7 @@ import de.dagere.peass.ci.logs.rts.RTSLogData;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.persistence.StaticTestSelection;
-import de.dagere.peass.dependency.persistence.VersionStaticSelection;
+import de.dagere.peass.dependency.persistence.CommitStaticSelection;
 import de.dagere.peass.utils.Constants;
 
 public class RTSLogFileReader {
@@ -46,10 +46,10 @@ public class RTSLogFileReader {
       if (dependencyFile.exists()) {
          try {
             StaticTestSelection dependencies = Constants.OBJECTMAPPER.readValue(dependencyFile, StaticTestSelection.class);
-            VersionStaticSelection version = dependencies.getVersions().get(measurementConfig.getFixedCommitConfig().getCommit());
-            if (version != null) {
-               LOG.debug("Version run success: {}", version.isRunning());
-               success = version.isRunning();
+            CommitStaticSelection commitSelection = dependencies.getVersions().get(measurementConfig.getFixedCommitConfig().getCommit());
+            if (commitSelection != null) {
+               LOG.debug("Version run success: {}", commitSelection.isRunning());
+               success = commitSelection.isRunning();
             }
          } catch (IOException e) {
             e.printStackTrace();

@@ -23,7 +23,7 @@ import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.analysis.data.TestSet;
 import de.dagere.peass.dependency.persistence.ExecutionData;
 import de.dagere.peass.dependency.persistence.StaticTestSelection;
-import de.dagere.peass.dependency.persistence.VersionStaticSelection;
+import de.dagere.peass.dependency.persistence.CommitStaticSelection;
 import de.dagere.peass.dependency.traces.TraceFileManager;
 import de.dagere.peass.dependency.traces.coverage.CoverageSelectionInfo;
 import de.dagere.peass.dependency.traces.coverage.CoverageSelectionVersion;
@@ -128,7 +128,7 @@ public class RTSVisualizationCreator {
       File staticSelectionFile = localWorkspace.getStaticTestSelectionFile();
       if (staticSelectionFile.exists()) {
          StaticTestSelection staticTestSelection = Constants.OBJECTMAPPER.readValue(staticSelectionFile, StaticTestSelection.class);
-         VersionStaticSelection version = staticTestSelection.getVersions().get(peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit());
+         CommitStaticSelection version = staticTestSelection.getVersions().get(peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit());
 
          if (version != null) {
             addVersionDataToChangeliste(staticSelection, version);
@@ -142,7 +142,7 @@ public class RTSVisualizationCreator {
       return staticSelection;
    }
 
-   private void addVersionDataToChangeliste(final Map<String, List<String>> changesList, final VersionStaticSelection version) {
+   private void addVersionDataToChangeliste(final Map<String, List<String>> changesList, final CommitStaticSelection version) {
       for (Map.Entry<ChangedEntity, TestSet> entry : version.getChangedClazzes().entrySet()) {
          List<String> tests = new LinkedList<>();
          for (TestCase test : entry.getValue().getTests()) {

@@ -21,7 +21,7 @@ import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.analysis.data.TestSet;
 import de.dagere.peass.dependency.persistence.ExecutionData;
 import de.dagere.peass.dependency.persistence.StaticTestSelection;
-import de.dagere.peass.dependency.persistence.VersionStaticSelection;
+import de.dagere.peass.dependency.persistence.CommitStaticSelection;
 import de.dagere.peass.folders.ResultsFolders;
 import de.dagere.peass.utils.Constants;
 import hudson.EnvVars;
@@ -80,7 +80,7 @@ public class PeassAnalysisBuilder extends Builder implements SimpleBuildStep, Se
       String newestVersion = selection.getNewestCommit();
       TestSet newestVersionTraceSelection = data.getVersions().get(newestVersion);
       if (newestVersionTraceSelection != null) {
-         VersionStaticSelection versionStaticSelection = selection.getVersions().get(newestVersion);
+         CommitStaticSelection versionStaticSelection = selection.getVersions().get(newestVersion);
          if (versionStaticSelection != null) {
             for (Map.Entry<ChangedEntity, TestSet> changedEntity : versionStaticSelection.getChangedClazzes().entrySet()) {
                Set<TestCase> tests = new HashSet<>(changedEntity.getValue().getTests());

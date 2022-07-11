@@ -11,7 +11,7 @@ import de.dagere.peass.dependency.analysis.data.ChangedEntity;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.analysis.data.TestSet;
 import de.dagere.peass.dependency.persistence.StaticTestSelection;
-import de.dagere.peass.dependency.persistence.VersionStaticSelection;
+import de.dagere.peass.dependency.persistence.CommitStaticSelection;
 
 public class ProjectData {
    private final StaticTestSelection selection;
@@ -33,7 +33,7 @@ public class ProjectData {
    public List<ChangeLine> getChangeLines() {
       List<ChangeLine> result = new LinkedList<>();
       String version = selection.getNewestCommit();
-      VersionStaticSelection versionStaticSelection = selection.getVersions().get(version);
+      CommitStaticSelection versionStaticSelection = selection.getVersions().get(version);
       if (versionStaticSelection != null) {
          Map<ChangedEntity, TestSet> changedClazzes = versionStaticSelection.getChangedClazzes();
          for (Map.Entry<ChangedEntity, TestSet> entry : changedClazzes.entrySet()) {

@@ -10,7 +10,7 @@ de.dagere.peass.dependencyprocessors.VersionComparator
 de.dagere.peass.dependency.persistence.StaticTestSelection
 de.dagere.peass.dependency.persistence.InitialVersion
 de.dagere.peass.dependency.persistence.InitialCallList
-de.dagere.peass.dependency.persistence.VersionStaticSelection
+de.dagere.peass.dependency.persistence.CommitStaticSelection
 de.dagere.peass.dependency.analysis.data.ChangedEntity
 de.dagere.peass.ci.RTSResult
 de.dagere.peass.analysis.changes.Changes
