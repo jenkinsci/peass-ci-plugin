@@ -9,7 +9,7 @@
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
 
       <h1>Regression Test Selection Log Overview</h1>
-      Version: ${it.getVersion()} Old Version: ${it.getVersionOld()}
+      Commit: ${it.getVersion()} Old Commit: ${it.getVersionOld()}
       <br />
       <j:if test="${it.isRedirectSubprocessOutputToFile()}">
         <a href="../rtsLog">Peass Regression Test Selection Log</a>
