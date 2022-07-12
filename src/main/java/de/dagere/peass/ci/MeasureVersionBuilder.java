@@ -339,7 +339,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       config.setRepetitions(repetitions);
       config.setUseGC(useGC);
       config.setEarlyStop(false);
-      config.setShowStart(showStart);
+      config.getExecutionConfig().setShowStart(showStart);
       config.setDirectlyMeasureKieker(directlyMeasureKieker);
       
       if (executeParallel) {
@@ -506,12 +506,12 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       this.repetitions = repetitions;
    }
 
-   public int getTimeout() {
+   public long getTimeout() {
       return timeout;
    }
 
    @DataBoundSetter
-   public void setTimeout(final int timeout) {
+   public void setTimeout(final long timeout) {
       this.timeout = timeout;
    }
 
