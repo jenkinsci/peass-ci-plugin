@@ -2,7 +2,7 @@
   "versionCount" : 1,
   "changeCount" : 7,
   "testcaseCount" : 7,
-  "versionChanges" : {
+  "commitChanges" : {
     "c887b6745ad3a967c81681294ce5aafbdbc772da" : {
       "testcaseChanges" : {
         "de.package.TestClazzA" : [ {
