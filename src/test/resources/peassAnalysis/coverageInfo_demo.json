@@ -1,5 +1,5 @@
 {
-  "versions" : {
+  "commits" : {
     "6ce9d6a3154c4ce8f617c357cf466fab222d27ef" : {
       "testcases" : {
         "de.dagere.peass.ExampleTest#test" : {
