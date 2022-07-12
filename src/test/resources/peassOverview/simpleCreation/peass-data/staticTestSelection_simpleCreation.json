@@ -1,7 +1,7 @@
 {
   "url" : "/home/reichelt/nvme/workspaces/dissworkspace/permanent/workshop/demo-project",
   "testGoal" : null,
-  "initialversion" : {
+  "initialcommit" : {
     "version" : "dc90ca044d1aa98688ef2a7142f9019560df7a24",
     "jdk" : 8,
     "initialDependencies" : {
@@ -42,7 +42,7 @@
       }
     }
   },
-  "versions" : {
+  "commits" : {
     "6ce9d6a3154c4ce8f617c357cf466fab222d27ef" : {
       "running" : true,
       "jdk" : 8,

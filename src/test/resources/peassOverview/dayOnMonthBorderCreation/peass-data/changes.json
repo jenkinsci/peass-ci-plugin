@@ -8,7 +8,7 @@
     "outlierFactor" : 3.29,
     "statisticTest" : "T_TEST"
   },
-  "versionChanges" : {
+  "commitChanges" : {
     "6ce9d6a3154c4ce8f617c357cf466fab222d27ef" : {
       "testcaseChanges" : {
         "de.dagere.peass.ExampleTest" : [ {

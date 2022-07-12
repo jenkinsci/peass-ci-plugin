@@ -1,6 +1,6 @@
 {
   "url" : "/home/reichelt/nvme/workspaces/dissworkspace/permanent/workshop/demo-project",
-  "versions" : {
+  "commits" : {
     "dc90ca044d1aa98688ef2a7142f9019560df7a24" : { },
     "6ce9d6a3154c4ce8f617c357cf466fab222d27ef" : {
       "testcases" : {
