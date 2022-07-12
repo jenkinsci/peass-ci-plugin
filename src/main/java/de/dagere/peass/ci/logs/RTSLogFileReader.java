@@ -46,7 +46,7 @@ public class RTSLogFileReader {
       if (dependencyFile.exists()) {
          try {
             StaticTestSelection dependencies = Constants.OBJECTMAPPER.readValue(dependencyFile, StaticTestSelection.class);
-            CommitStaticSelection commitSelection = dependencies.getVersions().get(measurementConfig.getFixedCommitConfig().getCommit());
+            CommitStaticSelection commitSelection = dependencies.getCommits().get(measurementConfig.getFixedCommitConfig().getCommit());
             if (commitSelection != null) {
                LOG.debug("Commit run success: {}", commitSelection.isRunning());
                success = commitSelection.isRunning();

@@ -33,14 +33,14 @@ public class ProjectData {
    public List<ChangeLine> getChangeLines() {
       List<ChangeLine> result = new LinkedList<>();
       String version = selection.getNewestCommit();
-      CommitStaticSelection versionStaticSelection = selection.getVersions().get(version);
+      CommitStaticSelection versionStaticSelection = selection.getCommits().get(version);
       if (versionStaticSelection != null) {
          Map<ChangedEntity, TestSet> changedClazzes = versionStaticSelection.getChangedClazzes();
          for (Map.Entry<ChangedEntity, TestSet> entry : changedClazzes.entrySet()) {
 
             if (entry.getValue().getTests().size() > 0) {
                for (TestCase test : entry.getValue().getTests()) {
-                  Change change = changes.getVersion(version).getChange(test);
+                  Change change = changes.getCommitChanges(version).getChange(test);
                   ChangeLine line = new ChangeLine(version, entry.getKey().toString(), test.toString(), change.getChangePercent());
                   result.add(line);
                }

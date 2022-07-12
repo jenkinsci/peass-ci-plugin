@@ -85,10 +85,10 @@ public class ProjectDataCreator {
    }
 
    private void removeNotIncludedVersions(List<String> includedCommits, StaticTestSelection selection) {
-      Set<String> usedVersions = new HashSet<>(selection.getVersions().keySet());
+      Set<String> usedVersions = new HashSet<>(selection.getCommits().keySet());
       for (String version : usedVersions) {
          if (!includedCommits.contains(version)) {
-            selection.getVersions().remove(version);
+            selection.getCommits().remove(version);
          }
       }
    }

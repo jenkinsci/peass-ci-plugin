@@ -91,7 +91,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private int iterations = MeasurementConfigurationMixin.DEFAULT_ITERATIONS;
    private int warmup = MeasurementConfigurationMixin.DEFAULT_WARMUP;
    private int repetitions = MeasurementConfigurationMixin.DEFAULT_REPETITIONS;
-   private int timeout = MeasurementConfigurationMixin.DEFAULT_TIMEOUT;
+   private long timeout = MeasurementConfigurationMixin.DEFAULT_TIMEOUT;
 
    private boolean executeRCA = true;
    private boolean executeParallel = false;

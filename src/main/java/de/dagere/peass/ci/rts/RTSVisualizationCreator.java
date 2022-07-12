@@ -97,7 +97,7 @@ public class RTSVisualizationCreator {
       File traceTestSelectionFile = localWorkspace.getTraceTestSelectionFile();
       if (traceTestSelectionFile.exists()) {
          ExecutionData traceSelections = Constants.OBJECTMAPPER.readValue(traceTestSelectionFile, ExecutionData.class);
-         TestSet tests = traceSelections.getVersions().get(peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit());
+         TestSet tests = traceSelections.getCommits().get(peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit());
 
          if (tests != null) {
             for (TestCase test : tests.getTests()) {
@@ -128,7 +128,7 @@ public class RTSVisualizationCreator {
       File staticSelectionFile = localWorkspace.getStaticTestSelectionFile();
       if (staticSelectionFile.exists()) {
          StaticTestSelection staticTestSelection = Constants.OBJECTMAPPER.readValue(staticSelectionFile, StaticTestSelection.class);
-         CommitStaticSelection version = staticTestSelection.getVersions().get(peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit());
+         CommitStaticSelection version = staticTestSelection.getCommits().get(peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit());
 
          if (version != null) {
             addVersionDataToChangeliste(staticSelection, version);

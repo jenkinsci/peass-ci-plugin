@@ -78,9 +78,9 @@ public class PeassAnalysisBuilder extends Builder implements SimpleBuildStep, Se
 
    public static void removeNotTraceSelectedTests(StaticTestSelection selection, ExecutionData data) {
       String newestVersion = selection.getNewestCommit();
-      TestSet newestVersionTraceSelection = data.getVersions().get(newestVersion);
+      TestSet newestVersionTraceSelection = data.getCommits().get(newestVersion);
       if (newestVersionTraceSelection != null) {
-         CommitStaticSelection versionStaticSelection = selection.getVersions().get(newestVersion);
+         CommitStaticSelection versionStaticSelection = selection.getCommits().get(newestVersion);
          if (versionStaticSelection != null) {
             for (Map.Entry<ChangedEntity, TestSet> changedEntity : versionStaticSelection.getChangedClazzes().entrySet()) {
                Set<TestCase> tests = new HashSet<>(changedEntity.getValue().getTests());

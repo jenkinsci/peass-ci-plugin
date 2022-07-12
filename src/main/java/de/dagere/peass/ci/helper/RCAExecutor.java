@@ -57,7 +57,7 @@ public class RCAExecutor {
 
    public void executeRCAs()
          throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException {
-      Changes versionChanges = changes.getVersion(config.getFixedCommitConfig().getCommit());
+      Changes versionChanges = changes.getCommitChanges(config.getFixedCommitConfig().getCommit());
 
       boolean needsRCA = checkNeedsRCA(versionChanges);
 

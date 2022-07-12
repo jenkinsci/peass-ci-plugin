@@ -151,7 +151,7 @@ public class LocalPeassProcessManager {
 
       Map<String, TestcaseStatistic> noWarmupStatistics = createPureMeasurementVisualization(run, dataFolder, measurements);
 
-      Changes versionChanges = changes.getVersion(peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit());
+      Changes versionChanges = changes.getCommitChanges(peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit());
 
       final MeasurementOverviewAction action = new MeasurementOverviewAction(IdHelper.getId(), peassConfig.getMeasurementConfig(), versionChanges, statistics,
             noWarmupStatistics, measurements, histogramReader.getUpdatedConfigurations());

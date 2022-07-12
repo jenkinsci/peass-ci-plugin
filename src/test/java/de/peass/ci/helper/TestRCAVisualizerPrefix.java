@@ -66,7 +66,7 @@ public class TestRCAVisualizerPrefix {
 
    private Run createChangefileActions(final File changefile) throws IOException, StreamReadException, DatabindException {
       ProjectChanges changes = Constants.OBJECTMAPPER.readValue(changefile, ProjectChanges.class);
-      Changes versionChanges = changes.getVersionChanges().values().iterator().next();
+      Changes versionChanges = changes.getCommitChanges().values().iterator().next();
 
       String longestPrefix = RCAVisualizer.getLongestPrefix(versionChanges.getTestcaseChanges().keySet());
       
