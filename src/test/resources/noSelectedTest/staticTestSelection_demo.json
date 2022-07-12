@@ -1,7 +1,7 @@
 {
   "url" : "/home/reichelt/nvme/workspaces/dissworkspace/peass-demo/demo-project",
   "testGoal" : null,
-  "initialcommits" : {
+  "initialcommit" : {
     "version" : "0d0f5faf9a13f46203b42ed738be1d6b162d6553",
     "jdk" : 8,
     "initialDependencies" : {

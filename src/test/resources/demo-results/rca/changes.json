@@ -1,8 +1,8 @@
 {
-  "versionCount" : 0,
+  "commitCount" : 0,
   "changeCount" : 1,
   "testcaseCount" : 0,
-  "versionChanges" : {
+  "commitChanges" : {
     "b02c92af73e3297be617f4c973a7a63fb603565b" : {
       "testcaseChanges" : {
         "de.test.CalleeTest" : [ {
