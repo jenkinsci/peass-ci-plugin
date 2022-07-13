@@ -281,7 +281,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
       EnvironmentVariables peassEnv = new EnvironmentVariables(properties);
       for (Map.Entry<String, String> entry : env.entrySet()) {
-         System.out.println("Adding enviroenment: " + entry.getKey() + " " + entry.getValue());
+         System.out.println("Adding environment: " + entry.getKey() + " " + entry.getValue());
          peassEnv.getEnvironmentVariables().put(entry.getKey(), entry.getValue());
       }
 
