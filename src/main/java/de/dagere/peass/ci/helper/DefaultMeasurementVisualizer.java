@@ -32,7 +32,7 @@ public class DefaultMeasurementVisualizer {
    private static final Logger LOG = LogManager.getLogger(DefaultMeasurementVisualizer.class);
 
    private final File dataFolder;
-   private final String version;
+   private final String commit;
    private final Run<?, ?> run;
    private final VisualizationFolderManager visualizationFolders;
    private final Set<String> tests;
@@ -41,7 +41,7 @@ public class DefaultMeasurementVisualizer {
    public DefaultMeasurementVisualizer(final File dataFolder, final String version, final Run<?, ?> run, final VisualizationFolderManager visualizationFolders,
          final Set<String> tests) {
       this.dataFolder = dataFolder;
-      this.version = version;
+      this.commit = version;
       this.run = run;
       this.visualizationFolders = visualizationFolders;
       this.tests = tests;
@@ -67,15 +67,17 @@ public class DefaultMeasurementVisualizer {
 
                TestCase testcase = new TestCase(data);
 
-               KoPeMeTreeConverter treeConverter = new KoPeMeTreeConverter(detailResultsFolder, version, testcase);
+               KoPeMeTreeConverter treeConverter = new KoPeMeTreeConverter(detailResultsFolder, commit, testcase);
                File testcaseVisualizationFile = generateJSFile(testcase, treeConverter);
 
-               LOG.debug("Adding action: " + testcase.toString());
+               if (testcaseVisualizationFile != null) {
+                  LOG.debug("Adding action: " + testcase.toString());
 
-               String name = testcase.toString().replace("#", "_").substring(longestPrefix.length());
+                  String name = testcase.toString().replace("#", "_").substring(longestPrefix.length());
 
-               final String content = FileUtils.readFileToString(testcaseVisualizationFile, StandardCharsets.UTF_8);
-               run.addAction(new MeasurementVisualizationAction(IdHelper.getId(), "measurement_" + name, content));
+                  final String content = FileUtils.readFileToString(testcaseVisualizationFile, StandardCharsets.UTF_8);
+                  run.addAction(new MeasurementVisualizationAction(IdHelper.getId(), "measurement_" + name, content));
+               }
             } catch (IOException | NumberIsTooSmallException e) {
                LOG.error(e);
             }
@@ -90,17 +92,22 @@ public class DefaultMeasurementVisualizer {
    private File generateJSFile(final TestCase testcase, final KoPeMeTreeConverter treeConverter) throws IOException {
       GraphNode kopemeDataNode = treeConverter.getData();
 
-      LOG.info("Statistic: {}", kopemeDataNode.getStatistic());
-      noWarmupStatistics.put(testcase.toString(), kopemeDataNode.getStatistic());
+      if (kopemeDataNode != null) {
+         LOG.info("Statistic: {}", kopemeDataNode.getStatistic());
+         noWarmupStatistics.put(testcase.toString(), kopemeDataNode.getStatistic());
 
-      File versionVisualizationFolder = new File(visualizationFolders.getVisualizationFolder(), version);
-      File kopemeVisualizationFolder = new File(versionVisualizationFolder, "pure_kopeme");
-      if (!kopemeVisualizationFolder.mkdirs()) {
-         LOG.error("Creating file {} was not possibley", kopemeVisualizationFolder);
+         File versionVisualizationFolder = new File(visualizationFolders.getVisualizationFolder(), commit);
+         File kopemeVisualizationFolder = new File(versionVisualizationFolder, "pure_kopeme");
+         if (!kopemeVisualizationFolder.mkdirs()) {
+            LOG.error("Creating file {} was not possibley", kopemeVisualizationFolder);
+         }
+         File testcaseVisualizationFile = new File(kopemeVisualizationFolder, testcase.getClazz() + "_" + testcase.getMethodWithParams() + ".json");
+         writeDataJS(testcaseVisualizationFile, kopemeDataNode);
+         return testcaseVisualizationFile;
+      } else {
+         LOG.error("Testcase {} could not be found", testcase);
+         return null;
       }
-      File testcaseVisualizationFile = new File(kopemeVisualizationFolder, testcase.getClazz() + "_" + testcase.getMethodWithParams() + ".json");
-      writeDataJS(testcaseVisualizationFile, kopemeDataNode);
-      return testcaseVisualizationFile;
    }
 
    private void writeDataJS(final File destFile, final GraphNode kopemeDataNode) throws IOException {
