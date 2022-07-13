@@ -34,11 +34,11 @@
             <td>${it.config.generateCoverageSelection}</td>
           </tr>
           <tr>
-            <td>Commit</td>
+            <td>Current Commit</td>
             <td>${it.getVersion()}</td>
           </tr>
           <tr>
-            <td>Old Commit</td>
+            <td>Predecessor Commit</td>
             <td>${it.getVersionOld()}</td>
           </tr>
         </table>
