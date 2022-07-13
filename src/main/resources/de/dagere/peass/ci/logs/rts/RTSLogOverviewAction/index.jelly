@@ -9,7 +9,7 @@
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
 
       <h1>Regression Test Selection Log Overview</h1>
-      Commit: ${it.getVersion()} Old Commit: ${it.getVersionOld()}
+      Current commit: ${it.getVersion()} Predecessor commit: ${it.getVersionOld()}
       <br />
       <j:if test="${it.isRedirectSubprocessOutputToFile()}">
         <a href="../rtsLog">Peass Regression Test Selection Log</a>
@@ -50,8 +50,8 @@
         <table class="data-table">
           <tr>
             <th>Testcase</th>
-            <th>Current Version Run</th>
-            <th>Predecessor Version Run (if Present)</th>
+            <th>Current Commit Run</th>
+            <th>Predecessor Commit Run (if Present)</th>
           </tr>
           <j:forEach var="run" items="${it.getAllTests()}">
             <tr>

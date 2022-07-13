@@ -427,10 +427,10 @@ function visualizeHistogram() {
 		}
 	}
 
-	var version = {
+	var current = {
 		x: predecessorValues,
 		type: "histogram",
-		name: "Version",
+		name: "Current",
 		opacity: 0.5,
 		marker: {
 			color: 'green',
@@ -445,7 +445,7 @@ function visualizeHistogram() {
 			color: 'red',
 		},
 	};
-	var data = [version, predecessor];
+	var data = [current, predecessor];
 	var layout = {
 	  layout: {autosize: false, height: "400px"},
 		barmode: "overlay",

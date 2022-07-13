@@ -5,7 +5,8 @@
       <st:include page="sidepanel.jelly" it="${it.run}" optional="true" />
     </l:side-panel>
     <l:main-panel>
-
+      <st:include page="/style.jelly" optional="false" />
+      
       <h1>Performance RCA Logs Overview</h1>
       <j:if test="${it.isRedirectSubprocessOutputToFile()}">
         <a href="../rcaLog">Root Cause Analysis Overall Log</a>
@@ -19,11 +20,11 @@
           <b>Level: ${levelid}</b>
           <br />
           ${level} Size: ${level.getLogFiles().size()}
-          <table>
+          <table class="data-table">
             <tr>
               <th>VM-Id</th>
-              <th>Predecessor</th>
-              <th>Version</th>
+              <th>Predecessor Commit</th>
+              <th>Current Commit</th>
             </tr>
             <j:set var="vmid" value="0" />
             <j:forEach var="logFilePair" items="${level.getLogFiles()}">

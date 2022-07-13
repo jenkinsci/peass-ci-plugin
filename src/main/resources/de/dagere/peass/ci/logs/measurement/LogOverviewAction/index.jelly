@@ -24,9 +24,9 @@
         <table class="data-table">
           <tr>
             <th>VM-Id</th>
-            <th>Predecessor</th>
+            <th>Predecessor Commit</th>
             <th>End Time</th>
-            <th>Version</th>
+            <th>Current Commit</th>
             <th>End Time</th>
           </tr>
           <j:set var="vmid" value="0" />

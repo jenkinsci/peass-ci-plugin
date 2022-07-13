@@ -214,8 +214,8 @@ function diffUsingJS(text1, text2, outputDiv) {
 		baseTextLines: base,
 		newTextLines: newtxt,
 		opcodes: opcodes,
-		baseTextName: "Alte Version",
-		newTextName: "Neue Version",
+		baseTextName: "Predecessor Commit",
+		newTextName: "Current Commit",
 		viewType: 0,
 		bothContainLineNumbers: false
 	}));

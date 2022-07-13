@@ -41,10 +41,10 @@ function plotOverallHistogram(divName, node) {
     }
   }
   
-  var version = {
+  var current = {
     x: currentValues,
     type: "histogram",
-    name: "Version",
+    name: "Current",
     opacity: 0.5,
     marker: {
       color: "green"
@@ -59,7 +59,7 @@ function plotOverallHistogram(divName, node) {
       color: "red"
     }
   };
-  var data = [version, predecessor];
+  var data = [current, predecessor];
   var layout = {
     barmode: "overlay",
     title: { text: "Histogramm" },

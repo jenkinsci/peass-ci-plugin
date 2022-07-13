@@ -94,7 +94,7 @@
         jq$( "#dialogChanges" ).dialog({ autoOpen: false });
       </script>
 
-      <p>Commit: ${it.getConfig().getExecutionConfig().getCommit()}</p>
+      <p>Current commit: ${it.getConfig().getFixedCommitConfig().getCommit()}</p>
 
       <j:forEach var="testcaseChanges" items="${it.getChanges().getTestcaseChanges().entrySet()}">
         <h5>${%testcase}: ${testcaseChanges.getKey()}</h5>
@@ -159,10 +159,10 @@
           <j:set var="histogramValues" value="${measurements.getValue()}" />
           <j:set var="valuesCurrent" value="${histogramValues.getValuesCurrent()}" />
           <j:set var="dividedValuesCurrent" value="${it.divideValuesByFactor(valuesCurrent, histogramValues.getCurrentConfig(), factor)}" />
-          var version = {
+          var current = {
             x: ${it.getValuesReadable(dividedValuesCurrent)},
             type: "histogram",
-            name: "Version",
+            name: "Current",
             opacity: 0.5,
             marker: {
               color: 'green',
@@ -179,7 +179,7 @@
               color: 'red',
             },
           };
-          var data = [version, predecessor];
+          var data = [current, predecessor];
           var config = {
             responsive: true
           };
