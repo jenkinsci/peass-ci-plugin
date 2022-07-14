@@ -2,8 +2,10 @@ package de.dagere.peass.ci.peassOverview;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -11,6 +13,12 @@ import org.kohsuke.stapler.DataBoundSetter;
 
 import de.dagere.peass.ci.helper.IdHelper;
 import de.dagere.peass.ci.peassAnalysis.Messages;
+import de.dagere.peass.dependency.analysis.data.ChangedEntity;
+import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.data.TestSet;
+import de.dagere.peass.dependency.persistence.CommitStaticSelection;
+import de.dagere.peass.dependency.persistence.ExecutionData;
+import de.dagere.peass.dependency.persistence.StaticTestSelection;
 import hudson.EnvVars;
 import hudson.Extension;
 import hudson.FilePath;

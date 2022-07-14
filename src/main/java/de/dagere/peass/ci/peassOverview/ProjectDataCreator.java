@@ -17,11 +17,13 @@ import org.joda.time.format.ISODateTimeFormat;
 
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
-import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 
 import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.ci.MeasureVersionBuilder;
-import de.dagere.peass.ci.peassAnalysis.PeassAnalysisBuilder;
+import de.dagere.peass.dependency.analysis.data.ChangedEntity;
+import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.data.TestSet;
+import de.dagere.peass.dependency.persistence.CommitStaticSelection;
 import de.dagere.peass.dependency.persistence.ExecutionData;
 import de.dagere.peass.dependency.persistence.StaticTestSelection;
 import de.dagere.peass.folders.ResultsFolders;
@@ -82,7 +84,7 @@ public class ProjectDataCreator {
       if (resultsFolders.getTraceTestSelectionFile().exists()) {
          ExecutionData data = Constants.OBJECTMAPPER.readValue(resultsFolders.getTraceTestSelectionFile(), ExecutionData.class);
 
-         PeassAnalysisBuilder.removeNotTraceSelectedTests(selection, data);
+         PeassOverviewUtils.removeNotTraceSelectedTests(selection, data);
       }
 
       ProjectChanges projectChanges = new ProjectChanges();

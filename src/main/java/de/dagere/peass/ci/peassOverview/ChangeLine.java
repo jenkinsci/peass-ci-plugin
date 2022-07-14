@@ -1,4 +1,4 @@
-package de.dagere.peass.ci.peassAnalysis;
+package de.dagere.peass.ci.peassOverview;
 
 import java.io.Serializable;
 

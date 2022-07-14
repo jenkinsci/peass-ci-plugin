@@ -7,6 +7,7 @@ import java.util.Map;
 import de.dagere.peass.analysis.changes.Change;
 import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.ci.VisibleAction;
+import de.dagere.peass.ci.peassOverview.ChangeLine;
 import de.dagere.peass.dependency.analysis.data.ChangedEntity;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.analysis.data.TestSet;
