@@ -69,9 +69,9 @@ public class RCAVisualizer {
          for (Change change : testcases.getValue()) {
             final String actionName;
             if (change.getParams() != null) {
-               actionName = testcases.getKey() + "_" + change.getMethod() + "(" + change.getParams() + ")";
+               actionName = testcases.getKey() + File.separator + change.getMethod() + "(" + change.getParams() + ")";
             } else {
-               actionName = testcases.getKey() + "_" + change.getMethod();
+               actionName = testcases.getKey() + File.separator + change.getMethod();
             }
             File jsFile = new File(versionVisualizationFolder, actionName + ".js");
             LOG.info("Trying to copy {} Exists: {}", jsFile.getAbsolutePath(), jsFile.exists());
