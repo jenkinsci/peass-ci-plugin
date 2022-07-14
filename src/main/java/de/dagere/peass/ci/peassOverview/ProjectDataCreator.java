@@ -47,7 +47,7 @@ public class ProjectDataCreator {
       for (Project project : projects) {
          String projectPath = project.getProject();
          String projectName = project.getProjectName();
-         
+
          try {
             File projectWorkspace = new File(run.getRootDir(),
                   ".." + File.separator + ".." + File.separator + projectPath + File.separator + MeasureVersionBuilder.PEASS_FOLDER_NAME);
@@ -57,7 +57,7 @@ public class ProjectDataCreator {
             if (project.getProjectName().equals(".")) {
                projectName = projectWorkspace.getParentFile().getCanonicalFile().getName();
             }
-            
+
             ProjectData currentProjectData = getProjectData(run, listener, projectWorkspace, projectName);
             projectData.put(projectName, currentProjectData);
          } catch (IOException e) {
@@ -77,7 +77,7 @@ public class ProjectDataCreator {
 
       StaticTestSelection selection = Constants.OBJECTMAPPER.readValue(resultsFolders.getStaticTestSelectionFile(), StaticTestSelection.class);
 
-      removeNotIncludedVersions(includedCommits, selection);
+      removeNotIncludedCommits(includedCommits, selection);
 
       if (resultsFolders.getTraceTestSelectionFile().exists()) {
          ExecutionData data = Constants.OBJECTMAPPER.readValue(resultsFolders.getTraceTestSelectionFile(), ExecutionData.class);
@@ -96,7 +96,7 @@ public class ProjectDataCreator {
       return currentProjectData;
    }
 
-   private void removeNotIncludedVersions(List<String> includedCommits, StaticTestSelection selection) {
+   private void removeNotIncludedCommits(List<String> includedCommits, StaticTestSelection selection) {
       Set<String> usedVersions = new HashSet<>(selection.getCommits().keySet());
       for (String version : usedVersions) {
          if (!includedCommits.contains(version)) {
@@ -126,9 +126,12 @@ public class ProjectDataCreator {
             if (commitDate.isEqual(currentDate) || (commitDate.isAfter(oneWeekBefore) && commitDate.isBefore(currentDate))) {
                includedCommits.add(commit.getTag());
             }
+         } else if (referencePoint.equals(PeassOverviewBuilder.ALL)) {
+            includedCommits.add(commit.getTag());
          }
       }
 
+      LOG.debug("Commits: " + includedCommits);
       return includedCommits;
    }
 

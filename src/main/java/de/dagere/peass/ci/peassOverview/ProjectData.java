@@ -44,14 +44,15 @@ public class ProjectData {
             Map<ChangedEntity, TestSet> changedClazzes = versionStaticSelection.getChangedClazzes();
             for (Map.Entry<ChangedEntity, TestSet> entry : changedClazzes.entrySet()) {
 
+               String changedEntity = entry.getKey().toString();
                if (entry.getValue().getTests().size() > 0) {
                   for (TestCase test : entry.getValue().getTests()) {
                      Change change = changes.getCommitChanges(commit).getChange(test);
-                     ChangeLine line = new ChangeLine(commit, entry.getKey().toString(), test.toString(), change.getChangePercent());
+                     ChangeLine line = new ChangeLine(commit, changedEntity, test.toString(), (change != null ? change.getChangePercent() : Double.NaN));
                      result.add(line);
                   }
                } else {
-                  ChangeLine line = new ChangeLine(commit, entry.getKey().toString(), "none", 0);
+                  ChangeLine line = new ChangeLine(commit, changedEntity, "none", 0);
                   result.add(line);
                }
             }

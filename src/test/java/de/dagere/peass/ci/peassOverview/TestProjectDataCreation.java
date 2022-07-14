@@ -34,7 +34,7 @@ public class TestProjectDataCreation {
    }
 
    @Test
-   public void testFindInSimpleCreation() throws StreamReadException, DatabindException, IOException {
+   public void testFindInSimpleCreation() {
       Map<String, ProjectData> projectData = mockAndCreateProjectData(SIMPLE_CREATION_PROJECT, new DateTime(2022, 3, 21, 17, 22), PeassOverviewBuilder.LAST_DAY);
 
       MatcherAssert.assertThat(projectData.keySet(), IsIterableContaining.hasItem(SIMPLE_CREATION_PROJECT));
@@ -44,7 +44,7 @@ public class TestProjectDataCreation {
    }
 
    @Test
-   public void testTooLateInSimpleCreation() throws StreamReadException, DatabindException, IOException {
+   public void testTooLateInSimpleCreation() {
       Map<String, ProjectData> projectData = mockAndCreateProjectData(SIMPLE_CREATION_PROJECT, new DateTime(2022, 3, 23, 17, 22), PeassOverviewBuilder.LAST_DAY);
 
       MatcherAssert.assertThat(projectData.keySet(), IsIterableContaining.hasItem(SIMPLE_CREATION_PROJECT));
@@ -53,7 +53,7 @@ public class TestProjectDataCreation {
    }
    
    @Test
-   public void testDayOnMonthBorderCreation() throws StreamReadException, DatabindException, IOException {
+   public void testDayOnMonthBorderCreation() {
       Map<String, ProjectData> projectData = mockAndCreateProjectData(DAY_ON_MONTH_BORDER_PROJECT, new DateTime(2022, 4, 1, 12, 22), PeassOverviewBuilder.LAST_DAY);
 
       MatcherAssert.assertThat(projectData.keySet(), IsIterableContaining.hasItem(DAY_ON_MONTH_BORDER_PROJECT));
@@ -62,7 +62,7 @@ public class TestProjectDataCreation {
    }
 
    @Test
-   public void testLastWeekCreation() throws StreamReadException, DatabindException, IOException {
+   public void testLastWeekCreation() {
       Map<String, ProjectData> projectData = mockAndCreateProjectData(SIMPLE_CREATION_PROJECT, new DateTime(2022, 3, 25, 17, 22), PeassOverviewBuilder.LAST_WEEK);
 
       MatcherAssert.assertThat(projectData.keySet(), IsIterableContaining.hasItem(SIMPLE_CREATION_PROJECT));
@@ -71,7 +71,7 @@ public class TestProjectDataCreation {
       Assert.assertEquals("6ce9d6a3154c4ce8f617c357cf466fab222d27ef", simpleCreationProjectData.getChangeLines().get(0).getCommit());
    }
 
-   private Map<String, ProjectData> mockAndCreateProjectData(String project, DateTime date, String referencePoint) throws IOException, StreamReadException, DatabindException {
+   private Map<String, ProjectData> mockAndCreateProjectData(String project, DateTime date, String referencePoint) {
       LinkedList<Project> projects = new LinkedList<>();
       projects.add(new Project(project));
       ProjectDataCreator creator = new ProjectDataCreator(projects, referencePoint);

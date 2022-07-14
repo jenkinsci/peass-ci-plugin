@@ -26,6 +26,7 @@ public class PeassOverviewBuilder extends Builder implements SimpleBuildStep, Se
 
    public static final String LAST_DAY = "LAST_DAY";
    public static final String LAST_WEEK = "LAST_WEEK";
+   public static final String ALL = "ALL";
    
    private List<Project> projects;
    private String referencePoint = LAST_DAY;
