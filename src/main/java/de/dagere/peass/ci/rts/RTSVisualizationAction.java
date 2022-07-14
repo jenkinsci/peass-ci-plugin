@@ -7,7 +7,7 @@ import de.dagere.peass.ci.Messages;
 import de.dagere.peass.ci.VisibleAction;
 import de.dagere.peass.ci.logs.rts.RTSLogSummary;
 import de.dagere.peass.config.TestSelectionConfig;
-import de.dagere.peass.dependency.traces.coverage.CoverageSelectionVersion;
+import de.dagere.peass.dependency.traces.coverage.CoverageSelectionCommit;
 import io.jenkins.cli.shaded.org.jvnet.localizer.ResourceBundleHolder;
 
 public class RTSVisualizationAction extends VisibleAction {
@@ -21,9 +21,9 @@ public class RTSVisualizationAction extends VisibleAction {
    private final RTSLogSummary logSummary;
    
    //TODO Display count of calls for each test
-   private final CoverageSelectionVersion coverageSelection;
+   private final CoverageSelectionCommit coverageSelection;
 
-   public RTSVisualizationAction(int id, final TestSelectionConfig config, final Map<String, List<String>> staticSelection, final List<String> dynamicSelection, final CoverageSelectionVersion coverageSelection,
+   public RTSVisualizationAction(int id, final TestSelectionConfig config, final Map<String, List<String>> staticSelection, final List<String> dynamicSelection, final CoverageSelectionCommit coverageSelection,
          final String version, final String versionOld, final RTSLogSummary logSummary) {
       super(id);
       this.config = config;
@@ -47,7 +47,7 @@ public class RTSVisualizationAction extends VisibleAction {
       return dynamicSelection;
    }
 
-   public CoverageSelectionVersion getCoveragebasedSelection() {
+   public CoverageSelectionCommit getCoveragebasedSelection() {
       return coverageSelection;
    }
    

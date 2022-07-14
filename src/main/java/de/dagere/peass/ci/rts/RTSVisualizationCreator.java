@@ -26,7 +26,7 @@ import de.dagere.peass.dependency.persistence.StaticTestSelection;
 import de.dagere.peass.dependency.persistence.CommitStaticSelection;
 import de.dagere.peass.dependency.traces.TraceFileManager;
 import de.dagere.peass.dependency.traces.coverage.CoverageSelectionInfo;
-import de.dagere.peass.dependency.traces.coverage.CoverageSelectionVersion;
+import de.dagere.peass.dependency.traces.coverage.CoverageSelectionCommit;
 import de.dagere.peass.dependency.traces.diff.TraceFileUtil;
 import de.dagere.peass.folders.ResultsFolders;
 import de.dagere.peass.utils.Constants;
@@ -49,7 +49,7 @@ public class RTSVisualizationCreator {
          Map<String, List<String>> staticSelection = readStaticSelection(run);
 
          List<String> traceSelectedTests = readTraceBasedSelection(run);
-         CoverageSelectionVersion coverageSelectedTests = readCoverageSelection(run);
+         CoverageSelectionCommit coverageSelectedTests = readCoverageSelection(run);
 
          System.out.println("Selected: " + traceSelectedTests + " Coverage: " + coverageSelectedTests);
 
@@ -110,12 +110,12 @@ public class RTSVisualizationCreator {
       return selectedTests;
    }
 
-   private CoverageSelectionVersion readCoverageSelection(final Run<?, ?> run) throws IOException, JsonParseException, JsonMappingException {
+   private CoverageSelectionCommit readCoverageSelection(final Run<?, ?> run) throws IOException, JsonParseException, JsonMappingException {
       File coverageInfoFile = localWorkspace.getCoverageInfoFile();
       if (coverageInfoFile.exists()) {
          LOG.info("Reading {}", coverageInfoFile);
          CoverageSelectionInfo executions = Constants.OBJECTMAPPER.readValue(coverageInfoFile, CoverageSelectionInfo.class);
-         CoverageSelectionVersion currentVersion = executions.getVersions().get(peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit());
+         CoverageSelectionCommit currentVersion = executions.getVersions().get(peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit());
          return currentVersion;
       } else {
          LOG.info("File {} was not found, RTS coverage based selection info might be incomplete", coverageInfoFile.getAbsoluteFile());
