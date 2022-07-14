@@ -40,7 +40,7 @@ public class TestProjectDataCreation {
       MatcherAssert.assertThat(projectData.keySet(), IsIterableContaining.hasItem(SIMPLE_CREATION_PROJECT));
       ProjectData simpleCreationProjectData = projectData.get(SIMPLE_CREATION_PROJECT);
 
-      Assert.assertEquals("6ce9d6a3154c4ce8f617c357cf466fab222d27ef", simpleCreationProjectData.getChangeLines().get(0).getVersion());
+      Assert.assertEquals("6ce9d6a3154c4ce8f617c357cf466fab222d27ef", simpleCreationProjectData.getChangeLines().get(0).getCommit());
    }
 
    @Test
@@ -68,7 +68,7 @@ public class TestProjectDataCreation {
       MatcherAssert.assertThat(projectData.keySet(), IsIterableContaining.hasItem(SIMPLE_CREATION_PROJECT));
       ProjectData simpleCreationProjectData = projectData.get(SIMPLE_CREATION_PROJECT);
 
-      Assert.assertEquals("6ce9d6a3154c4ce8f617c357cf466fab222d27ef", simpleCreationProjectData.getChangeLines().get(0).getVersion());
+      Assert.assertEquals("6ce9d6a3154c4ce8f617c357cf466fab222d27ef", simpleCreationProjectData.getChangeLines().get(0).getCommit());
    }
 
    private Map<String, ProjectData> mockAndCreateProjectData(String project, DateTime date, String referencePoint) throws IOException, StreamReadException, DatabindException {

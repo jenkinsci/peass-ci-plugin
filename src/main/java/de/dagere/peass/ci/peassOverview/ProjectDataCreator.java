@@ -9,12 +9,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 
 import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.ci.MeasureVersionBuilder;
@@ -22,13 +25,17 @@ import de.dagere.peass.ci.peassAnalysis.PeassAnalysisBuilder;
 import de.dagere.peass.dependency.persistence.ExecutionData;
 import de.dagere.peass.dependency.persistence.StaticTestSelection;
 import de.dagere.peass.folders.ResultsFolders;
+import de.dagere.peass.testtransformation.TestMethodHelper;
 import de.dagere.peass.utils.Constants;
 import de.dagere.peass.vcs.CommitList;
 import de.dagere.peass.vcs.GitCommit;
 import hudson.model.Run;
 import hudson.model.TaskListener;
+import jline.internal.Log;
 
 public class ProjectDataCreator {
+
+   private static final Logger LOG = LogManager.getLogger(TestMethodHelper.class);
 
    private final List<Project> projects;
    private final String referencePoint;
@@ -38,21 +45,26 @@ public class ProjectDataCreator {
       this.referencePoint = referencePoint;
    }
 
-   public Map<String, ProjectData> generateAllProjectData(final Run<?, ?> run, final TaskListener listener) throws IOException, StreamReadException, DatabindException {
+   public Map<String, ProjectData> generateAllProjectData(final Run<?, ?> run, final TaskListener listener) {
       Map<String, ProjectData> projectData = new LinkedHashMap<>();
       for (Project project : projects) {
          String projectPath = project.getProject();
          String projectName = project.getProjectName();
 
-         ProjectData currentProjectData = getProjectData(run, listener, projectPath, projectName);
-         projectData.put(projectName, currentProjectData);
+         try {
+            ProjectData currentProjectData = getProjectData(run, listener, projectPath, projectName);
+            projectData.put(projectName, currentProjectData);
+         } catch (IOException e) {
+            LOG.error("Was not able to analyze project {}", projectName);
+            e.printStackTrace();
+            projectData.put(projectName, new ProjectData(null, null, true));
+         }
 
       }
       return projectData;
    }
 
-   private ProjectData getProjectData(final Run<?, ?> run, final TaskListener listener, String projectPath, String projectName)
-         throws IOException, StreamReadException, DatabindException {
+   private ProjectData getProjectData(final Run<?, ?> run, final TaskListener listener, String projectPath, String projectName) throws IOException {
       File projectWorkspace = new File(run.getRootDir(),
             ".." + File.separator + ".." + File.separator + projectPath + File.separator + MeasureVersionBuilder.PEASS_FOLDER_NAME);
       if (!projectWorkspace.exists()) {
@@ -80,7 +92,7 @@ public class ProjectDataCreator {
       } else {
          listener.getLogger().println(changeFile.getAbsolutePath() + " does not exist! If there are no Trace-based Selected Tests, that's ok.");
       }
-      ProjectData currentProjectData = new ProjectData(selection, projectChanges);
+      ProjectData currentProjectData = new ProjectData(selection, projectChanges, false);
       return currentProjectData;
    }
 

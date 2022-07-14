@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class ChangeLine implements Serializable {
    private static final long serialVersionUID = 1L;
 
-   private String version;
+   private String commit;
    private String changedEntity;
    private String testcase;
    private double changePercent;
@@ -13,19 +13,19 @@ public class ChangeLine implements Serializable {
    public ChangeLine() {
    }
 
-   public ChangeLine(String version, String changedEntity, String testcase, double changePercent) {
-      this.version = version;
+   public ChangeLine(String commit, String changedEntity, String testcase, double changePercent) {
+      this.commit = commit;
       this.changedEntity = changedEntity;
       this.testcase = testcase;
       this.changePercent = changePercent;
    }
 
-   public String getVersion() {
-      return version;
+   public String getCommit() {
+      return commit;
    }
 
-   public void setVersion(String version) {
-      this.version = version;
+   public void setCommit(String commit) {
+      this.commit = commit;
    }
 
    public String getChange() {
