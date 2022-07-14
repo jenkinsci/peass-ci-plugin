@@ -20,10 +20,6 @@ import com.fasterxml.jackson.databind.DatabindException;
 
 import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.ci.MeasureVersionBuilder;
-import de.dagere.peass.dependency.analysis.data.ChangedEntity;
-import de.dagere.peass.dependency.analysis.data.TestCase;
-import de.dagere.peass.dependency.analysis.data.TestSet;
-import de.dagere.peass.dependency.persistence.CommitStaticSelection;
 import de.dagere.peass.dependency.persistence.ExecutionData;
 import de.dagere.peass.dependency.persistence.StaticTestSelection;
 import de.dagere.peass.folders.ResultsFolders;
@@ -33,7 +29,6 @@ import de.dagere.peass.vcs.CommitList;
 import de.dagere.peass.vcs.GitCommit;
 import hudson.model.Run;
 import hudson.model.TaskListener;
-import jline.internal.Log;
 
 public class ProjectDataCreator {
 
@@ -52,9 +47,18 @@ public class ProjectDataCreator {
       for (Project project : projects) {
          String projectPath = project.getProject();
          String projectName = project.getProjectName();
-
+         
          try {
-            ProjectData currentProjectData = getProjectData(run, listener, projectPath, projectName);
+            File projectWorkspace = new File(run.getRootDir(),
+                  ".." + File.separator + ".." + File.separator + projectPath + File.separator + MeasureVersionBuilder.PEASS_FOLDER_NAME);
+            if (!projectWorkspace.exists()) {
+               throw new RuntimeException("Expected folder " + projectWorkspace.getAbsolutePath() + " did not exist");
+            }
+            if (project.getProjectName().equals(".")) {
+               projectName = projectWorkspace.getParentFile().getCanonicalFile().getName();
+            }
+            
+            ProjectData currentProjectData = getProjectData(run, listener, projectWorkspace, projectName);
             projectData.put(projectName, currentProjectData);
          } catch (IOException e) {
             LOG.error("Was not able to analyze project {}", projectName);
@@ -66,13 +70,7 @@ public class ProjectDataCreator {
       return projectData;
    }
 
-   private ProjectData getProjectData(final Run<?, ?> run, final TaskListener listener, String projectPath, String projectName) throws IOException {
-      File projectWorkspace = new File(run.getRootDir(),
-            ".." + File.separator + ".." + File.separator + projectPath + File.separator + MeasureVersionBuilder.PEASS_FOLDER_NAME);
-      if (!projectWorkspace.exists()) {
-         throw new RuntimeException("Expected folder " + projectWorkspace.getAbsolutePath() + " did not exist");
-      }
-
+   private ProjectData getProjectData(final Run<?, ?> run, final TaskListener listener, File projectWorkspace, String projectName) throws IOException {
       ResultsFolders resultsFolders = new ResultsFolders(projectWorkspace, projectName);
 
       List<String> includedCommits = findIncludedCommits(resultsFolders);
