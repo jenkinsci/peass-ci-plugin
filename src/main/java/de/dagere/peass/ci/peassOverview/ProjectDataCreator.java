@@ -51,15 +51,11 @@ public class ProjectDataCreator {
          try {
             File projectWorkspace = new File(run.getRootDir(),
                   ".." + File.separator + ".." + File.separator + projectPath + File.separator + MeasureVersionBuilder.PEASS_FOLDER_NAME);
-            if (!projectWorkspace.exists()) {
-               throw new RuntimeException("Expected folder " + projectWorkspace.getAbsolutePath() + " did not exist");
+            if (projectWorkspace.exists()) {
+               projectName = analyzeProject(run, listener, projectData, project, projectName, projectWorkspace);
+            } else {
+               listener.getLogger().println("Could not analyze " + projectPath + ": expected file " + projectWorkspace.getAbsolutePath() + "did not exist");
             }
-            if (project.getProjectName().equals(".")) {
-               projectName = projectWorkspace.getParentFile().getCanonicalFile().getName();
-            }
-
-            ProjectData currentProjectData = getProjectData(run, listener, projectWorkspace, projectName);
-            projectData.put(projectName, currentProjectData);
          } catch (IOException e) {
             LOG.error("Was not able to analyze project {}", projectName);
             e.printStackTrace();
@@ -68,6 +64,18 @@ public class ProjectDataCreator {
 
       }
       return projectData;
+
+   }
+
+   private String analyzeProject(final Run<?, ?> run, final TaskListener listener, Map<String, ProjectData> projectData, Project project, String projectName, File projectWorkspace)
+         throws IOException {
+      if (project.getProjectName().equals(".")) {
+         projectName = projectWorkspace.getParentFile().getCanonicalFile().getName();
+      }
+
+      ProjectData currentProjectData = getProjectData(run, listener, projectWorkspace, projectName);
+      projectData.put(projectName, currentProjectData);
+      return projectName;
    }
 
    private ProjectData getProjectData(final Run<?, ?> run, final TaskListener listener, File projectWorkspace, String projectName) throws IOException {
