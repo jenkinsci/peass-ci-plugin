@@ -54,9 +54,10 @@ public class ProjectDataCreator {
             if (projectWorkspace.exists()) {
                projectName = analyzeProject(run, listener, projectData, project, projectName, projectWorkspace);
             } else {
-               listener.getLogger().println("Could not analyze " + projectPath + ": expected file " + projectWorkspace.getAbsolutePath() + "did not exist");
+               listener.getLogger().println("Could not analyze " + projectPath + ": expected file " + projectWorkspace.getAbsolutePath() + " did not exist");
             }
          } catch (IOException e) {
+            listener.getLogger().println("Could not analyze " + projectPath);
             LOG.error("Was not able to analyze project {}", projectName);
             e.printStackTrace();
             projectData.put(projectName, new ProjectData(null, null, true));
