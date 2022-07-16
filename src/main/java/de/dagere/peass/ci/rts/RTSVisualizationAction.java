@@ -49,10 +49,10 @@ public class RTSVisualizationAction extends VisibleAction {
    public Map<List<String>, List<List<String>>> getStaticSelectionPrintable() {
       Map<List<String>, List<List<String>>> printableSelection = new LinkedHashMap<>();
       for (Map.Entry<String, List<String>> originalSelectionEntry : staticSelection.entrySet()) {
-         List<String> key = createPrintable(originalSelectionEntry.getKey());
+         List<String> key = LineUtil.createPrintable(originalSelectionEntry.getKey());
          List<List<String>> testcases = new LinkedList<>();
          for (String originalTestcase : originalSelectionEntry.getValue()) {
-            List<String> printableTestcase = createPrintable(originalTestcase);
+            List<String> printableTestcase = LineUtil.createPrintable(originalTestcase);
             testcases.add(printableTestcase);
          }
 
@@ -62,35 +62,6 @@ public class RTSVisualizationAction extends VisibleAction {
 
    }
 
-   private List<String> createPrintable(String originalTestcase) {
-      List<String> printableTestcase = new LinkedList<>();
-      if (originalTestcase.length() > 80) {
-         int moduleIndex = originalTestcase.lastIndexOf(ChangedEntity.MODULE_SEPARATOR);
-         if (moduleIndex != -1) {
-            printableTestcase.add(originalTestcase.substring(0, moduleIndex + 1));
-         }
-         int methodSeperatorIndex = originalTestcase.indexOf(ChangedEntity.METHOD_SEPARATOR);
-         if (methodSeperatorIndex != -1) {
-            printableTestcase.add(originalTestcase.substring(moduleIndex + 1, methodSeperatorIndex + 1));
-            int parameterIndex = originalTestcase.indexOf('(');
-            if (parameterIndex != -1) {
-               String parameterString = originalTestcase.substring(parameterIndex);
-               if (parameterString.length() > 80) {
-                  printableTestcase.add(parameterString.replaceAll(",", ", "));
-               } else {
-                  printableTestcase.add(parameterString);
-               }
-            } else {
-               printableTestcase.add(originalTestcase.substring(methodSeperatorIndex + 1));
-            }
-         } else {
-            printableTestcase.add(originalTestcase.substring(moduleIndex + 1));
-         }
-      } else {
-         printableTestcase.add(originalTestcase);
-      }
-      return printableTestcase;
-   }
 
    public List<String> getDynamicSelection() {
       return dynamicSelection;
