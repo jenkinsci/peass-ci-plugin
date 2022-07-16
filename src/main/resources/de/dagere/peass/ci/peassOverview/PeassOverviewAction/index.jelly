@@ -19,11 +19,11 @@
         </j:if>
         <table class="data-table">
           <j:if test="${!data.containsError}">
+            <th>Commit</th>
+            <th>${%change}</th>
+            <th>${%testcase}</th>
+            <th>${%changeMeasured}</th>
             <j:forEach var="change" items="${data.getChangeLines()}">
-              <th>Commit</th>
-              <th>${%change}</th>
-              <th>${%testcase}</th>
-              <th>${%changeMeasured}</th>
               <tr>
                 <td>${change.getCommit()}</td>
                 <td>${change.getChange()}</td>
