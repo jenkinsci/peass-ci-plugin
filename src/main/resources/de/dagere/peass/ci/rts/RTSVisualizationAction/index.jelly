@@ -1,5 +1,5 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:st="jelly:stapler">
+<j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:st="jelly:stapler" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
   <l:layout title="Regression Test Selection">
     <l:side-panel>
       <st:include page="sidepanel.jelly" it="${it.run}" optional="true" />
@@ -63,13 +63,18 @@
           <th>Change</th>
           <th>Test Cases</th>
         </tr>
-        <j:forEach var="change" items="${it.staticSelection.entrySet()}">
+        <j:forEach var="change" items="${it.getStaticSelectionPrintable().entrySet()}">
           <tr>
-            <td>${change.getKey()}</td>
+            <td>
+              <j:forEach var="changeLine" items="${change.getKey()}">
+                ${changeLine}<br />
+              </j:forEach>
+            </td>
             <td>
               <j:forEach var="testcase" items="${change.getValue()}">
-                ${testcase}
-                <br />
+                <j:forEach var="testcaseLine" items="${testcase}">
+                ${testcaseLine}<br />
+                </j:forEach>
               </j:forEach>
             </td>
           </tr>
