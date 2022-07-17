@@ -111,7 +111,7 @@ public class ProjectDataCreator {
       }
       return projectChanges;
    }
-   
+
    private ProjectStatistics getStatistics(final TaskListener listener, ResultsFolders resultsFolders) throws IOException, StreamReadException, DatabindException {
       ProjectStatistics projectChanges = new ProjectStatistics();
       final File statisticsFile = resultsFolders.getStatisticsFile();
@@ -164,8 +164,12 @@ public class ProjectDataCreator {
 
    private DateTime getCommitDate(GitCommit commit) {
       String jtdate = commit.getDate();
-      String onlyDay = jtdate.substring(0, jtdate.indexOf(' '));
-      DateTime commitDate = DATE_PARSER.parseDateTime(onlyDay);
-      return commitDate;
+      if (jtdate.length() > 0) {
+         String onlyDay = jtdate.substring(0, jtdate.indexOf(' '));
+         DateTime commitDate = DATE_PARSER.parseDateTime(onlyDay);
+         return commitDate;
+      } else {
+         return DateTime.now();
+      }
    }
 }

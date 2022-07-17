@@ -6,6 +6,7 @@ import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import org.jenkinsci.remoting.RoleChecker;
 
+import de.dagere.peass.folders.PeassFolders;
 import hudson.FilePath.FileCallable;
 import hudson.remoting.VirtualChannel;
 
@@ -19,7 +20,7 @@ public class CleanAllCallable implements FileCallable<Boolean> {
    @Override
    public Boolean invoke(final File potentialSlaveWorkspace, final VirtualChannel channel) {
       try {
-         File folder = new File(potentialSlaveWorkspace.getParentFile(), potentialSlaveWorkspace.getName() + "_fullPeass");
+         File folder = new File(potentialSlaveWorkspace.getParentFile(), potentialSlaveWorkspace.getName() + PeassFolders.PEASS_FULL_POSTFIX);
          if (folder.exists()) {
             System.out.println("Cleaning " + folder.getAbsolutePath());
             FileUtils.cleanDirectory(folder);

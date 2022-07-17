@@ -9,6 +9,7 @@ import org.jenkinsci.remoting.RoleChecker;
 
 import de.dagere.peass.ci.persistence.TrendFileUtil;
 import de.dagere.peass.ci.process.JenkinsLogRedirector;
+import de.dagere.peass.folders.PeassFolders;
 import de.dagere.peass.folders.ResultsFolders;
 import hudson.FilePath.FileCallable;
 import hudson.model.TaskListener;
@@ -32,7 +33,7 @@ public class CleanMeasurementCallable implements FileCallable<Boolean> {
    public Boolean invoke(final File potentialSlaveWorkspace, final VirtualChannel channel) {
       try (final JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
          String projectName = potentialSlaveWorkspace.getName();
-         File folder = new File(potentialSlaveWorkspace.getParentFile(), projectName + "_fullPeass");
+         File folder = new File(potentialSlaveWorkspace.getParentFile(), projectName + PeassFolders.PEASS_FULL_POSTFIX);
          ResultsFolders resultsFolders = new ResultsFolders(folder, projectName);
 
          deleteAllMeasurementData(projectName, folder, resultsFolders);
