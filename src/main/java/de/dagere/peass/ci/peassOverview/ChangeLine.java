@@ -1,6 +1,9 @@
 package de.dagere.peass.ci.peassOverview;
 
 import java.io.Serializable;
+import java.util.List;
+
+import de.dagere.peass.ci.rts.LineUtil;
 
 public class ChangeLine implements Serializable {
    private static final long serialVersionUID = 1L;
@@ -35,6 +38,10 @@ public class ChangeLine implements Serializable {
    public void setChange(String change) {
       this.changedEntity = change;
    }
+   
+   public List<String> getChangeVisible() {
+      return LineUtil.createPrintable(changedEntity);
+   }
 
    public String getTestcase() {
       return testcase;
@@ -42,6 +49,10 @@ public class ChangeLine implements Serializable {
 
    public void setTestcase(String testcase) {
       this.testcase = testcase;
+   }
+   
+   public List<String> getTestcaseVisible() {
+      return LineUtil.createPrintable(testcase);
    }
    
    public double getChangePercent() {

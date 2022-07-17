@@ -17,17 +17,27 @@
         <j:if test="${data.getChangeLines().isEmpty()}">
           ${%notSelectedMessage}
         </j:if>
-        <table class="data-table">
+        <table class="data-table" width="100%">
           <j:if test="${!data.containsError}">
+            <th>Commit</th>
+            <th>${%change}</th>
+            <th>${%testcase}</th>
+            <th>${%changeMeasured}</th>
             <j:forEach var="change" items="${data.getChangeLines()}">
-              <th>Commit</th>
-              <th>${%change}</th>
-              <th>${%testcase}</th>
-              <th>${%changeMeasured}</th>
               <tr>
                 <td>${change.getCommit()}</td>
-                <td>${change.getChange()}</td>
-                <td>${change.getTestcase()}</td>
+                <td>
+                  <j:forEach var="changeLine" items="${change.getChangeVisible()}">
+                    ${changeLine}
+                    <br />
+                  </j:forEach>
+                </td>
+                <td>
+                  <j:forEach var="testcaseLine" items="${change.getTestcaseVisible()}">
+                    ${testcaseLine}
+                    <br />
+                  </j:forEach>
+                </td>
                 <td>
                   <j:if test="${change.getChangePercent() &lt; 0}">
                     <div style="background-color:red;padding:2%;">
