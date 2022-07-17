@@ -19,6 +19,7 @@ import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
 
 import de.dagere.peass.analysis.changes.ProjectChanges;
+import de.dagere.peass.analysis.measurement.ProjectStatistics;
 import de.dagere.peass.ci.MeasureVersionBuilder;
 import de.dagere.peass.dependency.persistence.ExecutionData;
 import de.dagere.peass.dependency.persistence.StaticTestSelection;
@@ -60,7 +61,7 @@ public class ProjectDataCreator {
             listener.getLogger().println("Could not analyze " + projectPath);
             LOG.error("Was not able to analyze project {}", projectName);
             e.printStackTrace();
-            projectData.put(projectName, new ProjectData(null, null, true));
+            projectData.put(projectName, new ProjectData(null, null, null, true));
          }
 
       }
@@ -94,15 +95,32 @@ public class ProjectDataCreator {
          PeassOverviewUtils.removeNotTraceSelectedTests(selection, data);
       }
 
+      ProjectChanges projectChanges = getChanges(listener, resultsFolders);
+      ProjectStatistics statistics = getStatistics(listener, resultsFolders);
+      ProjectData currentProjectData = new ProjectData(selection, projectChanges, statistics, false);
+      return currentProjectData;
+   }
+
+   private ProjectChanges getChanges(final TaskListener listener, ResultsFolders resultsFolders) throws IOException, StreamReadException, DatabindException {
       ProjectChanges projectChanges = new ProjectChanges();
       final File changeFile = resultsFolders.getChangeFile();
       if (changeFile.exists()) {
-         projectChanges = Constants.OBJECTMAPPER.readValue(resultsFolders.getChangeFile(), ProjectChanges.class);
+         projectChanges = Constants.OBJECTMAPPER.readValue(changeFile, ProjectChanges.class);
       } else {
          listener.getLogger().println(changeFile.getAbsolutePath() + " does not exist! If there are no Trace-based Selected Tests, that's ok.");
       }
-      ProjectData currentProjectData = new ProjectData(selection, projectChanges, false);
-      return currentProjectData;
+      return projectChanges;
+   }
+   
+   private ProjectStatistics getStatistics(final TaskListener listener, ResultsFolders resultsFolders) throws IOException, StreamReadException, DatabindException {
+      ProjectStatistics projectChanges = new ProjectStatistics();
+      final File statisticsFile = resultsFolders.getStatisticsFile();
+      if (statisticsFile.exists()) {
+         projectChanges = Constants.OBJECTMAPPER.readValue(statisticsFile, ProjectStatistics.class);
+      } else {
+         listener.getLogger().println(statisticsFile.getAbsolutePath() + " does not exist! If there are no Trace-based Selected Tests, that's ok.");
+      }
+      return projectChanges;
    }
 
    private void removeNotIncludedCommits(List<String> includedCommits, StaticTestSelection selection) {

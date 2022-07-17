@@ -1,6 +1,6 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:l="/lib/layout" xmlns:st="jelly:stapler">
-  <l:layout title="Regression Test Selection">
+  <l:layout title="Peass Results Overview">
     <l:side-panel>
       <st:include page="sidepanel.jelly" it="${it.run}" optional="true" />
     </l:side-panel>
@@ -16,6 +16,12 @@
 
         <j:if test="${data.getChangeLines().isEmpty()}">
           ${%notSelectedMessage}
+        </j:if>
+        <j:if test="${data.containsError}">
+          This project contained an analysis error; please clean the cache and re-measure.
+        </j:if>
+        <j:if test="${data == null}">
+          No source code changes were detected during the selected time period in this project.
         </j:if>
         <table class="data-table" width="100%">
           <j:if test="${!data.containsError}">
@@ -33,32 +39,46 @@
                   </j:forEach>
                 </td>
                 <td>
-                  <j:forEach var="testcaseLine" items="${change.getTestcaseVisible()}">
+                  <j:if test="${change.getTestcase().equals('none')}">
+                    <div style="background-color:rgba(255, 255, 0, 0.25); padding:2%;">
+                      none
+                    </div>
+                  </j:if>
+                  <j:if test="${!change.getTestcase().equals('none')}">
+                    <j:forEach var="testcaseLine" items="${change.getTestcaseVisible()}">
                     ${testcaseLine}
                     <br />
                   </j:forEach>
+                  </j:if>
                 </td>
                 <td>
+                <j:if test="${!change.getTestcase().equals('none')}">
                   <j:if test="${change.getChangePercent() &lt; 0}">
                     <div style="background-color:red;padding:2%;">
-                      ${it.round(change.getChangePercent())} % </div>
+                      ${it.round(change.getChangePercent())} % 
+                    </div>
                   </j:if>
                   <j:if test="${change.getChangePercent() &gt; 0}">
                     <div style="background-color:green;padding:2%;">
-                      ${it.round(change.getChangePercent())} % </div>
+                      ${it.round(change.getChangePercent())} % 
+                    </div>
                   </j:if>
                   <j:if test="${change.getChangePercent() == 0}">
                     Unchanged
                   </j:if>
+                  <j:if test="${change.isNaN(change.getChangePercent())}">
+                    <div style="background-color:rgba(255, 0, 0, 0.25); padding:2%;">
+                      Unmeasured
+                    </div>
+                  </j:if>
                   ${change.isMeasured()}
+                </j:if>
+                  
+
                 </td>
               </tr>
             </j:forEach>
           </j:if>
-          <j:if test="${data.containsError}">
-            This project contained an analysis error; please clean the cache and re-measure.
-          </j:if>
-
         </table>
       </j:forEach>
 

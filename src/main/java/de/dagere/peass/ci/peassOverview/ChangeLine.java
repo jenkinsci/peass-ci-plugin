@@ -55,6 +55,10 @@ public class ChangeLine implements Serializable {
       return LineUtil.createPrintable(testcase);
    }
    
+   public boolean isNaN(double value) {
+      return Double.isNaN(value);
+   }
+   
    public double getChangePercent() {
       return changePercent;
    }
