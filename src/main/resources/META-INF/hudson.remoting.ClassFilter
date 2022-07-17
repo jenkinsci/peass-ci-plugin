@@ -7,6 +7,7 @@ de.dagere.peass.config.StatisticsConfig
 de.dagere.peass.analysis.changes.ProjectChanges
 de.dagere.peass.analysis.measurement.ProjectStatistics
 de.dagere.peass.dependencyprocessors.VersionComparator
+de.dagere.peass.dependencyprocessors.CommitByNameComparator
 de.dagere.peass.dependency.persistence.StaticTestSelection
 de.dagere.peass.dependency.persistence.InitialCommit
 de.dagere.peass.dependency.persistence.InitialCallList
