@@ -7,7 +7,7 @@ import de.dagere.peass.dependency.analysis.data.ChangedEntity;
 
 public class LineUtil {
 
-   private static final int MAX_CHAR_COUNT = 80;
+   private static final int MAX_CHAR_COUNT = 120;
 
    public static List<String> createPrintable(String originalTestcase) {
       List<String> printableTestcase = new LinkedList<>();
