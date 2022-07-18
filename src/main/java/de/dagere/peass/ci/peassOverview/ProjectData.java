@@ -65,27 +65,6 @@ public class ProjectData {
       List<String> changesWithNoTest = new LinkedList<>();
       fillOneOrLessTests(changedClazzes, oneTestCausingChanges, changesWithNoTest);
 
-      for (Map.Entry<ChangedEntity, TestSet> entry : changedClazzes.entrySet()) {
-
-         String changedEntity = entry.getKey().toString();
-         if (entry.getValue().getTests().size() > 0) {
-            for (TestCase test : entry.getValue().getTests()) {
-               if (oneTestCausingChanges.containsKey(test)) {
-                  oneTestCausingChanges.get(test).add(changedEntity);
-               } else {
-                  TestcaseStatistic testcaseStatistic = getTestcaseStatistic(commit, test);
-
-                  Changes commitChanges = changes.getCommitChanges(commit);
-                  Change change = commitChanges.getChange(test);
-
-                  double changeValue = getPrintableChangeValue(testcaseStatistic, change);
-
-                  ChangeLine line = new ChangeLine(commit, Arrays.asList(new String[] { changedEntity }), test.toString(), changeValue);
-                  result.add(line);
-               }
-            }
-         }
-      }
       addOneTestCausingChanges(result, commit, oneTestCausingChanges);
 
       addNoneTestCausingChanges(result, commit, changesWithNoTest);
@@ -95,7 +74,14 @@ public class ProjectData {
       for (Map.Entry<ChangedEntity, TestSet> entry : changedClazzes.entrySet()) {
 
          String changedEntity = entry.getKey().toString();
-         if (entry.getValue().getTests().size() == 1) {
+         if (entry.getValue().getTests().size() > 0) {
+            for (TestCase test : entry.getValue().getTests()) {
+               if (!oneTestCausingChanges.containsKey(test)) {
+                  oneTestCausingChanges.put(test, new TreeSet<>());
+               }
+               oneTestCausingChanges.get(test).add(changedEntity);
+            }
+         } else if (entry.getValue().getTests().size() == 1) {
             TestCase test = entry.getValue().getTests().iterator().next();
             if (!oneTestCausingChanges.containsKey(test)) {
                oneTestCausingChanges.put(test, new TreeSet<>());
