@@ -22,15 +22,24 @@
             ${%notSelectedMessage}
           </j:when>
           <j:otherwise>
+            
             <table class="data-table" width="100%">
               <j:if test="${!data.containsError}">
-                <th>Commit</th>
+                <j:set var="lastCommit" value="${data.getChangeLines().get(0).getCommit()}"/>
                 <th>${%change}</th>
                 <th>${%testcase}</th>
                 <th>${%changeMeasured}</th>
+                <tr><td colspan="3" style='text-align: center'>
+                  Commit: <b>${lastCommit}</b>
+                </td></tr>
                 <j:forEach var="change" items="${data.getChangeLines()}">
+                  <j:if test="${!change.getCommit().equals(lastCommit)}">
+                    <j:set var="lastCommit" value="${change.getCommit()}"/>
+                    <tr><td colspan="3" style='text-align: center'>
+                      Commit: <b>${lastCommit}</b>
+                    </td></tr>
+                  </j:if>
                   <tr>
-                    <td>${change.getCommit()}</td>
                     <td>
                       <j:forEach var="changeLine" items="${change.getChangeVisible()}">
                         ${changeLine}
