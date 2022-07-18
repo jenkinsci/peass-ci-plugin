@@ -1,9 +1,12 @@
 package de.dagere.peass.ci.peassOverview;
 
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import de.dagere.peass.analysis.changes.Change;
 import de.dagere.peass.analysis.changes.Changes;
@@ -58,30 +61,80 @@ public class ProjectData {
    private void addCommitData(List<ChangeLine> result, String commit, CommitStaticSelection commitStaticSelection) {
       Map<ChangedEntity, TestSet> changedClazzes = commitStaticSelection.getChangedClazzes();
 
+      Map<TestCase, Set<String>> oneTestCausingChanges = new LinkedHashMap<>();
       List<String> changesWithNoTest = new LinkedList<>();
+      fillOneOrLessTests(changedClazzes, oneTestCausingChanges, changesWithNoTest);
+
       for (Map.Entry<ChangedEntity, TestSet> entry : changedClazzes.entrySet()) {
 
          String changedEntity = entry.getKey().toString();
          if (entry.getValue().getTests().size() > 0) {
             for (TestCase test : entry.getValue().getTests()) {
-               TestcaseStatistic testcaseStatistic = getTestcaseStatistic(commit, test);
+               if (oneTestCausingChanges.containsKey(test)) {
+                  oneTestCausingChanges.get(test).add(changedEntity);
+               } else {
+                  TestcaseStatistic testcaseStatistic = getTestcaseStatistic(commit, test);
 
-               Changes commitChanges = changes.getCommitChanges(commit);
-               Change change = commitChanges.getChange(test);
+                  Changes commitChanges = changes.getCommitChanges(commit);
+                  Change change = commitChanges.getChange(test);
 
-               double changeValue = getPrintableChangeValue(testcaseStatistic, change);
+                  double changeValue = getPrintableChangeValue(testcaseStatistic, change);
 
-               ChangeLine line = new ChangeLine(commit, Arrays.asList(new String[] { changedEntity }), test.toString(), changeValue);
-               result.add(line);
+                  ChangeLine line = new ChangeLine(commit, Arrays.asList(new String[] { changedEntity }), test.toString(), changeValue);
+                  result.add(line);
+               }
             }
+         }
+      }
+      addOneTestCausingChanges(result, commit, oneTestCausingChanges);
+
+      addNoneTestCausingChanges(result, commit, changesWithNoTest);
+   }
+
+   private void fillOneOrLessTests(Map<ChangedEntity, TestSet> changedClazzes, Map<TestCase, Set<String>> oneTestCausingChanges, List<String> changesWithNoTest) {
+      for (Map.Entry<ChangedEntity, TestSet> entry : changedClazzes.entrySet()) {
+
+         String changedEntity = entry.getKey().toString();
+         if (entry.getValue().getTests().size() == 1) {
+            TestCase test = entry.getValue().getTests().iterator().next();
+            if (!oneTestCausingChanges.containsKey(test)) {
+               oneTestCausingChanges.put(test, new TreeSet<>());
+            }
+            oneTestCausingChanges.get(test).add(changedEntity);
          } else {
             changesWithNoTest.add(changedEntity);
          }
       }
+   }
+
+   private void addNoneTestCausingChanges(List<ChangeLine> result, String commit, List<String> changesWithNoTest) {
       if (changesWithNoTest.size() > 0) {
          ChangeLine line = new ChangeLine(commit, changesWithNoTest, "none", Double.NaN);
          result.add(line);
       }
+   }
+
+   private void addOneTestCausingChanges(List<ChangeLine> result, String commit, Map<TestCase, Set<String>> oneTestCausingChanges) {
+      for (Map.Entry<TestCase, Set<String>> oneTestEntry : oneTestCausingChanges.entrySet()) {
+         TestCase test = oneTestEntry.getKey();
+
+         double changeValue = getChangeValue(commit, test);
+
+         List<String> changesAsList = new LinkedList<>();
+         changesAsList.addAll(oneTestEntry.getValue());
+         ChangeLine line = new ChangeLine(commit, changesAsList, test.toString(), changeValue);
+         result.add(line);
+      }
+   }
+
+   private double getChangeValue(String commit, TestCase test) {
+      TestcaseStatistic testcaseStatistic = getTestcaseStatistic(commit, test);
+
+      Changes commitChanges = changes.getCommitChanges(commit);
+      Change change = commitChanges.getChange(test);
+
+      double changeValue = getPrintableChangeValue(testcaseStatistic, change);
+      return changeValue;
    }
 
    private TestcaseStatistic getTestcaseStatistic(String commit, TestCase test) {
