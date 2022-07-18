@@ -44,8 +44,8 @@ update(root);
 
 d3.select(self.frameElement).style("height", "500px");
 
-function getTexture(node){
-  if (node.hasSourceChange) {
+function getTexture(node) {
+  if (node.hasSourceChange) { 
     switch (node.state) {
       case 'FASTER': return faster_changed.url();
       case 'SLOWER': return slower_changed.url();
@@ -203,10 +203,10 @@ function fallbackCopyTextToClipboard(text) {
 
 function diffUsingJS(text1, text2, outputDiv) {
 	"use strict";
-	var base = difflib.stringAsLines(text1),
-		newtxt = difflib.stringAsLines(text2),
-		sm = new difflib.SequenceMatcher(base, newtxt),
-		opcodes = sm.get_opcodes();
+	var base = (text1 != null ? difflib.stringAsLines(text1) : "");
+	var newtxt = (text2 != null ? difflib.stringAsLines(text2) : "");
+	var sm = new difflib.SequenceMatcher(base, newtxt);
+ 	var opcodes = sm.get_opcodes();
 
 	outputDiv.innerHTML = "";
 
