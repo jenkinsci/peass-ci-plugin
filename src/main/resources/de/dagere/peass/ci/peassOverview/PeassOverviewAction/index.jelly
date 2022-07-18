@@ -41,10 +41,25 @@
                   </j:if>
                   <tr>
                     <td>
-                      <j:forEach var="changeLine" items="${change.getChangeVisible()}">
-                        ${changeLine}
-                        <br />
-                      </j:forEach>
+                      <j:if test="${change.getChangeVisible().size() &gt; 3}">
+                        <details>
+                          <summary>
+                            ${change.getChangeVisible().get(0)}<br />
+                            ${change.getChangeVisible().get(1)}<br/>
+                            ${change.getChangeVisible().get(2)}
+                          </summary>
+                            <j:forEach var="changeLine" items="${change.getChangeVisible().subList(3, change.getChangeVisible().size())}">
+                              ${changeLine}
+                              <br />
+                            </j:forEach>
+                        </details>
+                      </j:if>
+                      <j:if test="${change.getChangeVisible().size() &lt;= 3}">
+                        <j:forEach var="changeLine" items="${change.getChangeVisible()}">
+                          ${changeLine}
+                          <br />
+                        </j:forEach>
+                      </j:if>
                     </td>
                     <td>
                       <j:if test="${change.getTestcase().equals('none')}">
