@@ -54,12 +54,12 @@
                       <j:if test="${!change.getTestcase().equals('none')}">
                         <j:choose>
                           <j:when test="${change.getChangePercent() &lt; 0}">
-                            <div style="background-color:red;padding:2%;">
+                            <div style="background-color:rgba(255,100,100,1);padding:2%;">
                               ${it.round(change.getChangePercent())} % 
                             </div>
                           </j:when>
                           <j:when test="${change.getChangePercent() &gt; 0}">
-                            <div style="background-color:green;padding:2%;">
+                            <div style="background-color:rgba(100,255,100,1);padding:2%;">
                               ${it.round(change.getChangePercent())} % 
                             </div>
                           </j:when>
