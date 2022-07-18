@@ -1,6 +1,7 @@
 package de.dagere.peass.ci.peassOverview;
 
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
 
 import de.dagere.peass.ci.rts.LineUtil;
@@ -9,14 +10,14 @@ public class ChangeLine implements Serializable {
    private static final long serialVersionUID = 1L;
 
    private String commit;
-   private String changedEntity;
+   private List<String> changedEntity;
    private String testcase;
    private double changePercent;
 
    public ChangeLine() {
    }
 
-   public ChangeLine(String commit, String changedEntity, String testcase, double changePercent) {
+   public ChangeLine(String commit, List<String> changedEntity, String testcase, double changePercent) {
       this.commit = commit;
       this.changedEntity = changedEntity;
       this.testcase = testcase;
@@ -31,16 +32,20 @@ public class ChangeLine implements Serializable {
       this.commit = commit;
    }
 
-   public String getChange() {
+   public List<String> getChange() {
       return changedEntity;
    }
 
-   public void setChange(String change) {
+   public void setChange(List<String> change) {
       this.changedEntity = change;
    }
-   
+
    public List<String> getChangeVisible() {
-      return LineUtil.createPrintable(changedEntity);
+      List<String> result = new LinkedList<>();
+      for (String line : changedEntity) {
+         result.addAll(LineUtil.createPrintable(line));
+      }
+      return result;
    }
 
    public String getTestcase() {
@@ -50,19 +55,19 @@ public class ChangeLine implements Serializable {
    public void setTestcase(String testcase) {
       this.testcase = testcase;
    }
-   
+
    public List<String> getTestcaseVisible() {
       return LineUtil.createPrintable(testcase);
    }
-   
+
    public boolean isNaN(double value) {
       return Double.isNaN(value);
    }
-   
+
    public double getChangePercent() {
       return changePercent;
    }
-   
+
    public void setChangePercent(double changePercent) {
       this.changePercent = changePercent;
    }

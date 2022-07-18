@@ -1,5 +1,6 @@
 package de.dagere.peass.ci.peassOverview;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +44,7 @@ public class ProjectData {
    public List<ChangeLine> getChangeLines() {
       List<ChangeLine> result = new LinkedList<>();
       if (selection != null) {
-         
+
          for (Map.Entry<String, CommitStaticSelection> commitEntry : selection.getCommits().entrySet()) {
             String commit = commitEntry.getKey();
             CommitStaticSelection commitStaticSelection = commitEntry.getValue();
@@ -56,6 +57,8 @@ public class ProjectData {
 
    private void addCommitData(List<ChangeLine> result, String commit, CommitStaticSelection commitStaticSelection) {
       Map<ChangedEntity, TestSet> changedClazzes = commitStaticSelection.getChangedClazzes();
+
+      List<String> changesWithNoTest = new LinkedList<>();
       for (Map.Entry<ChangedEntity, TestSet> entry : changedClazzes.entrySet()) {
 
          String changedEntity = entry.getKey().toString();
@@ -68,13 +71,16 @@ public class ProjectData {
 
                double changeValue = getPrintableChangeValue(testcaseStatistic, change);
 
-               ChangeLine line = new ChangeLine(commit, changedEntity, test.toString(), changeValue);
+               ChangeLine line = new ChangeLine(commit, Arrays.asList(new String[] { changedEntity }), test.toString(), changeValue);
                result.add(line);
             }
          } else {
-            ChangeLine line = new ChangeLine(commit, changedEntity, "none", Double.NaN);
-            result.add(line);
+            changesWithNoTest.add(changedEntity);
          }
+      }
+      if (changesWithNoTest.size() > 0) {
+         ChangeLine line = new ChangeLine(commit, changesWithNoTest, "none", Double.NaN);
+         result.add(line);
       }
    }
 
