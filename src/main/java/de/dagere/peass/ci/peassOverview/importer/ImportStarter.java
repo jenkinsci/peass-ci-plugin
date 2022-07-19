@@ -12,6 +12,7 @@ import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.databind.DatabindException;
 
+import de.dagere.peass.ci.MeasureVersionBuilder;
 import de.dagere.peass.dependency.persistence.ExecutionData;
 import de.dagere.peass.folders.ResultsFolders;
 import de.dagere.peass.utils.Constants;
@@ -56,8 +57,19 @@ public class ImportStarter implements Callable<Void> {
 
    @Override
    public Void call() throws Exception {
-      String projectFolderName = fullPeassFolder.getName().substring(0, fullPeassFolder.getName().length() - "_fullPeass".length());
-      ResultsFolders folders = new ResultsFolders(fullPeassFolder, projectFolderName);
+      String projectFolderName;
+      ResultsFolders folders;
+
+      if (fullPeassFolder.getName().endsWith("_fullPeass")) {
+         projectFolderName = fullPeassFolder.getName().substring(0, fullPeassFolder.getName().length() - "_fullPeass".length());
+         folders = new ResultsFolders(fullPeassFolder, projectFolderName);
+      } else if (fullPeassFolder.getName().equals(MeasureVersionBuilder.PEASS_FOLDER_NAME)) {
+         projectFolderName = fullPeassFolder.getParentFile().getName();
+         folders = new ResultsFolders(fullPeassFolder, projectFolderName);
+      } else {
+         throw new RuntimeException("Full peass folder needs to end with _fullPeass or be named peass-data!");
+      }
+
       LOG.debug("Project name: {}", projectFolderName);
 
       importSelectionFiles(folders);
