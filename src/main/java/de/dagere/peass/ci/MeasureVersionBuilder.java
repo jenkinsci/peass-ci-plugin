@@ -281,11 +281,12 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
       EnvironmentVariables peassEnv = new EnvironmentVariables(properties);
       for (Map.Entry<String, String> entry : env.entrySet()) {
-         System.out.println("Adding enviroenment: " + entry.getKey() + " " + entry.getValue());
+         System.out.println("Adding environment: " + entry.getKey() + " " + entry.getValue());
          peassEnv.getEnvironmentVariables().put(entry.getKey(), entry.getValue());
       }
 
       TestSelectionConfig dependencyConfig = new TestSelectionConfig(1, false, true, generateCoverageSelection, writeAsZip);
+      configWithRealGitVersions.getExecutionConfig().setGitCryptKey(peassEnv.getEnvironmentVariables().get("GIT_CRYPT_KEY"));
       PeassProcessConfiguration peassConfig = new PeassProcessConfiguration(updateSnapshotDependencies, configWithRealGitVersions, dependencyConfig,
             peassEnv,
             displayRTSLogs, displayLogs, displayRCALogs, pattern);
