@@ -2,9 +2,6 @@ package de.dagere.peass.ci.peassOverview.importer;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 
 import org.apache.commons.io.FileUtils;
@@ -15,14 +12,8 @@ import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.databind.DatabindException;
 
-import de.dagere.peass.analysis.changes.Change;
-import de.dagere.peass.analysis.changes.Changes;
-import de.dagere.peass.analysis.changes.ProjectChanges;
-import de.dagere.peass.analysis.measurement.ProjectStatistics;
-import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.persistence.ExecutionData;
 import de.dagere.peass.folders.ResultsFolders;
-import de.dagere.peass.measurement.statistics.data.TestcaseStatistic;
 import de.dagere.peass.utils.Constants;
 import de.dagere.peass.vcs.CommitList;
 import de.dagere.peass.vcs.GitCommit;
