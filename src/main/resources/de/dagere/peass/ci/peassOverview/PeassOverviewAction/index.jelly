@@ -8,9 +8,16 @@
       <st:include page="/style.jelly" optional="false" />
 
       <h1>Peass Overview Results</h1>
+      <j:forEach var="project" items="${it.getProjects()}">
+        <j:if test="${!data.containsError}">
+          <a href="#${project.getKey()}">${project.getKey()}</a>${AMP}
+        </j:if>
+      </j:forEach>
 
       <j:forEach var="project" items="${it.getProjects()}">
+        <p id="${project.getKey()}"></p>
         <h2>${project.getKey()}</h2>
+        
 
         <j:set var="data" value="${project.getValue()}" />
 
