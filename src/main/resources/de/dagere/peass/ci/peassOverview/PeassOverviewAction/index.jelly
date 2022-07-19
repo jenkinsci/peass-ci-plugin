@@ -96,6 +96,13 @@
                             <div style="background-color:rgba(255,100,100,1);padding:2%;">
                               ${it.round(change.getChangePercent())} % 
                             </div>
+                            <br />
+                            <select name="classificationChanger" id="classification">
+                              <j:forEach var="option" items="${it.getChangeClassificationArray()}">
+                                <option value="${option}">${option}</option>
+                              </j:forEach>
+                            </select>
+                            ${it.getClassification(project.getKey(), lastCommit, change.getTestcase())}
                           </j:when>
                           <j:when test="${change.getChangePercent() &gt; 0}">
                             <div style="background-color:rgba(100,255,100,1);padding:2%;">
