@@ -31,6 +31,8 @@ public class PeassOverviewBuilder extends Builder implements SimpleBuildStep, Se
    
    private List<Project> projects;
    private String timespan = LAST_DAY;
+   private String changeClassifications = "TODO;function;optimization;update";
+   private String unmeasuredClassifications = "TODO;remoteServerCall";
 
    @DataBoundConstructor
    public PeassOverviewBuilder() {
@@ -43,7 +45,7 @@ public class PeassOverviewBuilder extends Builder implements SimpleBuildStep, Se
       ProjectDataCreator creator = new ProjectDataCreator(projects, timespan);
       Map<String, ProjectData> projectData = creator.generateAllProjectData(run, listener);
 
-      PeassOverviewAction action = new PeassOverviewAction(IdHelper.getId(), projectData);
+      PeassOverviewAction action = new PeassOverviewAction(IdHelper.getId(), projectData, changeClassifications, unmeasuredClassifications);
       run.addAction(action);
    }
 
@@ -63,6 +65,24 @@ public class PeassOverviewBuilder extends Builder implements SimpleBuildStep, Se
    @DataBoundSetter
    public void setTimespan(String timespan) {
       this.timespan = timespan;
+   }
+
+   public String getChangeClassifications() {
+      return changeClassifications;
+   }
+
+   @DataBoundSetter
+   public void setChangeClassifications(String changeClassifications) {
+      this.changeClassifications = changeClassifications;
+   }
+
+   public String getUnmeasuredClassifications() {
+      return unmeasuredClassifications;
+   }
+
+   @DataBoundSetter
+   public void setUnmeasuredClassifications(String unmeasuredClassifications) {
+      this.unmeasuredClassifications = unmeasuredClassifications;
    }
 
    @Symbol("peassOverview")
