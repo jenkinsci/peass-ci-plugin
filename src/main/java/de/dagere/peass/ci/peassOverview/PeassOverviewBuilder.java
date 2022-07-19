@@ -26,10 +26,11 @@ public class PeassOverviewBuilder extends Builder implements SimpleBuildStep, Se
 
    public static final String LAST_DAY = "LAST_DAY";
    public static final String LAST_WEEK = "LAST_WEEK";
+   public static final String LAST_MONTH = "LAST_MONTH";
    public static final String ALL = "ALL";
    
    private List<Project> projects;
-   private String referencePoint = LAST_DAY;
+   private String timespan = LAST_DAY;
 
    @DataBoundConstructor
    public PeassOverviewBuilder() {
@@ -39,7 +40,7 @@ public class PeassOverviewBuilder extends Builder implements SimpleBuildStep, Se
    public void perform(final Run<?, ?> run, final FilePath workspace, final EnvVars env, final Launcher launcher, final TaskListener listener) throws IOException {
       listener.getLogger().println("Generating Peass Overview");
 
-      ProjectDataCreator creator = new ProjectDataCreator(projects, referencePoint);
+      ProjectDataCreator creator = new ProjectDataCreator(projects, timespan);
       Map<String, ProjectData> projectData = creator.generateAllProjectData(run, listener);
 
       PeassOverviewAction action = new PeassOverviewAction(IdHelper.getId(), projectData);
@@ -55,13 +56,13 @@ public class PeassOverviewBuilder extends Builder implements SimpleBuildStep, Se
       this.projects = projects;
    }
 
-   public String getReferencePoint() {
-      return referencePoint;
+   public String getTimespan() {
+      return timespan;
    }
 
    @DataBoundSetter
-   public void setReferencePoint(String referencePoint) {
-      this.referencePoint = referencePoint;
+   public void setTimespan(String timespan) {
+      this.timespan = timespan;
    }
 
    @Symbol("peassOverview")
