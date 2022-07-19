@@ -13,6 +13,14 @@
           <a href="#${project.getKey()}">${project.getKey()}</a>${AMP}
         </j:if>
       </j:forEach>
+      
+      <div class="button-wrap">
+        <a href='#' style='position: absolute; right: 10px;' onClick="for (const line of document.getElementsByClassName('none')){
+        if (line.style.display == 'none')
+         line.style.display='';
+        else
+          line.style.display='none';}">Toggle None</a>
+      </div>
 
       <j:forEach var="project" items="${it.getProjects()}">
         <p id="${project.getKey()}"></p>
@@ -46,7 +54,7 @@
                       Commit: <b>${lastCommit}</b>
                     </td></tr>
                   </j:if>
-                  <tr>
+                  <tr class="${change.getTestcase().equals('none') ? 'none' : 'regular'}">
                     <td>
                       <j:if test="${change.getChangeVisible().size() &gt; 3}">
                         <details>
