@@ -21,6 +21,7 @@ import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.folders.ResultsFolders;
 import de.dagere.peass.measurement.statistics.data.TestcaseStatistic;
 import de.dagere.peass.utils.Constants;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class MeasurementMerger {
    
@@ -28,6 +29,7 @@ public class MeasurementMerger {
    
    private File[] changeFile;
    
+   @SuppressFBWarnings
    public MeasurementMerger(File[] changeFile) {
       this.changeFile = changeFile;
    }
