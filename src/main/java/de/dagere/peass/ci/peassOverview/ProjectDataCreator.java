@@ -36,11 +36,11 @@ public class ProjectDataCreator {
    private static final Logger LOG = LogManager.getLogger(TestMethodHelper.class);
 
    private final List<Project> projects;
-   private final String referencePoint;
+   private final String timespan;
 
-   public ProjectDataCreator(List<Project> projects, String referencePoint) {
+   public ProjectDataCreator(List<Project> projects, String timespan) {
       this.projects = projects;
-      this.referencePoint = referencePoint;
+      this.timespan = timespan;
    }
 
    public Map<String, ProjectData> generateAllProjectData(final Run<?, ?> run, final TaskListener listener) {
@@ -138,6 +138,7 @@ public class ProjectDataCreator {
       DateTime currentDate = new DateTime().withTimeAtStartOfDay();
       DateTime yesterday = currentDate.minusDays(1).withTimeAtStartOfDay();
       DateTime oneWeekBefore = currentDate.minusDays(7).withTimeAtStartOfDay();
+      DateTime oneMonthBefore = currentDate.minusDays(31).withTimeAtStartOfDay();
 
       List<String> includedCommits = new LinkedList<>();
       CommitList commitMetadata = Constants.OBJECTMAPPER.readValue(resultsFolders.getCommitMetadataFile(), CommitList.class);
@@ -145,15 +146,19 @@ public class ProjectDataCreator {
       for (GitCommit commit : commitMetadata.getCommits()) {
          DateTime commitDate = getCommitDate(commit);
 
-         if (referencePoint.equals(PeassOverviewBuilder.LAST_DAY)) {
+         if (timespan.equals(PeassOverviewBuilder.LAST_DAY)) {
             if (commitDate.isEqual(currentDate) || commitDate.isEqual(yesterday)) {
                includedCommits.add(commit.getTag());
             }
-         } else if (referencePoint.equals(PeassOverviewBuilder.LAST_WEEK)) {
+         } else if (timespan.equals(PeassOverviewBuilder.LAST_WEEK)) {
             if (commitDate.isEqual(currentDate) || (commitDate.isAfter(oneWeekBefore) && commitDate.isBefore(currentDate))) {
                includedCommits.add(commit.getTag());
             }
-         } else if (referencePoint.equals(PeassOverviewBuilder.ALL)) {
+         } else if (timespan.equals(PeassOverviewBuilder.LAST_MONTH)) {
+            if (commitDate.isEqual(currentDate) || (commitDate.isAfter(oneMonthBefore) && commitDate.isBefore(currentDate))) {
+               includedCommits.add(commit.getTag());
+            }
+         } else if (timespan.equals(PeassOverviewBuilder.ALL)) {
             includedCommits.add(commit.getTag());
          }
       }

@@ -71,10 +71,10 @@ public class TestProjectDataCreation {
       Assert.assertEquals("6ce9d6a3154c4ce8f617c357cf466fab222d27ef", simpleCreationProjectData.getChangeLines().get(0).getCommit());
    }
 
-   private Map<String, ProjectData> mockAndCreateProjectData(String project, DateTime date, String referencePoint) {
+   private Map<String, ProjectData> mockAndCreateProjectData(String project, DateTime date, String timespan) {
       LinkedList<Project> projects = new LinkedList<>();
       projects.add(new Project(project));
-      ProjectDataCreator creator = new ProjectDataCreator(projects, referencePoint);
+      ProjectDataCreator creator = new ProjectDataCreator(projects, timespan);
       Run runMock = Mockito.mock(Run.class);
       Mockito.when(runMock.getRootDir()).thenReturn(virtualProjectFolder);
 

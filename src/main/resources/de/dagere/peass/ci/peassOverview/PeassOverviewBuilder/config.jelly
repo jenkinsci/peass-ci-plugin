@@ -9,8 +9,8 @@
         <f:repeatableProperty add="${%AddProject}" header="${%Projects}" field="projects" />
       </td>
       <td>
-        <f:entry title="${%referencePoint}" field="referencePoint" description="${%referencePointDescr}">
-          <f:textbox default="LAST_DAY" />
+        <f:entry title="${%timespan}" field="timespan" description="${%timespanDescr}">
+          <f:textbox default="ALL" />
         </f:entry>
       </td>
     </tr>
