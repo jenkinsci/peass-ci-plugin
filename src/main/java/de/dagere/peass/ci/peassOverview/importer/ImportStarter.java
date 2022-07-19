@@ -73,54 +73,9 @@ public class ImportStarter implements Callable<Void> {
 
       writeCommitList(folders);
 
-      measurementMerger(folders);
+      MeasurementMerger measurementMerger = new MeasurementMerger(changeFile);
+      measurementMerger.merge(folders);
       return null;
-
-   }
-
-   private void measurementMerger(ResultsFolders folders) throws IOException, StreamReadException, DatabindException, StreamWriteException {
-      ProjectChanges changes = new ProjectChanges();
-      ProjectStatistics statistics = new ProjectStatistics();
-      for (File changeFileInstance : changeFile) {
-         if (!changeFileInstance.exists()) {
-            throw new RuntimeException("Import is only possible if changefile exists!");
-         }
-
-         readChangefile(changes, changeFileInstance);
-
-         readStatisticsFile(statistics, changeFileInstance);
-      }
-
-      LOG.info("Writing to {}", folders.getChangeFile());
-      Constants.OBJECTMAPPER.writeValue(folders.getChangeFile(), changes);
-
-      LOG.info("Writing to {}", folders.getStatisticsFile());
-      Constants.OBJECTMAPPER.writeValue(folders.getStatisticsFile(), statistics);
-   }
-
-   private void readStatisticsFile(ProjectStatistics statistics, File changeFileInstance) throws IOException, StreamReadException, DatabindException {
-      File currentStatisticsFile = new File(changeFileInstance.getParentFile(), "statistics.json");
-      ProjectStatistics currentStatistics = Constants.OBJECTMAPPER.readValue(currentStatisticsFile, ProjectStatistics.class);
-      for (Entry<String, Map<TestCase, TestcaseStatistic>> commitEntry : currentStatistics.getStatistics().entrySet()) {
-         for (Entry<TestCase, TestcaseStatistic> testEntry : commitEntry.getValue().entrySet()) {
-            statistics.addMeasurement(commitEntry.getKey(), testEntry.getKey(), testEntry.getValue());
-         }
-      }
-   }
-
-   private void readChangefile(ProjectChanges changes, File changeFileInstance) throws IOException, StreamReadException, DatabindException {
-      LOG.info("Reading from {}", changeFileInstance);
-      ProjectChanges currentChanges = Constants.OBJECTMAPPER.readValue(changeFileInstance, ProjectChanges.class);
-
-      for (Entry<String, Changes> commitChanges : currentChanges.getCommitChanges().entrySet()) {
-         String commit = commitChanges.getKey();
-         Map<TestCase, List<Change>> testcaseObjectChanges = commitChanges.getValue().getTestcaseObjectChanges();
-         for (Entry<TestCase, List<Change>> testcase : testcaseObjectChanges.entrySet()) {
-            for (Change change : testcase.getValue()) {
-               changes.addChange(testcase.getKey(), commit, change);
-            }
-         }
-      }
    }
 
    private void importSelectionFiles(ResultsFolders folders) throws IOException {
