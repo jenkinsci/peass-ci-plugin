@@ -28,7 +28,9 @@ import picocli.CommandLine.Option;
  * <li>statistics.json</li>
  * <li>changes.json</li>
  * </ul>
- * into a format readable by the Peass-CI plugin (this just needs to execute a re-run of the project).
+ * into a format readable by the Peass-CI plugin.
+ * 
+ * After the data have been installed to the job, run one build and afterwards the data will be available and a creation of an peassOverview is possible.
  *
  */
 public class ImportStarter implements Callable<Void> {
