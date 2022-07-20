@@ -27,12 +27,20 @@ public class ClassifiedProject {
 
    @JsonIgnore
    public TestcaseClassification getClassification(String commit) {
-      if (changeClassifications.get(commit) != null) {
-         return changeClassifications.get(commit);
+      TestcaseClassification testcaseClassification = changeClassifications.get(commit);
+      if (testcaseClassification == null) {
+         testcaseClassification = new TestcaseClassification();
+         changeClassifications.put(commit, testcaseClassification);
       }
-      if (unmeasuredClassifications.get(commit) != null) {
-         return unmeasuredClassifications.get(commit);
+      return testcaseClassification;
+   }
+
+   public TestcaseClassification getUnmeasuredClassification(String commit) {
+      TestcaseClassification testcaseClassification = unmeasuredClassifications.get(commit);
+      if (testcaseClassification == null) {
+         testcaseClassification = new TestcaseClassification();
+         unmeasuredClassifications.put(commit, testcaseClassification);
       }
-      return null;
+      return testcaseClassification;
    }
 }
