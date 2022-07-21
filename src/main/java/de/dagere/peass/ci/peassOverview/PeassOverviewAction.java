@@ -11,7 +11,6 @@ import java.util.Map;
 
 import javax.servlet.ServletException;
 
-import org.apache.groovy.parser.antlr4.GroovyParser.ClassicalForControlContext;
 import org.jvnet.localizer.LocaleProvider;
 import org.kohsuke.stapler.HttpResponse;
 import org.kohsuke.stapler.QueryParameter;
