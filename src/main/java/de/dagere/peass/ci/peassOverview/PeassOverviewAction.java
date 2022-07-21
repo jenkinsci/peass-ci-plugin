@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javax.servlet.ServletException;
 
+import org.apache.groovy.parser.antlr4.GroovyParser.ClassicalForControlContext;
 import org.jvnet.localizer.LocaleProvider;
 import org.kohsuke.stapler.HttpResponse;
 import org.kohsuke.stapler.QueryParameter;
@@ -39,7 +40,6 @@ public class PeassOverviewAction extends VisibleAction {
       this.unmeasuredClassifications = unmeasuredClassifications;
       this.path = path;
 
-      System.out.println("Path: " + path);
       File parentFile = new File(path);
       if (!parentFile.exists()) {
          if (!parentFile.mkdirs()) {
@@ -47,14 +47,16 @@ public class PeassOverviewAction extends VisibleAction {
          }
       }
       File classificationFile = new File(parentFile, "classifications.json");
-      Classifications classifications = new Classifications();
-      for (String project : projects.keySet()) {
-         classifications.getProjects().put(project, new ClassifiedProject());
-      }
-      try {
-         Constants.OBJECTMAPPER.writeValue(classificationFile, Classifications.class);
-      } catch (IOException e) {
-         e.printStackTrace();
+      if (!classificationFile.exists()) {
+         Classifications classifications = new Classifications();
+         for (String project : projects.keySet()) {
+            classifications.getProjects().put(project, new ClassifiedProject());
+         }
+         try {
+            Constants.OBJECTMAPPER.writeValue(classificationFile, classifications);
+         } catch (IOException e) {
+            e.printStackTrace();
+         }
       }
    }
 
