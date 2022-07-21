@@ -14,5 +14,17 @@
         </f:entry>
       </td>
     </tr>
+    <tr>
+      <td>
+        <f:entry title="${%changeClassifications}" field="changeClassifications" description="${%changeClassificationsDescr}">
+          <f:textbox default="TODO;function;optimization;update" />
+        </f:entry>
+      </td>
+      <td>
+        <f:entry title="${%unmeasuredClassifications}" field="unmeasuredClassifications" description="${%unmeasuredClassificationsDescr}">
+          <f:textbox default="TODO;remoteServerCall" />
+        </f:entry>
+      </td>
+    </tr>
   </table>
 </j:jelly>
