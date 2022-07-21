@@ -1,13 +1,21 @@
 package de.dagere.peass.ci.peassOverview;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.servlet.ServletException;
+
 import org.jvnet.localizer.LocaleProvider;
+import org.kohsuke.stapler.HttpResponse;
 import org.kohsuke.stapler.QueryParameter;
+import org.kohsuke.stapler.StaplerRequest;
+import org.kohsuke.stapler.StaplerResponse;
 import org.kohsuke.stapler.interceptor.RequirePOST;
 
 import de.dagere.peass.ci.VisibleAction;
@@ -22,14 +30,23 @@ public class PeassOverviewAction extends VisibleAction {
    private final Map<String, ProjectData> projects;
    private final String changeClassifications;
    private final String unmeasuredClassifications;
+   private final String path;
 
-   public PeassOverviewAction(int id, Map<String, ProjectData> projects, String changeClassifications, String unmeasuredClassifications) {
+   public PeassOverviewAction(int id, Map<String, ProjectData> projects, String changeClassifications, String unmeasuredClassifications, String path) {
       super(id);
       this.projects = projects;
       this.changeClassifications = changeClassifications;
       this.unmeasuredClassifications = unmeasuredClassifications;
+      this.path = path;
 
-      File classificationFile = new File("classifications.json");
+      System.out.println("Path: " + path);
+      File parentFile = new File(path);
+      if (!parentFile.exists()) {
+         if (!parentFile.mkdirs()) {
+            throw new RuntimeException("Creating " + path + " was not possible!");
+         }
+      }
+      File classificationFile = new File(parentFile, "classifications.json");
       Classifications classifications = new Classifications();
       for (String project : projects.keySet()) {
          classifications.getProjects().put(project, new ClassifiedProject());
@@ -62,7 +79,7 @@ public class PeassOverviewAction extends VisibleAction {
    }
 
    public String getClassification(String project, String commit, String test) {
-      File classificationFile = new File("classifications.json");
+      File classificationFile = new File(path, "classifications.json");
       if (classificationFile.exists()) {
          try {
             Classifications classifications = Constants.OBJECTMAPPER.readValue(classificationFile, Classifications.class);
@@ -80,9 +97,9 @@ public class PeassOverviewAction extends VisibleAction {
 
       return "TODO";
    }
-   
+
    public String getUnmeasuredClassification(String project, String commit, String test) {
-      File classificationFile = new File("classifications.json");
+      File classificationFile = new File(path, "classifications.json");
       if (classificationFile.exists()) {
          try {
             Classifications classifications = Constants.OBJECTMAPPER.readValue(classificationFile, Classifications.class);
@@ -128,7 +145,7 @@ public class PeassOverviewAction extends VisibleAction {
          @QueryParameter String testcase,
          @QueryParameter String classification) {
 
-      File classificationFile = new File("classifications.json");
+      File classificationFile = new File(path, "classifications.json");
       try {
          Classifications classifications;
          if (classificationFile.exists()) {
@@ -148,14 +165,14 @@ public class PeassOverviewAction extends VisibleAction {
          return FormValidation.error("Some error occured");
       }
    }
-   
+
    @RequirePOST
    public FormValidation doUpdateUnmeasured(@QueryParameter String project,
          @QueryParameter String commit,
          @QueryParameter String testcase,
          @QueryParameter String classification) {
 
-      File classificationFile = new File("classifications.json");
+      File classificationFile = new File(path, "classifications.json");
       try {
          Classifications classifications;
          if (classificationFile.exists()) {
@@ -174,6 +191,27 @@ public class PeassOverviewAction extends VisibleAction {
          e.printStackTrace();
          return FormValidation.error("Some error occured");
       }
+   }
+
+   public HttpResponse doDownloadClassification() {
+      return new HttpResponse() {
+
+         @Override
+         public void generateResponse(StaplerRequest req, StaplerResponse rsp, Object node) throws IOException, ServletException {
+            rsp.addHeader("Content-Type", "application/json");
+
+            File classificationFile = new File(path, "classifications.json");
+            Classifications classifications = Constants.OBJECTMAPPER.readValue(classificationFile, Classifications.class);
+            
+            String responseText = Constants.OBJECTMAPPER.writeValueAsString(classifications);
+            byte[] responseBytes = responseText.getBytes(StandardCharsets.UTF_8);
+            InputStream stream = new ByteArrayInputStream(responseBytes);
+
+            rsp.serveFile(req, stream, System.currentTimeMillis(), (long) responseBytes.length, "classifications.json");
+
+         }
+      };
+
    }
 
 }
