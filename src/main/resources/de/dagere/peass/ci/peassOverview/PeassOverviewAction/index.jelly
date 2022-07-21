@@ -21,6 +21,10 @@
         else
           line.style.display='none';}">Toggle None</a>
       </div>
+      
+      <div class="button-wrap" style='position: absolute; right: 10px; top: 150px;'>
+        <a href="downloadClassification">Download Classifications</a>
+      </div>
 
       <j:forEach var="project" items="${it.getProjects()}">
         <p id="${project.getKey()}"></p>
@@ -172,6 +176,7 @@
                                 </select>
                               </f:entry>
                               <f:submit method="updateUnmeasured" type="submit" title="Classify" with="project,commit,testcase,classification" />
+                              
                             </form>
                             </div>
                           </j:when>

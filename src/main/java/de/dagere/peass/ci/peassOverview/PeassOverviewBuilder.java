@@ -1,5 +1,6 @@
 package de.dagere.peass.ci.peassOverview;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
@@ -9,6 +10,7 @@ import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
 
+import de.dagere.peass.ci.MeasureVersionBuilder;
 import de.dagere.peass.ci.helper.IdHelper;
 import hudson.EnvVars;
 import hudson.Extension;
@@ -45,7 +47,8 @@ public class PeassOverviewBuilder extends Builder implements SimpleBuildStep, Se
       ProjectDataCreator creator = new ProjectDataCreator(projects, timespan);
       Map<String, ProjectData> projectData = creator.generateAllProjectData(run, listener);
 
-      PeassOverviewAction action = new PeassOverviewAction(IdHelper.getId(), projectData, changeClassifications, unmeasuredClassifications);
+      final File localWorkspace = new File(run.getRootDir(), ".." + File.separator + ".." + File.separator + MeasureVersionBuilder.PEASS_FOLDER_NAME).getCanonicalFile();
+      PeassOverviewAction action = new PeassOverviewAction(IdHelper.getId(), projectData, changeClassifications, unmeasuredClassifications, localWorkspace.getAbsolutePath());
       run.addAction(action);
    }
 
