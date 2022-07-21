@@ -7,6 +7,8 @@
     <l:main-panel>
       <st:include page="/style.jelly" optional="false" />
 
+      <iframe style="display: none" name="classificationResultFrame" id="classificationResultFrame"></iframe>
+
       <h1>Peass Overview Results</h1>
       <j:forEach var="project" items="${it.getProjects()}">
         <j:if test="${!data.containsError}">
@@ -101,7 +103,7 @@
                               ${it.round(change.getChangePercent())} % 
                             </div>
                             <br />
-                            <form action="updateClassification" method="post">
+                            <form action="updateClassification" method="post" target='classificationResultFrame'>
                               <div style='display: none'>
                                 <f:textbox name='project' value="${project.getKey()}"/>
                                 <f:textbox name='commit' value="${lastCommit}"/>
@@ -121,14 +123,12 @@
                               </f:entry>
                               <f:submit method="updateClassification" type="submit" title="Classify" with="project,commit,testcase,classification" />
                             </form>
-                            
-                            
                           </j:when>
                           <j:when test="${change.getChangePercent() &gt; 0}">
                             <div style="background-color:rgba(100,255,100,1);padding:2%;">
                               ${it.round(change.getChangePercent())} % 
                             </div>
-                            <form action="updateClassification" method="post">
+                            <form action="updateClassification" method="post" target='classificationResultFrame'>
                               <div style='display: none'>
                                 <f:textbox name='project' value="${project.getKey()}"/>
                                 <f:textbox name='commit' value="${lastCommit}"/>
@@ -157,7 +157,7 @@
                           <j:when test="${change.isNaN(change.getChangePercent())}">
                             <div style="background-color:rgba(255, 0, 0, 0.15); padding:2%;">
                               Unmeasured
-                              <form action="updateUnmeasured" method="post">
+                              <form action="updateUnmeasured" method="post" target='classificationResultFrame'> 
                               <div style='display: none'>
                                 <f:textbox name='project' value="${project.getKey()}"/>
                                 <f:textbox name='commit' value="${lastCommit}"/>
