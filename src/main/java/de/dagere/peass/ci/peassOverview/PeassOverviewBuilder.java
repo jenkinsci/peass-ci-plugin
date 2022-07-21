@@ -33,7 +33,7 @@ public class PeassOverviewBuilder extends Builder implements SimpleBuildStep, Se
    
    private List<Project> projects;
    private String timespan = LAST_DAY;
-   private String changeClassifications = "TODO;function;optimization;update";
+   private String changeClassifications = "TODO;function;optimization;testchange;versionupdate";
    private String unmeasuredClassifications = "TODO;remoteServerCall";
 
    @DataBoundConstructor
