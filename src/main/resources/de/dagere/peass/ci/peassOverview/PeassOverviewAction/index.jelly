@@ -7,7 +7,8 @@
     <l:main-panel>
       <st:include page="/style.jelly" optional="false" />
 
-      <iframe style="display: none" name="classificationResultFrame" id="classificationResultFrame"></iframe>
+      <iframe style="position: fixed; bottom: 1px; right: 1px; width: 80%; height: 50px; z-index: 999; background-color: white;" 
+        name="classificationResultFrame" id="classificationResultFrame" sandbox="allow-same-origin"></iframe>
 
       <h1>Peass Overview Results</h1>
       <j:forEach var="project" items="${it.getProjects()}">

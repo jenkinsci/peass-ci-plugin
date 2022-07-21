@@ -159,7 +159,7 @@ public class PeassOverviewAction extends VisibleAction {
 
          Constants.OBJECTMAPPER.writeValue(classificationFile, classifications);
 
-         return FormValidation.ok("Updated value");
+         return FormValidation.ok("Updated value of " + testcase + " (" + commit + ") to " + classification);
       } catch (IOException e) {
          System.out.println("Tried to write to " + classificationFile.getAbsolutePath());
          e.printStackTrace();
@@ -186,7 +186,7 @@ public class PeassOverviewAction extends VisibleAction {
 
          Constants.OBJECTMAPPER.writeValue(classificationFile, classifications);
 
-         return FormValidation.ok("Updated value");
+         return FormValidation.ok("Updated value of " + testcase + " (" + commit + ") to " + classification);
       } catch (IOException e) {
          System.out.println("Tried to write to " + classificationFile.getAbsolutePath());
          e.printStackTrace();
