@@ -26,7 +26,13 @@
         if (line.style.display == 'none')
          line.style.display='';
         else
-          line.style.display='none';}">Toggle None</a>
+          line.style.display='none';}
+        var button = document.getElementById('noneButton');
+        if (button.innerHTML=='Hide None') {
+          button.innerHTML='Show None';
+        } else {
+          button.innerHTML='Hide None';
+        }" id='noneButton'>Hide None</a>
       </div>
       
       <div class="button-wrap">
@@ -34,7 +40,15 @@
         if (line.style.display == 'none')
          line.style.display='';
         else
-          line.style.display='none';}">Toggle Classified</a>
+          line.style.display='none';
+        }
+        var button = document.getElementById('classifiedButton');
+        if (button.innerHTML=='Hide Classified') {
+          button.innerHTML='Show Classified';
+        } else {
+          button.innerHTML='Hide Classified';
+        }
+        " id='classifiedButton'>Hide Classified</a>
       </div>
 
       <j:forEach var="project" items="${it.getProjects()}">
