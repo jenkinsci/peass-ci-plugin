@@ -17,16 +17,24 @@
         </j:if>
       </j:forEach>
       
+      <div class="button-wrap" style='position: absolute; right: 10px; top: 120px;'>
+        <a href="downloadClassification">Download Classifications</a>
+      </div>
+      
       <div class="button-wrap">
-        <a href='#' style='position: absolute; right: 10px;' onClick="for (const line of document.getElementsByClassName('none')){
+        <a href='#' style='position: absolute; right: 10px; top: 160px;' onClick="for (const line of document.getElementsByClassName('none')){
         if (line.style.display == 'none')
          line.style.display='';
         else
           line.style.display='none';}">Toggle None</a>
       </div>
       
-      <div class="button-wrap" style='position: absolute; right: 10px; top: 150px;'>
-        <a href="downloadClassification">Download Classifications</a>
+      <div class="button-wrap">
+        <a href='#' style='position: absolute; right: 10px; top: 200px' onClick="for (const line of document.getElementsByClassName('classified')){
+        if (line.style.display == 'none')
+         line.style.display='';
+        else
+          line.style.display='none';}">Toggle Classified</a>
       </div>
 
       <j:forEach var="project" items="${it.getProjects()}">
@@ -61,7 +69,7 @@
                       Commit: <b>${lastCommit}</b>
                     </td></tr>
                   </j:if>
-                  <tr class="${change.getTestcase().equals('none') ? 'none' : 'regular'}">
+                  <tr class="${change.getTestcase().equals('none') ? 'none' : 'regular'} ${it.getClassification(project.getKey(), lastCommit, change.getTestcase()).equals('TODO') &amp;&amp; it.getUnmeasuredClassification(project.getKey(), lastCommit, change.getTestcase()).equals('TODO') ? 'unclassified' : 'classified'}">
                     <td>
                       <j:if test="${change.getChangeVisible().size() &gt; 3}">
                         <details>
