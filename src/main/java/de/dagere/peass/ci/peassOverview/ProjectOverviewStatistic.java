@@ -127,7 +127,6 @@ public class ProjectOverviewStatistic {
          addUnmeasuredClassifications(classificationData, statistic, commit, classificationsInThisCommit);
 
          CommitStaticSelection commitSelection = projectData.getSelection().getCommits().get(commit);
-         System.out.println("commitChanges: " + commitSelection);
          if (commitSelection != null) {
             int unmeasured = statistic.getUnmeasuredTests();
             Map<TestCase, TestcaseStatistic> commitStatistic = projectData.getStatistics().getStatistics().get(commit);
