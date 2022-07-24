@@ -5,8 +5,8 @@
     <table class="data-table">
       <tr>
         <th>Project</th>
-        <th>Measured Commits</th>
-        <th>Measured Tests</th>
+        <th>Selected</th>
+        <th>Measured</th>
         <th>Measured Changes</th>
         <j:forEach var="category" items="${it.getChangeClassificationArray()}">
           <j:if test="${!category.equals('TODO')}">
@@ -27,8 +27,10 @@
               ${project.getKey()}
             </j:if>
           </td>
-          <td>${project.getValue().getCommitsWithSourceChange()}</td>
-          <td>${project.getValue().getTestsWithSourceChange()}</td>
+          <td>${project.getValue().getCommitsWithSourceChange() + project.getValue().getCommitsWithUnmeasured()}
+            (${project.getValue().getTestsWithSourceChange() + project.getValue().getUnmeasuredTests()})
+          </td>
+          <td>${project.getValue().getCommitsWithSourceChange()} (${project.getValue().getTestsWithSourceChange()})</td>
           <td>${project.getValue().getCommitsWithChange()} (${project.getValue().getTestsWithChange()})</td>
           <j:forEach var="category" items="${it.getChangeClassificationArray()}">
             <j:if test="${!category.equals('TODO')}">
@@ -46,9 +48,8 @@
     <table class="data-table">
       <tr>
         <th>Project</th>
-        <th>Measured Commits</th>
-        <th>Measured Tests</th>
-        <th>Unmeasured Tests</th>
+        <th>Selected</th>
+        <th>Unmeasured</th>
         <j:forEach var="category" items="${it.getUnmeasuredClassificationArray()}">
           <j:if test="${!category.equals('TODO')}">
             <th>${category}</th>
@@ -68,8 +69,9 @@
               ${project.getKey()}
             </j:if>
           </td>
-          <td>${project.getValue().getCommitsWithSourceChange()}</td>
-          <td>${project.getValue().getTestsWithSourceChange()}</td>
+          <td>${project.getValue().getCommitsWithSourceChange() + project.getValue().getCommitsWithUnmeasured()}
+            (${project.getValue().getTestsWithSourceChange() + project.getValue().getUnmeasuredTests()})
+          </td>
           <td>${project.getValue().getCommitsWithUnmeasured()} (${project.getValue().getUnmeasuredTests()})</td>
           <j:forEach var="category" items="${it.getUnmeasuredClassificationArray()}">
             <j:if test="${!category.equals('TODO')}">
@@ -82,6 +84,16 @@
         </tr>
       </j:forEach>
     </table>
+    <j:set var="sum" value="${it.getStatistic().get('Sum')}" />
+    Values in parenthesis are the count of tests, the values before are the count of commits. For example, in sum,
+    <b>
+      ${sum.getCommitsWithSourceChange() + sum.getCommitsWithUnmeasured()}
+    </b>
+    commits have been measured (or tried to measure) and
+    <b>
+      ${project.getValue().getTestsWithSourceChange() + project.getValue().getUnmeasuredTests()}
+    </b>
+    tests have been measured (or tried to measure) in those commits.
   </div>
   <script>
     jq$("#dialogStatistic").dialog({ autoOpen: false });
