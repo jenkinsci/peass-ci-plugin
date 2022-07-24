@@ -22,12 +22,15 @@
       </div>
       
       <div class="button-wrap">
-        <a href='#' style='position: absolute; right: 10px; top: 160px;' onClick="for (const line of document.getElementsByClassName('none')){
-        if (line.style.display == 'none')
-         line.style.display='';
-        else
-          line.style.display='none';}
+        <a href='#' style='position: absolute; right: 10px; top: 160px;' onClick="
         var button = document.getElementById('noneButton');
+        for (const line of document.getElementsByClassName('none')){
+          if (button.innerHTML=='Hide None')
+            line.style.display='none';
+          else
+            line.style.display='';
+        }
+        
         if (button.innerHTML=='Hide None') {
           button.innerHTML='Show None';
         } else {
@@ -36,19 +39,39 @@
       </div>
       
       <div class="button-wrap">
-        <a href='#' style='position: absolute; right: 10px; top: 200px' onClick="for (const line of document.getElementsByClassName('classified')){
-        if (line.style.display == 'none')
-         line.style.display='';
-        else
-          line.style.display='none';
-        }
+        <a href='#' style='position: absolute; right: 10px; top: 200px' onClick="
         var button = document.getElementById('classifiedButton');
+        for (const line of document.getElementsByClassName('classified')){
+          if (button.innerHTML=='Hide Classified')
+            line.style.display='none';
+          else
+            line.style.display='';
+        }
+        
         if (button.innerHTML=='Hide Classified') {
           button.innerHTML='Show Classified';
         } else {
           button.innerHTML='Hide Classified';
         }
         " id='classifiedButton'>Hide Classified</a>
+      </div>
+      
+      <div class="button-wrap">
+        <a href='#' style='position: absolute; right: 150px; top: 200px' onClick="
+        var button = document.getElementById('unclassifiedButton');
+        for (const line of document.getElementsByClassName('unclassifyable')){
+          if (button.innerHTML=='Hide Unclassifyable')
+           line.style.display='none';
+          else
+            line.style.display='';
+        }
+        
+        if (button.innerHTML=='Hide Unclassifyable') {
+          button.innerHTML='Show Unclassifyable';
+        } else {
+          button.innerHTML='Hide Unclassifyable';
+        }
+        " id='unclassifiedButton'>Hide Unclassifyable</a>
       </div>
 
       <j:forEach var="project" items="${it.getProjects()}">
@@ -83,7 +106,9 @@
                       Commit: <b>${lastCommit}</b>
                     </td></tr>
                   </j:if>
-                  <tr class="${change.getTestcase().equals('none') ? 'none' : 'regular'} ${it.getClassification(project.getKey(), lastCommit, change.getTestcase()).equals('TODO') &amp;&amp; it.getUnmeasuredClassification(project.getKey(), lastCommit, change.getTestcase()).equals('TODO') ? 'unclassified' : 'classified'}">
+                  <tr class="${change.getTestcase().equals('none') ? 'none' : 'regular'} 
+                    ${it.getClassification(project.getKey(), lastCommit, change.getTestcase()).equals('TODO') &amp;&amp; it.getUnmeasuredClassification(project.getKey(), lastCommit, change.getTestcase()).equals('TODO') ? 'unclassified' : 'classified'}
+                    ${(change.getChangePercent() == 0 || (!change.getTestcase().equals('none') &amp;&amp; change.isNaN(change.getChangePercent()))) ? 'unclassifyable' : 'classifyable'}">
                     <td>
                       <j:if test="${change.getChangeVisible().size() &gt; 3}">
                         <details>
