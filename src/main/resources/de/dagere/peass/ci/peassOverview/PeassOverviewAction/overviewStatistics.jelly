@@ -70,7 +70,7 @@
           </td>
           <td>${project.getValue().getCommitsWithSourceChange()}</td>
           <td>${project.getValue().getTestsWithSourceChange()}</td>
-          <td>${project.getValue().getUnmeasuredTests()}</td>
+          <td>${project.getValue().getCommitsWithUnmeasured()} (${project.getValue().getUnmeasuredTests()})</td>
           <j:forEach var="category" items="${it.getUnmeasuredClassificationArray()}">
             <j:if test="${!category.equals('TODO')}">
               <td>

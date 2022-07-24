@@ -4,13 +4,10 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import de.dagere.peass.analysis.changes.Change;
-import de.dagere.peass.analysis.changes.Changes;
 import de.dagere.peass.ci.peassOverview.classification.ClassifiedProject;
 import de.dagere.peass.ci.peassOverview.classification.TestcaseClassification;
 import de.dagere.peass.dependency.analysis.data.TestCase;
@@ -21,7 +18,7 @@ public class ProjectOverviewStatistic {
    private int commitsWithSourceChange;
    private int testsWithSourceChange;
    private int commitsWithChange, testsWithChange;
-   private int unmeasuredTests;
+   private int commitsWithUnmeasured, unmeasuredTests;
    private Map<String, Integer> categoryTestCount = new LinkedHashMap<>();
    private Map<String, Integer> categoryCommitCount = new LinkedHashMap<>();
 
@@ -59,6 +56,14 @@ public class ProjectOverviewStatistic {
 
    public void setTestsWithChange(int testsWithChange) {
       this.testsWithChange = testsWithChange;
+   }
+
+   public int getCommitsWithUnmeasured() {
+      return commitsWithUnmeasured;
+   }
+
+   public void setCommitsWithUnmeasured(int commitsWithUnmeasured) {
+      this.commitsWithUnmeasured = commitsWithUnmeasured;
    }
 
    public int getUnmeasuredTests() {
@@ -120,6 +125,7 @@ public class ProjectOverviewStatistic {
       commits.addAll(classificationData.getChangeClassifications().keySet());
       commits.addAll(classificationData.getUnmeasuredClassifications().keySet());
 
+      int commitsWithUnmeasuredTest = 0;
       for (String commit : commits) {
          Set<String> classificationsInThisCommit = new HashSet<>();
 
@@ -137,13 +143,17 @@ public class ProjectOverviewStatistic {
                   unmeasured++;
                }
             }
+            if (unmeasured > 0) {
+               commitsWithUnmeasuredTest++;
+            }
             statistic.setUnmeasuredTests(unmeasured);
          }
-
+         
          for (String commitClassification : classificationsInThisCommit) {
             statistic.increaseCategoryCommitCount(commitClassification);
          }
       }
+      statistic.setCommitsWithUnmeasured(commitsWithUnmeasuredTest);
       return statistic;
    }
 
@@ -155,6 +165,7 @@ public class ProjectOverviewStatistic {
          result.setCommitsWithSourceChange(result.getCommitsWithSourceChange() + statistic.getCommitsWithSourceChange());
          result.setTestsWithChange(result.getTestsWithChange() + statistic.getTestsWithChange());
          result.setTestsWithSourceChange(result.getTestsWithSourceChange() + statistic.getTestsWithSourceChange());
+         result.setCommitsWithUnmeasured(result.getCommitsWithUnmeasured() + statistic.getCommitsWithUnmeasured());
          result.setUnmeasuredTests(result.getUnmeasuredTests() + statistic.getUnmeasuredTests());
 
          for (String category : statistic.getCategoryCommitCount().keySet()) {
