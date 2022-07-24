@@ -64,7 +64,7 @@
           </td>
           <td>${project.getValue().getCommitsWithSourceChange()}</td>
           <td>${project.getValue().getTestsWithSourceChange()}</td>
-          <td>Unmeasured</td>
+          <td>${project.getValue().getUnmeasuredTests()}</td>
           <j:forEach var="category" items="${it.getUnmeasuredClassificationArray()}">
             <td>
               ${project.getValue().getCategoryCommitCount().get(category) == null ? 0 : project.getValue().getCategoryCommitCount().get(category)}
