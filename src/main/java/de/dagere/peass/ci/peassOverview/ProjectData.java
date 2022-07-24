@@ -38,6 +38,10 @@ public class ProjectData {
    public ProjectChanges getChanges() {
       return changes;
    }
+   
+   public ProjectStatistics getStatistics() {
+      return statistics;
+   }
 
    public boolean isContainsError() {
       return containsError;

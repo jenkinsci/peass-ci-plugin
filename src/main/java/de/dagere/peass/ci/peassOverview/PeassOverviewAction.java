@@ -6,11 +6,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.text.NumberFormat;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.jfree.util.Log;
 import org.jvnet.localizer.LocaleProvider;
 import org.kohsuke.stapler.HttpResponse;
 import org.kohsuke.stapler.QueryParameter;
@@ -18,6 +25,7 @@ import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 import org.kohsuke.stapler.interceptor.RequirePOST;
 
+import de.dagere.peass.GetChangesStarter;
 import de.dagere.peass.ci.VisibleAction;
 import de.dagere.peass.ci.peassOverview.classification.Classifications;
 import de.dagere.peass.ci.peassOverview.classification.ClassifiedProject;
@@ -27,6 +35,8 @@ import hudson.util.FormValidation;
 
 public class PeassOverviewAction extends VisibleAction {
 
+   private static final Logger LOG = LogManager.getLogger(PeassOverviewAction.class);
+   
    private final Map<String, ProjectData> projects;
    private final String changeClassifications;
    private final String unmeasuredClassifications;
@@ -140,6 +150,33 @@ public class PeassOverviewAction extends VisibleAction {
       return NumberFormat.getInstance(locale).format(roundedValue);
    }
 
+   public Map<String, ProjectOverviewStatistic> getStatistic() {
+      Map<String, ProjectOverviewStatistic> result = new LinkedHashMap<>();
+
+      File classificationFile = new File(path, "classifications.json");
+      if (classificationFile.exists()) {
+         try {
+            Classifications classifications = Constants.OBJECTMAPPER.readValue(classificationFile, Classifications.class);
+            for (Map.Entry<String, ClassifiedProject> project : classifications.getProjects().entrySet()) {
+               String projectName = project.getKey();
+               LOG.info("Adding project " + projectName);
+               ProjectOverviewStatistic statistic = ProjectOverviewStatistic.getFromClassification(projectName, projects.get(projectName), project.getValue());
+
+               result.put(projectName, statistic);
+            }
+            ProjectOverviewStatistic mergedStatistic = ProjectOverviewStatistic.getSumStatistic(result.values());
+            result.put("Sum", mergedStatistic);
+
+         } catch (IOException e) {
+            e.printStackTrace();
+         }
+      } else {
+         LOG.error("Classification file did not exist");
+      }
+
+      return result;
+   }
+
    @RequirePOST
    public FormValidation doUpdateClassification(@QueryParameter String project,
          @QueryParameter String commit,
@@ -203,7 +240,7 @@ public class PeassOverviewAction extends VisibleAction {
 
             File classificationFile = new File(path, "classifications.json");
             Classifications classifications = Constants.OBJECTMAPPER.readValue(classificationFile, Classifications.class);
-            
+
             String responseText = Constants.OBJECTMAPPER.writeValueAsString(classifications);
             byte[] responseBytes = responseText.getBytes(StandardCharsets.UTF_8);
             InputStream stream = new ByteArrayInputStream(responseBytes);
