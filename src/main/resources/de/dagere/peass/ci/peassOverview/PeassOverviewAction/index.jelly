@@ -6,6 +6,10 @@
     </l:side-panel>
     <l:main-panel>
       <st:include page="/style.jelly" optional="false" />
+      <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css" />
+      <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+      <script> jq$ = jQuery.noConflict();</script>
 
       <iframe style="position: fixed; bottom: 1px; right: 1px; width: 80%; height: 50px; z-index: 999; background-color: white;" 
         name="classificationResultFrame" id="classificationResultFrame" sandbox="allow-same-origin"></iframe>
@@ -17,12 +21,23 @@
         </j:if>
       </j:forEach>
       
-      <div class="button-wrap" style='position: absolute; right: 10px; top: 120px;'>
-        <a href="downloadClassification">Download Classifications</a>
+      <div class="button-wrap">
+        <a href="downloadClassification" style='position: absolute; right: 10px; top: 120px; width: 200px;'>Download Classifications</a>
       </div>
       
       <div class="button-wrap">
-        <a href='#' style='position: absolute; right: 10px; top: 160px;' onClick="
+        <a href='#' style='position: absolute; right: 250px; top: 120px; width: 200px;' onClick="
+          jq$( '#dialogStatistic' ).dialog( 'open' );
+        "
+        >
+          Show Statistic
+        </a>
+      </div>
+      
+      <st:include page="overviewStatistics.jelly" it="${it}" optional="false" />
+      
+      <div class="button-wrap">
+        <a href='#' style='position: absolute; right: 10px; top: 160px; width: 200px;' onClick="
         var button = document.getElementById('noneButton');
         for (const line of document.getElementsByClassName('none')){
           if (button.innerHTML=='Hide None')
@@ -39,7 +54,7 @@
       </div>
       
       <div class="button-wrap">
-        <a href='#' style='position: absolute; right: 10px; top: 200px' onClick="
+        <a href='#' style='position: absolute; right: 10px; top: 200px; width: 200px;' onClick="
         var button = document.getElementById('classifiedButton');
         for (const line of document.getElementsByClassName('classified')){
           if (button.innerHTML=='Hide Classified')
@@ -57,7 +72,7 @@
       </div>
       
       <div class="button-wrap">
-        <a href='#' style='position: absolute; right: 150px; top: 200px' onClick="
+        <a href='#' style='position: absolute; right: 250px; top: 200px; width: 200px;' onClick="
         var button = document.getElementById('unclassifiedButton');
         for (const line of document.getElementsByClassName('unclassifyable')){
           if (button.innerHTML=='Hide Unclassifyable')
