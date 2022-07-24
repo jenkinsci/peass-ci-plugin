@@ -1,6 +1,6 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout" xmlns:x="jelly:xml">
-  <div id="dialogStatistic" title="Statistic" style='width: 750px;'>
+  <div id="dialogStatistic" title="Statistic">
     <h1>Measurement Statistic</h1>
     <table class="data-table">
       <tr>

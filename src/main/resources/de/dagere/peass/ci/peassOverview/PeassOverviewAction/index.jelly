@@ -27,6 +27,7 @@
       
       <div class="button-wrap">
         <a href='#' style='position: absolute; right: 250px; top: 120px; width: 200px;' onClick="
+          jq$( '#dialogStatistic' ).dialog({ minWidth: 1000 });
           jq$( '#dialogStatistic' ).dialog( 'open' );
         "
         >
