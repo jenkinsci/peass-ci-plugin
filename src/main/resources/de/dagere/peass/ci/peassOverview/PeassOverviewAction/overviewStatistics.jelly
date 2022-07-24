@@ -9,7 +9,9 @@
         <th>Measured Tests</th>
         <th>Measured Changes</th>
         <j:forEach var="category" items="${it.getChangeClassificationArray()}">
-          <th>${category}</th>
+          <j:if test="${!category.equals('TODO')}">
+            <th>${category}</th>
+          </j:if>
         </j:forEach>
 
       </tr>
@@ -29,16 +31,18 @@
           <td>${project.getValue().getTestsWithSourceChange()}</td>
           <td>${project.getValue().getCommitsWithChange()} (${project.getValue().getTestsWithChange()})</td>
           <j:forEach var="category" items="${it.getChangeClassificationArray()}">
-            <td>
-              ${project.getValue().getCategoryCommitCount().get(category) == null ? 0 : project.getValue().getCategoryCommitCount().get(category)}
-              (${project.getValue().getCategoryTestCount().get(category) == null ? 0 : project.getValue().getCategoryTestCount().get(category)})
-            </td>
+            <j:if test="${!category.equals('TODO')}">
+              <td>
+                ${project.getValue().getCategoryCommitCount().get(category) == null ? 0 : project.getValue().getCategoryCommitCount().get(category)}
+                (${project.getValue().getCategoryTestCount().get(category) == null ? 0 : project.getValue().getCategoryTestCount().get(category)})
+              </td>
+            </j:if>
           </j:forEach>
         </tr>
       </j:forEach>
     </table>
     <h1>Measurement Problem Statistic</h1>
-    
+
     <table class="data-table">
       <tr>
         <th>Project</th>
@@ -46,7 +50,9 @@
         <th>Measured Tests</th>
         <th>Unmeasured Tests</th>
         <j:forEach var="category" items="${it.getUnmeasuredClassificationArray()}">
-          <th>${category}</th>
+          <j:if test="${!category.equals('TODO')}">
+            <th>${category}</th>
+          </j:if>
         </j:forEach>
 
       </tr>
@@ -66,10 +72,12 @@
           <td>${project.getValue().getTestsWithSourceChange()}</td>
           <td>${project.getValue().getUnmeasuredTests()}</td>
           <j:forEach var="category" items="${it.getUnmeasuredClassificationArray()}">
-            <td>
-              ${project.getValue().getCategoryCommitCount().get(category) == null ? 0 : project.getValue().getCategoryCommitCount().get(category)}
-              (${project.getValue().getCategoryTestCount().get(category) == null ? 0 : project.getValue().getCategoryTestCount().get(category)})
-            </td>
+            <j:if test="${!category.equals('TODO')}">
+              <td>
+                ${project.getValue().getCategoryCommitCount().get(category) == null ? 0 : project.getValue().getCategoryCommitCount().get(category)}
+                (${project.getValue().getCategoryTestCount().get(category) == null ? 0 : project.getValue().getCategoryTestCount().get(category)})
+              </td>
+            </j:if>
           </j:forEach>
         </tr>
       </j:forEach>

@@ -156,6 +156,7 @@ public class ProjectOverviewStatistic {
          result.setCommitsWithSourceChange(result.getCommitsWithSourceChange() + statistic.getCommitsWithSourceChange());
          result.setTestsWithChange(result.getTestsWithChange() + statistic.getTestsWithChange());
          result.setTestsWithSourceChange(result.getTestsWithSourceChange() + statistic.getTestsWithSourceChange());
+         result.setUnmeasuredTests(result.getUnmeasuredTests() + statistic.getUnmeasuredTests());
 
          for (String category : statistic.getCategoryCommitCount().keySet()) {
             Integer categoryCommitCount = result.getCategoryCommitCount().get(category);
