@@ -149,7 +149,7 @@ public class ProjectOverviewStatistic {
                categoryTestCount = 0;
             }
             categoryTestCount += statistic.getCategoryTestCount().get(category);
-            result.getCategoryTestCount().put(category, categoryCommitCount);
+            result.getCategoryTestCount().put(category, categoryTestCount);
          }
       }
       
