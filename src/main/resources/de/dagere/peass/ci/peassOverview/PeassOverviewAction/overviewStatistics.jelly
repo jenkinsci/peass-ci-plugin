@@ -1,6 +1,7 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout" xmlns:x="jelly:xml">
   <div id="dialogStatistic" title="Statistic" style='width: 750px;'>
+    <h1>Measurement Statistic</h1>
     <table class="data-table">
       <tr>
         <th>Project</th>
@@ -8,10 +9,6 @@
         <th>Measured Tests</th>
         <th>Measured Changes</th>
         <j:forEach var="category" items="${it.getChangeClassificationArray()}">
-          <th>${category}</th>
-        </j:forEach>
-        <th>Unmeasured Tests</th>
-        <j:forEach var="category" items="${it.getUnmeasuredClassificationArray()}">
           <th>${category}</th>
         </j:forEach>
 
@@ -37,10 +34,41 @@
               (${project.getValue().getCategoryTestCount().get(category) == null ? 0 : project.getValue().getCategoryTestCount().get(category)})
             </td>
           </j:forEach>
+        </tr>
+      </j:forEach>
+    </table>
+    <h1>Measurement Problem Statistic</h1>
+    
+    <table class="data-table">
+      <tr>
+        <th>Project</th>
+        <th>Measured Commits</th>
+        <th>Measured Tests</th>
+        <th>Unmeasured Tests</th>
+        <j:forEach var="category" items="${it.getUnmeasuredClassificationArray()}">
+          <th>${category}</th>
+        </j:forEach>
+
+      </tr>
+      <j:forEach var="project" items="${it.getStatistic().entrySet()}">
+        <tr>
+          <td>
+            <j:if test="${project.getKey().equals('Sum')}">
+              <b>
+                ${project.getKey()}
+              </b>
+            </j:if>
+            <j:if test="${!project.getKey().equals('Sum')}">
+              ${project.getKey()}
+            </j:if>
+          </td>
+          <td>${project.getValue().getCommitsWithSourceChange()}</td>
+          <td>${project.getValue().getTestsWithSourceChange()}</td>
           <td>Unmeasured</td>
           <j:forEach var="category" items="${it.getUnmeasuredClassificationArray()}">
             <td>
               ${project.getValue().getCategoryCommitCount().get(category) == null ? 0 : project.getValue().getCategoryCommitCount().get(category)}
+              (${project.getValue().getCategoryTestCount().get(category) == null ? 0 : project.getValue().getCategoryTestCount().get(category)})
             </td>
           </j:forEach>
         </tr>
