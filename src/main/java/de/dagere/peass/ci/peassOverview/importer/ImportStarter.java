@@ -14,6 +14,8 @@ import com.fasterxml.jackson.databind.DatabindException;
 
 import de.dagere.peass.ci.MeasureVersionBuilder;
 import de.dagere.peass.dependency.persistence.ExecutionData;
+import de.dagere.peass.dependency.persistence.SelectedTests;
+import de.dagere.peass.dependency.persistence.StaticTestSelection;
 import de.dagere.peass.folders.ResultsFolders;
 import de.dagere.peass.utils.Constants;
 import de.dagere.peass.vcs.CommitList;
@@ -72,16 +74,16 @@ public class ImportStarter implements Callable<Void> {
 
       LOG.debug("Project name: {}", projectFolderName);
 
-      importSelectionFiles(folders);
+      SelectedTests selectedTests = importSelectionFiles(folders);
 
       writeCommitList(folders);
 
-      MeasurementMerger measurementMerger = new MeasurementMerger(changeFile);
+      MeasurementMerger measurementMerger = new MeasurementMerger(changeFile, selectedTests);
       measurementMerger.merge(folders);
       return null;
    }
 
-   private void importSelectionFiles(ResultsFolders folders) throws IOException {
+   private SelectedTests importSelectionFiles(ResultsFolders folders) throws IOException {
       LOG.info("Copying {} to {}", executionFile, folders.getTraceTestSelectionFile());
       FileUtils.copyFile(executionFile, folders.getTraceTestSelectionFile());
 
@@ -92,6 +94,9 @@ public class ImportStarter implements Callable<Void> {
 
       LOG.info("Copying {} to {}", staticSelectionFile, folders.getStaticTestSelectionFile());
       FileUtils.copyFile(staticSelectionFile, folders.getStaticTestSelectionFile());
+      
+      SelectedTests tests = Constants.OBJECTMAPPER.readValue(staticSelectionFile, StaticTestSelection.class);
+      return tests;
    }
 
    private void writeCommitList(ResultsFolders folders) throws IOException, StreamReadException, DatabindException, StreamWriteException {
