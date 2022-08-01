@@ -265,7 +265,7 @@ public class PeassOverviewAction extends VisibleAction {
          public void generateResponse(StaplerRequest req, StaplerResponse rsp, Object node) throws IOException, ServletException {
             rsp.addHeader("Content-Type", "application/json");
 
-            Map<String, Map<String, List<String>>> unclassifiedList = buildUnclassifiedList();
+            Classifications unclassifiedList = buildUnclassifiedList();
 
             String responseText = Constants.OBJECTMAPPER.writeValueAsString(unclassifiedList);
             byte[] responseBytes = responseText.getBytes(StandardCharsets.UTF_8);
@@ -275,8 +275,8 @@ public class PeassOverviewAction extends VisibleAction {
 
          }
 
-         private Map<String, Map<String, List<String>>> buildUnclassifiedList() {
-            Map<String, Map<String, List<String>>> unclassifiedList = new HashMap<>();
+         private Classifications buildUnclassifiedList() {
+            Classifications unclassifiedClassification = new Classifications();
             
             for (Entry<String, ProjectData> project : projects.entrySet()) {
                String projectName = project.getKey();
@@ -285,29 +285,15 @@ public class PeassOverviewAction extends VisibleAction {
                      for (Change change : changes.getValue()) {
                         String testcase = changes.getKey() + "#" + change.getMethod();
                         String commitName = commit.getKey();
+                        
                         if (getClassification(projectName, commitName, testcase).equals("TODO")) {
-                           addTODOChange(unclassifiedList, projectName, testcase, commitName);
+                           unclassifiedClassification.setClassification(projectName, commitName, testcase, "TODO");
                         }
                      }
                   }
                }
             }
-            return unclassifiedList;
-         }
-
-         private void addTODOChange(Map<String, Map<String, List<String>>> unclassifiedList, String projectName, String testcase, String commitName) {
-            Map<String, List<String>> unclassifiedProject = unclassifiedList.get(projectName);
-            if (unclassifiedProject == null) {
-               unclassifiedProject = new LinkedHashMap<>();
-               unclassifiedList.put(projectName, unclassifiedProject);
-            }
-            List<String> unclassifiedListOfCommit = unclassifiedProject.get(commitName);
-            if (unclassifiedListOfCommit == null) {
-               unclassifiedListOfCommit = new LinkedList<>();
-               unclassifiedProject.put(commitName, unclassifiedListOfCommit);
-            }
-            
-            unclassifiedListOfCommit.add(testcase);
+            return unclassifiedClassification;
          }
       };
 
