@@ -18,6 +18,8 @@ import de.dagere.peass.analysis.changes.Changes;
 import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.analysis.measurement.ProjectStatistics;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.persistence.SelectedTests;
+import de.dagere.peass.dependencyprocessors.CommitComparatorInstance;
 import de.dagere.peass.folders.ResultsFolders;
 import de.dagere.peass.measurement.statistics.data.TestcaseStatistic;
 import de.dagere.peass.utils.Constants;
@@ -28,14 +30,16 @@ public class MeasurementMerger {
    private static final Logger LOG = LogManager.getLogger(MeasurementMerger.class);
    
    private File[] changeFile;
+   private final SelectedTests selectedTests;
    
    @SuppressFBWarnings
-   public MeasurementMerger(File[] changeFile) {
+   public MeasurementMerger(File[] changeFile, SelectedTests selectedTests) {
       this.changeFile = changeFile;
+      this.selectedTests = selectedTests;
    }
 
    public void merge(ResultsFolders folders) throws IOException, StreamReadException, DatabindException, StreamWriteException {
-      ProjectChanges changes = new ProjectChanges();
+      ProjectChanges changes = new ProjectChanges(new CommitComparatorInstance(selectedTests));
       ProjectStatistics statistics = new ProjectStatistics();
       for (File changeFileInstance : changeFile) {
          if (!changeFileInstance.exists()) {
