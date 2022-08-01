@@ -94,6 +94,11 @@
       ${project.getValue().getTestsWithSourceChange() + project.getValue().getUnmeasuredTests()}
     </b>
     tests have been measured (or tried to measure) in those commits.
+    <br />
+    <br />
+    <div class="button-wrap">
+      <a href="downloadUnclassified">Download Unclassified List</a>
+    </div>
   </div>
   <script>
     jq$("#dialogStatistic").dialog({ autoOpen: false });

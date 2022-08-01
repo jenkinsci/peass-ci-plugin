@@ -6,8 +6,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.text.NumberFormat;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -15,6 +18,7 @@ import java.util.Set;
 
 import javax.servlet.ServletException;
 
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jfree.util.Log;
@@ -26,6 +30,8 @@ import org.kohsuke.stapler.StaplerResponse;
 import org.kohsuke.stapler.interceptor.RequirePOST;
 
 import de.dagere.peass.GetChangesStarter;
+import de.dagere.peass.analysis.changes.Change;
+import de.dagere.peass.analysis.changes.Changes;
 import de.dagere.peass.ci.VisibleAction;
 import de.dagere.peass.ci.peassOverview.classification.Classifications;
 import de.dagere.peass.ci.peassOverview.classification.ClassifiedProject;
@@ -247,6 +253,61 @@ public class PeassOverviewAction extends VisibleAction {
 
             rsp.serveFile(req, stream, System.currentTimeMillis(), (long) responseBytes.length, "classifications.json");
 
+         }
+      };
+
+   }
+   
+   public HttpResponse doDownloadUnclassified() {
+      return new HttpResponse() {
+
+         @Override
+         public void generateResponse(StaplerRequest req, StaplerResponse rsp, Object node) throws IOException, ServletException {
+            rsp.addHeader("Content-Type", "application/json");
+
+            Map<String, Map<String, List<String>>> unclassifiedList = buildUnclassifiedList();
+
+            String responseText = Constants.OBJECTMAPPER.writeValueAsString(unclassifiedList);
+            byte[] responseBytes = responseText.getBytes(StandardCharsets.UTF_8);
+            InputStream stream = new ByteArrayInputStream(responseBytes);
+
+            rsp.serveFile(req, stream, System.currentTimeMillis(), (long) responseBytes.length, "unclassified.json");
+
+         }
+
+         private Map<String, Map<String, List<String>>> buildUnclassifiedList() {
+            Map<String, Map<String, List<String>>> unclassifiedList = new HashMap<>();
+            
+            for (Entry<String, ProjectData> project : projects.entrySet()) {
+               String projectName = project.getKey();
+               for (Entry<String, Changes> commit : project.getValue().getChanges().getCommitChanges().entrySet()) {
+                  for (Entry<String, List<Change>> changes : commit.getValue().getTestcaseChanges().entrySet()) {
+                     for (Change change : changes.getValue()) {
+                        String testcase = changes.getKey() + "#" + change.getMethod();
+                        String commitName = commit.getKey();
+                        if (getClassification(projectName, commitName, testcase).equals("TODO")) {
+                           addTODOChange(unclassifiedList, projectName, testcase, commitName);
+                        }
+                     }
+                  }
+               }
+            }
+            return unclassifiedList;
+         }
+
+         private void addTODOChange(Map<String, Map<String, List<String>>> unclassifiedList, String projectName, String testcase, String commitName) {
+            Map<String, List<String>> unclassifiedProject = unclassifiedList.get(projectName);
+            if (unclassifiedProject == null) {
+               unclassifiedProject = new LinkedHashMap<>();
+               unclassifiedList.put(projectName, unclassifiedProject);
+            }
+            List<String> unclassifiedListOfCommit = unclassifiedProject.get(commitName);
+            if (unclassifiedListOfCommit == null) {
+               unclassifiedListOfCommit = new LinkedList<>();
+               unclassifiedProject.put(commitName, unclassifiedListOfCommit);
+            }
+            
+            unclassifiedListOfCommit.add(testcase);
          }
       };
 
