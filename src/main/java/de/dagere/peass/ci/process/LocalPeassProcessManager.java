@@ -189,7 +189,7 @@ public class LocalPeassProcessManager {
       return changes;
    }
 
-   private ProjectStatistics readStatistics() throws IOException, JsonParseException, JsonMappingException {
+   private ProjectStatistics readStatistics() throws IOException {
       final File statisticsFile = results.getStatisticsFile();
       ProjectStatistics statistics;
       if (statisticsFile.exists()) {
