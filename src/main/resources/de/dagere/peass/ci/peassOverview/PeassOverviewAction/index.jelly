@@ -38,7 +38,7 @@
       <st:include page="overviewStatistics.jelly" it="${it}" optional="false" />
       
       <div class="button-wrap">
-        <a href='#' style='position: absolute; right: 10px; top: 160px; width: 200px;' onClick="
+        <a href='#' style='position: absolute; right: 10px; top: 180px; width: 200px;' onClick="
         var button = document.getElementById('noneButton');
         for (const line of document.getElementsByClassName('none')){
           if (button.innerHTML=='Hide None')
@@ -55,7 +55,7 @@
       </div>
       
       <div class="button-wrap">
-        <a href='#' style='position: absolute; right: 10px; top: 200px; width: 200px;' onClick="
+        <a href='#' style='position: absolute; right: 10px; top: 225px; width: 200px;' onClick="
         var button = document.getElementById('classifiedButton');
         for (const line of document.getElementsByClassName('classified')){
           if (button.innerHTML=='Hide Classified')
@@ -73,7 +73,7 @@
       </div>
       
       <div class="button-wrap">
-        <a href='#' style='position: absolute; right: 250px; top: 200px; width: 200px;' onClick="
+        <a href='#' style='position: absolute; right: 250px; top: 225px; width: 200px;' onClick="
         var button = document.getElementById('unclassifiedButton');
         for (const line of document.getElementsByClassName('unclassifyable')){
           if (button.innerHTML=='Hide Unclassifyable')
