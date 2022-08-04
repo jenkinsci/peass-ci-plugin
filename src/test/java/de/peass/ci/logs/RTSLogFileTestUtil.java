@@ -25,7 +25,7 @@ public class RTSLogFileTestUtil {
    static final File localFolder = new File("target/" + MeasureVersionBuilder.PEASS_FOLDER_NAME);
    static final File testFolder = new File(localFolder, "current_peass");
    
-   private final TestCase test1;
+   private final TestMethodCall test1;
    private final String projectName;
 
    public RTSLogFileTestUtil(final TestMethodCall test1, final String projectName) {
