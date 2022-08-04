@@ -61,7 +61,7 @@ public class LogFileReader {
       logFiles.put(testcase, currentFiles);
    }
 
-   private List<LogFiles> tryLocalLogFolderVMIds(final TestCase testcase, final File logFolder, final PeassFolders folders) {
+   private List<LogFiles> tryLocalLogFolderVMIds(final TestMethodCall testcase, final File logFolder, final PeassFolders folders) {
       List<LogFiles> currentFiles = new LinkedList<>();
       if (logFolder != null && logFolder.exists() && logFolder.isDirectory()) {
          LOG.debug("Log folder: {} {}", logFolder, logFolder.listFiles());

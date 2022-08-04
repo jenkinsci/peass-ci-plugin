@@ -13,8 +13,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import de.dagere.peass.analysis.measurement.ProjectStatistics;
-import de.dagere.peass.dependency.analysis.data.TestCase;
-import de.dagere.peass.dependency.analysis.data.deserializer.TestcaseKeyDeserializer;
+import de.dagere.peass.dependency.analysis.data.deserializer.TestMethodCallKeyDeserializer;
 import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.measurement.statistics.data.TestcaseStatistic;
 import de.dagere.peass.utils.Constants;
@@ -25,7 +24,7 @@ public class TestStatisticsReading {
    public void testTestcaseNaming() throws JsonParseException, JsonMappingException, IOException {
       File statisticsFile = new File("src/test/resources/statistics.json");
 
-      Constants.OBJECTMAPPER.registerModules(new SimpleModule().addKeyDeserializer(TestCase.class, new TestcaseKeyDeserializer()));
+      Constants.OBJECTMAPPER.registerModules(new SimpleModule().addKeyDeserializer(TestMethodCall.class, new TestMethodCallKeyDeserializer()));
       
       ProjectStatistics statistics = Constants.OBJECTMAPPER.readValue(statisticsFile, ProjectStatistics.class);
 

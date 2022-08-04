@@ -46,6 +46,7 @@ import de.dagere.peass.config.TestSelectionConfig;
 import de.dagere.peass.config.parameters.ExecutionConfigMixin;
 import de.dagere.peass.config.parameters.MeasurementConfigurationMixin;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.data.deserializer.TestMethodCallKeyDeserializer;
 import de.dagere.peass.dependency.analysis.data.deserializer.TestcaseKeyDeserializer;
 import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.execution.utils.EnvironmentVariables;
@@ -86,6 +87,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    static {
       SimpleModule keyDeserializer = new SimpleModule().addKeyDeserializer(TestCase.class, new TestcaseKeyDeserializer());
       Constants.OBJECTMAPPER.registerModules(keyDeserializer);
+      SimpleModule methodDeserializer = new SimpleModule().addKeyDeserializer(TestMethodCall.class, new TestMethodCallKeyDeserializer());
+      Constants.OBJECTMAPPER.registerModules(methodDeserializer);
    }
 
    private int VMs = MeasurementConfigurationMixin.DEFAULT_VMS;
