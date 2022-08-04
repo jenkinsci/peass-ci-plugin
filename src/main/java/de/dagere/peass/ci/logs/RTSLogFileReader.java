@@ -77,7 +77,7 @@ public class RTSLogFileReader {
       if (allFiles != null) {
          for (File examinedFolder : allFiles) {
             if (examinedFolder.getName().startsWith("log_")) {
-               testClazzFolders.put(examinedFolder, null);
+               testClazzFolders.put(examinedFolder, "");
             } else if (examinedFolder.isDirectory()) {
                String module = examinedFolder.getName();
                File[] versionFiles = examinedFolder.listFiles((FilenameFilter) new WildcardFileFilter("log_*"));
