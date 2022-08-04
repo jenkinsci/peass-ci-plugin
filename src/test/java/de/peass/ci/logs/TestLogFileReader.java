@@ -14,6 +14,7 @@ import org.mockito.Mockito;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import de.dagere.peass.analysis.measurement.ProjectStatistics;
 import de.dagere.peass.ci.MeasureVersionBuilder;
@@ -22,6 +23,8 @@ import de.dagere.peass.ci.logs.LogFileReader;
 import de.dagere.peass.ci.logs.LogFiles;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.data.deserializer.TestMethodCallKeyDeserializer;
+import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.folders.PeassFolders;
 import de.dagere.peass.folders.ResultsFolders;
 import de.dagere.peass.utils.Constants;
@@ -37,6 +40,9 @@ public class TestLogFileReader {
 
    @BeforeEach
    public void init() throws IOException {
+      SimpleModule methodDeserializer = new SimpleModule().addKeyDeserializer(TestMethodCall.class, new TestMethodCallKeyDeserializer());
+      Constants.OBJECTMAPPER.registerModules(methodDeserializer);
+      
       File source = new File(RESOURCES_FOLDER, "demo-results-logs/demo-vis2_peass");
       if (localFolder.exists()) {
          FileUtils.deleteDirectory(localFolder);

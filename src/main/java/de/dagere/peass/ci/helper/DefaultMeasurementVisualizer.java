@@ -90,7 +90,7 @@ public class DefaultMeasurementVisualizer {
       return noWarmupStatistics;
    }
 
-   private File generateJSFile(final TestCase testcase, final KoPeMeTreeConverter treeConverter) throws IOException {
+   private File generateJSFile(final TestMethodCall testcase, final KoPeMeTreeConverter treeConverter) throws IOException {
       GraphNode kopemeDataNode = treeConverter.getData();
 
       if (kopemeDataNode != null) {
