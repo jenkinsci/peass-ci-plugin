@@ -84,13 +84,6 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
    private static final long serialVersionUID = -7455227251645979702L;
 
-   static {
-      SimpleModule keyDeserializer = new SimpleModule().addKeyDeserializer(TestCase.class, new TestcaseKeyDeserializer());
-      Constants.OBJECTMAPPER.registerModules(keyDeserializer);
-      SimpleModule methodDeserializer = new SimpleModule().addKeyDeserializer(TestMethodCall.class, new TestMethodCallKeyDeserializer());
-      Constants.OBJECTMAPPER.registerModules(methodDeserializer);
-   }
-
    private int VMs = MeasurementConfigurationMixin.DEFAULT_VMS;
    private int iterations = MeasurementConfigurationMixin.DEFAULT_ITERATIONS;
    private int warmup = MeasurementConfigurationMixin.DEFAULT_WARMUP;
