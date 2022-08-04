@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 import de.dagere.peass.analysis.measurement.ProjectStatistics;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.measurement.statistics.data.TestcaseStatistic;
 import de.dagere.peass.utils.Constants;
 import hudson.model.Run;
@@ -34,15 +35,15 @@ public class TrendFileUtil {
 
    private static void addFakePredecessorStatistics(final Run<?, ?> run, final ProjectStatistics statistics, final BuildMeasurementValues values) {
       final ProjectStatistics fakePredecessorStatistics = new ProjectStatistics();
-      final Entry<String, Map<TestCase, TestcaseStatistic>> currentEntry = statistics.getStatistics().entrySet().iterator().next();
-      final String version = currentEntry.getKey();
-      for (Entry<TestCase, TestcaseStatistic> entry : currentEntry.getValue().entrySet()) {
+      final Entry<String, Map<TestMethodCall, TestcaseStatistic>> currentEntry = statistics.getStatistics().entrySet().iterator().next();
+      final String commit = currentEntry.getKey();
+      for (Entry<TestMethodCall, TestcaseStatistic> entry : currentEntry.getValue().entrySet()) {
          TestcaseStatistic predecessor = new TestcaseStatistic();
          predecessor.setCalls(entry.getValue().getCallsOld());
          predecessor.setMeanCurrent(entry.getValue().getMeanOld());
          predecessor.setDeviationCurrent(entry.getValue().getDeviationOld());
          predecessor.setVMs(entry.getValue().getVMs());
-         fakePredecessorStatistics.addMeasurement(version + "~1", entry.getKey(), predecessor);
+         fakePredecessorStatistics.addMeasurement(commit + "~1", entry.getKey(), predecessor);
       }
       values.addMeasurement(fakePredecessorStatistics, run.getNumber() - 1);
    }

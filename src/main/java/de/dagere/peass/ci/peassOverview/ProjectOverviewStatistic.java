@@ -11,6 +11,7 @@ import java.util.Set;
 import de.dagere.peass.ci.peassOverview.classification.ClassifiedProject;
 import de.dagere.peass.ci.peassOverview.classification.TestcaseClassification;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.dependency.persistence.CommitStaticSelection;
 import de.dagere.peass.measurement.statistics.data.TestcaseStatistic;
 
@@ -135,7 +136,7 @@ public class ProjectOverviewStatistic {
          CommitStaticSelection commitSelection = projectData.getSelection().getCommits().get(commit);
          if (commitSelection != null) {
             int unmeasured = statistic.getUnmeasuredTests();
-            Map<TestCase, TestcaseStatistic> commitStatistic = projectData.getStatistics().getStatistics().get(commit);
+            Map<TestMethodCall, TestcaseStatistic> commitStatistic = projectData.getStatistics().getStatistics().get(commit);
             for (TestCase test : commitSelection.getTests().getTests()) {
                if (commitStatistic == null) {
                   unmeasured++;

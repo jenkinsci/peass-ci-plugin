@@ -18,6 +18,7 @@ import de.dagere.peass.analysis.changes.Changes;
 import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.analysis.measurement.ProjectStatistics;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.dependency.persistence.SelectedTests;
 import de.dagere.peass.dependencyprocessors.CommitComparatorInstance;
 import de.dagere.peass.folders.ResultsFolders;
@@ -61,8 +62,8 @@ public class MeasurementMerger {
    private void readStatisticsFile(ProjectStatistics statistics, File changeFileInstance) throws IOException, StreamReadException, DatabindException {
       File currentStatisticsFile = new File(changeFileInstance.getParentFile(), "statistics.json");
       ProjectStatistics currentStatistics = Constants.OBJECTMAPPER.readValue(currentStatisticsFile, ProjectStatistics.class);
-      for (Entry<String, Map<TestCase, TestcaseStatistic>> commitEntry : currentStatistics.getStatistics().entrySet()) {
-         for (Entry<TestCase, TestcaseStatistic> testEntry : commitEntry.getValue().entrySet()) {
+      for (Entry<String, Map<TestMethodCall, TestcaseStatistic>> commitEntry : currentStatistics.getStatistics().entrySet()) {
+         for (Entry<TestMethodCall, TestcaseStatistic> testEntry : commitEntry.getValue().entrySet()) {
             statistics.addMeasurement(commitEntry.getKey(), testEntry.getKey(), testEntry.getValue());
          }
       }

@@ -15,13 +15,13 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import de.dagere.peass.ci.logs.RTSLogFileReader;
 import de.dagere.peass.ci.logs.rts.RTSLogData;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 
 public class TestRTSLogFileReader {
 
-   
-   static final TestCase TEST1 = new TestCase("de.test.CalleeTest#onlyCallMethod1");
-   static final TestCase TEST2 = new TestCase("de.test.CalleeTest#onlyCallMethod2");
-   
+   static final TestMethodCall TEST1 = new TestMethodCall("de.test.CalleeTest", "onlyCallMethod1");
+   static final TestMethodCall TEST2 = new TestMethodCall("de.test.CalleeTest", "onlyCallMethod2");
+
    private RTSLogFileTestUtil util = new RTSLogFileTestUtil(TEST1, "demo-vis2");
 
    @BeforeEach
@@ -29,7 +29,7 @@ public class TestRTSLogFileReader {
       File source = new File("src/test/resources/demo-results-logs/demo-vis2_peass");
       util.init(source);
    }
-   
+
    @Test
    public void testReading() throws JsonParseException, JsonMappingException, IOException {
       RTSLogFileReader reader = util.initializeReader();

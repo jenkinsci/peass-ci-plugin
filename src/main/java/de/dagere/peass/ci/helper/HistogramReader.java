@@ -12,6 +12,7 @@ import de.dagere.kopeme.kopemedata.TestMethod;
 import de.dagere.kopeme.kopemedata.VMResultChunk;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.measurement.dataloading.MultipleVMTestUtil;
 import de.dagere.peass.measurement.dataloading.ResultLoader;
 import io.jenkins.cli.shaded.org.apache.commons.io.filefilter.WildcardFileFilter;
@@ -53,7 +54,7 @@ public class HistogramReader {
       final TestMethod testcase = data.getMethods().get(0);
       VMResultChunk chunk = testcase.getDatacollectorResults().get(0).getChunks().get(0);
       
-      String testcaseKey = new TestCase(data).toString();
+      String testcaseKey = new TestMethodCall(data).toString();
       
       MeasurementConfig currentConfig = getUpdatedConfiguration(testcaseKey, testcase, chunk);
       

@@ -14,10 +14,11 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import de.dagere.peass.ci.logs.RTSLogFileReader;
 import de.dagere.peass.ci.logs.rts.RTSLogData;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 
 public class TestRTSLogFileReaderMultimodule {
 
-   private static final TestCase TEST1 = new TestCase("de.test.CalleeTest", "onlyCallMethod1", "moduleA");
+   private static final TestMethodCall TEST1 = new TestMethodCall("de.test.CalleeTest", "onlyCallMethod1", "moduleA");
 
    private RTSLogFileTestUtil util = new RTSLogFileTestUtil(TEST1, "demo-vis2-multimodule");
 

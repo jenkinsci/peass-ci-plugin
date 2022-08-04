@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import de.dagere.peass.analysis.measurement.ProjectStatistics;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.measurement.statistics.data.TestcaseStatistic;
 
 public class BuildMeasurementValues {
@@ -23,8 +24,8 @@ public class BuildMeasurementValues {
 
    @JsonIgnore
    public void addMeasurement(final ProjectStatistics currentVersionStatistics, final int buildNumber) {
-      for (Entry<String, Map<TestCase, TestcaseStatistic>> version : currentVersionStatistics.getStatistics().entrySet()) {
-         for (Map.Entry<TestCase, TestcaseStatistic> testcase : version.getValue().entrySet()) {
+      for (Entry<String, Map<TestMethodCall, TestcaseStatistic>> version : currentVersionStatistics.getStatistics().entrySet()) {
+         for (Map.Entry<TestMethodCall, TestcaseStatistic> testcase : version.getValue().entrySet()) {
             final String testcaseName = testcase.getKey().toString();
             TestMeasurementValues testcasePersistedValues = values.get(testcaseName);
             if (testcasePersistedValues == null) {

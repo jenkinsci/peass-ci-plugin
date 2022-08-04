@@ -19,6 +19,7 @@ import de.dagere.peass.ci.persistence.BuildMeasurementValues;
 import de.dagere.peass.ci.persistence.TestMeasurementValues;
 import de.dagere.peass.ci.persistence.TrendFileUtil;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.measurement.statistics.data.TestcaseStatistic;
 import hudson.model.Run;
 
@@ -77,8 +78,8 @@ public class TestTrendFileUtil {
 
    private ProjectStatistics buildStatistics() {
       ProjectStatistics simpleStatistics = new ProjectStatistics();
-      simpleStatistics.addMeasurement("000001", new TestCase("DemoTest", "methodA"), new TestcaseStatistic(1, 2, 0.1, 0.2, 15, -5, true, 100, 100));
-      simpleStatistics.addMeasurement("000001", new TestCase("DemoTest", "methodB"), new TestcaseStatistic(3, 4, 0.2, 0.3, 20, -5, true, 100, 100));
+      simpleStatistics.addMeasurement("000001", new TestMethodCall("DemoTest", "methodA"), new TestcaseStatistic(1, 2, 0.1, 0.2, 15, -5, true, 100, 100));
+      simpleStatistics.addMeasurement("000001", new TestMethodCall("DemoTest", "methodB"), new TestcaseStatistic(3, 4, 0.2, 0.3, 20, -5, true, 100, 100));
       return simpleStatistics;
    }
 }

@@ -19,6 +19,7 @@ import de.dagere.peass.ci.logs.LogUtil;
 import de.dagere.peass.config.FixedCommitConfig;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import hudson.model.Run;
 
 public class MeasurementActionCreator {
@@ -37,7 +38,7 @@ public class MeasurementActionCreator {
       this.pattern = pattern;
    }
 
-   public void createMeasurementActions(final Set<TestCase> tests) throws IOException {
+   public void createMeasurementActions(final Set<TestMethodCall> tests) throws IOException {
       createOverallLogAction();
 
       Map<TestCase, List<LogFiles>> logFiles = reader.readAllTestcases(tests);

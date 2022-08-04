@@ -11,6 +11,7 @@ import de.dagere.peass.ci.logs.rts.RTSActionCreator;
 import de.dagere.peass.ci.logs.rts.RTSLogSummary;
 import de.dagere.peass.ci.process.RTSInfos;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import hudson.model.Run;
 
 public class LogActionCreator {
@@ -34,7 +35,7 @@ public class LogActionCreator {
       return rtsActionCreator.getLogSummary();
    }
 
-   public void createMeasurementActions(final Set<TestCase> tests) throws IOException {
+   public void createMeasurementActions(final Set<TestMethodCall> tests) throws IOException {
       MeasurementActionCreator measurementActionCreator = new MeasurementActionCreator(reader, run, peassConfig.getMeasurementConfig(), peassConfig.getPattern());
       measurementActionCreator.createMeasurementActions(tests);
    }

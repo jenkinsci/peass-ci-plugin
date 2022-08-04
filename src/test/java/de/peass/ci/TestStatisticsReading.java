@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import de.dagere.peass.analysis.measurement.ProjectStatistics;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.analysis.data.deserializer.TestcaseKeyDeserializer;
+import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.measurement.statistics.data.TestcaseStatistic;
 import de.dagere.peass.utils.Constants;
 
@@ -28,9 +29,9 @@ public class TestStatisticsReading {
       
       ProjectStatistics statistics = Constants.OBJECTMAPPER.readValue(statisticsFile, ProjectStatistics.class);
 
-      Map<TestCase, TestcaseStatistic> testcase = statistics.getStatistics().values().iterator().next();
+      Map<TestMethodCall, TestcaseStatistic> testcase = statistics.getStatistics().values().iterator().next();
 
-      for (TestCase test : testcase.keySet()) {
+      for (TestMethodCall test : testcase.keySet()) {
          MatcherAssert.assertThat(test.getClazz(), Matchers.not(Matchers.containsString(" ")));
       }
    }
