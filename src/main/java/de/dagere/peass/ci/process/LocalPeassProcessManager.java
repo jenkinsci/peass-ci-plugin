@@ -38,6 +38,7 @@ import de.dagere.peass.ci.remote.RemoteRCA;
 import de.dagere.peass.ci.remote.RemoteRTS;
 import de.dagere.peass.ci.rts.RTSVisualizationCreator;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.folders.ResultsFolders;
 import de.dagere.peass.measurement.rca.CauseSearcherConfig;
 import de.dagere.peass.measurement.statistics.data.TestcaseStatistic;
@@ -101,7 +102,7 @@ public class LocalPeassProcessManager {
       return aggregatedRTSResult;
    }
 
-   public boolean measure(final Set<TestCase> tests) throws IOException, InterruptedException {
+   public boolean measure(final Set<TestMethodCall> tests) throws IOException, InterruptedException {
       final RemoteMeasurer remotePerformer = new RemoteMeasurer(peassConfig, listener, tests);
       boolean worked = workspace.act(remotePerformer);
       listener.getLogger().println("Measurement worked: " + worked);

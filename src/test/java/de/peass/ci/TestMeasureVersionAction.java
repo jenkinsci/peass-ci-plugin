@@ -13,6 +13,7 @@ import de.dagere.peass.ci.helper.HistogramValues;
 import de.dagere.peass.ci.helper.IdHelper;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 
 public class TestMeasureVersionAction {
 
@@ -35,10 +36,10 @@ public class TestMeasureVersionAction {
 
    private ProjectChanges getChanges() {
       final ProjectChanges changes = new ProjectChanges();
-      changes.addChange(new TestCase("de.package.ClassA", "method1"), "1", new Change("dummy", "method1"));
-      changes.addChange(new TestCase("de.package.ClassA", "method2"), "1", new Change("dummy", "method2"));
-      changes.addChange(new TestCase("de.package.ClassB", "method2"), "1", new Change("dummy", "method2"));
-      changes.addChange(new TestCase("de.package.otherpackage.ClassC", "method2"), "1", new Change("dummy", "method2"));
+      changes.addChange(new TestMethodCall("de.package.ClassA", "method1"), "1", new Change("dummy", "method1"));
+      changes.addChange(new TestMethodCall("de.package.ClassA", "method2"), "1", new Change("dummy", "method2"));
+      changes.addChange(new TestMethodCall("de.package.ClassB", "method2"), "1", new Change("dummy", "method2"));
+      changes.addChange(new TestMethodCall("de.package.otherpackage.ClassC", "method2"), "1", new Change("dummy", "method2"));
       return changes;
    }
 

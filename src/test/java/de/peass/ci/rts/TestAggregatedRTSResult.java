@@ -10,6 +10,7 @@ import de.dagere.peass.ci.RTSResult;
 import de.dagere.peass.ci.logs.rts.AggregatedRTSResult;
 import de.dagere.peass.ci.logs.rts.RTSLogSummary;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 
 public class TestAggregatedRTSResult {
 
@@ -21,7 +22,7 @@ public class TestAggregatedRTSResult {
       Mockito.when(summary.isPredecessorContainsSuccess()).thenReturn(true);
       Mockito.when(summary.isVersionContainsSuccess()).thenReturn(true);
 
-      RTSResult rtsResult = new RTSResult(new HashSet<TestCase>(), true);
+      RTSResult rtsResult = new RTSResult(new HashSet<TestMethodCall>(), true);
       AggregatedRTSResult result = new AggregatedRTSResult(summary, rtsResult);
       
       Assert.assertFalse(result.isRtsAllError());
@@ -36,7 +37,7 @@ public class TestAggregatedRTSResult {
       Mockito.when(summary.isPredecessorContainsSuccess()).thenReturn(false);
       Mockito.when(summary.isVersionContainsSuccess()).thenReturn(false);
 
-      RTSResult rtsResult = new RTSResult(new HashSet<TestCase>(), true);
+      RTSResult rtsResult = new RTSResult(new HashSet<TestMethodCall>(), true);
       AggregatedRTSResult result = new AggregatedRTSResult(summary, rtsResult);
       
       Assert.assertFalse(result.isRtsAllError());
@@ -51,7 +52,7 @@ public class TestAggregatedRTSResult {
       Mockito.when(summary.isPredecessorContainsSuccess()).thenReturn(true);
       Mockito.when(summary.isVersionContainsSuccess()).thenReturn(true);
 
-      RTSResult rtsResult = new RTSResult(new HashSet<TestCase>(), true);
+      RTSResult rtsResult = new RTSResult(new HashSet<TestMethodCall>(), true);
       AggregatedRTSResult result = new AggregatedRTSResult(summary, rtsResult);
       
       Assert.assertFalse(result.isRtsAllError());

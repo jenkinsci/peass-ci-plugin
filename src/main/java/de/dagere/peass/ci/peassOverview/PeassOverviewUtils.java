@@ -26,7 +26,7 @@ public class PeassOverviewUtils {
                         if (test.getMethod() != null) {
                            changedEntity.getValue().removeTest(test.onlyClazz(), test.getMethod());
                         } else {
-                           changedEntity.getValue().removeTest(test);
+                           changedEntity.getValue().removeTest(test.onlyClazz());
                         }
                      }
                   }

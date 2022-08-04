@@ -13,6 +13,7 @@ import de.dagere.peass.ci.ContinuousExecutor;
 import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.ci.process.JenkinsLogRedirector;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import hudson.FilePath.FileCallable;
 import hudson.model.TaskListener;
 import hudson.remoting.VirtualChannel;
@@ -27,9 +28,9 @@ public class RemoteMeasurer implements FileCallable<Boolean> {
 
    private final TaskListener listener;
    
-   private final Set<TestCase> tests;
+   private final Set<TestMethodCall> tests;
 
-   public RemoteMeasurer(final PeassProcessConfiguration peassConfig, final TaskListener listener, final Set<TestCase> tests) {
+   public RemoteMeasurer(final PeassProcessConfiguration peassConfig, final TaskListener listener, final Set<TestMethodCall> tests) {
       this.peassConfig = peassConfig;
       this.listener = listener;
       this.tests = tests;

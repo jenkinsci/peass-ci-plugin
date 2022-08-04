@@ -21,6 +21,7 @@ import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.rca.RCALevel;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.folders.CauseSearchFolders;
 import de.dagere.peass.folders.PeassFolders;
 import de.dagere.peass.measurement.rca.data.CauseSearchData;
@@ -39,9 +40,9 @@ public class LogFileReader {
 
    }
 
-   public Map<TestCase, List<LogFiles>> readAllTestcases(final Set<TestCase> tests) {
+   public Map<TestCase, List<LogFiles>> readAllTestcases(final Set<TestMethodCall> tests) {
       Map<TestCase, List<LogFiles>> logFiles = new HashMap<>();
-      for (TestCase testcase : tests) {
+      for (TestMethodCall testcase : tests) {
          readTestcase(visualizationFolders.getPeassFolders(), logFiles, testcase);
       }
       return logFiles;
@@ -52,7 +53,7 @@ public class LogFileReader {
       return logFiles;
    }
 
-   private void readTestcase(final PeassFolders folders, final Map<TestCase, List<LogFiles>> logFiles, final TestCase testcase) {
+   private void readTestcase(final PeassFolders folders, final Map<TestCase, List<LogFiles>> logFiles, final TestMethodCall testcase) {
       LOG.info("Reading testcase " + testcase);
 
       File logFolder = folders.getExistingMeasureLogFolder(measurementConfig.getFixedCommitConfig().getCommit(), testcase);
@@ -154,7 +155,7 @@ public class LogFileReader {
    private void readRCATestcase(final CauseSearchFolders causeFolders, final Map<TestCase, List<RCALevel>> testcases, final File jsonFileName)
          throws IOException, JsonParseException, JsonMappingException {
       CauseSearchData data = Constants.OBJECTMAPPER.readValue(jsonFileName, CauseSearchData.class);
-      TestCase test = data.getCauseConfig().getTestCase();
+      TestMethodCall test = data.getCauseConfig().getTestCase();
 
       boolean lastHadLogs = true;
       int levelId = 0;

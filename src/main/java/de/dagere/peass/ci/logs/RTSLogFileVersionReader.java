@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.rts.RTSLogData;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.dependency.traces.TraceFileManager;
 import de.dagere.peass.dependency.traces.TraceWriter;
 
@@ -22,7 +23,7 @@ public class RTSLogFileVersionReader {
    private final Map<TestCase, RTSLogData> files = new LinkedHashMap<>();
    private File testClazzFolder;
    private File methodFile;
-   private TestCase test;
+   private TestMethodCall test;
 
    public RTSLogFileVersionReader(final VisualizationFolderManager visualizationFolders, final String commit) {
       this.visualizationFolders = visualizationFolders;
@@ -46,7 +47,7 @@ public class RTSLogFileVersionReader {
                this.methodFile = methodFile;
                String clazz = testClazzFolder.getName().substring("log_".length());
                String method = methodFile.getName().substring(0, methodFile.getName().length() - ".txt".length());
-               test = new TestCase(clazz, method, module);
+               test = new TestMethodCall(clazz, method, module);
 
                addMethodLog();
             }
@@ -83,11 +84,11 @@ public class RTSLogFileVersionReader {
 
                if (methodFile.getName().contains("(")) {
                   String params = fileName.substring(test.getMethod().length() + 1, fileName.length() - 1);
-                  test = new TestCase(test.getClazz(), test.getMethod(), test.getModule(), params);
+                  test = new TestMethodCall(test.getClazz(), test.getMethod(), test.getModule(), params);
                   boolean runWasSuccessful = checkRunWasSuccessful(viewMethodDir);
                   addMethodLogData(runWasSuccessful, false);
                } else {
-                  test = new TestCase(test.getClazz(), test.getMethod(), test.getModule());
+                  test = new TestMethodCall(test.getClazz(), test.getMethod(), test.getModule());
                   /*
                    * runWasSuccessful is always true in this case
                    * we can't use checkRunWasSuccessful because no viewMethodDir exists

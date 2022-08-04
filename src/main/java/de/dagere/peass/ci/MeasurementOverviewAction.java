@@ -20,6 +20,7 @@ import de.dagere.peass.ci.helper.RCAVisualizer;
 import de.dagere.peass.ci.helper.UnitConverter;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.measurement.statistics.StatisticUtil;
 import de.dagere.peass.measurement.statistics.data.TestcaseStatistic;
 
@@ -119,9 +120,9 @@ public class MeasurementOverviewAction extends VisibleAction {
    }
 
    public TestcaseStatistic getTestcaseStatistic(final String testcase) {
-      Entry<String, Map<TestCase, TestcaseStatistic>> testcaseStatisticEntry = statistics.getStatistics().entrySet().iterator().next();
-      Map<TestCase, TestcaseStatistic> testcaseStatistic = testcaseStatisticEntry.getValue();
-      return testcaseStatistic.get(new TestCase(testcase));
+      Entry<String, Map<TestMethodCall, TestcaseStatistic>> testcaseStatisticEntry = statistics.getStatistics().entrySet().iterator().next();
+      Map<TestMethodCall, TestcaseStatistic> testcaseStatistic = testcaseStatisticEntry.getValue();
+      return testcaseStatistic.get(TestMethodCall.createFromString(testcase));
    }
 
    public TestcaseStatistic getNoWarmupStatistic(final String testcase) {

@@ -12,6 +12,7 @@ import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.RTSLogFileReader;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.dependency.traces.TraceWriter;
 import de.dagere.peass.folders.PeassFolders;
 import de.dagere.peass.folders.ResultsFolders;
@@ -27,7 +28,7 @@ public class RTSLogFileTestUtil {
    private final TestCase test1;
    private final String projectName;
 
-   public RTSLogFileTestUtil(final TestCase test1, final String projectName) {
+   public RTSLogFileTestUtil(final TestMethodCall test1, final String projectName) {
       this.test1 = test1;
       this.projectName = projectName;
    }

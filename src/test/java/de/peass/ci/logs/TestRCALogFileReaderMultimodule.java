@@ -23,6 +23,7 @@ import de.dagere.peass.ci.logs.LogFileReader;
 import de.dagere.peass.ci.logs.rca.RCALevel;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.folders.CauseSearchFolders;
 import de.dagere.peass.folders.PeassFolders;
 import de.dagere.peass.folders.ResultsFolders;
@@ -32,7 +33,7 @@ public class TestRCALogFileReaderMultimodule {
    private final File localFolder = new File("target/"+ MeasureVersionBuilder.PEASS_FOLDER_NAME);
    private final File testFolder = new File(localFolder, "current_peass");
    
-   private static final TestCase test = new TestCase("de.test.CalleeTest","onlyCallMethod2", "moduleA");
+   private static final TestMethodCall test = new TestMethodCall("de.test.CalleeTest","onlyCallMethod2", "moduleA");
 
    @BeforeEach
    public void init() throws IOException {

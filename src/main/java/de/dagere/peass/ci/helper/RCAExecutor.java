@@ -22,6 +22,7 @@ import de.dagere.peass.ci.NonIncludedTestRemover;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.ChangedEntity;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.dependencyprocessors.CommitComparatorInstance;
 import de.dagere.peass.dependencyprocessors.ViewNotFoundException;
 import de.dagere.peass.execution.utils.EnvironmentVariables;
@@ -70,15 +71,15 @@ public class RCAExecutor {
 
          for (Entry<String, List<Change>> testcases : versionChanges.getTestcaseChanges().entrySet()) {
             for (Change change : testcases.getValue()) {
-               final TestCase testCase;
+               final TestMethodCall testCase;
                String testClazzName = testcases.getKey();
                if (testClazzName.contains(ChangedEntity.MODULE_SEPARATOR)) {
                   int moduleSeparatorIndex = testClazzName.indexOf(ChangedEntity.MODULE_SEPARATOR);
                   String module = testClazzName.substring(0, moduleSeparatorIndex);
                   String testclazz = testClazzName.substring(moduleSeparatorIndex + 1, testClazzName.length());
-                  testCase = new TestCase(testclazz, change.getMethod(), module, change.getParams());
+                  testCase = new TestMethodCall(testclazz, change.getMethod(), module, change.getParams());
                } else {
-                  testCase = new TestCase(testClazzName, change.getMethod(), "", change.getParams());
+                  testCase = new TestMethodCall(testClazzName, change.getMethod(), "", change.getParams());
                }
                boolean match = NonIncludedTestRemover.isTestIncluded(testCase, config.getExecutionConfig());
                if (match) {
@@ -102,7 +103,7 @@ public class RCAExecutor {
       boolean needsRCA = false;
       for (Entry<String, List<Change>> testcases : versionChanges.getTestcaseChanges().entrySet()) {
          for (Change change : testcases.getValue()) {
-            final TestCase testCase = new TestCase(testcases.getKey(), change.getMethod());
+            final TestMethodCall testCase = new TestMethodCall(testcases.getKey(), change.getMethod());
             boolean match = NonIncludedTestRemover.isTestIncluded(testCase, config.getExecutionConfig());
             if (match) {
                final File expectedResultFile = getExpectedRCAFile(testCase);
@@ -125,7 +126,7 @@ public class RCAExecutor {
       return needsRCA;
    }
 
-   private void analyseChange(final MeasurementConfig currentConfig, final TestCase testCase)
+   private void analyseChange(final MeasurementConfig currentConfig, final TestMethodCall testCase)
          throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException {
       final File expectedResultFile = getExpectedRCAFile(testCase);
       LOG.info("Testing {}", expectedResultFile);
@@ -142,7 +143,7 @@ public class RCAExecutor {
       return expectedResultFile;
    }
 
-   private void executeRCA(final MeasurementConfig config, final TestCase testCase)
+   private void executeRCA(final MeasurementConfig config, final TestMethodCall testCase)
          throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException {
       final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(testCase, causeConfig);
       config.getKiekerConfig().setUseKieker(true);

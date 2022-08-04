@@ -21,6 +21,7 @@ import de.dagere.kopeme.datastorage.JSONDataLoader;
 import de.dagere.kopeme.kopemedata.Kopemedata;
 import de.dagere.peass.ci.MeasurementVisualizationAction;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.measurement.statistics.data.TestcaseStatistic;
 import de.dagere.peass.utils.Constants;
 import de.dagere.peass.visualization.GraphNode;
@@ -65,7 +66,7 @@ public class DefaultMeasurementVisualizer {
             try {
                Kopemedata data = JSONDataLoader.loadData(testcaseFile);
 
-               TestCase testcase = new TestCase(data);
+               TestMethodCall testcase = new TestMethodCall(data);
 
                KoPeMeTreeConverter treeConverter = new KoPeMeTreeConverter(detailResultsFolder, commit, testcase);
                File testcaseVisualizationFile = generateJSFile(testcase, treeConverter);

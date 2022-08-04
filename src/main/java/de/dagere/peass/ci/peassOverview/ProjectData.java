@@ -14,6 +14,7 @@ import de.dagere.peass.analysis.measurement.ProjectStatistics;
 import de.dagere.peass.dependency.analysis.data.ChangedEntity;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.analysis.data.TestSet;
+import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.dependency.persistence.StaticTestSelection;
 import de.dagere.peass.measurement.statistics.data.TestcaseStatistic;
 import de.dagere.peass.dependency.persistence.CommitStaticSelection;
@@ -64,7 +65,7 @@ public class ProjectData {
    private void addCommitData(List<ChangeLine> result, String commit, CommitStaticSelection commitStaticSelection) {
       Map<ChangedEntity, TestSet> changedClazzes = commitStaticSelection.getChangedClazzes();
 
-      Map<TestCase, Set<String>> oneTestCausingChanges = new LinkedHashMap<>();
+      Map<TestMethodCall, Set<String>> oneTestCausingChanges = new LinkedHashMap<>();
       List<String> changesWithNoTest = new LinkedList<>();
       fillOneOrLessTests(changedClazzes, oneTestCausingChanges, changesWithNoTest);
 
@@ -73,19 +74,19 @@ public class ProjectData {
       addNoneTestCausingChanges(result, commit, changesWithNoTest);
    }
 
-   private void fillOneOrLessTests(Map<ChangedEntity, TestSet> changedClazzes, Map<TestCase, Set<String>> oneTestCausingChanges, List<String> changesWithNoTest) {
+   private void fillOneOrLessTests(Map<ChangedEntity, TestSet> changedClazzes, Map<TestMethodCall, Set<String>> oneTestCausingChanges, List<String> changesWithNoTest) {
       for (Map.Entry<ChangedEntity, TestSet> entry : changedClazzes.entrySet()) {
 
          String changedEntity = entry.getKey().toString();
-         if (entry.getValue().getTests().size() > 0) {
-            for (TestCase test : entry.getValue().getTests()) {
+         if (entry.getValue().getTestMethods().size() > 0) {
+            for (TestMethodCall test : entry.getValue().getTestMethods()) {
                if (!oneTestCausingChanges.containsKey(test)) {
                   oneTestCausingChanges.put(test, new TreeSet<>());
                }
                oneTestCausingChanges.get(test).add(changedEntity);
             }
-         } else if (entry.getValue().getTests().size() == 1) {
-            TestCase test = entry.getValue().getTests().iterator().next();
+         } else if (entry.getValue().getTestMethods().size() == 1) {
+            TestMethodCall test = entry.getValue().getTestMethods().iterator().next();
             if (!oneTestCausingChanges.containsKey(test)) {
                oneTestCausingChanges.put(test, new TreeSet<>());
             }
@@ -103,9 +104,9 @@ public class ProjectData {
       }
    }
 
-   private void addOneTestCausingChanges(List<ChangeLine> result, String commit, Map<TestCase, Set<String>> oneTestCausingChanges) {
-      for (Map.Entry<TestCase, Set<String>> oneTestEntry : oneTestCausingChanges.entrySet()) {
-         TestCase test = oneTestEntry.getKey();
+   private void addOneTestCausingChanges(List<ChangeLine> result, String commit, Map<TestMethodCall, Set<String>> oneTestCausingChanges) {
+      for (Map.Entry<TestMethodCall, Set<String>> oneTestEntry : oneTestCausingChanges.entrySet()) {
+         TestMethodCall test = oneTestEntry.getKey();
 
          double changeValue = getChangeValue(commit, test);
 
@@ -116,7 +117,7 @@ public class ProjectData {
       }
    }
 
-   private double getChangeValue(String commit, TestCase test) {
+   private double getChangeValue(String commit, TestMethodCall test) {
       TestcaseStatistic testcaseStatistic = getTestcaseStatistic(commit, test);
 
       Changes commitChanges = changes.getCommitChanges(commit);
@@ -127,7 +128,7 @@ public class ProjectData {
    }
 
    private TestcaseStatistic getTestcaseStatistic(String commit, TestCase test) {
-      Map<TestCase, TestcaseStatistic> commitStatistics = statistics.getStatistics().get(commit);
+      Map<TestMethodCall, TestcaseStatistic> commitStatistics = statistics.getStatistics().get(commit);
       TestcaseStatistic testcaseStatistic;
       if (commitStatistics != null) {
          testcaseStatistic = commitStatistics.get(test);

@@ -17,6 +17,7 @@ import de.dagere.peass.config.ExecutionConfig;
 import de.dagere.peass.config.FixedCommitConfig;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.folders.PeassFolders;
 import de.dagere.peass.folders.ResultsFolders;
 
@@ -59,7 +60,7 @@ public class TestRTSLogFileReaderParameterized {
       Assert.assertTrue(data.isSuccess());
       
       Map<TestCase, RTSLogData> rtsVmRunsPredecessor = reader.getRtsVmRuns(COMMIT_OLD);
-      RTSLogData dataImplicitParameterized = rtsVmRunsPredecessor.get(new TestCase("de.dagere.peass.ExampleTest", "test", ""));
+      RTSLogData dataImplicitParameterized = rtsVmRunsPredecessor.get(new TestMethodCall("de.dagere.peass.ExampleTest", "test", ""));
       Assert.assertNotNull(dataImplicitParameterized);
       Assert.assertTrue(dataImplicitParameterized.isParameterizedWithoutIndex());
       Assert.assertTrue(dataImplicitParameterized.isSuccess());
