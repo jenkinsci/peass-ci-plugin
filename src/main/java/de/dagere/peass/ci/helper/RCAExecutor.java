@@ -58,9 +58,9 @@ public class RCAExecutor {
 
    public void executeRCAs()
          throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException {
-      Changes versionChanges = changes.getCommitChanges(config.getFixedCommitConfig().getCommit());
+      Changes commitChanges = changes.getCommitChanges(config.getFixedCommitConfig().getCommit());
 
-      boolean needsRCA = checkNeedsRCA(versionChanges);
+      boolean needsRCA = checkNeedsRCA(commitChanges);
 
       if (needsRCA) {
          LOG.info("At least one testcase was not successfully executed in the last build for the current version - executing RCA");
@@ -69,7 +69,7 @@ public class RCAExecutor {
          MeasurementConfig currentConfig = new MeasurementConfig(config);
          currentConfig.setDirectlyMeasureKieker(false);
 
-         for (Entry<String, List<Change>> testcases : versionChanges.getTestcaseChanges().entrySet()) {
+         for (Entry<String, List<Change>> testcases : commitChanges.getTestcaseChanges().entrySet()) {
             for (Change change : testcases.getValue()) {
                final TestMethodCall testCase;
                String testClazzName = testcases.getKey();
@@ -99,11 +99,11 @@ public class RCAExecutor {
 
    }
 
-   private boolean checkNeedsRCA(final Changes versionChanges) throws IOException, JsonParseException, JsonMappingException {
+   private boolean checkNeedsRCA(final Changes commitChanges) throws IOException, JsonParseException, JsonMappingException {
       boolean needsRCA = false;
-      for (Entry<String, List<Change>> testcases : versionChanges.getTestcaseChanges().entrySet()) {
+      for (Entry<String, List<Change>> testcases : commitChanges.getTestcaseChanges().entrySet()) {
          for (Change change : testcases.getValue()) {
-            final TestMethodCall testCase = new TestMethodCall(testcases.getKey(), change.getMethod());
+            final TestMethodCall testCase = TestMethodCall.createFromClassString(testcases.getKey(), change.getMethod());
             boolean match = NonIncludedTestRemover.isTestIncluded(testCase, config.getExecutionConfig());
             if (match) {
                final File expectedResultFile = getExpectedRCAFile(testCase);
