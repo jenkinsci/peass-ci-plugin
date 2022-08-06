@@ -18,6 +18,7 @@ import de.dagere.peass.analysis.changes.Changes;
 import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.analysis.measurement.ProjectStatistics;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.testData.TestClazzCall;
 import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.dependency.persistence.SelectedTests;
 import de.dagere.peass.dependencyprocessors.CommitComparatorInstance;
@@ -75,8 +76,8 @@ public class MeasurementMerger {
 
       for (Entry<String, Changes> commitChanges : currentChanges.getCommitChanges().entrySet()) {
          String commit = commitChanges.getKey();
-         Map<TestCase, List<Change>> testcaseObjectChanges = commitChanges.getValue().getTestcaseObjectChanges();
-         for (Entry<TestCase, List<Change>> testcase : testcaseObjectChanges.entrySet()) {
+         Map<TestClazzCall, List<Change>> testcaseObjectChanges = commitChanges.getValue().getTestcaseObjectChanges();
+         for (Entry<TestClazzCall, List<Change>> testcase : testcaseObjectChanges.entrySet()) {
             for (Change change : testcase.getValue()) {
                changes.addChange(testcase.getKey(), commit, change);
             }
