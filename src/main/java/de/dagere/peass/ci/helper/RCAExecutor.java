@@ -24,7 +24,6 @@ import de.dagere.peass.dependency.analysis.data.ChangedEntity;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.dependencyprocessors.CommitComparatorInstance;
-import de.dagere.peass.dependencyprocessors.ViewNotFoundException;
 import de.dagere.peass.execution.utils.EnvironmentVariables;
 import de.dagere.peass.folders.CauseSearchFolders;
 import de.dagere.peass.measurement.rca.CauseSearcherConfig;
@@ -57,7 +56,7 @@ public class RCAExecutor {
    }
 
    public void executeRCAs()
-         throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException {
+         throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException {
       Changes commitChanges = changes.getCommitChanges(config.getFixedCommitConfig().getCommit());
 
       boolean needsRCA = checkNeedsRCA(commitChanges);
@@ -127,7 +126,7 @@ public class RCAExecutor {
    }
 
    private void analyseChange(final MeasurementConfig currentConfig, final TestMethodCall testCase)
-         throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException {
+         throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException {
       final File expectedResultFile = getExpectedRCAFile(testCase);
       LOG.info("Testing {}", expectedResultFile);
       if (!expectedResultFile.exists()) {
@@ -144,7 +143,7 @@ public class RCAExecutor {
    }
 
    private void executeRCA(final MeasurementConfig config, final TestMethodCall testCase)
-         throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException, ViewNotFoundException {
+         throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException {
       final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(testCase, causeConfig);
       config.getKiekerConfig().setUseKieker(true);
 
