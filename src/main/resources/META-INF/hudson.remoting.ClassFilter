@@ -18,6 +18,8 @@ de.dagere.peass.analysis.changes.Changes
 de.dagere.peass.analysis.changes.Change
 de.dagere.peass.measurement.statistics.data.TestcaseStatistic
 de.dagere.peass.dependency.analysis.data.TestCase
+de.dagere.peass.dependency.analysis.testData.TestMethodCall
+de.dagere.peass.dependency.analysis.testData.TestClazzCall
 de.dagere.peass.dependency.traces.coverage.CoverageSelectionCommit
 de.dagere.peass.dependency.traces.coverage.TraceCallSummary
 de.dagere.peass.dependency.analysis.data.TestSet
