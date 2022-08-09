@@ -22,11 +22,11 @@ import de.dagere.peass.folders.PeassFolders;
 import de.dagere.peass.folders.ResultsFolders;
 
 public class TestRTSLogFileReaderParameterized {
-   
+
    private static final String COMMIT = "a12a0b7f4c162794fca0e7e3fcc6ea3b3a2cbc2b";
    private static final String COMMIT_OLD = "49f75e8877c2e9b7cf6b56087121a35fdd73ff8b";
 
-   static final TestCase TEST1 = new TestCase("de.dagere.peass.ExampleTest#test");
+   static final TestMethodCall TEST1 = new TestMethodCall("de.dagere.peass.ExampleTest", "test");
 
    private final File currentDir = new File("target/parameterized-demo_fullPeass");
 
@@ -58,7 +58,7 @@ public class TestRTSLogFileReaderParameterized {
       Assert.assertNotNull(data);
       Assert.assertFalse(data.isParameterizedWithoutIndex());
       Assert.assertTrue(data.isSuccess());
-      
+
       Map<TestCase, RTSLogData> rtsVmRunsPredecessor = reader.getRtsVmRuns(COMMIT_OLD);
       RTSLogData dataImplicitParameterized = rtsVmRunsPredecessor.get(new TestMethodCall("de.dagere.peass.ExampleTest", "test", ""));
       Assert.assertNotNull(dataImplicitParameterized);
