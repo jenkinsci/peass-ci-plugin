@@ -54,7 +54,7 @@ public class RemoteRTS implements FileCallable<RTSResult> {
                peassConfig.getMeasurementConfig(),
                peassConfig.getDependencyConfig(),
                peassConfig.getEnvVars());
-         String commitOld = executor.getVersionOld();
+         String commitOld = executor.getCommitOld();
          try {
             RTSResult tests = executor.executeRTS();
             return tests;
