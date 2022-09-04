@@ -36,13 +36,14 @@ import de.dagere.peass.ci.VisibleAction;
 import de.dagere.peass.ci.peassOverview.classification.Classifications;
 import de.dagere.peass.ci.peassOverview.classification.ClassifiedProject;
 import de.dagere.peass.ci.peassOverview.classification.TestcaseClassification;
+import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.utils.Constants;
 import hudson.util.FormValidation;
 
 public class PeassOverviewAction extends VisibleAction {
 
    private static final Logger LOG = LogManager.getLogger(PeassOverviewAction.class);
-   
+
    private final Map<String, ProjectData> projects;
    private final String changeClassifications;
    private final String unmeasuredClassifications;
@@ -63,15 +64,50 @@ public class PeassOverviewAction extends VisibleAction {
       }
       File classificationFile = new File(parentFile, "classifications.json");
       if (!classificationFile.exists()) {
-         Classifications classifications = new Classifications();
-         for (String project : projects.keySet()) {
-            classifications.getProjects().put(project, new ClassifiedProject());
+         writeEmptyClassifications(projects, classificationFile);
+      } else {
+         removeUnneededClassifications(projects, classificationFile);
+      }
+   }
+
+   private void writeEmptyClassifications(Map<String, ProjectData> projects, File classificationFile) {
+      Classifications classifications = new Classifications();
+      for (String project : projects.keySet()) {
+         classifications.getProjects().put(project, new ClassifiedProject());
+      }
+      try {
+         Constants.OBJECTMAPPER.writeValue(classificationFile, classifications);
+      } catch (IOException e) {
+         e.printStackTrace();
+      }
+   }
+
+   private void removeUnneededClassifications(Map<String, ProjectData> projects, File classificationFile) {
+      try {
+         Classifications classifications = Constants.OBJECTMAPPER.readValue(classificationFile, Classifications.class);
+         for (Entry<String, ClassifiedProject> project : classifications.getProjects().entrySet()) {
+            ProjectData data = projects.get(project.getKey());
+            if (data != null) {
+               for (Entry<String, TestcaseClassification> commitClassification : project.getValue().getChangeClassifications().entrySet()) {
+                  Changes commitChanges = data.getChanges().getCommitChanges(commitClassification.getKey());
+                  Set<String> deletables = new HashSet<>();
+                  for (Entry<String, String> testcaseClassification : commitClassification.getValue().getClassifications().entrySet()) {
+                     TestMethodCall testMethod = TestMethodCall.createFromString(testcaseClassification.getKey());
+                     Change change = commitChanges.getChange(testMethod);
+                     if (change == null) {
+                        System.out.println("Deletable: " + testMethod + " " + commitClassification.getKey());
+                        deletables.add(testcaseClassification.getKey());
+                     }
+                  }
+                  for (String deletable : deletables) {
+                     commitClassification.getValue().getClassifications().remove(deletable);
+                  }
+               }
+            }
          }
-         try {
-            Constants.OBJECTMAPPER.writeValue(classificationFile, classifications);
-         } catch (IOException e) {
-            e.printStackTrace();
-         }
+         Constants.OBJECTMAPPER.writeValue(classificationFile, classifications);
+      } catch (IOException e) {
+         e.printStackTrace();
       }
    }
 
@@ -257,7 +293,7 @@ public class PeassOverviewAction extends VisibleAction {
       };
 
    }
-   
+
    public HttpResponse doDownloadUnclassified() {
       return new HttpResponse() {
 
@@ -277,7 +313,7 @@ public class PeassOverviewAction extends VisibleAction {
 
          private Classifications buildUnclassifiedList() {
             Classifications unclassifiedClassification = new Classifications();
-            
+
             for (Entry<String, ProjectData> project : projects.entrySet()) {
                String projectName = project.getKey();
                for (Entry<String, Changes> commit : project.getValue().getChanges().getCommitChanges().entrySet()) {
@@ -285,7 +321,7 @@ public class PeassOverviewAction extends VisibleAction {
                      for (Change change : changes.getValue()) {
                         String testcase = changes.getKey() + "#" + change.getMethod();
                         String commitName = commit.getKey();
-                        
+
                         if (getClassification(projectName, commitName, testcase).equals("TODO")) {
                            unclassifiedClassification.setClassification(projectName, commitName, testcase, "TODO");
                         }
