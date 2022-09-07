@@ -29,6 +29,8 @@ import de.dagere.peass.dependency.persistence.CommitStaticSelection;
 import de.dagere.peass.dependency.persistence.ExecutionData;
 import de.dagere.peass.dependency.persistence.StaticTestSelection;
 import de.dagere.peass.utils.Constants;
+import de.dagere.peass.vcs.CommitList;
+import de.dagere.peass.vcs.GitCommit;
 import de.dagere.peass.vcs.GitUtils;
 
 public class OneJobImporter {
@@ -41,6 +43,8 @@ public class OneJobImporter {
    private final File fullPeassFolder;
 
    private final String projectName;
+   
+   private final CommitList commits = new CommitList();
 
    public OneJobImporter(File projectResultsFolder, File workspaceFolder) throws StreamReadException, DatabindException, IOException {
       this.projectResultsFolder = projectResultsFolder;
@@ -59,6 +63,12 @@ public class OneJobImporter {
       File jenkinsPropertyFolder = new File(fullPeassFolder, "properties_" + projectName);
       File resultsPropertyFolder = new File(projectResultsFolder, "results/properties_" + projectName);
       FileUtils.copyDirectory(resultsPropertyFolder, jenkinsPropertyFolder);
+      
+      for (String commitName : executionData.getCommitNames()) {
+         final GitCommit gc = new GitCommit(commitName, "", "", "");
+         commits.getCommits().add(gc);
+      }
+      Constants.OBJECTMAPPER.writeValue(new File(fullPeassFolder, "commits.json"), commits);
    }
 
    public void startImport() throws StreamWriteException, DatabindException, IOException, InterruptedException {
@@ -92,6 +102,15 @@ public class OneJobImporter {
 
       GitUtils.goToTag(commit, workspaceFolder);
 
+      importRCAData(commit);
+      
+      importMeasurementFolder(commit, predecessor, fakeMeasurementFolder);
+
+      Constants.OBJECTMAPPER.writeValue(new File(fullPeassFolder, "traceTestSelection_" + projectName + ".json"), copiedSelection);
+      Constants.OBJECTMAPPER.writeValue(new File(fullPeassFolder, "staticTestSelection_" + projectName + ".json"), copiedStaticSelection);
+   }
+
+   private void importRCAData(String commit) throws IOException {
       File jobCommitFolder = new File(fullPeassFolder, projectName + "_peass/rca/treeMeasurementResults/" + commit);
       jobCommitFolder.mkdirs();
       File rcaCommitFolder = new File(projectResultsFolder, "rca-results/treeMeasurementResults/" + commit);
@@ -99,11 +118,6 @@ public class OneJobImporter {
          File jobClazzFolder = new File(jobCommitFolder, clazzFolder.getName());
          FileUtils.copyDirectory(clazzFolder, jobClazzFolder);
       }
-      
-      importMeasurementFolder(commit, predecessor, fakeMeasurementFolder);
-
-      Constants.OBJECTMAPPER.writeValue(new File(fullPeassFolder, "traceTestSelection_" + projectName + ".json"), copiedSelection);
-      Constants.OBJECTMAPPER.writeValue(new File(fullPeassFolder, "staticTestSelection_" + projectName + ".json"), copiedStaticSelection);
    }
 
    private void importMeasurementFolder(String commit, String predecessor, File fakeMeasurementFolder)

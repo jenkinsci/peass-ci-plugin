@@ -55,7 +55,9 @@ public class ProjectData {
          for (Map.Entry<String, CommitStaticSelection> commitEntry : selection.getCommits().entrySet()) {
             String commit = commitEntry.getKey();
             CommitStaticSelection commitStaticSelection = commitEntry.getValue();
-            addCommitData(result, commit, commitStaticSelection);
+            if (commitStaticSelection != null) {
+               addCommitData(result, commit, commitStaticSelection);
+            }
          }
       }
 
