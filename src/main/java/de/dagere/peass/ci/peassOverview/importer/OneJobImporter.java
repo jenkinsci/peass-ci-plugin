@@ -8,7 +8,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -56,6 +55,10 @@ public class OneJobImporter {
       staticSelection = Constants.OBJECTMAPPER.readValue(staticSelectionFile, StaticTestSelection.class);
       executionData = Constants.OBJECTMAPPER.readValue(executionFile, ExecutionData.class);
       projectChanges = Constants.OBJECTMAPPER.readValue(new File(projectResultsFolder, "measurement-results/changes.json"), ProjectChanges.class);
+      
+      File jenkinsPropertyFolder = new File(fullPeassFolder, "properties_" + projectName);
+      File resultsPropertyFolder = new File(projectResultsFolder, "results/properties_" + projectName);
+      FileUtils.copyDirectory(resultsPropertyFolder, jenkinsPropertyFolder);
    }
 
    public void startImport() throws StreamWriteException, DatabindException, IOException, InterruptedException {
