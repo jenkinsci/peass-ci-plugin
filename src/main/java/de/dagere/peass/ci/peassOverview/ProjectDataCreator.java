@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.DatabindException;
 import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.analysis.measurement.ProjectStatistics;
 import de.dagere.peass.ci.MeasureVersionBuilder;
+import de.dagere.peass.ci.rca.RCAMapping;
 import de.dagere.peass.dependency.persistence.ExecutionData;
 import de.dagere.peass.dependency.persistence.StaticTestSelection;
 import de.dagere.peass.folders.ResultsFolders;
@@ -66,7 +67,36 @@ public class ProjectDataCreator {
          }
       }
       return projectData;
+   }
 
+   public Map<String, RCAMapping> getRCAMappings(final Run<?, ?> run) {
+
+      Map<String, RCAMapping> result = new LinkedHashMap<>();
+      for (Project project : projects) {
+         String projectPath = project.getProject();
+         String projectName = project.getProjectName();
+
+         File projectWorkspace = new File(run.getRootDir(),
+               ".." + File.separator + ".." + File.separator + projectPath + File.separator + MeasureVersionBuilder.PEASS_FOLDER_NAME);
+
+         File rcaMappingFile = new File(projectWorkspace, ResultsFolders.RCA_MAPPING_FILE_NAME);
+
+         
+
+         if (rcaMappingFile.exists()) {
+            try {
+               RCAMapping mapping = Constants.OBJECTMAPPER.readValue(rcaMappingFile, RCAMapping.class);
+               result.put(projectName, mapping);
+            } catch (IOException e) {
+               e.printStackTrace();
+            }
+         } else {
+            System.out.println("RCA mapping file not existing: " + rcaMappingFile.getAbsolutePath());
+         }
+
+      }
+      System.out.println("Result: " + result);
+      return result;
    }
 
    private String analyzeProject(final Run<?, ?> run, final TaskListener listener, Map<String, ProjectData> projectData, Project project, String projectName, File projectWorkspace)

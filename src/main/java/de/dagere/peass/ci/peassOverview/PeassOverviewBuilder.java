@@ -12,6 +12,7 @@ import org.kohsuke.stapler.DataBoundSetter;
 
 import de.dagere.peass.ci.MeasureVersionBuilder;
 import de.dagere.peass.ci.helper.IdHelper;
+import de.dagere.peass.ci.rca.RCAMapping;
 import hudson.EnvVars;
 import hudson.Extension;
 import hudson.FilePath;
@@ -46,9 +47,10 @@ public class PeassOverviewBuilder extends Builder implements SimpleBuildStep, Se
 
       ProjectDataCreator creator = new ProjectDataCreator(projects, timespan);
       Map<String, ProjectData> projectData = creator.generateAllProjectData(run, listener);
-
+      Map<String, RCAMapping> rcaMapping = creator.getRCAMappings(run);
+      
       final File localWorkspace = new File(run.getRootDir(), ".." + File.separator + ".." + File.separator + MeasureVersionBuilder.PEASS_FOLDER_NAME).getCanonicalFile();
-      PeassOverviewAction action = new PeassOverviewAction(IdHelper.getId(), projectData, changeClassifications, unmeasuredClassifications, localWorkspace.getAbsolutePath());
+      PeassOverviewAction action = new PeassOverviewAction(IdHelper.getId(), projectData, rcaMapping, changeClassifications, unmeasuredClassifications, localWorkspace.getAbsolutePath());
       run.addAction(action);
    }
 

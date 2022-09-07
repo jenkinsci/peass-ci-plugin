@@ -154,7 +154,16 @@
                       </j:if>
                       <j:if test="${!change.getTestcase().equals('none')}">
                         <j:forEach var="testcaseLine" items="${change.getTestcaseVisible()}">
-                          ${testcaseLine}
+                          <j:choose>
+                            <j:when test="${it.getRCAUrl(project.getKey(), lastCommit, change.getTestcase()) != null}">
+                               <a href="../../../${project.getKey()}/${it.getRCAUrl(project.getKey(), lastCommit, change.getTestcase())}" target='parent'>
+                                 ${testcaseLine}
+                               </a>
+                            </j:when>
+                            <j:otherwise>
+                              ${testcaseLine}
+                            </j:otherwise>
+                          </j:choose>
                           <br />
                         </j:forEach>
                       </j:if>
