@@ -6,7 +6,7 @@ import java.util.Set;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
-import de.dagere.peass.ci.helper.RCAVisualizer;
+import de.dagere.peass.ci.rca.RCAVisualizer;
 
 public class TestLongestPrefix {
 

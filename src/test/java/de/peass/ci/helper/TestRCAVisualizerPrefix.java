@@ -17,7 +17,7 @@ import de.dagere.peass.analysis.changes.Change;
 import de.dagere.peass.analysis.changes.Changes;
 import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.ci.RCAVisualizationAction;
-import de.dagere.peass.ci.helper.RCAVisualizer;
+import de.dagere.peass.ci.rca.RCAVisualizer;
 import de.dagere.peass.utils.Constants;
 import hudson.model.Run;
 
