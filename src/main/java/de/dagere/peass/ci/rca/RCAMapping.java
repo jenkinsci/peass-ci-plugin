@@ -8,18 +8,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.utils.Constants;
 
-class CommitRCAURLs{
-   private Map<TestMethodCall, String> executionURLs = new LinkedHashMap<>();
-
-   public Map<TestMethodCall, String> getExecutionURLs() {
-      return executionURLs;
-   }
-
-   public void setExecutionURLs(Map<TestMethodCall, String> executionURLs) {
-      this.executionURLs = executionURLs;
-   }
-}
-
 public class RCAMapping {
    private Map<String, CommitRCAURLs> commits = new LinkedHashMap<>();
 
@@ -29,17 +17,6 @@ public class RCAMapping {
 
    public void setCommits(Map<String, CommitRCAURLs> commits) {
       this.commits = commits;
-   }
-   
-   public static void main(String[] args) throws JsonProcessingException {
-      CommitRCAURLs value = new CommitRCAURLs();
-      value.getExecutionURLs().put(new TestMethodCall("MyClass", "myMethod"), "3");
-      
-      RCAMapping rcaMapping = new RCAMapping();
-      rcaMapping.getCommits().put("commit1", value);
-      
-      System.out.println(Constants.OBJECTMAPPER.writeValueAsString(rcaMapping));
-      
    }
 
    public void addMapping(String commit, TestMethodCall testMethodCall, String url) {

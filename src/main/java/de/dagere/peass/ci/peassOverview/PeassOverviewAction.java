@@ -36,6 +36,8 @@ import de.dagere.peass.ci.VisibleAction;
 import de.dagere.peass.ci.peassOverview.classification.Classifications;
 import de.dagere.peass.ci.peassOverview.classification.ClassifiedProject;
 import de.dagere.peass.ci.peassOverview.classification.TestcaseClassification;
+import de.dagere.peass.ci.rca.CommitRCAURLs;
+import de.dagere.peass.ci.rca.RCAMapping;
 import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.utils.Constants;
 import hudson.util.FormValidation;
@@ -45,13 +47,15 @@ public class PeassOverviewAction extends VisibleAction {
    private static final Logger LOG = LogManager.getLogger(PeassOverviewAction.class);
 
    private final Map<String, ProjectData> projects;
+   private final Map<String, RCAMapping> projectRCAMappings;
    private final String changeClassifications;
    private final String unmeasuredClassifications;
    private final String path;
 
-   public PeassOverviewAction(int id, Map<String, ProjectData> projects, String changeClassifications, String unmeasuredClassifications, String path) {
+   public PeassOverviewAction(int id, Map<String, ProjectData> projects, Map<String, RCAMapping> projectRCAMappings, String changeClassifications, String unmeasuredClassifications, String path) {
       super(id);
       this.projects = projects;
+      this.projectRCAMappings = projectRCAMappings;
       this.changeClassifications = changeClassifications;
       this.unmeasuredClassifications = unmeasuredClassifications;
       this.path = path;
@@ -109,6 +113,26 @@ public class PeassOverviewAction extends VisibleAction {
       } catch (IOException e) {
          e.printStackTrace();
       }
+   }
+   
+   public RCAMapping getRCAMapping(String project) {
+      return projectRCAMappings.get(project);
+   }
+   
+   public String getRCAUrl(String project, String commit, String testcase) {
+//      System.out.println("Getting url: " + project + " " + commit + " " + testcase);
+      
+      RCAMapping rcaMapping = projectRCAMappings.get(project);
+      if (rcaMapping != null) {
+         System.out.println("Mapping detected");
+         CommitRCAURLs commitMapping = rcaMapping.getCommits().get(commit);
+         TestMethodCall testMethod = TestMethodCall.createFromString(testcase);
+         System.out.println("Method: " + testMethod);
+         String url = commitMapping.getExecutionURLs().get(testMethod);
+         System.out.println("URL: " + url);
+         return url;
+      }
+      return null;
    }
 
    public Map<String, ProjectData> getProjects() {
