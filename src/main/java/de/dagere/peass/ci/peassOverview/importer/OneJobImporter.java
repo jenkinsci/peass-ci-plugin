@@ -44,11 +44,14 @@ public class OneJobImporter {
 
    private final String projectName;
    
+   private final String url;
+   
    private final CommitList commits = new CommitList();
 
-   public OneJobImporter(File projectResultsFolder, File workspaceFolder) throws StreamReadException, DatabindException, IOException {
+   public OneJobImporter(File projectResultsFolder, File workspaceFolder, String url) throws StreamReadException, DatabindException, IOException {
       this.projectResultsFolder = projectResultsFolder;
       this.workspaceFolder = workspaceFolder;
+      this.url = url;
       fullPeassFolder = new File(workspaceFolder.getParentFile(), workspaceFolder.getName() + "_fullPeass");
       
       projectName = projectResultsFolder.getName();
@@ -146,9 +149,9 @@ public class OneJobImporter {
    }
 
    private void triggerBuild(String projectName) throws MalformedURLException, IOException, UnsupportedEncodingException {
-      URL url = new URL("http://localhost:8080/jenkins/job/" + projectName + "/build?token=TOKENGEHEIM&delay=0");
+      URL urlObject = new URL(url);
 
-      try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"))) {
+      try (BufferedReader reader = new BufferedReader(new InputStreamReader(urlObject.openStream(), "UTF-8"))) {
          for (String line; (line = reader.readLine()) != null;) {
             System.out.println(line);
          }
