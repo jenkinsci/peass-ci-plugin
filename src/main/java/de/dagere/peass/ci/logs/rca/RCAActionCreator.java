@@ -14,6 +14,7 @@ import de.dagere.peass.ci.logs.InternalLogAction;
 import de.dagere.peass.ci.logs.LogFileReader;
 import de.dagere.peass.ci.logs.LogFiles;
 import de.dagere.peass.ci.logs.LogUtil;
+import de.dagere.peass.config.FixedCommitConfig;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import hudson.model.Run;
@@ -36,8 +37,9 @@ public class RCAActionCreator {
 
       Map<TestCase, List<RCALevel>> testLevelMap = createRCALogActions(reader);
 
-      RCALogOverviewAction rcaOverviewAction = new RCALogOverviewAction(IdHelper.getId(), testLevelMap, measurementConfig.getFixedCommitConfig().getCommit().substring(0, 6),
-            measurementConfig.getFixedCommitConfig().getCommitOld().substring(0, 6), measurementConfig.getExecutionConfig().isRedirectSubprocessOutputToFile());
+      FixedCommitConfig fixedCommitConfig = measurementConfig.getFixedCommitConfig();
+      RCALogOverviewAction rcaOverviewAction = new RCALogOverviewAction(IdHelper.getId(), testLevelMap, fixedCommitConfig.getCommit().substring(0, 6),
+            fixedCommitConfig.getCommitOld().substring(0, 6), measurementConfig.getExecutionConfig().isRedirectSubprocessOutputToFile());
       run.addAction(rcaOverviewAction);
    }
 
@@ -74,7 +76,7 @@ public class RCAActionCreator {
       addLog(testcase, levelId, vmId, files.getPredecessor(), measurementConfig.getFixedCommitConfig().getCommitOld());
    }
 
-   private void addLog(final Map.Entry<TestCase, List<RCALevel>> testcase, final int levelId, final int vmId, final File logFile, final String version) throws IOException {
+   private void addLog(final Map.Entry<TestCase, List<RCALevel>> testcase, final int levelId, final int vmId, final File logFile, final String commit) throws IOException {
       String logData;
       if (logFile.exists()) {
          logData = FileUtils.readFileToString(logFile, StandardCharsets.UTF_8);
@@ -82,6 +84,6 @@ public class RCAActionCreator {
          logData = "Log file could not be found";
       }
       
-      run.addAction(new RCALogAction(IdHelper.getId(), testcase.getKey(), vmId, levelId, version, logData));
+      run.addAction(new RCALogAction(IdHelper.getId(), testcase.getKey(), vmId, levelId, commit, logData));
    }
 }

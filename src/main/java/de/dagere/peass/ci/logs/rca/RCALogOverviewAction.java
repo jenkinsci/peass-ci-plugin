@@ -10,15 +10,15 @@ import de.dagere.peass.dependency.analysis.data.TestCase;
 public class RCALogOverviewAction extends VisibleAction {
    
    private final Map<TestCase, List<RCALevel>> testLevelMap;
-   private String version;
-   private String versionOld;
+   private String commit;
+   private String commitOld;
    private boolean redirectSubprocessOutputToFile;
 
-   public RCALogOverviewAction(int id, final Map<TestCase, List<RCALevel>> testLevelMap, final String version, final String versionOld, final boolean redirectSubprocessOutputToFile) {
+   public RCALogOverviewAction(int id, final Map<TestCase, List<RCALevel>> testLevelMap, final String commit, final String commitOld, final boolean redirectSubprocessOutputToFile) {
       super(id);
       this.testLevelMap = testLevelMap;
-      this.version = version;
-      this.versionOld = versionOld;
+      this.commit = commit;
+      this.commitOld = commitOld;
       this.redirectSubprocessOutputToFile = redirectSubprocessOutputToFile;
    }
 
@@ -27,11 +27,11 @@ public class RCALogOverviewAction extends VisibleAction {
    }
 
    public String getVersion() {
-      return version;
+      return commit;
    }
 
    public String getVersionOld() {
-      return versionOld;
+      return commitOld;
    }
 
    public boolean isRedirectSubprocessOutputToFile(){

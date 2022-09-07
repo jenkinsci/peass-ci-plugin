@@ -12,16 +12,16 @@ import de.dagere.peass.dependency.analysis.data.TestCase;
 public class LogOverviewAction extends VisibleAction {
    
    private Map<TestCase, List<LogFiles>> logFiles = new HashMap<>();
-   private String version;
-   private String versionOld;
+   private String commit;
+   private String commitOld;
    private int vms;
    private boolean redirectSubprocessOutputToFile;
 
-   public LogOverviewAction(int id, final Map<TestCase, List<LogFiles>> logFiles, final String version, final String versionOld, int vms, final boolean redirectSubprocessOutputToFile) {
+   public LogOverviewAction(int id, final Map<TestCase, List<LogFiles>> logFiles, final String commit, final String commitOld, int vms, final boolean redirectSubprocessOutputToFile) {
       super(id);
       this.logFiles = logFiles;
-      this.version = version;
-      this.versionOld = versionOld;
+      this.commit = commit;
+      this.commitOld = commitOld;
       this.vms = vms;
       this.redirectSubprocessOutputToFile = redirectSubprocessOutputToFile;
    }
@@ -31,11 +31,11 @@ public class LogOverviewAction extends VisibleAction {
    }
    
    public String getVersion() {
-      return version;
+      return commit;
    }
    
    public String getVersionOld() {
-      return versionOld;
+      return commitOld;
    }
    
    public int getVms() {
