@@ -1,4 +1,4 @@
-package de.dagere.peass.ci.helper;
+package de.dagere.peass.ci.rca;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +16,11 @@ import de.dagere.peass.analysis.changes.Change;
 import de.dagere.peass.analysis.changes.Changes;
 import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.ci.RCAVisualizationAction;
+import de.dagere.peass.ci.helper.IdHelper;
+import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.config.MeasurementConfig;
+import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
+import de.dagere.peass.utils.Constants;
 import de.dagere.peass.visualization.VisualizeRCAStarter;
 import hudson.model.Run;
 
@@ -28,12 +32,25 @@ public class RCAVisualizer {
    private final VisualizationFolderManager visualizationFolders;
    private final ProjectChanges changes;
    private final Run<?, ?> run;
+   private final RCAMapping mapping;
 
    public RCAVisualizer(final MeasurementConfig measurementConfig, final VisualizationFolderManager visualizationFolders, final ProjectChanges changes, final Run<?, ?> run) {
       this.measurementConfig = measurementConfig;
       this.visualizationFolders = visualizationFolders;
       this.changes = changes;
       this.run = run;
+      RCAMapping readMapping = null;
+      try {
+         File rcaMappingFile = visualizationFolders.getResultsFolders().getRCAMappingFile();
+         if (rcaMappingFile.exists()) {
+            readMapping = Constants.OBJECTMAPPER.readValue(rcaMappingFile, RCAMapping.class);
+         } else {
+            readMapping = new RCAMapping();
+         }
+      } catch (IOException e) {
+         e.printStackTrace();
+      }
+      mapping = readMapping;
    }
 
    public void visualizeRCA() throws Exception {
@@ -98,7 +115,12 @@ public class RCAVisualizer {
       final String displayName = name.substring(longestPrefix.length());
 
       final String content = FileUtils.readFileToString(rcaDestFile, StandardCharsets.UTF_8);
-      run.addAction(new RCAVisualizationAction(IdHelper.getId(), displayName, content));
+      RCAVisualizationAction visualizationAction = new RCAVisualizationAction(IdHelper.getId(), displayName, content);
+      run.addAction(visualizationAction);
+      TestMethodCall testMethodCall = TestMethodCall.createFromString(testcases.getKey() + "#" + change.getMethodWithParams());
+      String url = run.getNumber() + "/" + visualizationAction.getUrlName();
+      mapping.addMapping(measurementConfig.getFixedCommitConfig().getCommit(), testMethodCall, url);
+      Constants.OBJECTMAPPER.writeValue(visualizationFolders.getResultsFolders().getRCAMappingFile(), mapping);
    }
 
    public static String getLongestPrefix(final Set<String> tests) {
