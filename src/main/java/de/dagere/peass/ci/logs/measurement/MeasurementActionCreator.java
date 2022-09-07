@@ -45,9 +45,9 @@ public class MeasurementActionCreator {
       createLogActions(run, logFiles);
 
       FixedCommitConfig fixedCommitConfig = measurementConfig.getFixedCommitConfig();
-      String shortVersion = fixedCommitConfig.getCommit().substring(0, 6);
-      String shortVersionOld = fixedCommitConfig.getCommitOld().substring(0, 6);
-      LogOverviewAction logOverviewAction = new LogOverviewAction(IdHelper.getId(), logFiles, shortVersion, shortVersionOld, measurementConfig.getVms(),
+      String shortCommit = fixedCommitConfig.getCommit().substring(0, 6);
+      String shortCommitOld = fixedCommitConfig.getCommitOld().substring(0, 6);
+      LogOverviewAction logOverviewAction = new LogOverviewAction(IdHelper.getId(), logFiles, shortCommit, shortCommitOld, measurementConfig.getVms(),
             measurementConfig.getExecutionConfig().isRedirectSubprocessOutputToFile());
       run.addAction(logOverviewAction);
    }
