@@ -16,10 +16,12 @@ import de.dagere.peass.utils.Constants;
 public class RTSInfos {
    private final boolean staticChanges;
    private final boolean staticallySelectedTests;
+   private final TestSet tests;
 
-   public RTSInfos(final boolean staticChanges, final boolean staticallySelectedTests) {
+   public RTSInfos(final boolean staticChanges, final boolean staticallySelectedTests, TestSet tests) {
       this.staticChanges = staticChanges;
       this.staticallySelectedTests = staticallySelectedTests;
+      this.tests = tests;
    }
 
    public boolean isStaticChanges() {
@@ -30,6 +32,10 @@ public class RTSInfos {
       return staticallySelectedTests;
    }
 
+   public TestSet getTests() {
+      return tests;
+   }
+
    public static RTSInfos readInfosFromFolders(final ResultsFolders results, final PeassProcessConfiguration peassConfig) throws StreamReadException, DatabindException, IOException {
       File staticTestSelectionFile = results.getStaticTestSelectionFile();
       if (staticTestSelectionFile.exists()) {
@@ -37,16 +43,17 @@ public class RTSInfos {
          StaticTestSelection staticTestSelection = Constants.OBJECTMAPPER.readValue(staticTestSelectionFile, StaticTestSelection.class);
          CommitStaticSelection version = staticTestSelection.getCommits().get(peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit());
          boolean hasStaticallySelectedTests = false;
+         TestSet tests = null;
          if (version != null) {
             if (!version.getChangedClazzes().isEmpty()) {
                staticChanges = true;
             }
-            TestSet tests = version.getTests();
+            tests = version.getTests();
             hasStaticallySelectedTests = !tests.getTests().isEmpty();
          }
-         return new RTSInfos(staticChanges, hasStaticallySelectedTests);
+         return new RTSInfos(staticChanges, hasStaticallySelectedTests, tests);
       } else {
-         return new RTSInfos(false, false);
+         return new RTSInfos(false, false, null);
       }
    }
 }

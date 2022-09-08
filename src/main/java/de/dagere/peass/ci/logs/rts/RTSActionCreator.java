@@ -4,7 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
@@ -18,6 +21,8 @@ import de.dagere.peass.ci.logs.RTSLogFileReader;
 import de.dagere.peass.ci.process.RTSInfos;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.data.TestSet;
+import de.dagere.peass.dependency.analysis.testData.TestClazzCall;
 import hudson.model.Run;
 
 public class RTSActionCreator {
@@ -50,9 +55,33 @@ public class RTSActionCreator {
       Map<TestCase, RTSLogData> rtsVmRuns = createVersionRTSData(measurementConfig.getFixedCommitConfig().getCommit());
       Map<TestCase, RTSLogData> rtsVmRunsPredecessor = createVersionRTSData(measurementConfig.getFixedCommitConfig().getCommitOld());
 
+      removeIgnoredTestLogs(rtsVmRuns, staticChanges.getTests());
+
       logSummary = RTSLogSummary.createLogSummary(rtsVmRuns, rtsVmRunsPredecessor);
 
       createOverviewAction(processSuccessRuns, rtsVmRuns, rtsVmRunsPredecessor, staticChanges);
+   }
+
+   private void removeIgnoredTestLogs(Map<TestCase, RTSLogData> rtsVmRuns, TestSet tests) {
+      Iterator<Entry<TestCase, RTSLogData>> logMapIt = rtsVmRuns.entrySet().iterator();
+
+      while (logMapIt.hasNext()) {
+         TestCase logCase = logMapIt.next().getKey();
+
+         if (!contains(tests, logCase)) {
+            logMapIt.remove();
+         }
+      }
+   }
+
+   private boolean contains(TestSet tests, TestCase logCase) {
+      for (Entry<TestClazzCall, Set<String>> selectedTestClazz : tests.entrySet()) {
+         if (selectedTestClazz.getKey().getClazz().equals(logCase.getClazz()) &&
+               selectedTestClazz.getValue().contains(logCase.getMethod())) {
+            return true;
+         }
+      }
+      return false;
    }
 
    private void createOverviewAction(final Map<String, File> processSuccessRuns, final Map<TestCase, RTSLogData> rtsVmRuns, final Map<TestCase, RTSLogData> rtsVmRunsPredecessor,
