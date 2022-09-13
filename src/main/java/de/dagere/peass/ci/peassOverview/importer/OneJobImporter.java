@@ -103,7 +103,7 @@ public class OneJobImporter {
       File fakeMeasurementFolder = new File(fullPeassFolder, "measurement_" + commit + "_" + predecessor);
       fakeMeasurementFolder.mkdir();
 
-      GitUtils.goToTag(commit, workspaceFolder);
+      GitUtils.goToCommit(commit, workspaceFolder);
 
       importRCAData(commit);
       

@@ -18,6 +18,7 @@ import de.dagere.peass.ci.logs.RTSLogFileReader;
 import de.dagere.peass.ci.process.RTSInfos;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.data.TestSet;
 import hudson.model.Run;
 
 public class RTSActionCreator {
@@ -47,8 +48,8 @@ public class RTSActionCreator {
 
       Map<String, File> processSuccessRuns = createProcessSuccessRunsActions();
 
-      Map<TestCase, RTSLogData> rtsVmRuns = createVersionRTSData(measurementConfig.getFixedCommitConfig().getCommit());
-      Map<TestCase, RTSLogData> rtsVmRunsPredecessor = createVersionRTSData(measurementConfig.getFixedCommitConfig().getCommitOld());
+      Map<TestCase, RTSLogData> rtsVmRuns = createVersionRTSData(measurementConfig.getFixedCommitConfig().getCommit(), staticChanges.getIgnoredTestsCurrent());
+      Map<TestCase, RTSLogData> rtsVmRunsPredecessor = createVersionRTSData(measurementConfig.getFixedCommitConfig().getCommitOld(), staticChanges.getIgnoredTestsPredecessor());
 
       logSummary = RTSLogSummary.createLogSummary(rtsVmRuns, rtsVmRunsPredecessor);
 
@@ -85,14 +86,15 @@ public class RTSActionCreator {
           * should be obtained for both versions
           */
          processSuccessRunSucceeded.put(processSuccessRun.getKey(), reader.isVersionRunWasSuccess());
-         ProcessSuccessLogAction processSuccessAction = new ProcessSuccessLogAction(IdHelper.getId(), "processSuccessRun_" + processSuccessRun.getKey(), logData, processSuccessRun.getKey());
+         ProcessSuccessLogAction processSuccessAction = new ProcessSuccessLogAction(IdHelper.getId(), "processSuccessRun_" + processSuccessRun.getKey(), logData,
+               processSuccessRun.getKey());
          run.addAction(processSuccessAction);
       }
       return processSuccessRuns;
    }
 
-   private Map<TestCase, RTSLogData> createVersionRTSData(final String commit) throws IOException {
-      Map<TestCase, RTSLogData> rtsVmRuns = reader.getRtsVmRuns(commit);
+   private Map<TestCase, RTSLogData> createVersionRTSData(final String commit, final TestSet ignoredTests) throws IOException {
+      Map<TestCase, RTSLogData> rtsVmRuns = reader.getRtsVmRuns(commit, ignoredTests);
       LOG.info("RTS Runs: {}", rtsVmRuns.size());
       for (Map.Entry<TestCase, RTSLogData> rtsLogData : rtsVmRuns.entrySet()) {
          String methodLogData = getLogData(rtsLogData.getValue().getMethodFile());

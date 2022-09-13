@@ -13,10 +13,10 @@ import org.mockito.Mockito;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.RTSLogFileReader;
 import de.dagere.peass.ci.logs.rts.RTSLogData;
-import de.dagere.peass.config.ExecutionConfig;
 import de.dagere.peass.config.FixedCommitConfig;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.data.TestSet;
 import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.folders.PeassFolders;
 import de.dagere.peass.folders.ResultsFolders;
@@ -52,14 +52,14 @@ public class TestRTSLogFileReaderParameterized {
       Mockito.when(measurementConfig.getFixedCommitConfig()).thenReturn(fixedCommitConfig);
       RTSLogFileReader reader = new RTSLogFileReader(visualizationFoldersMock, measurementConfig);
 
-      Map<TestCase, RTSLogData> rtsVmRuns = reader.getRtsVmRuns(COMMIT);
+      Map<TestCase, RTSLogData> rtsVmRuns = reader.getRtsVmRuns(COMMIT, new TestSet());
 
       RTSLogData data = rtsVmRuns.get(new TestCase("de.dagere.peass.ExampleTest", "test", "", "JUNIT_PARAMETERIZED-1"));
       Assert.assertNotNull(data);
       Assert.assertFalse(data.isParameterizedWithoutIndex());
       Assert.assertTrue(data.isSuccess());
 
-      Map<TestCase, RTSLogData> rtsVmRunsPredecessor = reader.getRtsVmRuns(COMMIT_OLD);
+      Map<TestCase, RTSLogData> rtsVmRunsPredecessor = reader.getRtsVmRuns(COMMIT_OLD, new TestSet());
       RTSLogData dataImplicitParameterized = rtsVmRunsPredecessor.get(new TestMethodCall("de.dagere.peass.ExampleTest", "test", ""));
       Assert.assertNotNull(dataImplicitParameterized);
       Assert.assertTrue(dataImplicitParameterized.isParameterizedWithoutIndex());
