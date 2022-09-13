@@ -16,6 +16,7 @@ import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.rts.RTSLogData;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.data.TestSet;
 import de.dagere.peass.dependency.persistence.StaticTestSelection;
 import de.dagere.peass.dependency.persistence.CommitStaticSelection;
 import de.dagere.peass.utils.Constants;
@@ -69,7 +70,7 @@ public class RTSLogFileReader {
       return logsExisting;
    }
 
-   public Map<TestCase, RTSLogData> getRtsVmRuns(final String commit) {
+   public Map<TestCase, RTSLogData> getRtsVmRuns(final String commit, final TestSet ignoredTests) {
       File commitFolder = new File(visualizationFolders.getPeassFolders().getDependencyLogFolder(), commit);
       File[] allFiles = commitFolder.listFiles();
       Map<File, String> testClazzFolders = new LinkedHashMap<>();
@@ -92,7 +93,7 @@ public class RTSLogFileReader {
          LOG.info("Expected rts commit folder {} did not exist", commitFolder);
       }
       RTSLogFileVersionReader RTSLogFileVersionReader = new RTSLogFileVersionReader(visualizationFolders, commit);
-      return RTSLogFileVersionReader.getClazzLogs(testClazzFolders);
+      return RTSLogFileVersionReader.getClazzLogs(testClazzFolders, ignoredTests);
 
    }
 
