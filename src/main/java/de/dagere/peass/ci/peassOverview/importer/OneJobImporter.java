@@ -43,9 +43,9 @@ public class OneJobImporter {
    private final File fullPeassFolder;
 
    private final String projectName;
-   
+
    private final String url;
-   
+
    private final CommitList commits = new CommitList();
 
    public OneJobImporter(File projectResultsFolder, File workspaceFolder, String url) throws StreamReadException, DatabindException, IOException {
@@ -53,7 +53,7 @@ public class OneJobImporter {
       this.workspaceFolder = workspaceFolder;
       this.url = url;
       fullPeassFolder = new File(workspaceFolder.getParentFile(), workspaceFolder.getName() + "_fullPeass");
-      
+
       projectName = projectResultsFolder.getName();
 
       File staticSelectionFile = new File(projectResultsFolder, "results/staticTestSelection_" + projectName + ".json");
@@ -62,11 +62,11 @@ public class OneJobImporter {
       staticSelection = Constants.OBJECTMAPPER.readValue(staticSelectionFile, StaticTestSelection.class);
       executionData = Constants.OBJECTMAPPER.readValue(executionFile, ExecutionData.class);
       projectChanges = Constants.OBJECTMAPPER.readValue(new File(projectResultsFolder, "measurement-results/changes.json"), ProjectChanges.class);
-      
+
       File jenkinsPropertyFolder = new File(fullPeassFolder, "properties_" + projectName);
       File resultsPropertyFolder = new File(projectResultsFolder, "results/properties_" + projectName);
       FileUtils.copyDirectory(resultsPropertyFolder, jenkinsPropertyFolder);
-      
+
       for (String commitName : executionData.getCommitNames()) {
          final GitCommit gc = new GitCommit(commitName, "", "", "");
          commits.getCommits().add(gc);
@@ -103,10 +103,10 @@ public class OneJobImporter {
       File fakeMeasurementFolder = new File(fullPeassFolder, "measurement_" + commit + "_" + predecessor);
       fakeMeasurementFolder.mkdir();
 
-      GitUtils.goToTag(commit, workspaceFolder);
+      GitUtils.goToCommit(commit, workspaceFolder);
 
       importRCAData(commit);
-      
+
       importMeasurementFolder(commit, predecessor, fakeMeasurementFolder);
 
       Constants.OBJECTMAPPER.writeValue(new File(fullPeassFolder, "traceTestSelection_" + projectName + ".json"), copiedSelection);
@@ -134,7 +134,7 @@ public class OneJobImporter {
                for (VMResult result : chunk.getResults()) {
                   commits.add(result.getCommit());
                }
-               if (commits.size() == 2 && commits.contains(commit) && commits.contains(predecessor)){
+               if (commits.size() == 2 && commits.contains(commit) && commits.contains(predecessor)) {
                   String clazzName = data.getClazz();
                   Kopemedata copiedData = new Kopemedata(clazzName);
                   copiedData.getMethods().add(new TestMethod(data.getFirstMethodResult().getMethod()));
