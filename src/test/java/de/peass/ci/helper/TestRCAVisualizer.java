@@ -41,6 +41,8 @@ public class TestRCAVisualizer {
       // Calls the RCAVisualizer, which should be tested
       MeasurementConfig measurementConfig = new MeasurementConfig(2);
       measurementConfig.getFixedCommitConfig().setCommit("b02c92af73e3297be617f4c973a7a63fb603565b");
+      new File(folder.getRoot(), "project").mkdirs();
+      
       VisualizationFolderManager visualizationFolders = new VisualizationFolderManager(folder.getRoot(), "project", run);
       visualizationFolders.getPropertyFolder().mkdir();
       RCAVisualizer visualizer = new RCAVisualizer(measurementConfig, visualizationFolders, changes, run);
