@@ -11,6 +11,8 @@ import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.management.RuntimeErrorException;
+
 import org.apache.commons.io.FileUtils;
 
 import com.fasterxml.jackson.core.exc.StreamReadException;
@@ -101,7 +103,9 @@ public class OneJobImporter {
    private void prepareData(StaticTestSelection copiedStaticSelection, ExecutionData copiedSelection, String commit, String predecessor)
          throws IOException, StreamReadException, DatabindException, StreamWriteException {
       File fakeMeasurementFolder = new File(fullPeassFolder, "measurement_" + commit + "_" + predecessor);
-      fakeMeasurementFolder.mkdir();
+      if (!fakeMeasurementFolder.mkdir()) {
+         throw new RuntimeException("Could not create " + fakeMeasurementFolder);
+      }
 
       GitUtils.goToCommit(commit, workspaceFolder);
 
@@ -115,33 +119,41 @@ public class OneJobImporter {
 
    private void importRCAData(String commit) throws IOException {
       File jobCommitFolder = new File(fullPeassFolder, projectName + "_peass/rca/treeMeasurementResults/" + commit);
-      jobCommitFolder.mkdirs();
+      if (!jobCommitFolder.mkdirs()) {
+         throw new RuntimeException("Could not create " + jobCommitFolder);
+      }
       File rcaCommitFolder = new File(projectResultsFolder, "rca-results/treeMeasurementResults/" + commit);
-      for (File clazzFolder : rcaCommitFolder.listFiles()) {
-         File jobClazzFolder = new File(jobCommitFolder, clazzFolder.getName());
-         FileUtils.copyDirectory(clazzFolder, jobClazzFolder);
+      File[] clazzFolders = rcaCommitFolder.listFiles();
+      if (clazzFolders != null) {
+         for (File clazzFolder : clazzFolders) {
+            File jobClazzFolder = new File(jobCommitFolder, clazzFolder.getName());
+            FileUtils.copyDirectory(clazzFolder, jobClazzFolder);
+         }
       }
    }
 
    private void importMeasurementFolder(String commit, String predecessor, File fakeMeasurementFolder)
          throws IOException, StreamReadException, DatabindException, StreamWriteException {
       File measurementsFullFolder = new File(projectResultsFolder, "measurement-results/measurementsFull");
-      for (File jsonFile : measurementsFullFolder.listFiles()) {
-         if (jsonFile.getName().endsWith(".json")) {
-            Kopemedata data = Constants.OBJECTMAPPER.readValue(jsonFile, Kopemedata.class);
-            for (VMResultChunk chunk : data.getChunks()) {
-               Set<String> commits = new HashSet<>();
-               for (VMResult result : chunk.getResults()) {
-                  commits.add(result.getCommit());
-               }
-               if (commits.size() == 2 && commits.contains(commit) && commits.contains(predecessor)) {
-                  String clazzName = data.getClazz();
-                  Kopemedata copiedData = new Kopemedata(clazzName);
-                  copiedData.getMethods().add(new TestMethod(data.getFirstMethodResult().getMethod()));
-                  copiedData.getFirstMethodResult().getDatacollectorResults().add(new DatacollectorResult(data.getFirstTimeDataCollector().getName()));
-                  copiedData.getChunks().add(chunk);
-                  File resultFile = new File(fakeMeasurementFolder, jsonFile.getName());
-                  Constants.OBJECTMAPPER.writeValue(resultFile, copiedData);
+      File[] jsonFiles = measurementsFullFolder.listFiles();
+      if (jsonFiles != null) {
+         for (File jsonFile : jsonFiles) {
+            if (jsonFile.getName().endsWith(".json")) {
+               Kopemedata data = Constants.OBJECTMAPPER.readValue(jsonFile, Kopemedata.class);
+               for (VMResultChunk chunk : data.getChunks()) {
+                  Set<String> commits = new HashSet<>();
+                  for (VMResult result : chunk.getResults()) {
+                     commits.add(result.getCommit());
+                  }
+                  if (commits.size() == 2 && commits.contains(commit) && commits.contains(predecessor)) {
+                     String clazzName = data.getClazz();
+                     Kopemedata copiedData = new Kopemedata(clazzName);
+                     copiedData.getMethods().add(new TestMethod(data.getFirstMethodResult().getMethod()));
+                     copiedData.getFirstMethodResult().getDatacollectorResults().add(new DatacollectorResult(data.getFirstTimeDataCollector().getName()));
+                     copiedData.getChunks().add(chunk);
+                     File resultFile = new File(fakeMeasurementFolder, jsonFile.getName());
+                     Constants.OBJECTMAPPER.writeValue(resultFile, copiedData);
+                  }
                }
             }
          }
