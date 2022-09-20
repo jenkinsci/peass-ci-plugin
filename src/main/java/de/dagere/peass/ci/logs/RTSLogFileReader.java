@@ -15,9 +15,9 @@ import org.apache.logging.log4j.Logger;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.rts.RTSLogData;
 import de.dagere.peass.config.MeasurementConfig;
-import de.dagere.peass.dependency.analysis.data.TestCase;
-import de.dagere.peass.dependency.persistence.StaticTestSelection;
+import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.dependency.persistence.CommitStaticSelection;
+import de.dagere.peass.dependency.persistence.StaticTestSelection;
 import de.dagere.peass.utils.Constants;
 
 public class RTSLogFileReader {
@@ -69,7 +69,7 @@ public class RTSLogFileReader {
       return logsExisting;
    }
 
-   public Map<TestCase, RTSLogData> getRtsVmRuns(final String commit) {
+   public Map<TestMethodCall, RTSLogData> getRtsVmRuns(final String commit) {
       File commitFolder = new File(visualizationFolders.getPeassFolders().getDependencyLogFolder(), commit);
       File[] allFiles = commitFolder.listFiles();
       Map<File, String> testClazzFolders = new LinkedHashMap<>();

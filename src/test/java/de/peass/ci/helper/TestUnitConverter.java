@@ -1,8 +1,9 @@
 package de.peass.ci.helper;
 
-import de.dagere.peass.ci.helper.UnitConverter;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
+
+import de.dagere.peass.ci.helper.UnitConverter;
 
 public class TestUnitConverter {
 

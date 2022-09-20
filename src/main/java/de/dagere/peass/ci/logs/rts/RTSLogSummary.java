@@ -5,7 +5,7 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 
 /**
  * This summarizes logs for showing information in the regular step action.
@@ -19,7 +19,7 @@ public class RTSLogSummary {
    
    private static final Logger LOG = LogManager.getLogger(RTSLogSummary.class);
 
-   public static RTSLogSummary createLogSummary(Map<TestCase, RTSLogData> rtsVmRuns, Map<TestCase, RTSLogData> rtsVmRunsPredecessor) {
+   public static RTSLogSummary createLogSummary(Map<TestMethodCall, RTSLogData> rtsVmRuns, Map<TestMethodCall, RTSLogData> rtsVmRunsPredecessor) {
       boolean versionContainsNonSuccess = rtsVmRuns.values().stream().anyMatch(log -> !log.isSuccess());
       boolean predecessorContainsNonSuccess = rtsVmRunsPredecessor.values().stream().anyMatch(log -> !log.isSuccess());
 

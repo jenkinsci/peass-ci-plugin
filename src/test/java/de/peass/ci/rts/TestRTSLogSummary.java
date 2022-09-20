@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import de.dagere.peass.ci.logs.rts.AggregatedRTSResult;
 import de.dagere.peass.ci.logs.rts.RTSLogData;
 import de.dagere.peass.ci.logs.rts.RTSLogSummary;
-import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 
 public class TestRTSLogSummary {
@@ -25,8 +24,8 @@ public class TestRTSLogSummary {
 
    @Test
    public void testFineResult() {
-      Map<TestCase, RTSLogData> rtsVmRuns = new HashMap<>();
-      Map<TestCase, RTSLogData> rtsVmRunsPredecessor = new HashMap<>();
+      Map<TestMethodCall, RTSLogData> rtsVmRuns = new HashMap<>();
+      Map<TestMethodCall, RTSLogData> rtsVmRunsPredecessor = new HashMap<>();
       boolean success = true;
       rtsVmRuns.put(new TestMethodCall("TestMe", "test"), new RTSLogData(null, null, null, success, false));
       rtsVmRunsPredecessor.put(new TestMethodCall("TestMe", "test"), new RTSLogData(null, null, null, success, false));
@@ -43,11 +42,11 @@ public class TestRTSLogSummary {
 
    @Test
    public void testParameterizedResultNoError() {
-      Map<TestCase, RTSLogData> rtsVmRuns = new HashMap<>();
-      Map<TestCase, RTSLogData> rtsVmRunsPredecessor = new HashMap<>();
+      Map<TestMethodCall, RTSLogData> rtsVmRuns = new HashMap<>();
+      Map<TestMethodCall, RTSLogData> rtsVmRunsPredecessor = new HashMap<>();
       boolean success = true;
-      rtsVmRuns.put(new TestCase("TestMe#test([0])"), new RTSLogData(null, null, null, success, true));
-      rtsVmRunsPredecessor.put(new TestCase("TestMe#test([0])"), new RTSLogData(null, null, null, success, true));
+      rtsVmRuns.put(TestMethodCall.createFromString("TestMe#test([0])"), new RTSLogData(null, null, null, success, true));
+      rtsVmRunsPredecessor.put(TestMethodCall.createFromString("TestMe#test([0])"), new RTSLogData(null, null, null, success, true));
       RTSLogSummary summary = RTSLogSummary.createLogSummary(rtsVmRuns, rtsVmRunsPredecessor);
 
       Assert.assertFalse(summary.isErrorInCurrentVersionOccured());
@@ -67,14 +66,14 @@ public class TestRTSLogSummary {
 
    @Test
    public void testParameterizedResultError() {
-      Map<TestCase, RTSLogData> rtsVmRuns = new HashMap<>();
-      Map<TestCase, RTSLogData> rtsVmRunsPredecessor = new HashMap<>();
+      Map<TestMethodCall, RTSLogData> rtsVmRuns = new HashMap<>();
+      Map<TestMethodCall, RTSLogData> rtsVmRunsPredecessor = new HashMap<>();
       boolean success = true;
-      rtsVmRuns.put(new TestCase("TestMe#test([0])"), new RTSLogData(null, null, null, success, true));
-      rtsVmRunsPredecessor.put(new TestCase("TestMe#test([0])"), new RTSLogData(null, null, null, success, true));
-      rtsVmRuns.put(new TestCase("TestMe#test2([0])"), new RTSLogData(null, null, null, success, true));
+      rtsVmRuns.put(TestMethodCall.createFromString("TestMe#test([0])"), new RTSLogData(null, null, null, success, true));
+      rtsVmRunsPredecessor.put(TestMethodCall.createFromString("TestMe#test([0])"), new RTSLogData(null, null, null, success, true));
+      rtsVmRuns.put(TestMethodCall.createFromString("TestMe#test2([0])"), new RTSLogData(null, null, null, success, true));
       success = false;
-      rtsVmRunsPredecessor.put(new TestCase("TestMe#test2([0])"), new RTSLogData(null, null, null, success, true));
+      rtsVmRunsPredecessor.put(TestMethodCall.createFromString("TestMe#test2([0])"), new RTSLogData(null, null, null, success, true));
       RTSLogSummary summary = RTSLogSummary.createLogSummary(rtsVmRuns, rtsVmRunsPredecessor);
 
       Assert.assertFalse(summary.isErrorInCurrentVersionOccured());

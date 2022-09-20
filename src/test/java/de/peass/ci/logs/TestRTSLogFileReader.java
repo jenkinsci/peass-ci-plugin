@@ -14,7 +14,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 import de.dagere.peass.ci.logs.RTSLogFileReader;
 import de.dagere.peass.ci.logs.rts.RTSLogData;
-import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 
 public class TestRTSLogFileReader {
@@ -41,7 +40,7 @@ public class TestRTSLogFileReader {
 
       Assert.assertTrue(reader.isLogsExisting());
 
-      Map<TestCase, RTSLogData> rtsVmRuns = reader.getRtsVmRuns("a23e385264c31def8dcda86c3cf64faa698c62d8");
+      Map<TestMethodCall, RTSLogData> rtsVmRuns = reader.getRtsVmRuns("a23e385264c31def8dcda86c3cf64faa698c62d8");
       Assert.assertEquals(2, rtsVmRuns.size());
 
       checkFirstTest(rtsVmRuns);
@@ -53,7 +52,7 @@ public class TestRTSLogFileReader {
    }
 
    private void checkSecondTest(RTSLogFileReader reader) {
-      Map<TestCase, RTSLogData> rtsVmRunsPredecessor = reader.getRtsVmRuns("33ce17c04b5218c25c40137d4d09f40fbb3e4f0f");
+      Map<TestMethodCall, RTSLogData> rtsVmRunsPredecessor = reader.getRtsVmRuns("33ce17c04b5218c25c40137d4d09f40fbb3e4f0f");
       Assert.assertEquals(2, rtsVmRunsPredecessor.size());
       RTSLogData rtsLogData = rtsVmRunsPredecessor.get(TEST1);
       Assert.assertEquals("33ce17c04b5218c25c40137d4d09f40fbb3e4f0f", rtsLogData.getVersion());
@@ -61,7 +60,7 @@ public class TestRTSLogFileReader {
       Assert.assertFalse(rtsLogData.isParameterizedWithoutIndex());
    }
 
-   private void checkFirstTest(Map<TestCase, RTSLogData> rtsVmRuns) {
+   private void checkFirstTest(Map<TestMethodCall, RTSLogData> rtsVmRuns) {
       File dataFile1 = rtsVmRuns.get(TEST1).getMethodFile();
       Assert.assertTrue(dataFile1.exists());
       RTSLogData logDataTest2 = rtsVmRuns.get(TEST2);

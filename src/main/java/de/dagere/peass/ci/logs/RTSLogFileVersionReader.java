@@ -9,7 +9,6 @@ import org.apache.logging.log4j.Logger;
 
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.rts.RTSLogData;
-import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.dependency.traces.TraceFileManager;
 import de.dagere.peass.dependency.traces.TraceWriter;
@@ -20,7 +19,7 @@ public class RTSLogFileVersionReader {
    private final VisualizationFolderManager visualizationFolders;
 
    private final String commit;
-   private final Map<TestCase, RTSLogData> files = new LinkedHashMap<>();
+   private final Map<TestMethodCall, RTSLogData> files = new LinkedHashMap<>();
    private File testClazzFolder;
    private File methodFile;
    private TestMethodCall test;
@@ -30,7 +29,7 @@ public class RTSLogFileVersionReader {
       this.commit = commit;
    }
 
-   public Map<TestCase, RTSLogData> getClazzLogs(final Map<File, String> testClazzFolders) {
+   public Map<TestMethodCall, RTSLogData> getClazzLogs(final Map<File, String> testClazzFolders) {
       testClazzFolders.forEach(this::getClazzLog);
       return files;
    }

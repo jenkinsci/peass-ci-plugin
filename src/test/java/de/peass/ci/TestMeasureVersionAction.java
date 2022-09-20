@@ -10,9 +10,7 @@ import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.analysis.measurement.ProjectStatistics;
 import de.dagere.peass.ci.MeasurementOverviewAction;
 import de.dagere.peass.ci.helper.HistogramValues;
-import de.dagere.peass.ci.helper.IdHelper;
 import de.dagere.peass.config.MeasurementConfig;
-import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 
 public class TestMeasureVersionAction {

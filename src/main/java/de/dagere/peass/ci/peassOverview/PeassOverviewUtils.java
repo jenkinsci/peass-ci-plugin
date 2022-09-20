@@ -5,8 +5,8 @@ import java.util.Map;
 import java.util.Set;
 
 import de.dagere.peass.dependency.analysis.data.ChangedEntity;
-import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.analysis.data.TestSet;
+import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.dependency.persistence.CommitStaticSelection;
 import de.dagere.peass.dependency.persistence.ExecutionData;
 import de.dagere.peass.dependency.persistence.StaticTestSelection;
@@ -19,10 +19,10 @@ public class PeassOverviewUtils {
             CommitStaticSelection versionStaticSelection = selection.getCommits().get(commit);
             if (versionStaticSelection != null) {
                for (Map.Entry<ChangedEntity, TestSet> changedEntity : versionStaticSelection.getChangedClazzes().entrySet()) {
-                  Set<TestCase> tests = new HashSet<>(changedEntity.getValue().getTests());
+                  Set<TestMethodCall> tests = new HashSet<>(changedEntity.getValue().getTestMethods());
 
-                  for (TestCase test : tests) {
-                     if (!commitTraceSelection.getTests().contains(test)) {
+                  for (TestMethodCall test : tests) {
+                     if (!commitTraceSelection.getTestMethods().contains(test)) {
                         if (test.getMethod() != null) {
                            changedEntity.getValue().removeTest(test.onlyClazz(), test.getMethod());
                         } else {
