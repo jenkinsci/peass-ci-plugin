@@ -8,6 +8,7 @@ import java.util.TreeSet;
 import de.dagere.peass.ci.Messages;
 import de.dagere.peass.ci.VisibleAction;
 import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 
 public class RTSLogOverviewAction extends VisibleAction {
 
@@ -15,12 +16,12 @@ public class RTSLogOverviewAction extends VisibleAction {
    private Map<String, Boolean> processSuccessRunSucceeded;
    private boolean staticChanges;
    private boolean staticallySelectedTests;
-   private Map<TestCase, RTSLogData> vmRuns;
-   private Map<TestCase, RTSLogData> predecessorVmRuns;
+   private Map<TestMethodCall, RTSLogData> vmRuns;
+   private Map<TestMethodCall, RTSLogData> predecessorVmRuns;
    private final String version, versionOld;
    private boolean redirectSubprocessOutputToFile;
 
-   public RTSLogOverviewAction(int id, final Map<String, File> processSuccessRuns, final Map<TestCase, RTSLogData> vmRuns, final Map<TestCase, RTSLogData> predecessorVmRuns,
+   public RTSLogOverviewAction(int id, final Map<String, File> processSuccessRuns, final Map<TestMethodCall, RTSLogData> vmRuns, final Map<TestMethodCall, RTSLogData> predecessorVmRuns,
          final Map<String, Boolean> processSuccessRunSucceeded, final String commit, final String commitOld, final boolean redirectSubprocessOutputToFile) {
       super(id);
       this.processSuccessRuns = processSuccessRuns;
@@ -43,11 +44,11 @@ public class RTSLogOverviewAction extends VisibleAction {
       return allTests;
    }
 
-   public Map<TestCase, RTSLogData> getVmRuns() {
+   public Map<TestMethodCall, RTSLogData> getVmRuns() {
       return vmRuns;
    }
 
-   public Map<TestCase, RTSLogData> getPredecessorVmRuns() {
+   public Map<TestMethodCall, RTSLogData> getPredecessorVmRuns() {
       return predecessorVmRuns;
    }
 

@@ -17,8 +17,8 @@ import de.dagere.peass.ci.logs.LogUtil;
 import de.dagere.peass.ci.logs.RTSLogFileReader;
 import de.dagere.peass.ci.process.RTSInfos;
 import de.dagere.peass.config.MeasurementConfig;
-import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.analysis.data.TestSet;
+import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import hudson.model.Run;
 
 public class RTSActionCreator {
@@ -48,15 +48,15 @@ public class RTSActionCreator {
 
       Map<String, File> processSuccessRuns = createProcessSuccessRunsActions();
 
-      Map<TestCase, RTSLogData> rtsVmRuns = createVersionRTSData(measurementConfig.getFixedCommitConfig().getCommit(), staticChanges.getIgnoredTestsCurrent());
-      Map<TestCase, RTSLogData> rtsVmRunsPredecessor = createVersionRTSData(measurementConfig.getFixedCommitConfig().getCommitOld(), staticChanges.getIgnoredTestsPredecessor());
+      Map<TestMethodCall, RTSLogData> rtsVmRuns = createVersionRTSData(measurementConfig.getFixedCommitConfig().getCommit(), staticChanges.getIgnoredTestsCurrent());
+      Map<TestMethodCall, RTSLogData> rtsVmRunsPredecessor = createVersionRTSData(measurementConfig.getFixedCommitConfig().getCommitOld(), staticChanges.getIgnoredTestsPredecessor());
 
       logSummary = RTSLogSummary.createLogSummary(rtsVmRuns, rtsVmRunsPredecessor);
 
       createOverviewAction(processSuccessRuns, rtsVmRuns, rtsVmRunsPredecessor, staticChanges);
    }
 
-   private void createOverviewAction(final Map<String, File> processSuccessRuns, final Map<TestCase, RTSLogData> rtsVmRuns, final Map<TestCase, RTSLogData> rtsVmRunsPredecessor,
+   private void createOverviewAction(final Map<String, File> processSuccessRuns, final Map<TestMethodCall, RTSLogData> rtsVmRuns, final Map<TestMethodCall, RTSLogData> rtsVmRunsPredecessor,
          final RTSInfos rtsInfos) {
       RTSLogOverviewAction overviewAction = new RTSLogOverviewAction(IdHelper.getId(), processSuccessRuns, rtsVmRuns, rtsVmRunsPredecessor,
             processSuccessRunSucceeded, measurementConfig.getFixedCommitConfig().getCommit(), measurementConfig.getFixedCommitConfig().getCommitOld(),
@@ -93,10 +93,10 @@ public class RTSActionCreator {
       return processSuccessRuns;
    }
 
-   private Map<TestCase, RTSLogData> createVersionRTSData(final String commit, final TestSet ignoredTests) throws IOException {
-      Map<TestCase, RTSLogData> rtsVmRuns = reader.getRtsVmRuns(commit, ignoredTests);
+   private Map<TestMethodCall, RTSLogData> createVersionRTSData(final String commit, final TestSet ignoredTests) throws IOException {
+      Map<TestMethodCall, RTSLogData> rtsVmRuns = reader.getRtsVmRuns(commit, ignoredTests);
       LOG.info("RTS Runs: {}", rtsVmRuns.size());
-      for (Map.Entry<TestCase, RTSLogData> rtsLogData : rtsVmRuns.entrySet()) {
+      for (Map.Entry<TestMethodCall, RTSLogData> rtsLogData : rtsVmRuns.entrySet()) {
          String methodLogData = getLogData(rtsLogData.getValue().getMethodFile());
          String cleanLogData = getLogData(rtsLogData.getValue().getCleanFile());
          RTSLogAction logAction = new RTSLogAction(IdHelper.getId(), rtsLogData.getValue().getVersion(), rtsLogData.getKey(), cleanLogData, methodLogData);

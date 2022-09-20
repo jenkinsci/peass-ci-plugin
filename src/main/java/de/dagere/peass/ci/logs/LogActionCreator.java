@@ -10,7 +10,6 @@ import de.dagere.peass.ci.logs.rca.RCAActionCreator;
 import de.dagere.peass.ci.logs.rts.RTSActionCreator;
 import de.dagere.peass.ci.logs.rts.RTSLogSummary;
 import de.dagere.peass.ci.process.RTSInfos;
-import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import hudson.model.Run;
 

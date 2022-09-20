@@ -12,7 +12,6 @@ import org.apache.logging.log4j.Logger;
 
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.rts.RTSLogData;
-import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.analysis.data.TestSet;
 import de.dagere.peass.dependency.analysis.testData.TestClazzCall;
 import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
@@ -25,7 +24,7 @@ public class RTSLogFileVersionReader {
    private final VisualizationFolderManager visualizationFolders;
 
    private final String commit;
-   private final Map<TestCase, RTSLogData> files = new LinkedHashMap<>();
+   private final Map<TestMethodCall, RTSLogData> files = new LinkedHashMap<>();
    private File testClazzFolder;
    private File methodFile;
    private TestMethodCall test;
@@ -35,7 +34,7 @@ public class RTSLogFileVersionReader {
       this.commit = commit;
    }
 
-   public Map<TestCase, RTSLogData> getClazzLogs(final Map<File, String> testClazzFolders, final TestSet ignoredTests) {
+   public Map<TestMethodCall, RTSLogData> getClazzLogs(final Map<File, String> testClazzFolders, final TestSet ignoredTests) {
       for (Entry<File, String> testClazzFolder : testClazzFolders.entrySet()) {
          Set<String> ignoredMethods = findIgnoredMethods(ignoredTests, testClazzFolder.getKey());
          getClazzLog(testClazzFolder.getKey(), testClazzFolder.getValue(), ignoredMethods);

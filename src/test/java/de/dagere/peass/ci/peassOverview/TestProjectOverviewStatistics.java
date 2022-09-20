@@ -8,7 +8,6 @@ import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.analysis.measurement.ProjectStatistics;
 import de.dagere.peass.ci.peassOverview.classification.ClassifiedProject;
 import de.dagere.peass.ci.peassOverview.classification.TestcaseClassification;
-import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.dependency.persistence.StaticTestSelection;
 

@@ -8,8 +8,8 @@ import com.fasterxml.jackson.databind.DatabindException;
 
 import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.dependency.analysis.data.TestSet;
-import de.dagere.peass.dependency.persistence.StaticTestSelection;
 import de.dagere.peass.dependency.persistence.CommitStaticSelection;
+import de.dagere.peass.dependency.persistence.StaticTestSelection;
 import de.dagere.peass.folders.ResultsFolders;
 import de.dagere.peass.utils.Constants;
 

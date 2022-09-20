@@ -15,9 +15,9 @@ import de.dagere.peass.dependency.analysis.data.ChangedEntity;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.analysis.data.TestSet;
 import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
+import de.dagere.peass.dependency.persistence.CommitStaticSelection;
 import de.dagere.peass.dependency.persistence.StaticTestSelection;
 import de.dagere.peass.measurement.statistics.data.TestcaseStatistic;
-import de.dagere.peass.dependency.persistence.CommitStaticSelection;
 
 public class ProjectData {
    private final StaticTestSelection selection;
