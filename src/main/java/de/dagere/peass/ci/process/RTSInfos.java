@@ -48,17 +48,17 @@ public class RTSInfos {
       if (staticTestSelectionFile.exists()) {
          boolean staticChanges = false;
          StaticTestSelection staticTestSelection = Constants.OBJECTMAPPER.readValue(staticTestSelectionFile, StaticTestSelection.class);
-         CommitStaticSelection version = staticTestSelection.getCommits().get(peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit());
+         CommitStaticSelection commitSelection = staticTestSelection.getCommits().get(peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit());
          boolean hasStaticallySelectedTests = false;
 
          TestSet ignoredTestsCurrent = new TestSet();
-         if (version != null) {
-            if (!version.getChangedClazzes().isEmpty()) {
+         if (commitSelection != null) {
+            if (!commitSelection.getChangedClazzes().isEmpty()) {
                staticChanges = true;
             }
-            TestSet tests = version.getTests();
+            TestSet tests = commitSelection.getTests();
             hasStaticallySelectedTests = !tests.getTests().isEmpty();
-            ignoredTestsCurrent = version.getIgnoredAffectedTests();
+            ignoredTestsCurrent = commitSelection.getIgnoredAffectedTests();
          }
 
          CommitStaticSelection predecessor = staticTestSelection.getCommits().get(peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommitOld());

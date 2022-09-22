@@ -43,7 +43,8 @@ public class RTSLogFileVersionReader {
    }
 
    private Set<String> findIgnoredMethods(final TestSet ignoredTests, File testClazzFolder) {
-      if (ignoredTests == null) return Collections.emptySet();
+      if (ignoredTests == null)
+         return Collections.emptySet();
       for (Entry<TestClazzCall, Set<String>> ignoredTest : ignoredTests.entrySet()) {
          String clazzName = extractClazzNameFromTestClazzFolder(testClazzFolder);
          if (ignoredTest.getKey().getClazz().equals(clazzName)) {
