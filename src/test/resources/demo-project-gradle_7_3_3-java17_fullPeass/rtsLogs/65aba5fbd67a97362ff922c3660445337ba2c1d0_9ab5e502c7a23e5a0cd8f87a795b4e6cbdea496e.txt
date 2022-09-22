@@ -1,0 +1,362 @@
+16:48:07.618 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.vcs.GitUtils:393 - Going to commit 9ab5e502c7a23e5a0cd8f87a795b4e6cbdea496e folder: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17
+HEAD is now at 65aba5f Increased Thread.sleep to 20ms in Callee
+
+
+Note: switching to '9ab5e502c7a23e5a0cd8f87a795b4e6cbdea496e'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+HEAD is now at 9ab5e50 Initial commit
+
+16:48:07.759 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.testtransformation.JUnitTestTransformer:101 - Test transformer for /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17 created
+16:48:07.762 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] INFO  de.dagere.peass.dependency.ExecutorCreator:37 - default
+16:48:07.767 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.gradle.GradleParseUtil:43 - Editing: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17/build.gradle
+16:48:07.816 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.processutils.ProcessSuccessTester:45 - Executing run success test /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17
+16:48:07.818 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.processutils.ProcessBuilderHelper:35 - Command: [./gradlew, --no-daemon, testClasses, assemble]
+16:48:07.818 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.processutils.ProcessBuilderHelper:60 - KOPEME_HOME=/home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/measurementsTemp
+16:48:07.870 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.processutils.ProcessBuilderHelper:81 - Process started: 34625 Used PIDs: 971 Log to: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/logs/dependencyLogs/9ab5e502c7a23e5a0cd8f87a795b4e6cbdea496e/testRunning.log
+16:48:07.871 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.processutils.ProcessSuccessTester:68 - Waiting for 300 minutes
+16:48:16.211 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] INFO  de.dagere.peass.execution.processutils.ProcessSuccessTester:59 - Test was successfull
+16:48:16.214 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.testtransformation.JUnitTestTransformer:101 - Test transformer for /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17 created
+16:48:16.214 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] INFO  de.dagere.peass.dependency.ExecutorCreator:37 - default
+16:48:16.407 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.analysis.ModuleClassMapping:46 - Module: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17 Name: 
+16:48:16.448 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] INFO  de.dagere.peass.testtransformation.JUnitTestTransformer:149 - Included tests: 1
+16:48:16.448 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.KiekerResultManager:94 - Truncating: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/measurementsTemp
+16:48:16.448 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.KiekerResultManager:86 - Executing dependency update test, results folder: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/measurementsTemp
+16:48:16.455 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.analysis.ModuleClassMapping:46 - Module: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17 Name: 
+16:48:16.469 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.gradle.GradleTestExecutor:39 - Starting Test Transformation
+16:48:16.471 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.kieker.KiekerEnvironmentPreparer:73 - Create default constructor: false
+16:48:16.769 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.testtransformation.JUnitTestTransformer:220 - JUnit Versions Determined: 1
+16:48:16.769 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.testtransformation.JUnitTestTransformer:222 - Editing test file: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17/src/test/java/demo/project/gradle/ExampleTest.java 5
+16:48:16.780 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.gradle.GradleTestExecutor:63 - Preparing modules: de.dagere.peass.execution.utils.ProjectModules@398072e5
+16:48:16.782 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.gradle.GradleBuildfileEditor:40 - Editing buildfile: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17/build.gradle
+16:48:16.802 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.gradle.GradleTaskAnalyzer:37 - Command: [/home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17/./gradlew, tasks, --all]
+16:48:23.197 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.gradle.GradleTaskAnalyzer:50 - Starting a Gradle Daemon, 1 incompatible Daemon could not be reused, use --status for details
+
+> Task :tasks
+
+------------------------------------------------------------
+Tasks runnable from root project 'demo-project-gradle'
+------------------------------------------------------------
+
+Build tasks
+-----------
+assemble - Assembles the outputs of this project.
+build - Assembles and tests this project.
+buildDependents - Assembles and tests this project and all projects that depend on it.
+buildNeeded - Assembles and tests this project and all projects it depends on.
+classes - Assembles main classes.
+clean - Deletes the build directory.
+jar - Assembles a jar archive containing the main classes.
+sourcesJar - Assembles a jar archive containing the main sources.
+testClasses - Assembles test classes.
+
+Build Setup tasks
+-----------------
+init - Initializes a new Gradle build.
+wrapper - Generates Gradle wrapper files.
+
+Documentation tasks
+-------------------
+javadoc - Generates Javadoc API documentation for the main source code.
+
+Help tasks
+----------
+buildEnvironment - Displays all buildscript dependencies declared in root project 'demo-project-gradle'.
+lib:buildEnvironment - Displays all buildscript dependencies declared in project ':lib'.
+dependencies - Displays all dependencies declared in root project 'demo-project-gradle'.
+lib:dependencies - Displays all dependencies declared in project ':lib'.
+dependencyInsight - Displays the insight into a specific dependency in root project 'demo-project-gradle'.
+lib:dependencyInsight - Displays the insight into a specific dependency in project ':lib'.
+help - Displays a help message.
+lib:help - Displays a help message.
+javaToolchains - Displays the detected java toolchains.
+lib:javaToolchains - Displays the detected java toolchains.
+outgoingVariants - Displays the outgoing variants of root project 'demo-project-gradle'.
+lib:outgoingVariants - Displays the outgoing variants of project ':lib'.
+projects - Displays the sub-projects of root project 'demo-project-gradle'.
+lib:projects - Displays the sub-projects of project ':lib'.
+properties - Displays the properties of root project 'demo-project-gradle'.
+lib:properties - Displays the properties of project ':lib'.
+tasks - Displays the tasks runnable from root project 'demo-project-gradle' (some of the displayed tasks may belong to subprojects).
+lib:tasks - Displays the tasks runnable from project ':lib'.
+
+Verification tasks
+------------------
+check - Runs all checks.
+test - Runs the test suite.
+
+Other tasks
+-----------
+compileJava - Compiles main Java source.
+compileTestJava - Compiles test Java source.
+components - Displays the components produced by root project 'demo-project-gradle'. [deprecated]
+lib:components - Displays the components produced by project ':lib'. [deprecated]
+dependentComponents - Displays the dependent components of components in root project 'demo-project-gradle'. [deprecated]
+lib:dependentComponents - Displays the dependent components of components in project ':lib'. [deprecated]
+model - Displays the configuration model of root project 'demo-project-gradle'. [deprecated]
+lib:model - Displays the configuration model of project ':lib'. [deprecated]
+prepareKotlinBuildScriptModel
+processResources - Processes main resources.
+processTestResources - Processes test resources.
+
+Rules
+-----
+Pattern: clean<TaskName>: Cleans the output files of a task.
+Pattern: build<ConfigurationName>: Assembles the artifacts of a configuration.
+
+BUILD SUCCESSFUL in 5s
+1 actionable task: 1 executed
+
+16:48:23.200 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] INFO  de.dagere.peass.execution.gradle.GradleBuildfileEditor:92 - Did not find spring boot
+Adding: 33 implementation 'de.dagere.kopeme:kopeme-junit5:1.1.12'
+integrationtest: -1
+Adding: 34 implementation 'net.kieker-monitoring:kieker:1.15.1'
+integrationtest: -1
+Adding: 35 implementation 'net.kieker-monitoring:kieker:1.15.1'
+integrationtest: -1
+16:48:23.202 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.kieker.ArgLineBuilder:94 - Created gradle argLine:   systemProperty "java.io.tmpdir", "/home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/kiekerTemp/kiekerTemp11884125906559172117"
+  systemProperty "kieker.monitoring.configuration", "/home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17/src/main/resources/META-INF/kieker.monitoring.properties"
+
+16:48:23.203 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.gradle.GradleBuildfileEditor:57 - Writing changed buildfile: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17/build.gradle
+16:48:23.203 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.gradle.GradleTestExecutor:136 - Cleaning not necessary: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17/build/test-results/release
+16:48:23.208 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.testtransformation.JUnitTestShortener:118 - Shortening: demo.project.gradle.ExampleTest#test
+16:48:23.229 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] INFO  de.dagere.peass.execution.utils.KoPeMeExecutor:61 - Cleaning...
+16:48:23.230 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.gradle.GradleTestExecutor:110 - Redirecting to null: false
+16:48:23.231 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.gradle.GradleTestExecutor:119 - Executing gradle test in moduleFolder: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17
+16:48:23.231 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.processutils.ProcessBuilderHelper:35 - Command: [/home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17/./gradlew, --init-script, /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/gradleHome/init.gradle, --no-daemon, cleanTest, test, --info, --tests, demo.project.gradle.ExampleTest]
+16:48:23.232 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.processutils.ProcessBuilderHelper:60 - KOPEME_HOME=/home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/measurementsTemp
+16:48:23.326 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.processutils.ProcessBuilderHelper:81 - Process started: 34625 Used PIDs: 1006 Log to: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/logs/dependencyLogs/9ab5e502c7a23e5a0cd8f87a795b4e6cbdea496e/log_demo.project.gradle.ExampleTest/test.txt
+16:48:23.327 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.utils.TestExecutor:120 - Executing: demo.project.gradle.ExampleTest Timeout: 300
+16:48:38.539 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.testtransformation.JUnitTestShortener:229 - File to reset: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17/src/test/java/demo/project/gradle/ExampleTest.java Exists: false Parent exists: true
+16:48:38.564 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.KiekerResultManager:147 - File: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/logs/dependencyLogs/9ab5e502c7a23e5a0cd8f87a795b4e6cbdea496e/log_demo.project.gradle.ExampleTest/test.txt Size: 0 MB
+16:48:38.565 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.KiekerResultManager:135 - KoPeMe-Kieker-Run finished
+16:48:38.565 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.DependencyManager:172 - Initial test execution finished, starting result collection, analyzing 1 files
+16:48:38.565 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.DependencyManager:226 - Parent: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/measurementsTemp/demo-project-gradle/demo.project.gradle.ExampleTest
+16:48:38.567 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.kopeme.parsing.BuildtoolProjectNameReader:52 - Directory: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17
+16:48:38.568 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.traces.KiekerFolderUtil:36 - Searching in: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/measurementsTemp/demo-project-gradle/demo.project.gradle.ExampleTest/1663771717588/test
+16:48:38.568 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.DependencyManager:307 - Reading Kieker folder: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/measurementsTemp/demo-project-gradle/demo.project.gradle.ExampleTest/1663771717588/test/kieker-20220921-144837-26009165746096-UTC--KIEKER-KoPeMe
+16:48:38.611 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.analysis.KiekerReaderConfiguration:37 - Reading from /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/measurementsTemp/demo-project-gradle/demo.project.gradle.ExampleTest/1663771717588/test/kieker-20220921-144837-26009165746096-UTC--KIEKER-KoPeMe
+16:48:38.654 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.analysis.KiekerReader:20 - Execution finished succesfully
+16:48:38.655 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.DependencyManager:245 - Test: demo.project.gradle.ExampleTest#test 
+16:48:38.655 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.DependencyManager:246 - Dependencies: 3
+16:48:38.655 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.DependencyManager:298 - Size: 0 Folder: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/measurementsTemp/demo-project-gradle/demo.project.gradle.ExampleTest/1663771717588/test/kieker-20220921-144837-26009165746096-UTC--KIEKER-KoPeMe
+16:48:38.655 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.DependencyManager:185 - Result collection finished
+16:48:38.655 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.reader.InitialCommitReader:64 - Starting writing: 1
+16:48:38.657 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.reader.DependencyReaderUtil:159 - Writing to: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/staticTestSelection_demo-project-gradle_7_3_3-java17.json
+16:48:38.690 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.reader.TraceViewGenerator:52 - Generating views for 9ab5e502c7a23e5a0cd8f87a795b4e6cbdea496e
+HEAD is now at 9ab5e50 Initial commit
+
+16:48:38.702 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.analysis.ModuleClassMapping:46 - Module: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17 Name: 
+16:48:38.703 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.kopeme.parsing.BuildtoolProjectNameReader:52 - Directory: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17
+16:48:38.703 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.traces.KiekerFolderUtil:36 - Searching in: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/measurementsTemp/demo-project-gradle/demo.project.gradle.ExampleTest/1663771717588/test
+16:48:38.764 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.traces.OneTraceGenerator:67 - Searching for: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/measurementsTemp/demo-project-gradle/demo.project.gradle.ExampleTest/1663771717588/test/kieker-20220921-144837-26009165746096-UTC--KIEKER-KoPeMe
+16:48:38.764 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.traces.OneTraceGenerator:89 - Filesize: 0 (737)
+16:48:38.764 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.analysis.CalledMethodLoader:114 - Size: 0 (737) Folder: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/measurementsTemp/demo-project-gradle/demo.project.gradle.ExampleTest/1663771717588/test/kieker-20220921-144837-26009165746096-UTC--KIEKER-KoPeMe
+16:48:38.765 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.analysis.KiekerReaderConfiguration:37 - Reading from /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/measurementsTemp/demo-project-gradle/demo.project.gradle.ExampleTest/1663771717588/test/kieker-20220921-144837-26009165746096-UTC--KIEKER-KoPeMe
+16:48:38.768 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.analysis.KiekerReader:20 - Execution finished succesfully
+16:48:38.768 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.traces.OneTraceGenerator:94 - Short Trace: 4 Folder: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/measurementsTemp/demo-project-gradle/demo.project.gradle.ExampleTest/1663771717588/test/kieker-20220921-144837-26009165746096-UTC--KIEKER-KoPeMe Project: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17
+16:48:38.772 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.traces.TraceMethodReader:61 - Trace Length: 4
+16:48:38.783 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.folders.ResultsFolders:169 - Created directory /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/views_demo-project-gradle_7_3_3-java17/view_9ab5e502c7a23e5a0cd8f87a795b4e6cbdea496e/demo.project.gradle.ExampleTest/test Success: true
+16:48:38.790 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.traces.TraceWriter:51 - Datei /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/views_demo-project-gradle_7_3_3-java17/view_9ab5e502c7a23e5a0cd8f87a795b4e6cbdea496e/demo.project.gradle.ExampleTest/test/9ab5e5_method.zip existiert: true
+16:48:38.791 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.DependencyManager:208 - Cleaning /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/initialresults_kieker/demo-project-gradle
+16:48:38.791 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.KiekerResultManager:159 - File: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/initialresults_kieker/demo-project-gradle/demo.project.gradle.ExampleTest Size: 0
+16:48:38.791 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.reader.DependencyReader:133 - Analysing 2 entries
+16:48:38.791 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.ChangeManager:72 - Saving old classes
+16:48:38.792 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.ChangeManager:105 - Copying from /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17/src/main/java to /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/lastSources/src/main/java
+16:48:38.794 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.ChangeManager:105 - Copying from /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17/src/java to /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/lastSources/src/java
+16:48:38.795 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.ChangeManager:105 - Copying from /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17/src/test/java to /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/lastSources/src/test/java
+16:48:38.795 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.ChangeManager:105 - Copying from /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17/src/test to /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/lastSources/src/test
+16:48:38.798 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.vcs.GitUtils:393 - Going to commit 65aba5fbd67a97362ff922c3660445337ba2c1d0 folder: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17
+HEAD is now at 9ab5e50 Initial commit
+
+Removing src/java/
+Removing src/main/resources/
+Removing src/test/META-INF/
+Removing src/test/resources/
+Removing target/
+
+Previous HEAD position was 9ab5e50 Initial commit
+HEAD is now at 65aba5f Increased Thread.sleep to 20ms in Callee
+
+16:48:38.815 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.gradle.GradleParseUtil:43 - Editing: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17/build.gradle
+16:48:38.832 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.processutils.ProcessSuccessTester:45 - Executing run success test /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17
+16:48:38.832 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.processutils.ProcessBuilderHelper:35 - Command: [./gradlew, --no-daemon, testClasses, assemble]
+16:48:38.833 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.processutils.ProcessBuilderHelper:60 - KOPEME_HOME=/home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/measurementsTemp
+16:48:38.897 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.processutils.ProcessBuilderHelper:81 - Process started: 34625 Used PIDs: 1011 Log to: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/logs/dependencyLogs/65aba5fbd67a97362ff922c3660445337ba2c1d0/testRunning.log
+16:48:38.897 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.processutils.ProcessSuccessTester:68 - Waiting for 300 minutes
+16:48:46.881 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] INFO  de.dagere.peass.execution.processutils.ProcessSuccessTester:59 - Test was successfull
+16:48:46.891 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] INFO  de.dagere.peass.dependency.ChangeManager:66 - Changed classes: 1
+16:48:46.891 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.ChangeManager:148 - Before Cleaning: [demo.project.gradle.Callee]
+16:48:46.892 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] INFO  de.dagere.peass.dependency.ChangeManager:172 - Vergleiche /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17/src/main/java/demo/project/gradle/Callee.java
+16:48:46.899 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.ChangeManager:160 - After cleaning: {demo.project.gradle.Callee=clazz: [Callee] true true [[innerMethod]]}
+16:48:46.899 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.ChangeManager:72 - Saving old classes
+16:48:46.901 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.ChangeManager:105 - Copying from /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17/src/main/java to /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/lastSources/src/main/java
+16:48:46.902 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.ChangeManager:105 - Copying from /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17/src/test/java to /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/lastSources/src/test/java
+16:48:46.902 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.ChangeManager:105 - Copying from /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17/src/test to /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/lastSources/src/test
+16:48:46.912 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.analysis.ModuleClassMapping:46 - Module: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17 Name: 
+16:48:46.913 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.analysis.data.TestDependencies:153 - Change: demo.project.gradle.Callee#innerMethod Calling: 1 [demo.project.gradle.ExampleTest#test]
+16:48:46.913 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.reader.StaticChangeHandler:46 - Change test mapping (without added tests): {demo.project.gradle.Callee#innerMethod=[demo.project.gradle.ExampleTest#test]}
+16:48:46.918 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.reader.DependencyReaderUtil:106 - Beginning to write
+16:48:46.923 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.reader.TraceChangeHandler:51 - Updating dependencies.. 65aba5fbd67a97362ff922c3660445337ba2c1d0
+16:48:46.927 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.analysis.ModuleClassMapping:46 - Module: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17 Name: 
+16:48:46.931 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.KiekerResultManager:94 - Truncating: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/measurementsTemp
+16:48:46.931 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.KiekerResultManager:86 - Executing dependency update test, results folder: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/measurementsTemp
+16:48:46.935 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.analysis.ModuleClassMapping:46 - Module: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17 Name: 
+16:48:46.938 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.gradle.GradleTestExecutor:39 - Starting Test Transformation
+16:48:46.938 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.kieker.KiekerEnvironmentPreparer:73 - Create default constructor: false
+16:48:47.157 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.testtransformation.JUnitTestTransformer:220 - JUnit Versions Determined: 1
+16:48:47.157 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.testtransformation.JUnitTestTransformer:222 - Editing test file: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17/src/test/java/demo/project/gradle/ExampleTest.java 5
+16:48:47.162 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.gradle.GradleTestExecutor:63 - Preparing modules: de.dagere.peass.execution.utils.ProjectModules@7a50a41c
+16:48:47.162 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.gradle.GradleBuildfileEditor:40 - Editing buildfile: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17/build.gradle
+16:48:47.180 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.gradle.GradleTaskAnalyzer:37 - Command: [/home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17/./gradlew, tasks, --all]
+16:48:48.413 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.gradle.GradleTaskAnalyzer:50 - 
+> Task :tasks
+
+------------------------------------------------------------
+Tasks runnable from root project 'demo-project-gradle'
+------------------------------------------------------------
+
+Build tasks
+-----------
+assemble - Assembles the outputs of this project.
+build - Assembles and tests this project.
+buildDependents - Assembles and tests this project and all projects that depend on it.
+buildNeeded - Assembles and tests this project and all projects it depends on.
+classes - Assembles main classes.
+clean - Deletes the build directory.
+jar - Assembles a jar archive containing the main classes.
+sourcesJar - Assembles a jar archive containing the main sources.
+testClasses - Assembles test classes.
+
+Build Setup tasks
+-----------------
+init - Initializes a new Gradle build.
+wrapper - Generates Gradle wrapper files.
+
+Documentation tasks
+-------------------
+javadoc - Generates Javadoc API documentation for the main source code.
+
+Help tasks
+----------
+buildEnvironment - Displays all buildscript dependencies declared in root project 'demo-project-gradle'.
+lib:buildEnvironment - Displays all buildscript dependencies declared in project ':lib'.
+dependencies - Displays all dependencies declared in root project 'demo-project-gradle'.
+lib:dependencies - Displays all dependencies declared in project ':lib'.
+dependencyInsight - Displays the insight into a specific dependency in root project 'demo-project-gradle'.
+lib:dependencyInsight - Displays the insight into a specific dependency in project ':lib'.
+help - Displays a help message.
+lib:help - Displays a help message.
+javaToolchains - Displays the detected java toolchains.
+lib:javaToolchains - Displays the detected java toolchains.
+outgoingVariants - Displays the outgoing variants of root project 'demo-project-gradle'.
+lib:outgoingVariants - Displays the outgoing variants of project ':lib'.
+projects - Displays the sub-projects of root project 'demo-project-gradle'.
+lib:projects - Displays the sub-projects of project ':lib'.
+properties - Displays the properties of root project 'demo-project-gradle'.
+lib:properties - Displays the properties of project ':lib'.
+tasks - Displays the tasks runnable from root project 'demo-project-gradle' (some of the displayed tasks may belong to subprojects).
+lib:tasks - Displays the tasks runnable from project ':lib'.
+
+Verification tasks
+------------------
+check - Runs all checks.
+test - Runs the test suite.
+
+Other tasks
+-----------
+compileJava - Compiles main Java source.
+compileTestJava - Compiles test Java source.
+components - Displays the components produced by root project 'demo-project-gradle'. [deprecated]
+lib:components - Displays the components produced by project ':lib'. [deprecated]
+dependentComponents - Displays the dependent components of components in root project 'demo-project-gradle'. [deprecated]
+lib:dependentComponents - Displays the dependent components of components in project ':lib'. [deprecated]
+model - Displays the configuration model of root project 'demo-project-gradle'. [deprecated]
+lib:model - Displays the configuration model of project ':lib'. [deprecated]
+prepareKotlinBuildScriptModel
+processResources - Processes main resources.
+processTestResources - Processes test resources.
+
+Rules
+-----
+Pattern: clean<TaskName>: Cleans the output files of a task.
+Pattern: build<ConfigurationName>: Assembles the artifacts of a configuration.
+
+BUILD SUCCESSFUL in 796ms
+1 actionable task: 1 executed
+
+16:48:48.414 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] INFO  de.dagere.peass.execution.gradle.GradleBuildfileEditor:92 - Did not find spring boot
+Adding: 33 implementation 'de.dagere.kopeme:kopeme-junit5:1.1.12'
+integrationtest: -1
+Adding: 34 implementation 'net.kieker-monitoring:kieker:1.15.1'
+integrationtest: -1
+Adding: 35 implementation 'net.kieker-monitoring:kieker:1.15.1'
+integrationtest: -1
+16:48:48.414 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.kieker.ArgLineBuilder:94 - Created gradle argLine:   systemProperty "java.io.tmpdir", "/home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/kiekerTemp/kiekerTemp178280007744035842"
+  systemProperty "kieker.monitoring.configuration", "/home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17/src/main/resources/META-INF/kieker.monitoring.properties"
+
+16:48:48.414 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.gradle.GradleBuildfileEditor:57 - Writing changed buildfile: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17/build.gradle
+16:48:48.414 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.gradle.GradleTestExecutor:136 - Cleaning not necessary: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17/build/test-results/release
+16:48:48.415 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.testtransformation.JUnitTestShortener:118 - Shortening: demo.project.gradle.ExampleTest#test
+16:48:48.421 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] INFO  de.dagere.peass.execution.utils.KoPeMeExecutor:61 - Cleaning...
+16:48:48.422 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.gradle.GradleTestExecutor:110 - Redirecting to null: false
+16:48:48.422 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.gradle.GradleTestExecutor:119 - Executing gradle test in moduleFolder: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17
+16:48:48.422 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.processutils.ProcessBuilderHelper:35 - Command: [/home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17/./gradlew, --init-script, /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/gradleHome/init.gradle, --no-daemon, cleanTest, test, --info, --tests, demo.project.gradle.ExampleTest]
+16:48:48.422 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.processutils.ProcessBuilderHelper:60 - KOPEME_HOME=/home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/measurementsTemp
+16:48:48.463 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.processutils.ProcessBuilderHelper:81 - Process started: 34625 Used PIDs: 1011 Log to: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/logs/dependencyLogs/65aba5fbd67a97362ff922c3660445337ba2c1d0/log_demo.project.gradle.ExampleTest/test.txt
+16:48:48.463 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.utils.TestExecutor:120 - Executing: demo.project.gradle.ExampleTest Timeout: 300
+16:48:59.905 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.testtransformation.JUnitTestShortener:229 - File to reset: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17/src/test/java/demo/project/gradle/ExampleTest.java Exists: false Parent exists: true
+16:48:59.912 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.KiekerResultManager:147 - File: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/logs/dependencyLogs/65aba5fbd67a97362ff922c3660445337ba2c1d0/log_demo.project.gradle.ExampleTest/test.txt Size: 0 MB
+16:48:59.912 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.KiekerResultManager:135 - KoPeMe-Kieker-Run finished
+16:48:59.912 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.DependencyManager:362 - Beginne Abhängigkeiten-Aktuallisierung für 1 Klassen
+16:48:59.913 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.kopeme.parsing.BuildtoolProjectNameReader:52 - Directory: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17
+16:48:59.914 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.DependencyManager:376 - Suche in /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/measurementsTemp/demo-project-gradle/demo.project.gradle.ExampleTest Existiert: true Ordner: true Tests: [test] 
+16:48:59.914 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.DependencyManager:226 - Parent: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/measurementsTemp/demo-project-gradle/demo.project.gradle.ExampleTest
+16:48:59.914 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.kopeme.parsing.BuildtoolProjectNameReader:52 - Directory: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17
+16:48:59.914 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.traces.KiekerFolderUtil:36 - Searching in: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/measurementsTemp/demo-project-gradle/demo.project.gradle.ExampleTest/1663771738955/test
+16:48:59.914 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.DependencyManager:307 - Reading Kieker folder: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/measurementsTemp/demo-project-gradle/demo.project.gradle.ExampleTest/1663771738955/test/kieker-20220921-144858-26030525651280-UTC--KIEKER-KoPeMe
+16:48:59.915 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.analysis.KiekerReaderConfiguration:37 - Reading from /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/measurementsTemp/demo-project-gradle/demo.project.gradle.ExampleTest/1663771738955/test/kieker-20220921-144858-26030525651280-UTC--KIEKER-KoPeMe
+16:48:59.919 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.analysis.KiekerReader:20 - Execution finished succesfully
+16:48:59.919 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.DependencyManager:245 - Test: demo.project.gradle.ExampleTest#test 
+16:48:59.919 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.DependencyManager:246 - Dependencies: 3
+16:48:59.919 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.DependencyManager:298 - Size: 0 Folder: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/measurementsTemp/demo-project-gradle/demo.project.gradle.ExampleTest/1663771738955/test/kieker-20220921-144858-26030525651280-UTC--KIEKER-KoPeMe
+16:48:59.920 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.DependencyManager:406 - Removed tests: []
+16:48:59.920 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.reader.DependencyReaderUtil:55 - Removed Tests: []
+16:48:59.920 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.reader.TraceViewGenerator:52 - Generating views for 65aba5fbd67a97362ff922c3660445337ba2c1d0
+HEAD is now at 65aba5f Increased Thread.sleep to 20ms in Callee
+
+16:48:59.934 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.analysis.ModuleClassMapping:46 - Module: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17 Name: 
+16:48:59.935 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.kopeme.parsing.BuildtoolProjectNameReader:52 - Directory: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17
+16:48:59.935 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.traces.KiekerFolderUtil:36 - Searching in: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/measurementsTemp/demo-project-gradle/demo.project.gradle.ExampleTest/1663771738955/test
+16:48:59.935 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.traces.OneTraceGenerator:67 - Searching for: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/measurementsTemp/demo-project-gradle/demo.project.gradle.ExampleTest/1663771738955/test/kieker-20220921-144858-26030525651280-UTC--KIEKER-KoPeMe
+16:48:59.936 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.traces.OneTraceGenerator:89 - Filesize: 0 (737)
+16:48:59.936 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.analysis.CalledMethodLoader:114 - Size: 0 (737) Folder: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/measurementsTemp/demo-project-gradle/demo.project.gradle.ExampleTest/1663771738955/test/kieker-20220921-144858-26030525651280-UTC--KIEKER-KoPeMe
+16:48:59.936 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.analysis.KiekerReaderConfiguration:37 - Reading from /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/measurementsTemp/demo-project-gradle/demo.project.gradle.ExampleTest/1663771738955/test/kieker-20220921-144858-26030525651280-UTC--KIEKER-KoPeMe
+16:48:59.939 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.analysis.KiekerReader:20 - Execution finished succesfully
+16:48:59.939 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.traces.OneTraceGenerator:94 - Short Trace: 4 Folder: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/measurementsTemp/demo-project-gradle/demo.project.gradle.ExampleTest/1663771738955/test/kieker-20220921-144858-26030525651280-UTC--KIEKER-KoPeMe Project: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17
+16:48:59.939 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.traces.TraceMethodReader:61 - Trace Length: 4
+16:48:59.945 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.folders.ResultsFolders:169 - Created directory /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/views_demo-project-gradle_7_3_3-java17/view_65aba5fbd67a97362ff922c3660445337ba2c1d0/demo.project.gradle.ExampleTest/test Success: true
+16:48:59.948 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.traces.TraceWriter:51 - Datei /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/views_demo-project-gradle_7_3_3-java17/view_65aba5fbd67a97362ff922c3660445337ba2c1d0/demo.project.gradle.ExampleTest/test/65aba5_method.zip existiert: true
+16:48:59.954 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.traces.diff.DiffFileGenerator:48 - Trace-Files: [/home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/views_demo-project-gradle_7_3_3-java17/view_9ab5e502c7a23e5a0cd8f87a795b4e6cbdea496e/demo.project.gradle.ExampleTest/test/9ab5e5.zip, /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/views_demo-project-gradle_7_3_3-java17/view_65aba5fbd67a97362ff922c3660445337ba2c1d0/demo.project.gradle.ExampleTest/test/65aba5.zip]
+16:48:59.959 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] INFO  de.dagere.peass.dependency.traces.diff.DiffFileGenerator:72 - Trace changed.
+16:48:59.959 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.traces.diff.DiffFileGenerator:119 - Filesize: 0 (0)
+16:49:00.003 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.reader.DependencyReaderUtil:159 - Writing to: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/staticTestSelection_demo-project-gradle_7_3_3-java17.json
+16:49:00.005 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] INFO  de.dagere.peass.dependency.reader.DependencySizeRecorder:20 - Overall-tests: 1 Executed tests with pruning: 2
+16:49:00.005 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.utils.TestExecutor:153 - Deleting: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/kiekerTemp/kiekerTemp178280007744035842/kieker-20220921-144859-26030889850792-UTC--KIEKER-KoPeMe
+16:49:00.006 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.execution.utils.TestExecutor:153 - Deleting: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/kiekerTemp/kiekerTemp178280007744035842/kieker-20220921-144858-26030482085010-UTC--KIEKER-KoPeMe
+16:49:00.007 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.kopeme.parsing.BuildtoolProjectNameReader:52 - Directory: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17
+16:49:00.008 [org.jenkinsci.plugins.workflow.steps.SynchronousNonBlockingStepExecution [#1]] DEBUG de.dagere.peass.dependency.reader.DependencyReader:143 - Finished dependency-reading

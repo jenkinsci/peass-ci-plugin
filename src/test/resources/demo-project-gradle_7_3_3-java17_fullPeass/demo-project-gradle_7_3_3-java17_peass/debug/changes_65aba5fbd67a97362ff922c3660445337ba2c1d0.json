@@ -1,0 +1,10 @@
+{
+  "demo.project.gradle.Callee" : {
+    "changedMethods" : {
+      "Callee" : [ "innerMethod" ]
+    },
+    "importChanges" : [ ],
+    "change" : true,
+    "onlyMethodChange" : true
+  }
+}

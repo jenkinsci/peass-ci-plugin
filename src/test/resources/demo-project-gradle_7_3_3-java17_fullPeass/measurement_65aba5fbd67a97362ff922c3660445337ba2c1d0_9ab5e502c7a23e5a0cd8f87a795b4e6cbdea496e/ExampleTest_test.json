@@ -1,0 +1,102 @@
+{
+  "clazz" : "demo.project.gradle.ExampleTest",
+  "methods" : [ {
+    "method" : "test",
+    "datacollectorResults" : [ {
+      "name" : "de.dagere.kopeme.datacollection.TimeDataCollectorNoGC",
+      "chunks" : [ {
+        "chunkStartTime" : 1663771740354,
+        "results" : [ {
+          "value" : 1.396515475E7,
+          "deviation" : 1.978392939160305E7,
+          "min" : 4028699.0,
+          "max" : 4.3640979E7,
+          "warmup" : 0,
+          "iterations" : 4,
+          "repetitions" : 2,
+          "commit" : "9ab5e502c7a23e5a0cd8f87a795b4e6cbdea496e",
+          "vmRunConfiguration" : { },
+          "date" : 1663771754307
+        }, {
+          "value" : 4.96748605E7,
+          "deviation" : 1.2021640319690723E7,
+          "min" : 4.3272621E7,
+          "max" : 6.7702429E7,
+          "warmup" : 0,
+          "iterations" : 4,
+          "repetitions" : 2,
+          "commit" : "65aba5fbd67a97362ff922c3660445337ba2c1d0",
+          "vmRunConfiguration" : { },
+          "date" : 1663771766627
+        }, {
+          "value" : 1.306879675E7,
+          "deviation" : 1.6650878722135905E7,
+          "min" : 3911277.0,
+          "max" : 3.802809E7,
+          "warmup" : 0,
+          "iterations" : 4,
+          "repetitions" : 2,
+          "commit" : "9ab5e502c7a23e5a0cd8f87a795b4e6cbdea496e",
+          "vmRunConfiguration" : { },
+          "date" : 1663771778907
+        }, {
+          "value" : 5.069254575E7,
+          "deviation" : 1.3505041037790082E7,
+          "min" : 4.3241996E7,
+          "max" : 7.0930055E7,
+          "warmup" : 0,
+          "iterations" : 4,
+          "repetitions" : 2,
+          "commit" : "65aba5fbd67a97362ff922c3660445337ba2c1d0",
+          "vmRunConfiguration" : { },
+          "date" : 1663771791451
+        }, {
+          "value" : 9623576.25,
+          "deviation" : 1.0450607788434936E7,
+          "min" : 3907309.0,
+          "max" : 2.5270085E7,
+          "warmup" : 0,
+          "iterations" : 4,
+          "repetitions" : 2,
+          "commit" : "9ab5e502c7a23e5a0cd8f87a795b4e6cbdea496e",
+          "vmRunConfiguration" : { },
+          "date" : 1663771803871
+        }, {
+          "value" : 4.73866395E7,
+          "deviation" : 6641663.802515075,
+          "min" : 4.349159E7,
+          "max" : 5.7329616E7,
+          "warmup" : 0,
+          "iterations" : 4,
+          "repetitions" : 2,
+          "commit" : "65aba5fbd67a97362ff922c3660445337ba2c1d0",
+          "vmRunConfiguration" : { },
+          "date" : 1663771815220
+        }, {
+          "value" : 1.05306235E7,
+          "deviation" : 1.032266817906974E7,
+          "min" : 4075005.0,
+          "max" : 2.5812162E7,
+          "warmup" : 0,
+          "iterations" : 4,
+          "repetitions" : 2,
+          "commit" : "9ab5e502c7a23e5a0cd8f87a795b4e6cbdea496e",
+          "vmRunConfiguration" : { },
+          "date" : 1663771827653
+        }, {
+          "value" : 5.053453525E7,
+          "deviation" : 8644166.777193753,
+          "min" : 4.2835385E7,
+          "max" : 6.2912621E7,
+          "warmup" : 0,
+          "iterations" : 4,
+          "repetitions" : 2,
+          "commit" : "65aba5fbd67a97362ff922c3660445337ba2c1d0",
+          "vmRunConfiguration" : { },
+          "date" : 1663771839437
+        } ]
+      } ],
+      "results" : [ ]
+    } ]
+  } ]
+}

@@ -1,0 +1,6 @@
+@Test
+public void test() {
+    final ExampleClass exampleClazz = new ExampleClass();
+    exampleClazz.calleeMethod();
+    assertNotNull(exampleClazz);
+}

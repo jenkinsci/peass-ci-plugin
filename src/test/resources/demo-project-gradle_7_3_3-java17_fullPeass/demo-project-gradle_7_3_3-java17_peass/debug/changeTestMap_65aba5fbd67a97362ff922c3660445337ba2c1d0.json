@@ -1,0 +1,10 @@
+{
+  "changes" : {
+    "demo.project.gradle.Callee#innerMethod" : [ {
+      "clazz" : "demo.project.gradle.ExampleTest",
+      "method" : "test",
+      "module" : "",
+      "params" : null
+    } ]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "overallScore" : 0,
+  "selected" : false,
+  "testcase" : {
+    "clazz" : "demo.project.gradle.ExampleTest",
+    "method" : "test",
+    "module" : "",
+    "params" : null
+  },
+  "callCounts" : {
+    "demo.project.gradle.Callee#innerMethod" : 1,
+    "demo.project.gradle.ExampleTest#test" : 1,
+    "demo.project.gradle.Callee#method1" : 1,
+    "demo.project.gradle.ExampleClass#calleeMethod" : 1
+  },
+  "selectedChanges" : [ ]
+}

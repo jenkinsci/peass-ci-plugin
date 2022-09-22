@@ -1,0 +1,31 @@
+{
+  "dependencyMap" : {
+    "demo.project.gradle.ExampleTest#test" : {
+      "calledMethods" : {
+        "demo.project.gradle.ExampleClass" : [ "calleeMethod" ],
+        "demo.project.gradle.Callee" : [ "method1", "innerMethod" ],
+        "demo.project.gradle.ExampleTest" : [ "test" ]
+      },
+      "calledClasses" : [ {
+        "clazz" : "demo.project.gradle.ExampleClass",
+        "method" : null,
+        "parameters" : [ ]
+      }, {
+        "clazz" : "demo.project.gradle.Callee",
+        "method" : null,
+        "parameters" : [ ]
+      }, {
+        "clazz" : "demo.project.gradle.ExampleTest",
+        "method" : null,
+        "parameters" : [ ]
+      } ]
+    }
+  },
+  "copiedDependencies" : {
+    "demo.project.gradle.ExampleTest#test" : {
+      "demo.project.gradle.ExampleClass" : [ "calleeMethod" ],
+      "demo.project.gradle.Callee" : [ "method1", "innerMethod" ],
+      "demo.project.gradle.ExampleTest" : [ "test" ]
+    }
+  }
+}

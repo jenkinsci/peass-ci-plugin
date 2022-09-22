@@ -1,0 +1,12 @@
+{
+  "running" : true,
+  "jdk" : 8,
+  "predecessor" : "9ab5e502c7a23e5a0cd8f87a795b4e6cbdea496e",
+  "changedClazzes" : {
+    "demo.project.gradle.Callee#innerMethod" : {
+      "testcases" : {
+        "demo.project.gradle.ExampleTest" : [ "test" ]
+      }
+    }
+  }
+}

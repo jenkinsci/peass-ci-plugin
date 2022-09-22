@@ -1,0 +1,11 @@
+$0=kieker.common.record.misc.KiekerMetadataRecord
+$1=1.15.1
+$2=KIEKER-KoPeMe
+$3=maw-vm
+$4=NANOSECONDS
+$5=kieker.common.record.controlflow.OperationExecutionRecord
+$6=private void demo.project.gradle.Callee.innerMethod()
+$7=<no-session-id>
+$8=protected void demo.project.gradle.Callee.method1()
+$9=protected void demo.project.gradle.ExampleClass.calleeMethod()
+$10=public void demo.project.gradle.ExampleTest.test()

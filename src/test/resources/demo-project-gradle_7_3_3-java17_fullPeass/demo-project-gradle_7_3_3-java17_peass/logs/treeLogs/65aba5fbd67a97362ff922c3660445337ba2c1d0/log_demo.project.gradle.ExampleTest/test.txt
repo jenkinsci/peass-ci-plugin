@@ -1,0 +1,280 @@
+Initialized native services in: /home/maw/.gradle/native
+Initialized jansi services in: /home/maw/.gradle/native
+To honour the JVM settings for this build a single-use Daemon process will be forked. See https://docs.gradle.org/7.3.3/userguide/gradle_daemon.html#sec:disabling_the_daemon.
+Starting process 'Gradle build daemon'. Working directory: /home/maw/.gradle/daemon/7.3.3 Command: /usr/lib/jvm/java-11-openjdk-amd64/bin/java --add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.lang.invoke=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED --add-opens java.prefs/java.util.prefs=ALL-UNNAMED --add-opens java.prefs/java.util.prefs=ALL-UNNAMED --add-opens java.base/java.nio.charset=ALL-UNNAMED --add-opens java.base/java.net=ALL-UNNAMED --add-opens java.base/java.util.concurrent.atomic=ALL-UNNAMED -XX:MaxMetaspaceSize=256m -XX:+HeapDumpOnOutOfMemoryError -Xms256m -Xmx512m -Dfile.encoding=UTF-8 -Duser.country=DE -Duser.language=de -Duser.variant -cp /home/maw/.gradle/wrapper/dists/gradle-7.3.3-bin/6a41zxkdtcxs8rphpq6y0069z/gradle-7.3.3/lib/gradle-launcher-7.3.3.jar org.gradle.launcher.daemon.bootstrap.GradleDaemon 7.3.3
+Successfully started process 'Gradle build daemon'
+An attempt to start the daemon took 1.042 secs.
+The client will now receive all logging from the daemon (pid: 39539). The daemon log file: /home/maw/.gradle/daemon/7.3.3/daemon-39539.out.log
+Daemon will be stopped at the end of the build 
+Using 4 worker leases.
+Watching the file system is configured to be enabled if available
+Now considering [/home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/projectTemp/tree_65aba5fbd67a97362ff922c3660445337ba2c1d0] as hierarchies to watch
+File system watching is active
+Starting Build
+Settings evaluated using settings file '/home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/projectTemp/tree_65aba5fbd67a97362ff922c3660445337ba2c1d0/settings.gradle'.
+Projects loaded. Root project using build file '/home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/projectTemp/tree_65aba5fbd67a97362ff922c3660445337ba2c1d0/build.gradle'.
+Included projects: [root project 'demo-project-gradle', project ':lib']
+
+> Configure project :
+Evaluating root project 'demo-project-gradle' using build file '/home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/projectTemp/tree_65aba5fbd67a97362ff922c3660445337ba2c1d0/build.gradle'.
+Compiling build file '/home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/projectTemp/tree_65aba5fbd67a97362ff922c3660445337ba2c1d0/build.gradle' using SubsetScriptTransformer.
+Compiling build file '/home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/projectTemp/tree_65aba5fbd67a97362ff922c3660445337ba2c1d0/build.gradle' using BuildScriptTransformer.
+
+> Configure project :lib
+Evaluating project ':lib' using build file '/home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/projectTemp/tree_65aba5fbd67a97362ff922c3660445337ba2c1d0/lib/build.gradle'.
+All projects evaluated.
+Selected primary task 'cleanTest' from project :
+Selected primary task 'test' from project :
+Starting process 'command '/usr/lib/jvm/jre1.8.0_333/bin/java''. Working directory: /home/maw/.gradle/.tmp/tmp-jvm7227713620868717919probe Command: /usr/lib/jvm/jre1.8.0_333/bin/java -cp . JavaProbe
+Successfully started process 'command '/usr/lib/jvm/jre1.8.0_333/bin/java''
+Starting process 'command '/home/maw/.gradle/jdks/jdk-17.0.1+12/bin/java''. Working directory: /home/maw/.gradle/.tmp/tmp-jvm13231378558902014932probe Command: /home/maw/.gradle/jdks/jdk-17.0.1+12/bin/java -cp . JavaProbe
+Successfully started process 'command '/home/maw/.gradle/jdks/jdk-17.0.1+12/bin/java''
+Starting process 'command '/usr/lib/jvm/corretto-17/bin/java''. Working directory: /home/maw/.gradle/.tmp/tmp-jvm6990422900291987439probe Command: /usr/lib/jvm/corretto-17/bin/java -cp . JavaProbe
+Successfully started process 'command '/usr/lib/jvm/corretto-17/bin/java''
+Starting process 'command '/usr/lib/jvm/openjdk-11/bin/java''. Working directory: /home/maw/.gradle/.tmp/tmp-jvm10456197150538355759probe Command: /usr/lib/jvm/openjdk-11/bin/java -cp . JavaProbe
+Tasks to be executed: [task ':cleanTest', task ':compileJava', task ':processResources', task ':classes', task ':compileTestJava', task ':processTestResources', task ':testClasses', task ':test']
+Tasks that were excluded: []
+:cleanTest (Thread[Execution worker for ':',5,main]) started.
+
+> Task :cleanTest
+Caching disabled for task ':cleanTest' because:
+  Build cache is disabled
+Task ':cleanTest' is not up-to-date because:
+  Task has not declared any outputs despite executing actions.
+:cleanTest (Thread[Execution worker for ':',5,main]) completed. Took 0.081 secs.
+:compileJava (Thread[Execution worker for ':' Thread 3,5,main]) started.
+This JVM does not support getting OS memory, so no OS memory status updates will be broadcast
+
+> Task :compileJava
+Deleting stale output file: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/projectTemp/tree_65aba5fbd67a97362ff922c3660445337ba2c1d0/build/generated/sources/annotationProcessor/java/main
+Deleting stale output file: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/projectTemp/tree_65aba5fbd67a97362ff922c3660445337ba2c1d0/build/tmp/compileJava/previous-compilation-data.bin
+Deleting stale output file: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/projectTemp/tree_65aba5fbd67a97362ff922c3660445337ba2c1d0/build/generated/sources/headers/java/main
+Deleting stale output file: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/projectTemp/tree_65aba5fbd67a97362ff922c3660445337ba2c1d0/build/classes/java/main
+Watching 1 directories to track changes
+Watching 2 directories to track changes
+Watching 3 directories to track changes
+Watching 4 directories to track changes
+Watching 8 directories to track changes
+Watching 9 directories to track changes
+Caching disabled for task ':compileJava' because:
+  Build cache is disabled
+Task ':compileJava' is not up-to-date because:
+  Output property 'destinationDirectory' file /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17/build/classes/java/main has been removed.
+  Output property 'destinationDirectory' file /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17/build/classes/java/main/demo has been removed.
+  Output property 'destinationDirectory' file /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17/build/classes/java/main/demo/project has been removed.
+Watching 8 directories to track changes
+Watching 7 directories to track changes
+Watching 6 directories to track changes
+Watching 5 directories to track changes
+The input changes require a full rebuild for incremental task ':compileJava'.
+Full recompilation is required because no incremental change information is available. This is usually caused by clean builds or changing compiler arguments.
+Compiling with toolchain '/usr/lib/jvm/corretto-17'.
+Starting process 'Gradle Worker Daemon 1'. Working directory: /home/maw/.gradle/workers Command: /usr/lib/jvm/corretto-17/bin/java @/home/maw/.gradle/.tmp/gradle-worker-classpath16425428004473752807txt -Xmx512m -Dfile.encoding=UTF-8 -Duser.country=DE -Duser.language=de -Duser.variant worker.org.gradle.process.internal.worker.GradleWorkerMain 'Gradle Worker Daemon 1'
+Successfully started process 'Gradle Worker Daemon 1'
+Started Gradle worker daemon (0.334 secs) with fork options DaemonForkOptions{executable=/usr/lib/jvm/corretto-17/bin/java, minHeapSize=null, maxHeapSize=null, jvmArgs=[], keepAliveMode=SESSION}.
+Compiling with JDK Java compiler API.
+Class dependency analysis for incremental compilation took 0.017 secs.
+Created classpath snapshot for incremental compilation in 0.158 secs.
+Watching 9 directories to track changes
+Watching 10 directories to track changes
+Watching 11 directories to track changes
+Watching 12 directories to track changes
+:compileJava (Thread[Execution worker for ':' Thread 3,5,main]) completed. Took 2.717 secs.
+:processResources (Thread[Execution worker for ':' Thread 3,5,main]) started.
+
+> Task :processResources
+Watching 13 directories to track changes
+Watching 15 directories to track changes
+Caching disabled for task ':processResources' because:
+  Build cache is disabled
+Task ':processResources' is not up-to-date because:
+  No history is available.
+Watching 14 directories to track changes
+Watching 16 directories to track changes
+:processResources (Thread[Execution worker for ':' Thread 3,5,main]) completed. Took 0.017 secs.
+:classes (Thread[Execution worker for ':' Thread 3,5,main]) started.
+
+> Task :classes
+Skipping task ':classes' as it has no actions.
+:classes (Thread[Execution worker for ':' Thread 3,5,main]) completed. Took 0.0 secs.
+:compileTestJava (Thread[Execution worker for ':' Thread 3,5,main]) started.
+
+> Task :compileTestJava
+Deleting stale output file: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/projectTemp/tree_65aba5fbd67a97362ff922c3660445337ba2c1d0/build/generated/sources/headers/java/test
+Deleting stale output file: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/projectTemp/tree_65aba5fbd67a97362ff922c3660445337ba2c1d0/build/tmp/compileTestJava/previous-compilation-data.bin
+Deleting stale output file: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/projectTemp/tree_65aba5fbd67a97362ff922c3660445337ba2c1d0/build/classes/java/test
+Deleting stale output file: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/projectTemp/tree_65aba5fbd67a97362ff922c3660445337ba2c1d0/build/generated/sources/annotationProcessor/java/test
+Watching 17 directories to track changes
+Watching 18 directories to track changes
+Watching 19 directories to track changes
+Watching 20 directories to track changes
+Watching 24 directories to track changes
+Caching disabled for task ':compileTestJava' because:
+  Build cache is disabled
+Task ':compileTestJava' is not up-to-date because:
+  Output property 'destinationDirectory' file /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17/build/classes/java/test has been removed.
+  Output property 'destinationDirectory' file /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17/build/classes/java/test/demo has been removed.
+  Output property 'destinationDirectory' file /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17/build/classes/java/test/demo/project has been removed.
+Watching 23 directories to track changes
+Watching 22 directories to track changes
+Watching 21 directories to track changes
+Watching 20 directories to track changes
+The input changes require a full rebuild for incremental task ':compileTestJava'.
+Full recompilation is required because no incremental change information is available. This is usually caused by clean builds or changing compiler arguments.
+Compiling with toolchain '/usr/lib/jvm/corretto-17'.
+Compiling with JDK Java compiler API.
+Class dependency analysis for incremental compilation took 0.001 secs.
+Created classpath snapshot for incremental compilation in 0.05 secs.
+Watching 24 directories to track changes
+Watching 25 directories to track changes
+Watching 26 directories to track changes
+Watching 27 directories to track changes
+:compileTestJava (Thread[Execution worker for ':' Thread 3,5,main]) completed. Took 0.675 secs.
+:processTestResources (Thread[Execution worker for ':',5,main]) started.
+
+> Task :processTestResources
+Watching 28 directories to track changes
+Watching 30 directories to track changes
+Caching disabled for task ':processTestResources' because:
+  Build cache is disabled
+Task ':processTestResources' is not up-to-date because:
+  No history is available.
+Watching 29 directories to track changes
+Watching 31 directories to track changes
+:processTestResources (Thread[Execution worker for ':',5,main]) completed. Took 0.02 secs.
+:testClasses (Thread[Execution worker for ':',5,main]) started.
+
+> Task :testClasses
+Skipping task ':testClasses' as it has no actions.
+:testClasses (Thread[Execution worker for ':',5,main]) completed. Took 0.0 secs.
+:test (Thread[Execution worker for ':',5,main]) started.
+Gradle Test Executor 2 started executing tests.
+Gradle Test Executor 2 finished executing tests.
+
+> Task :test
+Watching 32 directories to track changes
+Watching 33 directories to track changes
+Watching 33 directories to track changes
+Caching disabled for task ':test' because:
+  Build cache is disabled
+Task ':test' is not up-to-date because:
+  Value of input property 'systemProperties' has changed for task ':test'
+Watching 32 directories to track changes
+Watching 31 directories to track changes
+Starting process 'Gradle Test Executor 2'. Working directory: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/projectTemp/tree_65aba5fbd67a97362ff922c3660445337ba2c1d0 Command: /usr/lib/jvm/corretto-17/bin/java -Dkieker.monitoring.configuration=/home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/projectTemp/tree_65aba5fbd67a97362ff922c3660445337ba2c1d0/src/main/resources/META-INF/kieker.monitoring.properties -Dorg.gradle.internal.worker.tmpdir=/home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/projectTemp/tree_65aba5fbd67a97362ff922c3660445337ba2c1d0/build/tmp/test/work -Dorg.gradle.native=false @/home/maw/.gradle/.tmp/gradle-worker-classpath18012905924942012432txt -Xmx512m -Dfile.encoding=UTF-8 -Djava.io.tmpdir=/home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/projectTemp/tree_65aba5fbd67a97362ff922c3660445337ba2c1d0_peass/kiekerTemp/kiekerTemp10262243817187319148 -Duser.country=DE -Duser.language=de -Duser.variant -ea worker.org.gradle.process.internal.worker.GradleWorkerMain 'Gradle Test Executor 2'
+Successfully started process 'Gradle Test Executor 2'
+
+ExampleTest STANDARD_OUT
+    16:51:07.292 [Test worker] DEBUG kieker.monitoring.core.configuration.ConfigurationFactory:59 - Searching for JVM argument 'kieker.monitoring.configuration' ...
+    16:51:07.303 [Test worker] INFO  kieker.monitoring.core.configuration.ConfigurationFactory:67 - Loading configuration from JVM-specified location: '/home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/projectTemp/tree_65aba5fbd67a97362ff922c3660445337ba2c1d0/src/main/resources/META-INF/kieker.monitoring.properties'
+    16:51:07.313 [Test worker] INFO  kieker.monitoring.core.controller.TCPController:79 - Could not parse port for the TCPController, deactivating this option. Received string was: 
+
+ExampleTest STANDARD_ERROR
+    Sept. 21, 2022 4:51:07 PM de.dagere.kopeme.kieker.writer.ChangeableFolderWriter <init>
+    INFORMATION: Init..
+    Sept. 21, 2022 4:51:07 PM de.dagere.kopeme.kieker.writer.ChangeableFolderWriter <init>
+    INFORMATION: Writer: class kieker.monitoring.writer.filesystem.FileWriter
+
+ExampleTest STANDARD_OUT
+    16:51:07.393 [Test worker] DEBUG kieker.monitoring.core.controller.WriterController:258 - Initializing Writer Controller
+    16:51:07.393 [Test worker] INFO  kieker.monitoring.core.controller.StateController:128 - Enabling monitoring
+    16:51:07.394 [Thread-3] DEBUG kieker.monitoring.writer.MonitoringWriterThread:58 - kieker.monitoring.writer.MonitoringWriterThread is running.
+
+ExampleTest STANDARD_ERROR
+    Sept. 21, 2022 4:51:07 PM de.dagere.kopeme.kieker.writer.ChangeableFolderWriter onStarting
+    INFORMATION: Initializing class de.dagere.kopeme.kieker.writer.ChangeableFolderWriter
+
+ExampleTest STANDARD_OUT
+    16:51:07.402 [Test worker] INFO  kieker.monitoring.core.controller.MonitoringController:172 - Current State of kieker.monitoring (1.15.1) Status: 'enabled'
+    	Name: 'KIEKER-KoPeMe'; Hostname: 'maw-vm'; experimentID: '1'
+    JMXController: JMX disabled
+    TimeSource: 'kieker.monitoring.timer.SystemNanoTimer'
+    	Time in nanoseconds (with nanoseconds precision) since Thu Jan 01 01:00:00 CET 1970'
+    ProbeController: disabled
+    WriterController:
+    	Queue type: class kieker.monitoring.queue.BlockingQueueDecorator
+    	Queue capacity: 10000000
+    	Insert behavior (a.k.a. QueueFullBehavior): class kieker.monitoring.queue.behavior.BlockOnFailedInsertBehavior
+    		numBlocked: 0
+    Writer: 'de.dagere.kopeme.kieker.writer.ChangeableFolderWriter'
+    	Configuration:
+    		de.dagere.kopeme.kieker.writer.ChangeableFolderWriter.realwriter='FileWriter'
+    		de.dagere.kopeme.kieker.writer.ChangeableFolderWriter.flush='false'
+
+    	Automatic assignment of logging timestamps: 'true'
+    Sampling Controller: Periodic Sensor available: Poolsize: '0'; Scheduled Tasks: '0'
+    16:51:07.405 [Test worker] INFO  kieker.monitoring.core.registry.ControlFlowRegistry:49 - First threadId will be 229965055972605952
+    16:51:07.413 [Test worker] DEBUG de.dagere.kopeme.runnables.TestRunnables:27 - Klasse: class demo.project.gradle.ExampleTest
+    No GC Collector
+    16:51:07.423 [Test worker] DEBUG de.dagere.kopeme.parsing.BuildtoolProjectNameReader:52 - Directory: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/projectTemp/tree_65aba5fbd67a97362ff922c3660445337ba2c1d0/.
+    16:51:07.426 [Test worker] INFO  de.dagere.kopeme.kieker.KoPeMeKiekerSupport:111 - Waiting for Kieker writer queue to finish
+    16:51:07.426 [Test worker] DEBUG de.dagere.kopeme.kieker.KoPeMeKiekerSupport:121 - Final queue size: 0
+
+ExampleTest STANDARD_ERROR
+    Sept. 21, 2022 4:51:07 PM de.dagere.kopeme.kieker.writer.ChangeableFolderWriter setFolder
+    INFORMATION: Terminating old writer
+    Sept. 21, 2022 4:51:07 PM de.dagere.kopeme.kieker.writer.ChangeableFolderWriter setFolder
+    INFORMATION: writer: class kieker.monitoring.writer.filesystem.FileWriter
+    Sept. 21, 2022 4:51:07 PM de.dagere.kopeme.kieker.writer.ChangeableFolderWriter setFolder
+    INFORMATION: Writing to: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/projectTemp/tree_65aba5fbd67a97362ff922c3660445337ba2c1d0_peass/measurementsTemp/demo-project-gradle/demo.project.gradle.ExampleTest/1663771867422/test 485686996
+    Sept. 21, 2022 4:51:07 PM de.dagere.kopeme.kieker.writer.ChangeableFolderWriter setFolder
+    INFORMATION: New writer 989126847 created; old writer 485686996
+    Sept. 21, 2022 4:51:07 PM de.dagere.kopeme.kieker.writer.ChangeableFolderWriter addRecordsToNewWriter
+    INFORMATION: Adding registry record: KiekerMetadataRecord: version = 1.15.1, controllerName = KIEKER-KoPeMe, hostname = maw-vm, experimentId = 1, debugMode = false, timeOffset = 0, timeUnit = NANOSECONDS, numberOfRecords = 0, 
+    Sept. 21, 2022 4:51:07 PM de.dagere.kopeme.kieker.writer.ChangeableFolderWriter setFolder
+    INFORMATION: Change writing to: 989126847
+
+ExampleTest STANDARD_OUT
+    16:51:07.444 [Test worker] INFO  kieker.monitoring.core.controller.StateController:128 - Enabling monitoring
+    16:51:07.445 [Test worker] DEBUG de.dagere.kopeme.kieker.KoPeMeKiekerSupport:54 - Kieker-Monitoring successfully enabled
+    16:51:07.454 [Test worker] DEBUG de.dagere.kopeme.TimeBoundExecution:100 - Waiting: 300000
+    16:51:07.484 [timebound-0] DEBUG de.dagere.kopeme.junit.rule.KoPeMeBasicStatement5:127 - Executing 1 iteration 
+    16:51:07.487 [timebound-0] DEBUG de.dagere.kopeme.junit.rule.KoPeMeBasicStatement5:130 - --- Starting iteration  1/1 ---
+    16:51:07.530 [timebound-0] DEBUG de.dagere.kopeme.junit.rule.KoPeMeBasicStatement5:139 - --- Stopping iteration  1/1 ---
+    16:51:07.552 [timebound-0] DEBUG de.dagere.kopeme.junit.rule.KoPeMeBasicStatement5:154 - Finished iterations: 1
+    16:51:07.553 [timebound-0] INFO  de.dagere.kopeme.datacollection.tempfile.ResultTempWriterBin:79 - Flushing to /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/projectTemp/tree_65aba5fbd67a97362ff922c3660445337ba2c1d0_peass/kiekerTemp/kiekerTemp10262243817187319148/kopeme-10255166242971565199.bin finished
+    16:51:07.575 [timebound-0] DEBUG de.dagere.kopeme.datacollection.tempfile.WrittenResultReaderBin:48 - Count of iterations: 1  Values: 1
+    16:51:07.810 [Test worker] DEBUG de.dagere.kopeme.TimeBoundExecution:107 - KoPeMe-Test METHOD. Kieker: true Threads: 0
+    16:51:07.810 [Test worker] DEBUG de.dagere.kopeme.kieker.KoPeMeKiekerSupport:88 - Disabling Monitoring..
+    16:51:07.811 [Test worker] INFO  de.dagere.kopeme.kieker.KoPeMeKiekerSupport:111 - Waiting for Kieker writer queue to finish
+    16:51:07.811 [Test worker] DEBUG de.dagere.kopeme.kieker.KoPeMeKiekerSupport:121 - Final queue size: 0
+    16:51:07.811 [Test worker] INFO  kieker.monitoring.core.controller.StateController:143 - Disabling monitoring
+    16:51:07.811 [Test worker] DEBUG kieker.monitoring.core.controller.WriterController:267 - Shutting down Writer Controller
+    16:51:07.812 [Test worker] DEBUG de.dagere.kopeme.kieker.KoPeMeKiekerSupport:155 - Waiting for Thread-End: Thread[Thread-3,5,main]
+
+ExampleTest STANDARD_ERROR
+    Sept. 21, 2022 4:51:07 PM de.dagere.kopeme.kieker.writer.ChangeableFolderWriter onTerminating
+    INFORMATION: Terminating writing
+
+ExampleTest STANDARD_OUT
+    16:51:07.814 [Thread-3] DEBUG kieker.monitoring.writer.MonitoringWriterThread:75 - kieker.monitoring.writer.MonitoringWriterThread has finished.
+    16:51:07.818 [Test worker] DEBUG de.dagere.kopeme.kieker.KoPeMeKiekerSupport:158 - Waiting for Thread-End: Thread[Thread-3,5,], Thread alive: false
+    16:51:07.818 [Test worker] DEBUG de.dagere.kopeme.kieker.KoPeMeKiekerSupport:160 - Writing finished, Thread alive: false
+    16:51:07.819 [Test worker] DEBUG kieker.monitoring.core.configuration.ConfigurationFactory:59 - Searching for JVM argument 'kieker.monitoring.configuration' ...
+    16:51:07.820 [Test worker] INFO  kieker.monitoring.core.configuration.ConfigurationFactory:67 - Loading configuration from JVM-specified location: '/home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/projectTemp/tree_65aba5fbd67a97362ff922c3660445337ba2c1d0/src/main/resources/META-INF/kieker.monitoring.properties'
+
+ExampleTest STANDARD_ERROR
+    Sept. 21, 2022 4:51:07 PM de.dagere.kopeme.kieker.writer.ChangeableFolderWriter <init>
+    INFORMATION: Init..
+    Sept. 21, 2022 4:51:07 PM de.dagere.kopeme.kieker.writer.ChangeableFolderWriter <init>
+    INFORMATION: Writer: class kieker.monitoring.writer.filesystem.FileWriter
+
+ExampleTest STANDARD_OUT
+    16:51:07.845 [Test worker] DEBUG kieker.monitoring.core.controller.WriterController:258 - Initializing Writer Controller
+    16:51:07.846 [Test worker] INFO  de.dagere.kopeme.junit.rule.KoPeMeExtensionStatement:85 - Test demo.project.gradle.ExampleTest beendet
+
+ExampleTest > test() SKIPPED
+
+ExampleTest STANDARD_OUT
+    16:51:07.854 [Thread-5] DEBUG kieker.monitoring.writer.MonitoringWriterThread:58 - kieker.monitoring.writer.MonitoringWriterThread is running.
+Finished generating test XML results (0.02 secs) into: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/projectTemp/tree_65aba5fbd67a97362ff922c3660445337ba2c1d0/build/test-results/test
+Generating HTML test report...
+Finished generating test html results (0.02 secs) into: /home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17_fullPeass/demo-project-gradle_7_3_3-java17_peass/projectTemp/tree_65aba5fbd67a97362ff922c3660445337ba2c1d0/build/reports/tests/test
+Watching 32 directories to track changes
+Watching 37 directories to track changes
+Watching 38 directories to track changes
+:test (Thread[Execution worker for ':',5,main]) completed. Took 2.126 secs.
+
+BUILD SUCCESSFUL in 11s
+6 actionable tasks: 6 executed
+Stopped 1 worker daemon(s).
