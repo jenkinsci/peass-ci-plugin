@@ -12,6 +12,8 @@ import org.apache.logging.log4j.Logger;
 
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.rts.RTSLogData;
+import de.dagere.peass.dependency.analysis.data.TestSet;
+import de.dagere.peass.dependency.analysis.testData.TestClazzCall;
 import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.dependency.traces.TraceFileManager;
 import de.dagere.peass.dependency.traces.TraceWriter;

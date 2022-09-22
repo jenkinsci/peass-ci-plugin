@@ -17,6 +17,7 @@ import de.dagere.peass.ci.logs.LogUtil;
 import de.dagere.peass.ci.logs.RTSLogFileReader;
 import de.dagere.peass.ci.process.RTSInfos;
 import de.dagere.peass.config.MeasurementConfig;
+import de.dagere.peass.dependency.analysis.data.TestSet;
 import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import hudson.model.Run;
 
@@ -93,7 +94,7 @@ public class RTSActionCreator {
    }
 
    private Map<TestMethodCall, RTSLogData> createVersionRTSData(final String commit, final TestSet ignoredTests) throws IOException {
-      Map<TestCase, RTSLogData> rtsVmRuns = reader.getRtsVmRuns(commit, ignoredTests);
+      Map<TestMethodCall, RTSLogData> rtsVmRuns = reader.getRtsVmRuns(commit, ignoredTests);
 
       LOG.info("RTS Runs: {}", rtsVmRuns.size());
       for (Map.Entry<TestMethodCall, RTSLogData> rtsLogData : rtsVmRuns.entrySet()) {
