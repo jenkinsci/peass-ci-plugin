@@ -47,8 +47,8 @@ public class RTSActionCreator {
 
       Map<String, File> processSuccessRuns = createProcessSuccessRunsActions();
 
-      Map<TestMethodCall, RTSLogData> rtsVmRuns = createVersionRTSData(measurementConfig.getFixedCommitConfig().getCommit());
-      Map<TestMethodCall, RTSLogData> rtsVmRunsPredecessor = createVersionRTSData(measurementConfig.getFixedCommitConfig().getCommitOld());
+      Map<TestMethodCall, RTSLogData> rtsVmRuns = createVersionRTSData(measurementConfig.getFixedCommitConfig().getCommit(), staticChanges.getIgnoredTestsCurrent());
+      Map<TestMethodCall, RTSLogData> rtsVmRunsPredecessor = createVersionRTSData(measurementConfig.getFixedCommitConfig().getCommitOld(), staticChanges.getIgnoredTestsPredecessor());
 
       logSummary = RTSLogSummary.createLogSummary(rtsVmRuns, rtsVmRunsPredecessor);
 
@@ -85,14 +85,16 @@ public class RTSActionCreator {
           * should be obtained for both versions
           */
          processSuccessRunSucceeded.put(processSuccessRun.getKey(), reader.isVersionRunWasSuccess());
-         ProcessSuccessLogAction processSuccessAction = new ProcessSuccessLogAction(IdHelper.getId(), "processSuccessRun_" + processSuccessRun.getKey(), logData, processSuccessRun.getKey());
+         ProcessSuccessLogAction processSuccessAction = new ProcessSuccessLogAction(IdHelper.getId(), "processSuccessRun_" + processSuccessRun.getKey(), logData,
+               processSuccessRun.getKey());
          run.addAction(processSuccessAction);
       }
       return processSuccessRuns;
    }
 
-   private Map<TestMethodCall, RTSLogData> createVersionRTSData(final String commit) throws IOException {
-      Map<TestMethodCall, RTSLogData> rtsVmRuns = reader.getRtsVmRuns(commit);
+   private Map<TestMethodCall, RTSLogData> createVersionRTSData(final String commit, final TestSet ignoredTests) throws IOException {
+      Map<TestCase, RTSLogData> rtsVmRuns = reader.getRtsVmRuns(commit, ignoredTests);
+
       LOG.info("RTS Runs: {}", rtsVmRuns.size());
       for (Map.Entry<TestMethodCall, RTSLogData> rtsLogData : rtsVmRuns.entrySet()) {
          String methodLogData = getLogData(rtsLogData.getValue().getMethodFile());

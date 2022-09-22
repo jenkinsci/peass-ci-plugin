@@ -40,7 +40,7 @@ public class TestRTSLogFileReader {
 
       Assert.assertTrue(reader.isLogsExisting());
 
-      Map<TestMethodCall, RTSLogData> rtsVmRuns = reader.getRtsVmRuns("a23e385264c31def8dcda86c3cf64faa698c62d8");
+      Map<TestMethodCall, RTSLogData> rtsVmRuns = reader.getRtsVmRuns("a23e385264c31def8dcda86c3cf64faa698c62d8", new TestSet());
       Assert.assertEquals(2, rtsVmRuns.size());
 
       checkFirstTest(rtsVmRuns);
@@ -52,7 +52,7 @@ public class TestRTSLogFileReader {
    }
 
    private void checkSecondTest(RTSLogFileReader reader) {
-      Map<TestMethodCall, RTSLogData> rtsVmRunsPredecessor = reader.getRtsVmRuns("33ce17c04b5218c25c40137d4d09f40fbb3e4f0f");
+      Map<TestMethodCall, RTSLogData> rtsVmRunsPredecessor = reader.getRtsVmRuns("33ce17c04b5218c25c40137d4d09f40fbb3e4f0f", new TestSet());
       Assert.assertEquals(2, rtsVmRunsPredecessor.size());
       RTSLogData rtsLogData = rtsVmRunsPredecessor.get(TEST1);
       Assert.assertEquals("33ce17c04b5218c25c40137d4d09f40fbb3e4f0f", rtsLogData.getVersion());

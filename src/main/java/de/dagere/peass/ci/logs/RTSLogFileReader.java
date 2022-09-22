@@ -92,7 +92,7 @@ public class RTSLogFileReader {
          LOG.info("Expected rts commit folder {} did not exist", commitFolder);
       }
       RTSLogFileVersionReader RTSLogFileVersionReader = new RTSLogFileVersionReader(visualizationFolders, commit);
-      return RTSLogFileVersionReader.getClazzLogs(testClazzFolders);
+      return RTSLogFileVersionReader.getClazzLogs(testClazzFolders, ignoredTests);
 
    }
 

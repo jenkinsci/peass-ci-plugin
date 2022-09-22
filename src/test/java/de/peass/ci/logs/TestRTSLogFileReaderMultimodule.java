@@ -13,6 +13,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 import de.dagere.peass.ci.logs.RTSLogFileReader;
 import de.dagere.peass.ci.logs.rts.RTSLogData;
+import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.peass.dependency.analysis.data.TestSet;
 import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 
 public class TestRTSLogFileReaderMultimodule {
@@ -38,7 +40,7 @@ public class TestRTSLogFileReaderMultimodule {
 
       Assert.assertTrue(reader.isLogsExisting());
 
-      Map<TestMethodCall, RTSLogData> rtsVmRuns = reader.getRtsVmRuns(RTSLogFileTestUtil.COMMIT);
+      Map<TestMethodCall, RTSLogData> rtsVmRuns = reader.getRtsVmRuns(RTSLogFileTestUtil.COMMIT, new TestSet());
       Assert.assertEquals(2, rtsVmRuns.size());
 
       File dataFile1 = rtsVmRuns.get(TestRTSLogFileReader.TEST1).getMethodFile();

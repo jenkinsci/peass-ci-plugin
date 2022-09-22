@@ -10,13 +10,15 @@ public class RTSLogData {
    private final File cleanFile;
    private final boolean success;
    private final boolean isParameterizedWithoutIndex;
+   private final boolean ignored;
 
-   public RTSLogData(final String commit, final File methodFile, final File cleanFile, final boolean success, boolean isParameterizedWithoutIndex) {
+   public RTSLogData(final String commit, final File methodFile, final File cleanFile, final boolean success, boolean isParameterizedWithoutIndex, final boolean ignored) {
       this.commit = commit;
       this.methodFile = methodFile;
       this.cleanFile = cleanFile;
       this.success = success;
       this.isParameterizedWithoutIndex = isParameterizedWithoutIndex;
+      this.ignored = ignored;
    }
 
    public String getVersion() {
@@ -41,5 +43,9 @@ public class RTSLogData {
 
    public boolean isParameterizedWithoutIndex() {
       return isParameterizedWithoutIndex;
+   }
+
+   public boolean isIgnored() {
+      return ignored;
    }
 }

@@ -20,8 +20,8 @@ public class RTSLogSummary {
    private static final Logger LOG = LogManager.getLogger(RTSLogSummary.class);
 
    public static RTSLogSummary createLogSummary(Map<TestMethodCall, RTSLogData> rtsVmRuns, Map<TestMethodCall, RTSLogData> rtsVmRunsPredecessor) {
-      boolean versionContainsNonSuccess = rtsVmRuns.values().stream().anyMatch(log -> !log.isSuccess());
-      boolean predecessorContainsNonSuccess = rtsVmRunsPredecessor.values().stream().anyMatch(log -> !log.isSuccess());
+      boolean versionContainsFailure = rtsVmRuns.values().stream().anyMatch(log -> !log.isSuccess() && !log.isIgnored());
+      boolean predecessorContainsFailure = rtsVmRunsPredecessor.values().stream().anyMatch(log -> !log.isSuccess() && !log.isIgnored());
 
       boolean versionContainsSuccess = rtsVmRuns.values().stream().anyMatch(log -> log.isSuccess());
       boolean predecessorContainsSuccess = rtsVmRunsPredecessor.values().stream().anyMatch(log -> log.isSuccess());
@@ -29,8 +29,8 @@ public class RTSLogSummary {
       boolean versionContainsParametrizedwhithoutIndex = rtsVmRuns.values().stream().anyMatch(log -> log.isParameterizedWithoutIndex());
       boolean predecessorContainsParametrizedwhithoutIndex = rtsVmRunsPredecessor.values().stream().anyMatch(log -> log.isParameterizedWithoutIndex());
 
-      LOG.debug("Errors in logs: {} {}", versionContainsNonSuccess, predecessorContainsNonSuccess);
-      RTSLogSummary logSummary = new RTSLogSummary(versionContainsNonSuccess, predecessorContainsNonSuccess, versionContainsSuccess, predecessorContainsSuccess,
+      LOG.debug("Errors in logs: current: {} predecessor: {}", versionContainsFailure, predecessorContainsFailure);
+      RTSLogSummary logSummary = new RTSLogSummary(versionContainsFailure, predecessorContainsFailure, versionContainsSuccess, predecessorContainsSuccess,
             versionContainsParametrizedwhithoutIndex, predecessorContainsParametrizedwhithoutIndex);
       return logSummary;
    }
