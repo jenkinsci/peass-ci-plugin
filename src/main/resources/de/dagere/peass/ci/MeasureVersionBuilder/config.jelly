@@ -242,7 +242,7 @@
             <f:textbox default="100" />
           </f:entry>
           <br />
-          <f:entry title="${%timportLogSizeInMb}" field="importLogSizeInMb" description="${%importLogSizeInMbDescr}">
+          <f:entry title="${%importLogSizeInMb}" field="importLogSizeInMb" description="${%importLogSizeInMbDescr}">
             <f:textbox default="100" />
           </f:entry>
         </td>
