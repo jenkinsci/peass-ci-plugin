@@ -12,6 +12,7 @@ import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.rts.RTSLogData;
 import de.dagere.peass.config.MeasurementConfig;
@@ -25,13 +26,15 @@ public class RTSLogFileReader {
    private static final Logger LOG = LogManager.getLogger(RTSLogFileReader.class);
 
    private final VisualizationFolderManager visualizationFolders;
+   private final PeassProcessConfiguration peassConfig;
    private final MeasurementConfig measurementConfig;
    private final boolean logsExisting;
    private final boolean versionRunWasSuccess;
 
-   public RTSLogFileReader(final VisualizationFolderManager visualizationFolders, final MeasurementConfig measurementConfig) {
+   public RTSLogFileReader(final VisualizationFolderManager visualizationFolders, final PeassProcessConfiguration peassConfig) {
       this.visualizationFolders = visualizationFolders;
-      this.measurementConfig = measurementConfig;
+      this.peassConfig = peassConfig;
+      this.measurementConfig = peassConfig.getMeasurementConfig();
 
       File rtsLogOverviewFile = visualizationFolders.getResultsFolders().getRTSLogFile(measurementConfig.getFixedCommitConfig().getCommit(),
             measurementConfig.getFixedCommitConfig().getCommitOld());
@@ -102,7 +105,7 @@ public class RTSLogFileReader {
             measurementConfig.getFixedCommitConfig().getCommitOld());
       try {
          LOG.debug("Reading RTS Log {}", rtsLogFile.getAbsolutePath());
-         return FileUtils.readFileToString(rtsLogFile, StandardCharsets.UTF_8);
+         return peassConfig.getLogText(rtsLogFile);
       } catch (IOException e) {
          e.printStackTrace();
          return "RTS log not readable";
@@ -115,7 +118,7 @@ public class RTSLogFileReader {
       try {
          if (sourceReadLogFile.exists()) {
             LOG.debug("Reading Source Read Log {}", sourceReadLogFile.getAbsolutePath());
-            return FileUtils.readFileToString(sourceReadLogFile, StandardCharsets.UTF_8);
+            return peassConfig.getLogText(sourceReadLogFile);
          } else {
             LOG.error("No source reading log available");
             return "No source reading log available";

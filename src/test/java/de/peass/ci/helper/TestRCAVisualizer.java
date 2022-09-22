@@ -14,6 +14,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import de.dagere.peass.analysis.changes.ProjectChanges;
+import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.ci.RCAVisualizationAction;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.rca.RCAVisualizer;
@@ -41,11 +42,13 @@ public class TestRCAVisualizer {
       // Calls the RCAVisualizer, which should be tested
       MeasurementConfig measurementConfig = new MeasurementConfig(2);
       measurementConfig.getFixedCommitConfig().setCommit("b02c92af73e3297be617f4c973a7a63fb603565b");
+      PeassProcessConfiguration peassConfig = new PeassProcessConfiguration(false, measurementConfig, null, null, 0, false, false, false, null);
+      
       new File(folder.getRoot(), "project").mkdirs();
       
       VisualizationFolderManager visualizationFolders = new VisualizationFolderManager(folder.getRoot(), "project", run);
       visualizationFolders.getPropertyFolder().mkdir();
-      RCAVisualizer visualizer = new RCAVisualizer(measurementConfig, visualizationFolders, changes, run);
+      RCAVisualizer visualizer = new RCAVisualizer(peassConfig, visualizationFolders, changes, run);
       visualizer.visualizeRCA();
 
       testCorrectResult(run, visualizationResultFolder);
