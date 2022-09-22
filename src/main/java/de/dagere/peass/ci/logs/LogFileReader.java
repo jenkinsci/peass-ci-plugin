@@ -68,18 +68,18 @@ public class LogFileReader {
 
          int tryIndex = 0;
          String filenameSuffix = "log_" + testcase.getClazz() + File.separator + testcase.getMethodWithParams() + ".txt";
-         File predecessorFile = getVersionFile(testcase, logFolder, tryIndex, filenameSuffix, measurementConfig.getFixedCommitConfig().getCommitOld());
+         File predecessorFile = getCommitFile(testcase, logFolder, tryIndex, filenameSuffix, measurementConfig.getFixedCommitConfig().getCommitOld());
 
          LOG.debug("Trying whether {} exists {}", predecessorFile, predecessorFile.exists());
          while (predecessorFile.exists()) {
             CorrectRunChecker checker = new CorrectRunChecker(testcase, tryIndex, measurementConfig, visualizationFolders);
 
-            File currentFile = getVersionFile(testcase, logFolder, tryIndex, filenameSuffix, measurementConfig.getFixedCommitConfig().getCommit());
+            File currentFile = getCommitFile(testcase, logFolder, tryIndex, filenameSuffix, measurementConfig.getFixedCommitConfig().getCommit());
             LogFiles vmidLogFile = new LogFiles(predecessorFile, currentFile, checker.isPredecessorRunning(), checker.isCurrentRunning());
             currentFiles.add(vmidLogFile);
 
             tryIndex++;
-            predecessorFile = getVersionFile(testcase, logFolder, tryIndex, filenameSuffix, measurementConfig.getFixedCommitConfig().getCommitOld());
+            predecessorFile = getCommitFile(testcase, logFolder, tryIndex, filenameSuffix, measurementConfig.getFixedCommitConfig().getCommitOld());
             LOG.debug("Trying whether {} exists: {}", predecessorFile, predecessorFile.exists());
          }
       } else {
@@ -88,8 +88,8 @@ public class LogFileReader {
       return currentFiles;
    }
 
-   private File getVersionFile(final TestCase testcase, final File logFolder, final int tryIndex, final String filenameSuffix, final String version) {
-      String vmFolderName = "vm_" + tryIndex + "_" + version;
+   private File getCommitFile(final TestCase testcase, final File logFolder, final int tryIndex, final String filenameSuffix, final String commit) {
+      String vmFolderName = "vm_" + tryIndex + "_" + commit;
       File predecessorFile;
       if (testcase.getModule() != null) {
          predecessorFile = new File(logFolder, vmFolderName + File.separator + testcase.getModule() + File.separator + filenameSuffix);
