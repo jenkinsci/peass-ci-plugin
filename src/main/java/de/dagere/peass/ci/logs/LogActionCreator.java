@@ -28,7 +28,7 @@ public class LogActionCreator {
    }
    
    public RTSLogSummary createRTSActions(final RTSInfos staticChanges) throws IOException {
-      RTSLogFileReader rtsReader = new RTSLogFileReader(visualizationFolders, peassConfig.getMeasurementConfig());
+      RTSLogFileReader rtsReader = new RTSLogFileReader(visualizationFolders, peassConfig);
       RTSActionCreator rtsActionCreator = new RTSActionCreator(rtsReader, run, peassConfig);
       rtsActionCreator.createRTSActions(staticChanges);
       return rtsActionCreator.getLogSummary();
@@ -40,7 +40,7 @@ public class LogActionCreator {
    }
    
    public void createRCAActions() throws IOException {
-      RCAActionCreator rcaActionCreator = new RCAActionCreator(reader, run, peassConfig.getMeasurementConfig(), peassConfig.getPattern());
+      RCAActionCreator rcaActionCreator = new RCAActionCreator(reader, run, peassConfig);
       rcaActionCreator.createRCAActions();
    }
 }

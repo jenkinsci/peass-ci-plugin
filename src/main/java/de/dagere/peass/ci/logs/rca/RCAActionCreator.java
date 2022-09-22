@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
 
+import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.ci.helper.IdHelper;
 import de.dagere.peass.ci.logs.InternalLogAction;
 import de.dagere.peass.ci.logs.LogFileReader;
@@ -22,14 +23,16 @@ import hudson.model.Run;
 public class RCAActionCreator {
    private final LogFileReader reader;
    private final Run<?, ?> run;
+   private final PeassProcessConfiguration peassConfig;
    private final MeasurementConfig measurementConfig;
    private final Pattern pattern;
 
-   public RCAActionCreator(final LogFileReader reader, final Run<?, ?> run, final MeasurementConfig measurementConfig, final Pattern pattern) {
+   public RCAActionCreator(final LogFileReader reader, final Run<?, ?> run, PeassProcessConfiguration peassConfig) {
       this.reader = reader;
       this.run = run;
-      this.measurementConfig = measurementConfig;
-      this.pattern = pattern;
+      this.peassConfig = peassConfig;
+      this.measurementConfig = peassConfig.getMeasurementConfig();
+      this.pattern = peassConfig.getPattern();
    }
 
    public void createRCAActions() throws IOException {
@@ -79,7 +82,7 @@ public class RCAActionCreator {
    private void addLog(final Map.Entry<TestCase, List<RCALevel>> testcase, final int levelId, final int vmId, final File logFile, final String commit) throws IOException {
       String logData;
       if (logFile.exists()) {
-         logData = FileUtils.readFileToString(logFile, StandardCharsets.UTF_8);
+         logData = peassConfig.getLogText(logFile);
       } else {
          logData = "Log file could not be found";
       }

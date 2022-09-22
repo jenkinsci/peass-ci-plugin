@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.RTSLogFileReader;
 import de.dagere.peass.ci.logs.rts.RTSLogData;
@@ -49,7 +50,9 @@ public class TestRTSLogFileReaderParameterized {
       fixedCommitConfig.setCommit(COMMIT);
       fixedCommitConfig.setCommitOld(COMMIT_OLD);
       Mockito.when(measurementConfig.getFixedCommitConfig()).thenReturn(fixedCommitConfig);
-      RTSLogFileReader reader = new RTSLogFileReader(visualizationFoldersMock, measurementConfig);
+      PeassProcessConfiguration peassConfig = new PeassProcessConfiguration(false, measurementConfig, null, null, 0, false, false, false, null);
+      
+      RTSLogFileReader reader = new RTSLogFileReader(visualizationFoldersMock, peassConfig);
 
       Map<TestMethodCall, RTSLogData> rtsVmRuns = reader.getRtsVmRuns(COMMIT, new TestSet());
 

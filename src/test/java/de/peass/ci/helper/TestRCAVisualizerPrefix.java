@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.DatabindException;
 import de.dagere.peass.analysis.changes.Change;
 import de.dagere.peass.analysis.changes.Changes;
 import de.dagere.peass.analysis.changes.ProjectChanges;
+import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.ci.RCAVisualizationAction;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.rca.RCAVisualizer;
@@ -79,7 +80,8 @@ public class TestRCAVisualizerPrefix {
       new File(visualizationResultFolder, "test").mkdirs();
       VisualizationFolderManager visualizationFolders = new VisualizationFolderManager(visualizationResultFolder, "test", run);
       
-      RCAVisualizer rcaVisualizer = new RCAVisualizer(measurementConfig, visualizationFolders, null, run);
+      PeassProcessConfiguration peassConfig = new PeassProcessConfiguration(false, measurementConfig, null, null, 0, false, false, false, null);
+      RCAVisualizer rcaVisualizer = new RCAVisualizer(peassConfig, visualizationFolders, null, run);
       
       for (Entry<String, List<Change>> testcases : versionChanges.getTestcaseChanges().entrySet()) {
          for (Change change : testcases.getValue()) {

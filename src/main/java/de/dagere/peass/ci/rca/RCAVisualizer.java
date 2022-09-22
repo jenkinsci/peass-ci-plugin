@@ -15,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 import de.dagere.peass.analysis.changes.Change;
 import de.dagere.peass.analysis.changes.Changes;
 import de.dagere.peass.analysis.changes.ProjectChanges;
+import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.ci.RCAVisualizationAction;
 import de.dagere.peass.ci.helper.IdHelper;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
@@ -28,14 +29,16 @@ public class RCAVisualizer {
 
    private static final Logger LOG = LogManager.getLogger(RCAVisualizer.class);
 
+   private final PeassProcessConfiguration peassConfig;
    private final MeasurementConfig measurementConfig;
    private final VisualizationFolderManager visualizationFolders;
    private final ProjectChanges changes;
    private final Run<?, ?> run;
    private final RCAMapping mapping;
 
-   public RCAVisualizer(final MeasurementConfig measurementConfig, final VisualizationFolderManager visualizationFolders, final ProjectChanges changes, final Run<?, ?> run) {
-      this.measurementConfig = measurementConfig;
+   public RCAVisualizer(final PeassProcessConfiguration peassConfig, final VisualizationFolderManager visualizationFolders, final ProjectChanges changes, final Run<?, ?> run) {
+      this.peassConfig = peassConfig;
+      this.measurementConfig = peassConfig.getMeasurementConfig();
       this.visualizationFolders = visualizationFolders;
       this.changes = changes;
       this.run = run;
@@ -112,7 +115,7 @@ public class RCAVisualizer {
       LOG.info("Adding: " + rcaDestFile + " " + name);
       final String displayName = name.substring(longestPrefix.length());
 
-      final String content = FileUtils.readFileToString(rcaDestFile, StandardCharsets.UTF_8);
+      final String content = peassConfig.getLogText(rcaDestFile);
       RCAVisualizationAction visualizationAction = new RCAVisualizationAction(IdHelper.getId(), displayName, content);
       run.addAction(visualizationAction);
       TestMethodCall testMethodCall = TestMethodCall.createFromString(testcases.getKey() + "#" + change.getMethodWithParams());

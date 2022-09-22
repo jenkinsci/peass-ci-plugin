@@ -161,7 +161,7 @@ public class LocalPeassProcessManager {
    }
 
    public void visualizeRCAResults(final Run<?, ?> run, final ProjectChanges changes) throws Exception, IOException {
-      final RCAVisualizer rcaVisualizer = new RCAVisualizer(peassConfig.getMeasurementConfig(), visualizationFolders, changes, run);
+      final RCAVisualizer rcaVisualizer = new RCAVisualizer(peassConfig, visualizationFolders, changes, run);
       rcaVisualizer.visualizeRCA();
 
       if (peassConfig.isDisplayRCALogs()) {

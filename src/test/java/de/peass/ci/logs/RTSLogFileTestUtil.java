@@ -8,6 +8,7 @@ import org.apache.commons.io.FileUtils;
 import org.mockito.Mockito;
 
 import de.dagere.peass.ci.MeasureVersionBuilder;
+import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.RTSLogFileReader;
 import de.dagere.peass.config.MeasurementConfig;
@@ -62,11 +63,12 @@ public class RTSLogFileTestUtil {
 
    RTSLogFileReader initializeReader() {
       MeasurementConfig peassDemoConfig = new MeasurementConfig(2, COMMIT, COMMIT_OLD);
+      PeassProcessConfiguration peassConfig = new PeassProcessConfiguration(false, peassDemoConfig, null, null, 0, false, false, false, null);           
 
       VisualizationFolderManager visualizationFolders = Mockito.mock(VisualizationFolderManager.class);
       Mockito.when(visualizationFolders.getPeassFolders()).thenReturn(new PeassFolders(testFolder));
       Mockito.when(visualizationFolders.getResultsFolders()).thenReturn(new ResultsFolders(localFolder, projectName));
-      RTSLogFileReader reader = new RTSLogFileReader(visualizationFolders, peassDemoConfig);
+      RTSLogFileReader reader = new RTSLogFileReader(visualizationFolders, peassConfig);
       return reader;
    }
 
