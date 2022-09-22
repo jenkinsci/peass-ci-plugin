@@ -39,13 +39,11 @@ public class RCAVisualizer {
       this.visualizationFolders = visualizationFolders;
       this.changes = changes;
       this.run = run;
-      RCAMapping readMapping = null;
+      RCAMapping readMapping = new RCAMapping();
       try {
          File rcaMappingFile = visualizationFolders.getResultsFolders().getRCAMappingFile();
          if (rcaMappingFile.exists()) {
             readMapping = Constants.OBJECTMAPPER.readValue(rcaMappingFile, RCAMapping.class);
-         } else {
-            readMapping = new RCAMapping();
          }
       } catch (IOException e) {
          e.printStackTrace();

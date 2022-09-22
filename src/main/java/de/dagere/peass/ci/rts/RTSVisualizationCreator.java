@@ -21,12 +21,13 @@ import de.dagere.peass.config.FixedCommitConfig;
 import de.dagere.peass.dependency.analysis.data.ChangedEntity;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.analysis.data.TestSet;
+import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
+import de.dagere.peass.dependency.persistence.CommitStaticSelection;
 import de.dagere.peass.dependency.persistence.ExecutionData;
 import de.dagere.peass.dependency.persistence.StaticTestSelection;
-import de.dagere.peass.dependency.persistence.CommitStaticSelection;
 import de.dagere.peass.dependency.traces.TraceFileManager;
-import de.dagere.peass.dependency.traces.coverage.CoverageSelectionInfo;
 import de.dagere.peass.dependency.traces.coverage.CoverageSelectionCommit;
+import de.dagere.peass.dependency.traces.coverage.CoverageSelectionInfo;
 import de.dagere.peass.dependency.traces.diff.TraceFileUtil;
 import de.dagere.peass.folders.ResultsFolders;
 import de.dagere.peass.utils.Constants;
@@ -69,7 +70,7 @@ public class RTSVisualizationCreator {
    }
 
    private void visualizeTest(final Run<?, ?> run, final String traceSelectedTest) throws IOException {
-      TestCase testcase = new TestCase(traceSelectedTest);
+      TestMethodCall testcase = TestMethodCall.createFromString(traceSelectedTest);
       File traceFolder = localWorkspace.getVersionDiffFolder(peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit());
       String traceSource = readText(testcase, traceFolder);
 
@@ -77,7 +78,7 @@ public class RTSVisualizationCreator {
       run.addAction(traceAction);
    }
 
-   private String readText(TestCase testcase, File traceFolder) throws IOException {
+   private String readText(TestMethodCall testcase, File traceFolder) throws IOException {
       File traceFile = new File(traceFolder, testcase.getShortClazz() + "#" + testcase.getMethod() + TraceFileManager.TXT_ENDING);
       System.out.println("Trace file: " + traceFile.getAbsolutePath());
       String traceSource = "";

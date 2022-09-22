@@ -29,7 +29,6 @@ import com.cloudbees.plugins.credentials.common.StandardUsernamePasswordCredenti
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.ci.logs.rts.AggregatedRTSResult;
@@ -38,6 +37,7 @@ import de.dagere.peass.ci.process.JenkinsLogRedirector;
 import de.dagere.peass.ci.process.LocalPeassProcessManager;
 import de.dagere.peass.ci.remote.RemoteVersionReader;
 import de.dagere.peass.config.ExecutionConfig;
+import de.dagere.peass.config.FixedCommitConfig;
 import de.dagere.peass.config.KiekerConfig;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.config.MeasurementStrategy;
@@ -45,14 +45,10 @@ import de.dagere.peass.config.StatisticalTests;
 import de.dagere.peass.config.TestSelectionConfig;
 import de.dagere.peass.config.parameters.ExecutionConfigMixin;
 import de.dagere.peass.config.parameters.MeasurementConfigurationMixin;
-import de.dagere.peass.dependency.analysis.data.TestCase;
-import de.dagere.peass.dependency.analysis.data.deserializer.TestMethodCallKeyDeserializer;
-import de.dagere.peass.dependency.analysis.data.deserializer.TestcaseKeyDeserializer;
 import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.execution.utils.EnvironmentVariables;
 import de.dagere.peass.measurement.rca.CauseSearcherConfig;
 import de.dagere.peass.measurement.rca.RCAStrategy;
-import de.dagere.peass.utils.Constants;
 import hudson.EnvVars;
 import hudson.Extension;
 import hudson.FilePath;
@@ -268,7 +264,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
             run.setResult(Result.FAILURE);
             return;
          }
-         
+
       }
    }
 
@@ -302,8 +298,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       listener.getLogger().println("Starting RemoteVersionReader");
       final RemoteVersionReader remoteVersionReader = new RemoteVersionReader(measurementConfig, listener);
       final MeasurementConfig configWithRealGitVersions = workspace.act(remoteVersionReader);
-      listener.getLogger()
-            .println("Read version: " + configWithRealGitVersions.getFixedCommitConfig().getCommit() + " " + configWithRealGitVersions.getFixedCommitConfig().getCommitOld());
+      FixedCommitConfig fixedCommitConfig = configWithRealGitVersions.getFixedCommitConfig();
+      listener.getLogger().println("Read version: " + fixedCommitConfig.getCommit() + " " + fixedCommitConfig.getCommitOld());
       return configWithRealGitVersions;
    }
 
@@ -329,7 +325,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          significanceLevel = 0.01;
       }
       final MeasurementConfig config = new MeasurementConfig(VMs);
-      
+
       config.getStatisticsConfig().setType1error(significanceLevel);
       config.getStatisticsConfig().setStatisticTest(statisticalTest);
       config.setIterations(iterations);
@@ -339,7 +335,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       config.setEarlyStop(false);
       config.getExecutionConfig().setShowStart(showStart);
       config.setDirectlyMeasureKieker(directlyMeasureKieker);
-      
+
       if (executeParallel) {
          System.out.println("Measuring parallel");
          config.setMeasurementStrategy(MeasurementStrategy.PARALLEL);
@@ -347,9 +343,9 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          config.setMeasurementStrategy(MeasurementStrategy.SEQUENTIAL);
          System.out.println("executeparallel is false");
       }
-      
+
       parameterizeKiekerConfig(config.getKiekerConfig());
-      
+
       if (useAggregation && !useSourceInstrumentation) {
          throw new RuntimeException("Aggregation may only be used with source instrumentation currently.");
       }
@@ -360,11 +356,11 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       if (nightlyBuild && versionDiff != 1) {
          throw new RuntimeException("If nightly build is set, do not set versionDiff! nightlyBuild will automatically select the last tested version.");
       }
-      
+
       config.getFixedCommitConfig().setCommit("HEAD");
       final String oldVersion = getOldVersion();
       config.getFixedCommitConfig().setCommitOld(oldVersion);
-      
+
       parameterizeExecutionConfig(config.getExecutionConfig());
 
       System.out.println("Building, iterations: " + iterations + " test goal: " + testGoal);
@@ -376,32 +372,32 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          executionConfig.setTestTransformer("de.dagere.peass.dependency.jmh.JmhTestTransformer");
          executionConfig.setTestExecutor("de.dagere.peass.dependency.jmh.JmhTestExecutor");
       }
-      
+
       executionConfig.setTimeout(timeout * 60l * 1000);
-      
+
       executionConfig.setExecuteBeforeClassInMeasurement(executeBeforeClassInMeasurement);
       executionConfig.setOnlyMeasureWorkload(onlyMeasureWorkload);
       if (onlyMeasureWorkload && repetitions != 1) {
          throw new RuntimeException("If onlyMeasureWorkload is set, repetitions should be 1, but are " + repetitions);
       }
       executionConfig.setRedirectToNull(redirectToNull);
-      
+
       executionConfig.setRemoveSnapshots(removeSnapshots);
       executionConfig.setExcludeLog4jSlf4jImpl(excludeLog4jSlf4jImpl);
       executionConfig.setExcludeLog4jToSlf4j(excludeLog4jToSlf4j);
 
       executionConfig.setIncludes(IncludeExcludeParser.getStringList(includes));
       executionConfig.setExcludes(IncludeExcludeParser.getStringList(excludes));
-      
+
       executionConfig.setIncludeByRule(IncludeExcludeParser.getStringListSimple(includeByRule));
       executionConfig.setExcludeByRule(IncludeExcludeParser.getStringListSimple(excludeByRule));
-      
+
       executionConfig.setUseAlternativeBuildfile(useAlternativeBuildfile);
       executionConfig.setRedirectSubprocessOutputToFile(redirectSubprocessOutputToFile);
 
       executionConfig.setTestTransformer(testTransformer);
       executionConfig.setTestExecutor(testExecutor);
-      
+
       if (clazzFolders != null && !"".equals(clazzFolders.trim())) {
          List<String> pathes = ExecutionConfig.buildFolderList(clazzFolders);
          List<String> clazzFolders2 = executionConfig.getClazzFolders();
@@ -620,7 +616,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public void setIncludes(final String includes) {
       this.includes = includes;
    }
-   
+
    public String getExcludes() {
       return excludes;
    }
@@ -633,21 +629,21 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public String getIncludeByRule() {
       return includeByRule;
    }
-   
+
    @DataBoundSetter
    public void setIncludeByRule(String includeByRule) {
       this.includeByRule = includeByRule;
    }
-   
+
    public String getExcludeByRule() {
       return excludeByRule;
    }
-   
+
    @DataBoundSetter
    public void setExcludeByRule(String excludeByRule) {
       this.excludeByRule = excludeByRule;
    }
-   
+
    public boolean isExecuteRCA() {
       return executeRCA;
    }
@@ -786,21 +782,21 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public boolean isExcludeLog4jSlf4jImpl() {
       return excludeLog4jSlf4jImpl;
    }
-   
+
    @DataBoundSetter
    public void setExcludeLog4jSlf4jImpl(final boolean excludeLog4jSlf4jImpl) {
       this.excludeLog4jSlf4jImpl = excludeLog4jSlf4jImpl;
    }
-   
+
    public boolean isExcludeLog4jToSlf4j() {
       return excludeLog4jToSlf4j;
    }
-   
+
    @DataBoundSetter
    public void setExcludeLog4jToSlf4j(final boolean excludeLog4jToSlf4j) {
       this.excludeLog4jToSlf4j = excludeLog4jToSlf4j;
    }
-   
+
    public boolean isRedirectToNull() {
       return redirectToNull;
    }
@@ -908,25 +904,25 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public void setCredentialsId(final String credentialsId) {
       this.credentialsId = credentialsId;
    }
-   
+
    public boolean isWriteAsZip() {
       return writeAsZip;
    }
-   
+
    @DataBoundSetter
    public void setWriteAsZip(boolean writeAsZip) {
       this.writeAsZip = writeAsZip;
    }
-   
+
    public boolean isDirectlyMeasureKieker() {
       return directlyMeasureKieker;
    }
-   
+
    @DataBoundSetter
    public void setDirectlyMeasureKieker(boolean directlyMeasureKieker) {
       this.directlyMeasureKieker = directlyMeasureKieker;
    }
-   
+
    @Symbol("measure")
    @Extension
    public static final class DescriptorImpl extends BuildStepDescriptor<Builder> {

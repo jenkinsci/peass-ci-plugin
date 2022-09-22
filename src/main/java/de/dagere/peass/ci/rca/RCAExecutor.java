@@ -135,7 +135,7 @@ public class RCAExecutor {
       }
    }
 
-   private File getExpectedRCAFile(final TestCase testCase) {
+   private File getExpectedRCAFile(final TestMethodCall testCase) {
       CauseSearchFolders folders = new CauseSearchFolders(projectFolder);
       final File expectedResultFile = new File(folders.getRcaTreeFolder(config.getFixedCommitConfig().getCommit(), testCase),
             testCase.getMethodWithParams() + ".json");

@@ -19,7 +19,6 @@ import de.dagere.peass.ci.helper.HistogramValues;
 import de.dagere.peass.ci.helper.UnitConverter;
 import de.dagere.peass.ci.rca.RCAVisualizer;
 import de.dagere.peass.config.MeasurementConfig;
-import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.measurement.statistics.StatisticUtil;
 import de.dagere.peass.measurement.statistics.data.TestcaseStatistic;

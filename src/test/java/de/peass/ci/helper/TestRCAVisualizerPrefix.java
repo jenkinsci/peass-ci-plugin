@@ -17,7 +17,9 @@ import de.dagere.peass.analysis.changes.Change;
 import de.dagere.peass.analysis.changes.Changes;
 import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.ci.RCAVisualizationAction;
+import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.rca.RCAVisualizer;
+import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.utils.Constants;
 import hudson.model.Run;
 
@@ -71,7 +73,13 @@ public class TestRCAVisualizerPrefix {
       String longestPrefix = RCAVisualizer.getLongestPrefix(versionChanges.getTestcaseChanges().keySet());
       
       Run run = Mockito.mock(Run.class);
-      RCAVisualizer rcaVisualizer = new RCAVisualizer(null, null, null, run);
+      MeasurementConfig measurementConfig = new MeasurementConfig(2);
+      measurementConfig.getFixedCommitConfig().setCommit("000001");
+      final File visualizationResultFolder = new File("target", "visualization_result");
+      new File(visualizationResultFolder, "test").mkdirs();
+      VisualizationFolderManager visualizationFolders = new VisualizationFolderManager(visualizationResultFolder, "test", run);
+      
+      RCAVisualizer rcaVisualizer = new RCAVisualizer(measurementConfig, visualizationFolders, null, run);
       
       for (Entry<String, List<Change>> testcases : versionChanges.getTestcaseChanges().entrySet()) {
          for (Change change : testcases.getValue()) {

@@ -3,10 +3,7 @@ package de.dagere.peass.ci.rca;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
-import de.dagere.peass.utils.Constants;
 
 public class RCAMapping {
    private Map<String, CommitRCAURLs> commits = new LinkedHashMap<>();

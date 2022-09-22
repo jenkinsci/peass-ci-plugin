@@ -11,7 +11,6 @@ import de.dagere.kopeme.kopemedata.Kopemedata;
 import de.dagere.kopeme.kopemedata.TestMethod;
 import de.dagere.kopeme.kopemedata.VMResultChunk;
 import de.dagere.peass.config.MeasurementConfig;
-import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.measurement.dataloading.MultipleVMTestUtil;
 import de.dagere.peass.measurement.dataloading.ResultLoader;
