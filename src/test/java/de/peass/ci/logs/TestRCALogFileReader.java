@@ -18,6 +18,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import de.dagere.peass.ci.MeasureVersionBuilder;
+import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.LogFileReader;
 import de.dagere.peass.ci.logs.rca.RCALevel;
@@ -53,12 +54,13 @@ public class TestRCALogFileReader {
    @Test
    public void testReading() throws JsonParseException, JsonMappingException, IOException {
       MeasurementConfig peassDemoConfig = new MeasurementConfig(2, RTSLogFileTestUtil.COMMIT, RTSLogFileTestUtil.COMMIT_OLD);
-
+      PeassProcessConfiguration peassConfig = new PeassProcessConfiguration(false, peassDemoConfig, null, null, 5, false, false, false, null);
+      
       VisualizationFolderManager visualizationFolders = Mockito.mock(VisualizationFolderManager.class);
       Mockito.when(visualizationFolders.getPeassFolders()).thenReturn(new PeassFolders(testFolder));
       Mockito.when(visualizationFolders.getPeassRCAFolders()).thenReturn(new CauseSearchFolders(testFolder));
       Mockito.when(visualizationFolders.getResultsFolders()).thenReturn(new ResultsFolders(localFolder, "demo-vis2"));
-      LogFileReader reader = new LogFileReader(visualizationFolders, peassDemoConfig);
+      LogFileReader reader = new LogFileReader(visualizationFolders, peassConfig);
 
       TestMethodCall test = new TestMethodCall("de.test.CalleeTest", "onlyCallMethod2");
       Map<TestCase, List<RCALevel>> rcaTestcases = reader.getRCATestcases();

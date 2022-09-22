@@ -11,6 +11,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.ci.helper.IdHelper;
 import de.dagere.peass.ci.logs.InternalLogAction;
 import de.dagere.peass.ci.logs.LogFileReader;
@@ -28,14 +29,16 @@ public class MeasurementActionCreator {
 
    private final LogFileReader reader;
    private final Run<?, ?> run;
+   private final PeassProcessConfiguration processConfig;
    private final MeasurementConfig measurementConfig;
    private final Pattern pattern;
 
-   public MeasurementActionCreator(final LogFileReader reader, final Run<?, ?> run, final MeasurementConfig measurementConfig, final Pattern pattern) {
+   public MeasurementActionCreator(final LogFileReader reader, final Run<?, ?> run, final PeassProcessConfiguration processConfig) {
       this.reader = reader;
       this.run = run;
-      this.measurementConfig = measurementConfig;
-      this.pattern = pattern;
+      this.processConfig = processConfig;
+      this.measurementConfig = processConfig.getMeasurementConfig();
+      this.pattern = processConfig.getPattern();
    }
 
    public void createMeasurementActions(final Set<TestMethodCall> tests) throws IOException {

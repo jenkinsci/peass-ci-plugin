@@ -241,7 +241,10 @@
           <f:entry title="${%traceSizeInMb}" field="traceSizeInMb" description="${%traceSizeInMbDescr}">
             <f:textbox default="100" />
           </f:entry>
-
+          <br />
+          <f:entry title="${%timportLogSizeInMb}" field="importLogSizeInMb" description="${%importLogSizeInMbDescr}">
+            <f:textbox default="100" />
+          </f:entry>
         </td>
         <td>
           <f:entry title="${%excludeForTracing}" field="excludeForTracing" description="${%excludeForTracingDescr}">
