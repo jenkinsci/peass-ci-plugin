@@ -31,7 +31,7 @@ public class TestRTSLogFileReader {
    }
 
    @Test
-   public void testReading() throws JsonParseException, JsonMappingException, IOException {
+   public void testReading() {
       RTSLogFileReader reader = util.initializeReader();
       Map<String, File> testcases = reader.findProcessSuccessRuns();
 
