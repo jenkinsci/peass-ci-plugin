@@ -11,6 +11,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.ci.helper.IdHelper;
 import de.dagere.peass.ci.logs.InternalLogAction;
 import de.dagere.peass.ci.logs.LogUtil;
@@ -27,16 +28,18 @@ public class RTSActionCreator {
 
    private final RTSLogFileReader reader;
    private final Run<?, ?> run;
+   private final PeassProcessConfiguration processConfig;
    private final MeasurementConfig measurementConfig;
    private final Map<String, Boolean> processSuccessRunSucceeded = new HashMap<>();
    private RTSLogSummary logSummary;
    private final Pattern pattern;
 
-   public RTSActionCreator(final RTSLogFileReader reader, final Run<?, ?> run, final MeasurementConfig measurementConfig, final Pattern pattern) {
+   public RTSActionCreator(final RTSLogFileReader reader, final Run<?, ?> run, final PeassProcessConfiguration processConfig) {
       this.reader = reader;
       this.run = run;
-      this.measurementConfig = measurementConfig;
-      this.pattern = pattern;
+      this.processConfig = processConfig;
+      this.measurementConfig = processConfig.getMeasurementConfig();
+      this.pattern = processConfig.getPattern();
    }
 
    public void createRTSActions(final RTSInfos staticChanges) throws IOException {
@@ -49,14 +52,16 @@ public class RTSActionCreator {
       Map<String, File> processSuccessRuns = createProcessSuccessRunsActions();
 
       Map<TestMethodCall, RTSLogData> rtsVmRuns = createVersionRTSData(measurementConfig.getFixedCommitConfig().getCommit(), staticChanges.getIgnoredTestsCurrent());
-      Map<TestMethodCall, RTSLogData> rtsVmRunsPredecessor = createVersionRTSData(measurementConfig.getFixedCommitConfig().getCommitOld(), staticChanges.getIgnoredTestsPredecessor());
+      Map<TestMethodCall, RTSLogData> rtsVmRunsPredecessor = createVersionRTSData(measurementConfig.getFixedCommitConfig().getCommitOld(),
+            staticChanges.getIgnoredTestsPredecessor());
 
       logSummary = RTSLogSummary.createLogSummary(rtsVmRuns, rtsVmRunsPredecessor);
 
       createOverviewAction(processSuccessRuns, rtsVmRuns, rtsVmRunsPredecessor, staticChanges);
    }
 
-   private void createOverviewAction(final Map<String, File> processSuccessRuns, final Map<TestMethodCall, RTSLogData> rtsVmRuns, final Map<TestMethodCall, RTSLogData> rtsVmRunsPredecessor,
+   private void createOverviewAction(final Map<String, File> processSuccessRuns, final Map<TestMethodCall, RTSLogData> rtsVmRuns,
+         final Map<TestMethodCall, RTSLogData> rtsVmRunsPredecessor,
          final RTSInfos rtsInfos) {
       RTSLogOverviewAction overviewAction = new RTSLogOverviewAction(IdHelper.getId(), processSuccessRuns, rtsVmRuns, rtsVmRunsPredecessor,
             processSuccessRunSucceeded, measurementConfig.getFixedCommitConfig().getCommit(), measurementConfig.getFixedCommitConfig().getCommitOld(),
@@ -80,7 +85,9 @@ public class RTSActionCreator {
    private Map<String, File> createProcessSuccessRunsActions() throws IOException {
       Map<String, File> processSuccessRuns = reader.findProcessSuccessRuns();
       for (Map.Entry<String, File> processSuccessRun : processSuccessRuns.entrySet()) {
-         String logData = FileUtils.readFileToString(processSuccessRun.getValue(), StandardCharsets.UTF_8);
+         String logData = processConfig.getLogText(processSuccessRun.getValue());
+
+         // String logData = FileUtils.readFileToString(processSuccessRun.getValue(), StandardCharsets.UTF_8);
          /**
           * This is not exactly what is required here - if process sucess runs are realy executed for both versions (which currently does not happen by default), than the value
           * should be obtained for both versions
@@ -92,6 +99,8 @@ public class RTSActionCreator {
       }
       return processSuccessRuns;
    }
+
+   
 
    private Map<TestMethodCall, RTSLogData> createVersionRTSData(final String commit, final TestSet ignoredTests) throws IOException {
       Map<TestMethodCall, RTSLogData> rtsVmRuns = reader.getRtsVmRuns(commit, ignoredTests);

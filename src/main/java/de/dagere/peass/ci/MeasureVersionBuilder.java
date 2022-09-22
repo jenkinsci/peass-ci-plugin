@@ -99,6 +99,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private boolean nightlyBuild = true;
    private int versionDiff = 1;
    private int traceSizeInMb = 100;
+   private int importLogSizeInMb = 100;
 
    private boolean displayRTSLogs = true;
    private boolean displayLogs = true;
@@ -281,7 +282,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       TestSelectionConfig dependencyConfig = new TestSelectionConfig(1, false, true, generateCoverageSelection, writeAsZip);
       configWithRealGitVersions.getExecutionConfig().setGitCryptKey(peassEnv.getEnvironmentVariables().get("GIT_CRYPT_KEY"));
       PeassProcessConfiguration peassConfig = new PeassProcessConfiguration(updateSnapshotDependencies, configWithRealGitVersions, dependencyConfig,
-            peassEnv,
+            peassEnv, importLogSizeInMb,
             displayRTSLogs, displayLogs, displayRCALogs, pattern);
       return peassConfig;
    }
@@ -552,6 +553,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    @DataBoundSetter
    public void setTraceSizeInMb(final int traceSizeInMb) {
       this.traceSizeInMb = traceSizeInMb;
+   }
+   
+   public int getImportLogSizeInMb() {
+      return importLogSizeInMb;
+   }
+   
+   @DataBoundSetter
+   public void setImportLogSizeInMb(int importLogSizeInMb) {
+      this.importLogSizeInMb = importLogSizeInMb;
    }
 
    public boolean isDisplayRTSLogs() {

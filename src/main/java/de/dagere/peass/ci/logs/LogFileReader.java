@@ -17,6 +17,7 @@ import org.apache.logging.log4j.Logger;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
+import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.rca.RCALevel;
 import de.dagere.peass.config.MeasurementConfig;
@@ -32,11 +33,13 @@ public class LogFileReader {
    private static final Logger LOG = LogManager.getLogger(LogFileReader.class);
 
    private final VisualizationFolderManager visualizationFolders;
+   private final PeassProcessConfiguration processConfig;
    private final MeasurementConfig measurementConfig;
 
-   public LogFileReader(final VisualizationFolderManager visualizationFolders, final MeasurementConfig measurementConfig) {
+   public LogFileReader(final VisualizationFolderManager visualizationFolders, final PeassProcessConfiguration processConfig) {
       this.visualizationFolders = visualizationFolders;
-      this.measurementConfig = measurementConfig;
+      this.processConfig = processConfig;
+      this.measurementConfig = processConfig.getMeasurementConfig();
 
    }
 
@@ -105,8 +108,8 @@ public class LogFileReader {
       try {
          if (measureLogFile.exists()) {
             LOG.debug("Reading {}", measureLogFile.getAbsolutePath());
-            String rtsLog = FileUtils.readFileToString(measureLogFile, StandardCharsets.UTF_8);
-            return rtsLog;
+            String measureLog = processConfig.getLogText(measureLogFile);
+            return measureLog;
          } else {
             return "Measurement log not readable; file " + measureLogFile.getAbsolutePath() + " did not exist";
          }
@@ -121,7 +124,7 @@ public class LogFileReader {
             measurementConfig.getFixedCommitConfig().getCommitOld());
       try {
          LOG.debug("Reading {}", rcaLogFile.getAbsolutePath());
-         String rcaLog = FileUtils.readFileToString(rcaLogFile, StandardCharsets.UTF_8);
+         String rcaLog = processConfig.getLogText(rcaLogFile);
          return rcaLog;
       } catch (IOException e) {
          e.printStackTrace();

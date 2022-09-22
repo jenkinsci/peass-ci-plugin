@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import de.dagere.peass.analysis.measurement.ProjectStatistics;
 import de.dagere.peass.ci.MeasureVersionBuilder;
+import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.LogFileReader;
 import de.dagere.peass.ci.logs.LogFiles;
@@ -66,11 +67,12 @@ public class TestLogFileReader {
    @Test
    public void testReading() throws JsonParseException, JsonMappingException, IOException {
       MeasurementConfig peassDemoConfig = new MeasurementConfig(2, VERSION, VERSION_OLD);
+      PeassProcessConfiguration peassConfig = new PeassProcessConfiguration(false, peassDemoConfig, null, null, 5, false, false, false, null);
 
       VisualizationFolderManager visualizationFolders = Mockito.mock(VisualizationFolderManager.class);
       Mockito.when(visualizationFolders.getPeassFolders()).thenReturn(new PeassFolders(testFolder));
       Mockito.when(visualizationFolders.getResultsFolders()).thenReturn(new ResultsFolders(localFolder, "demo-vis2"));
-      LogFileReader reader = new LogFileReader(visualizationFolders, peassDemoConfig);
+      LogFileReader reader = new LogFileReader(visualizationFolders, peassConfig);
       ProjectStatistics statistics = Constants.OBJECTMAPPER.readValue(new File("src/test/resources/demo-results-logs/statistics.json"), ProjectStatistics.class);
       Map<TestCase, List<LogFiles>> testcases = reader.readAllTestcases(statistics.getStatistics().get(VERSION).keySet());
 
@@ -86,11 +88,12 @@ public class TestLogFileReader {
    @Test
    public void testReadingIterationChanged() throws JsonParseException, JsonMappingException, IOException {
       MeasurementConfig peassDemoConfig = new MeasurementConfig(2, VERSION, VERSION_OLD);
+      PeassProcessConfiguration peassConfig = new PeassProcessConfiguration(false, peassDemoConfig, null, null, 5, false, false, false, null);
 
       VisualizationFolderManager visualizationFolders = Mockito.mock(VisualizationFolderManager.class);
       Mockito.when(visualizationFolders.getPeassFolders()).thenReturn(new PeassFolders(testFolder));
       Mockito.when(visualizationFolders.getResultsFolders()).thenReturn(new ResultsFolders(localFolder, "demo-vis2"));
-      LogFileReader reader = new LogFileReader(visualizationFolders, peassDemoConfig);
+      LogFileReader reader = new LogFileReader(visualizationFolders, peassConfig);
       ProjectStatistics statistics = Constants.OBJECTMAPPER.readValue(new File("src/test/resources/demo-results-logs/statistics.json"), ProjectStatistics.class);
       Map<TestCase, List<LogFiles>> testcases = reader.readAllTestcases(statistics.getStatistics().get(VERSION).keySet());
 

@@ -1,7 +1,12 @@
 package de.dagere.peass.ci;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.util.regex.Pattern;
+
+import org.apache.commons.io.FileUtils;
 
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.config.TestSelectionConfig;
@@ -16,17 +21,20 @@ public class PeassProcessConfiguration implements Serializable {
    private final EnvironmentVariables envVars;
    private final Pattern pattern;
 
+   private final int importLogSizeInMb;
 
    private final boolean displayRTSLogs;
    private final boolean displayLogs;
    private final boolean displayRCALogs;
 
-   public PeassProcessConfiguration(final boolean updateSnapshotDependencies, final MeasurementConfig measurementConfig, final TestSelectionConfig dependencyConfig, final EnvironmentVariables envVars,
-         final boolean displayRTSLogs, final boolean displayLogs, final boolean displayRCALogs, final Pattern pattern) {
+   public PeassProcessConfiguration(final boolean updateSnapshotDependencies, final MeasurementConfig measurementConfig, final TestSelectionConfig dependencyConfig,
+         final EnvironmentVariables envVars,
+         int importLogSizeInMb, final boolean displayRTSLogs, final boolean displayLogs, final boolean displayRCALogs, final Pattern pattern) {
       this.updateSnapshotDependencies = updateSnapshotDependencies;
       this.measurementConfig = measurementConfig;
       this.dependencyConfig = dependencyConfig;
       this.envVars = envVars;
+      this.importLogSizeInMb = importLogSizeInMb;
       this.displayRTSLogs = displayRTSLogs;
       this.displayLogs = displayLogs;
       this.displayRCALogs = displayRCALogs;
@@ -48,20 +56,35 @@ public class PeassProcessConfiguration implements Serializable {
    public EnvironmentVariables getEnvVars() {
       return envVars;
    }
-   
+
    public Pattern getPattern() {
       return pattern;
+   }
+
+   public int getImportLogSizeInMb() {
+      return importLogSizeInMb;
    }
 
    public boolean isDisplayRTSLogs() {
       return displayRTSLogs;
    }
-   
+
    public boolean isDisplayLogs() {
       return displayLogs;
    }
 
    public boolean isDisplayRCALogs() {
       return displayRCALogs;
+   }
+
+   public String getLogText(File logfile) throws IOException {
+      String logData;
+      long filesize = logfile.length() / (1024 * 1024);
+      if (filesize < getImportLogSizeInMb()) {
+         logData = FileUtils.readFileToString(logfile, StandardCharsets.UTF_8);
+      } else {
+         logData = "Could not import " + logfile + " since its size was " + filesize + " MB but only " + getImportLogSizeInMb() + " MB was allowed.";
+      }
+      return logData;
    }
 }
