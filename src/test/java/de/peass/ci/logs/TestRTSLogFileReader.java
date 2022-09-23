@@ -9,9 +9,6 @@ import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-
 import de.dagere.peass.ci.logs.RTSLogFileReader;
 import de.dagere.peass.ci.logs.rts.RTSLogData;
 import de.dagere.peass.dependency.analysis.data.TestSet;

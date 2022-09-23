@@ -2,12 +2,9 @@ package de.dagere.peass.ci.logs.rca;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
-
-import org.apache.commons.io.FileUtils;
 
 import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.ci.helper.IdHelper;
