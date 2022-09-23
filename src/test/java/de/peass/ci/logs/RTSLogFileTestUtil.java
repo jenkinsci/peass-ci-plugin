@@ -63,7 +63,7 @@ public class RTSLogFileTestUtil {
 
    RTSLogFileReader initializeReader() {
       MeasurementConfig peassDemoConfig = new MeasurementConfig(2, COMMIT, COMMIT_OLD);
-      PeassProcessConfiguration peassConfig = new PeassProcessConfiguration(false, peassDemoConfig, null, null, 0, false, false, false, null);           
+      PeassProcessConfiguration peassConfig = new PeassProcessConfiguration(false, peassDemoConfig, null, null, 100, false, false, false, null);           
 
       VisualizationFolderManager visualizationFolders = Mockito.mock(VisualizationFolderManager.class);
       Mockito.when(visualizationFolders.getPeassFolders()).thenReturn(new PeassFolders(testFolder));

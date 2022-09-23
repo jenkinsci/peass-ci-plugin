@@ -9,8 +9,6 @@ import org.junit.jupiter.api.Test;
 import de.dagere.peass.ci.logs.rts.AggregatedRTSResult;
 import de.dagere.peass.ci.logs.rts.RTSLogData;
 import de.dagere.peass.ci.logs.rts.RTSLogSummary;
-import de.dagere.peass.dependency.analysis.data.TestCase;
-import de.dagere.peass.dependency.analysis.data.TestSet;
 import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 
 public class TestRTSLogSummary {
