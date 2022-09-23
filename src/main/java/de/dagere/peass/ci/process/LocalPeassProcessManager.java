@@ -77,9 +77,9 @@ public class LocalPeassProcessManager {
       RTSResult result = workspace.act(rts);
       copyFromRemote();
       if (result != null) {
-         String versionOld = result.getVersionOld();
-         listener.getLogger().println("Setting predecessor version, obtained by RTS: " + versionOld);
-         peassConfig.getMeasurementConfig().getFixedCommitConfig().setCommitOld(versionOld);
+         String commitOld = result.getCommitOld();
+         listener.getLogger().println("Setting predecessor version, obtained by RTS: " + commitOld);
+         peassConfig.getMeasurementConfig().getFixedCommitConfig().setCommitOld(commitOld);
       }
       if (peassConfig.isDisplayRTSLogs()) {
          return displayRTSLogs(result);

@@ -61,7 +61,7 @@ public class RemoteRTS implements FileCallable<RTSResult> {
          } catch (Throwable e) {
             printErrorInformation(workspaceFolder, e);
             RTSResult rtsResult = new RTSResult(null, false);
-            rtsResult.setVersionOld(commitOld);
+            rtsResult.setCommitOld(commitOld);
             return rtsResult;
          }
       } catch (Throwable e) {
