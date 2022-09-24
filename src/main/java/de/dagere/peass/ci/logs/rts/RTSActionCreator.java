@@ -104,7 +104,6 @@ public class RTSActionCreator {
 
    private Map<TestMethodCall, RTSLogData> createVersionRTSData(final String commit, final TestSet ignoredTests) throws IOException {
       Map<TestMethodCall, RTSLogData> rtsVmRuns = reader.getRtsVmRuns(commit, ignoredTests);
-
       LOG.info("RTS Runs: {}", rtsVmRuns.size());
       for (Map.Entry<TestMethodCall, RTSLogData> rtsLogData : rtsVmRuns.entrySet()) {
          String methodLogData = getLogData(rtsLogData.getValue().getMethodFile());

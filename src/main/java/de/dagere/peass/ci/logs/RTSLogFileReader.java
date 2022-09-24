@@ -71,7 +71,7 @@ public class RTSLogFileReader {
       return logsExisting;
    }
 
-   public Map<TestMethodCall, RTSLogData> getRtsVmRuns(final String commit, TestSet ignoredTests) {
+   public Map<TestMethodCall, RTSLogData> getRtsVmRuns(final String commit, final TestSet ignoredTests) {
       File commitFolder = new File(visualizationFolders.getPeassFolders().getDependencyLogFolder(), commit);
       File[] allFiles = commitFolder.listFiles();
       Map<File, String> testClazzFolders = new LinkedHashMap<>();
