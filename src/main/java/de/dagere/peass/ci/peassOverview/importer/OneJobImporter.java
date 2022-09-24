@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
+import java.util.Base64;
 import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -45,13 +47,15 @@ public class OneJobImporter {
    private final String projectName;
 
    private final String url;
+   private final String authentication;
 
    private final CommitList commits = new CommitList();
 
-   public OneJobImporter(File projectResultsFolder, File workspaceFolder, String url) throws StreamReadException, DatabindException, IOException {
+   public OneJobImporter(File projectResultsFolder, File workspaceFolder, String url, String authentication) throws StreamReadException, DatabindException, IOException {
       this.projectResultsFolder = projectResultsFolder;
       this.workspaceFolder = workspaceFolder;
       this.url = url;
+      this.authentication = authentication;
       fullPeassFolder = new File(workspaceFolder.getParentFile(), workspaceFolder.getName() + "_fullPeass");
 
       projectName = projectResultsFolder.getName();
@@ -160,9 +164,18 @@ public class OneJobImporter {
 
    private void triggerBuild(String projectName) throws MalformedURLException, IOException, UnsupportedEncodingException {
       URL urlObject = new URL(url);
-
-      try (BufferedReader reader = new BufferedReader(new InputStreamReader(urlObject.openStream(), "UTF-8"))) {
+      URLConnection uc = urlObject.openConnection();
+      
+      if (authentication != null) {
+         String userpass = authentication;
+         String basicAuth = "Basic " + new String(Base64.getEncoder().encode(userpass.getBytes()));
+         
+         uc.setRequestProperty("Authorization", basicAuth);
+      }
+      
+      try (BufferedReader reader = new BufferedReader(new InputStreamReader(uc.getInputStream(), "UTF-8"))) {
          for (String line; (line = reader.readLine()) != null;) {
+            
             System.out.println(line);
          }
       }

@@ -14,8 +14,11 @@ public class JobImportStarter implements Callable<Void> {
    @Option(names = { "-workspaceFolder", "--workspaceFolder" }, description = "Path to the workspace folder (normally $JENKINS_JOME/workspaces/$PROJECTNAME", required = true)
    protected File workspaceFolder;
    
-   @Option(names = { "-url", "url" }, description = "URL to trigger for rebuild (e.g. http://localhost:8080/jenkins/job/MYJOB/build?token=MYTOKEN&delay=0", required = true)
+   @Option(names = { "-url", "--url" }, description = "URL to trigger for rebuild (e.g. http://localhost:8080/jenkins/job/MYJOB/build?token=MYTOKEN&delay=0", required = true)
    protected String url;
+   
+   @Option(names = { "-authentication", "--authentication" }, description = "Authentication, e.g. myUser:012312 (password should be encrypted)", required = false)
+   protected String authentication;
 
    public static void main(String[] args) {
       final CommandLine commandLine = new CommandLine(new JobImportStarter());
@@ -24,7 +27,7 @@ public class JobImportStarter implements Callable<Void> {
 
    @Override
    public Void call() throws Exception {
-      OneJobImporter oneJobImporter = new OneJobImporter(projectResultsFolder, workspaceFolder, url);
+      OneJobImporter oneJobImporter = new OneJobImporter(projectResultsFolder, workspaceFolder, url, authentication);
       oneJobImporter.startImport();
       return null;
    }
