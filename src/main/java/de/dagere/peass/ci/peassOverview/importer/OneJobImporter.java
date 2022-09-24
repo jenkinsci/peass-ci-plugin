@@ -105,7 +105,7 @@ public class OneJobImporter {
    private void prepareData(StaticTestSelection copiedStaticSelection, ExecutionData copiedSelection, String commit, String predecessor)
          throws IOException, StreamReadException, DatabindException, StreamWriteException {
       File fakeMeasurementFolder = new File(fullPeassFolder, "measurement_" + commit + "_" + predecessor);
-      if (!fakeMeasurementFolder.mkdir()) {
+      if (!fakeMeasurementFolder.mkdir() && !fakeMeasurementFolder.exists()) {
          throw new RuntimeException("Could not create " + fakeMeasurementFolder);
       }
 
@@ -168,7 +168,7 @@ public class OneJobImporter {
       
       if (authentication != null) {
          String userpass = authentication;
-         String basicAuth = "Basic " + new String(Base64.getEncoder().encode(userpass.getBytes()));
+         String basicAuth = "Basic " + new String(Base64.getEncoder().encode(userpass.getBytes("UTF-8")), "UTF-8");
          
          uc.setRequestProperty("Authorization", basicAuth);
       }
