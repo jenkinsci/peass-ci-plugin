@@ -19,7 +19,7 @@
     <revision>2.1.12</revision>
     <changelist>999999-SNAPSHOT</changelist>
     <gitHubRepo>jenkinsci/peass-ci-plugin</gitHubRepo>
-    <peass.version>0.2.3-SNAPSHOT</peass.version>
+    <peass.version>0.3.0</peass.version>
   </properties>
   <!-- Jenkins discourages usage of names like peass-jenkins-plugin or peass-plugin (https://www.jenkins.io/doc/developer/publishing/requesting-hosting/), therefore 
     it's just peass-ci -->
@@ -65,7 +65,7 @@
     <dependency>
       <groupId>de.dagere.peass</groupId>
       <artifactId>peass-jmh</artifactId>
-      <version>0.1.6</version>
+      <version>0.3.0</version>
     </dependency>
 
     <!-- This should never be removed, since Jenkins internally ignores JUnit 4, but it is required on the classpath for parsing -->
