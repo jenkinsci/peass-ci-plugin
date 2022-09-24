@@ -121,7 +121,7 @@ public class OneJobImporter {
 
    private void importRCAData(String commit) throws IOException {
       File jobCommitFolder = new File(fullPeassFolder, projectName + "_peass/rca/treeMeasurementResults/" + commit);
-      if (!jobCommitFolder.mkdirs()) {
+      if (!jobCommitFolder.mkdirs() && !jobCommitFolder.exists()) {
          throw new RuntimeException("Could not create " + jobCommitFolder);
       }
       File rcaCommitFolder = new File(projectResultsFolder, "rca-results/treeMeasurementResults/" + commit);
