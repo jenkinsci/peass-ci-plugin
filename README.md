@@ -85,7 +85,7 @@ When looking at this, you can see the histogram of the averages of you VM runs a
 
 
 # Known Problems
-- Peass only works if you use the latest version of JUnit, i.e. 4.13.x or 5.8.x, or JMH, i.e. 1.33. If you import an older version of JUnit (or it is imported by plugins you use, e.g. spring boot), please update your JUnit dependency. It is currently not possible to maintain and check the compatibility with older versions of the testing / benchmarking tools. 
+- Peass only works if you use the latest version of JUnit, i.e. 4.13.x or 5.9.x, or JMH, i.e. 1.35. If you import an older version of JUnit (or it is imported by plugins you use, e.g. spring boot), please update your JUnit dependency. It is currently not possible to maintain and check the compatibility with older versions of the testing / benchmarking tools. 
 
 # Development
 
