@@ -96,7 +96,7 @@ public class OneJobImporter {
          String predecessor = commitSelection.getValue().getPredecessor();
          Changes changes = projectChanges.getCommitChanges(commit);
          
-         LOG.debug("Importing {}, Changes: {}", commit, changes.getTestcaseChanges().size());
+         LOG.debug("Importing {}, Changes: {}", commit, (changes != null ? changes.getTestcaseChanges().size() : null));
          
          copiedSelection.addCall(commit, commitSelection.getValue());
          CommitStaticSelection commitStaticSelection = staticSelection.getCommits().get(commit);
