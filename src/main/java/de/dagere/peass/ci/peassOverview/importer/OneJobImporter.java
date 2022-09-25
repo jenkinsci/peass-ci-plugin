@@ -93,23 +93,26 @@ public class OneJobImporter {
       
       for (Entry<String, TestSet> commitSelection : executionData.getCommits().entrySet()) {
          String commit = commitSelection.getKey();
-         String predecessor = commitSelection.getValue().getPredecessor();
-         Changes changes = projectChanges.getCommitChanges(commit);
-         
-         LOG.debug("Importing {}, Changes: {}", commit, (changes != null ? changes.getTestcaseChanges().size() : null));
-         
-         copiedSelection.addCall(commit, commitSelection.getValue());
-         CommitStaticSelection commitStaticSelection = staticSelection.getCommits().get(commit);
-         copiedStaticSelection.getCommits().put(commit, commitStaticSelection);
+         if (!commit.equals(staticSelection.getInitialcommit().getCommit())) {
+            String predecessor = commitSelection.getValue().getPredecessor();
+            
+            Changes changes = projectChanges.getCommitChanges(commit);
+            
+            LOG.debug("Importing {}, Changes: {}", commit, (changes != null ? changes.getTestcaseChanges().size() : null));
+            
+            copiedSelection.addCall(commit, commitSelection.getValue());
+            CommitStaticSelection commitStaticSelection = staticSelection.getCommits().get(commit);
+            copiedStaticSelection.getCommits().put(commit, commitStaticSelection);
 
-         Constants.OBJECTMAPPER.writeValue(new File(fullPeassFolder, "traceTestSelection_" + projectName + ".json"), copiedSelection);
-         Constants.OBJECTMAPPER.writeValue(new File(fullPeassFolder, "staticTestSelection_" + projectName + ".json"), copiedStaticSelection);
-         if (changes != null && !changes.getTestcaseChanges().isEmpty()) {
-            prepareData(commit, predecessor);
+            Constants.OBJECTMAPPER.writeValue(new File(fullPeassFolder, "traceTestSelection_" + projectName + ".json"), copiedSelection);
+            Constants.OBJECTMAPPER.writeValue(new File(fullPeassFolder, "staticTestSelection_" + projectName + ".json"), copiedStaticSelection);
+            if (changes != null && !changes.getTestcaseChanges().isEmpty()) {
+               prepareData(commit, predecessor);
 
-            triggerBuild(projectName);
+               triggerBuild(projectName);
 
-            Thread.sleep(10000);
+               Thread.sleep(10000);
+            }
          }
       }
       
