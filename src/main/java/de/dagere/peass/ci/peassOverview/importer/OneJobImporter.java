@@ -14,6 +14,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.core.exc.StreamWriteException;
@@ -26,6 +28,7 @@ import de.dagere.kopeme.kopemedata.VMResult;
 import de.dagere.kopeme.kopemedata.VMResultChunk;
 import de.dagere.peass.analysis.changes.Changes;
 import de.dagere.peass.analysis.changes.ProjectChanges;
+import de.dagere.peass.ci.rca.RCAExecutor;
 import de.dagere.peass.dependency.analysis.data.TestSet;
 import de.dagere.peass.dependency.persistence.CommitStaticSelection;
 import de.dagere.peass.dependency.persistence.ExecutionData;
@@ -36,6 +39,9 @@ import de.dagere.peass.vcs.GitCommit;
 import de.dagere.peass.vcs.GitUtils;
 
 public class OneJobImporter {
+   
+   private static final Logger LOG = LogManager.getLogger(OneJobImporter.class);
+   
    private final StaticTestSelection staticSelection;
    private final ExecutionData executionData;
    private final ProjectChanges projectChanges;
@@ -83,6 +89,8 @@ public class OneJobImporter {
       copiedStaticSelection.setInitialcommit(staticSelection.getInitialcommit());
       ExecutionData copiedSelection = new ExecutionData();
 
+      LOG.info("Importing " + executionData.getCommits().size() +  " commits");
+      
       for (Entry<String, TestSet> commitSelection : executionData.getCommits().entrySet()) {
          String commit = commitSelection.getKey();
          String predecessor = commitSelection.getValue().getPredecessor();
