@@ -95,22 +95,28 @@ public class OneJobImporter {
          String commit = commitSelection.getKey();
          String predecessor = commitSelection.getValue().getPredecessor();
          Changes changes = projectChanges.getCommitChanges(commit);
-
+         
+         LOG.debug("Importing {}, Changes: {}", commit, changes.getTestcaseChanges().size());
+         
          copiedSelection.addCall(commit, commitSelection.getValue());
          CommitStaticSelection commitStaticSelection = staticSelection.getCommits().get(commit);
          copiedStaticSelection.getCommits().put(commit, commitStaticSelection);
 
+         Constants.OBJECTMAPPER.writeValue(new File(fullPeassFolder, "traceTestSelection_" + projectName + ".json"), copiedSelection);
+         Constants.OBJECTMAPPER.writeValue(new File(fullPeassFolder, "staticTestSelection_" + projectName + ".json"), copiedStaticSelection);
          if (changes != null && !changes.getTestcaseChanges().isEmpty()) {
-            prepareData(copiedStaticSelection, copiedSelection, commit, predecessor);
+            prepareData(commit, predecessor);
 
             triggerBuild(projectName);
 
             Thread.sleep(10000);
          }
       }
+      
+      triggerBuild(projectName);
    }
 
-   private void prepareData(StaticTestSelection copiedStaticSelection, ExecutionData copiedSelection, String commit, String predecessor)
+   private void prepareData(String commit, String predecessor)
          throws IOException, StreamReadException, DatabindException, StreamWriteException {
       File fakeMeasurementFolder = new File(fullPeassFolder, "measurement_" + commit + "_" + predecessor);
       if (!fakeMeasurementFolder.mkdir() && !fakeMeasurementFolder.exists()) {
@@ -123,8 +129,7 @@ public class OneJobImporter {
 
       importMeasurementFolder(commit, predecessor, fakeMeasurementFolder);
 
-      Constants.OBJECTMAPPER.writeValue(new File(fullPeassFolder, "traceTestSelection_" + projectName + ".json"), copiedSelection);
-      Constants.OBJECTMAPPER.writeValue(new File(fullPeassFolder, "staticTestSelection_" + projectName + ".json"), copiedStaticSelection);
+     
    }
 
    private void importRCAData(String commit) throws IOException {
