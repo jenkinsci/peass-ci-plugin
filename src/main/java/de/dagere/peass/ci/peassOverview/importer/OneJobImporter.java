@@ -133,9 +133,9 @@ public class OneJobImporter {
       Constants.OBJECTMAPPER.writeValue(new File(fullPeassFolder, "traceTestSelection_" + projectName + ".json"), copiedSelection);
       Constants.OBJECTMAPPER.writeValue(new File(fullPeassFolder, "staticTestSelection_" + projectName + ".json"), copiedStaticSelection);
       
+      File commitTraceFolder = new File(traceFolder, "view_" + commit);
       File commitFullPeassTraceFolder = new File(fullPeassTraceFolder, "view_" + commit);
-      if (!commitFullPeassTraceFolder.exists()) {
-         File commitTraceFolder = new File(traceFolder, "view_" + commit);
+      if (!commitFullPeassTraceFolder.exists() && commitTraceFolder.exists()) {
          FileUtils.copyDirectory(commitTraceFolder, commitFullPeassTraceFolder);
       }
    }
