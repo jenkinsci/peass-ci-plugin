@@ -1,0 +1,13 @@
+{
+  "url" : "https://github.com/mawHBT/demo-project-gradle_7_3_3-java17.git",
+  "commits" : {
+    "9ab5e502c7a23e5a0cd8f87a795b4e6cbdea496e" : { },
+    "65aba5fbd67a97362ff922c3660445337ba2c1d0" : {
+      "testcases" : {
+        "demo.project.gradle.ExampleTest" : [ "test" ]
+      },
+      "predecessor" : "9ab5e502c7a23e5a0cd8f87a795b4e6cbdea496e"
+    }
+  },
+  "android" : false
+}

@@ -1,0 +1,44 @@
+{
+  "url" : "https://github.com/mawHBT/demo-project-gradle_7_3_3-java17.git",
+  "testGoal" : null,
+  "initialcommit" : {
+    "commit" : "9ab5e502c7a23e5a0cd8f87a795b4e6cbdea496e",
+    "jdk" : 8,
+    "initialDependencies" : {
+      "demo.project.gradle.ExampleTest#test" : {
+        "entities" : [ {
+          "clazz" : "demo.project.gradle.Callee",
+          "method" : "innerMethod",
+          "parameters" : [ ]
+        }, {
+          "clazz" : "demo.project.gradle.Callee",
+          "method" : "method1",
+          "parameters" : [ ]
+        }, {
+          "clazz" : "demo.project.gradle.ExampleClass",
+          "method" : "calleeMethod",
+          "parameters" : [ ]
+        }, {
+          "clazz" : "demo.project.gradle.ExampleTest",
+          "method" : "test",
+          "parameters" : [ ]
+        } ]
+      }
+    }
+  },
+  "commits" : {
+    "65aba5fbd67a97362ff922c3660445337ba2c1d0" : {
+      "running" : true,
+      "jdk" : 8,
+      "predecessor" : "9ab5e502c7a23e5a0cd8f87a795b4e6cbdea496e",
+      "changedClazzes" : {
+        "demo.project.gradle.Callee#innerMethod" : {
+          "testcases" : {
+            "demo.project.gradle.ExampleTest" : [ "test" ]
+          }
+        }
+      }
+    }
+  },
+  "android" : false
+}

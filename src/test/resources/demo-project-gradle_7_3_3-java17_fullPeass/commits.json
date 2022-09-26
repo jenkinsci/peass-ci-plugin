@@ -1,0 +1,13 @@
+{
+  "commits" : [ {
+    "tag" : "9ab5e502c7a23e5a0cd8f87a795b4e6cbdea496e",
+    "comitter" : "Matti Wilhelmi <maw@hbt.de>",
+    "date" : "2022-01-03 11:06:22 +0100",
+    "message" : "     Initial commit "
+  }, {
+    "tag" : "65aba5fbd67a97362ff922c3660445337ba2c1d0",
+    "comitter" : "Matti Wilhelmi <maw@hbt.de>",
+    "date" : "2022-02-16 10:17:35 +0100",
+    "message" : "     Increased Thread.sleep to 20ms in Callee "
+  } ]
+}

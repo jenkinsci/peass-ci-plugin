@@ -1,0 +1,459 @@
+{
+  "measurementConfig" : {
+    "vms" : 4,
+    "earlyStop" : false,
+    "warmup" : 2,
+    "iterations" : 2,
+    "repetitions" : 2,
+    "logFullData" : true,
+    "useGC" : false,
+    "callSyncBetweenVMs" : true,
+    "waitTimeBetweenVMs" : 1000,
+    "kiekerConfig" : {
+      "useKieker" : true,
+      "useSourceInstrumentation" : true,
+      "useSelectiveInstrumentation" : true,
+      "useAggregation" : true,
+      "useCircularQueue" : true,
+      "enableAdaptiveMonitoring" : false,
+      "adaptiveInstrumentation" : false,
+      "kiekerAggregationInterval" : 5000,
+      "record" : "DURATION",
+      "onlyOneCallRecording" : false,
+      "extractMethod" : false,
+      "traceSizeInMb" : 100,
+      "kiekerQueueSize" : 10000000,
+      "createDefaultConstructor" : false,
+      "kiekerWaitTime" : 10,
+      "excludeForTracing" : [ "new org.eclipse.jetty.logging.JettyLevel.<init>(..)", "* org.eclipse.jetty.logging.JettyLevel.*(..)", "*[] org.eclipse.jetty.logging.JettyLevel.*(..)", "*.* org.eclipse.jetty.logging.JettyLevel.*(..)", "*.*.* org.eclipse.jetty.logging.JettyLevel.*(..)", "*.*.*.* org.eclipse.jetty.logging.JettyLevel.*(..)", "*.*.*.*.* org.eclipse.jetty.logging.JettyLevel.*(..)", "new org.eclipse.jetty.logging.JettyLoggerConfiguration.<init>(..)", "* org.eclipse.jetty.logging.JettyLoggerConfiguration.*(..)", "*[] org.eclipse.jetty.logging.JettyLoggerConfiguration.*(..)", "*.* org.eclipse.jetty.logging.JettyLoggerConfiguration.*(..)", "*.*.* org.eclipse.jetty.logging.JettyLoggerConfiguration.*(..)", "*.*.*.* org.eclipse.jetty.logging.JettyLoggerConfiguration.*(..)", "*.*.*.*.* org.eclipse.jetty.logging.JettyLoggerConfiguration.*(..)", "new org.eclipse.jetty.logging.JettyLoggingServiceProvider.<init>(..)", "* org.eclipse.jetty.logging.JettyLoggingServiceProvider.*(..)", "*[] org.eclipse.jetty.logging.JettyLoggingServiceProvider.*(..)", "*.* org.eclipse.jetty.logging.JettyLoggingServiceProvider.*(..)", "*.*.* org.eclipse.jetty.logging.JettyLoggingServiceProvider.*(..)", "*.*.*.* org.eclipse.jetty.logging.JettyLoggingServiceProvider.*(..)", "*.*.*.*.* org.eclipse.jetty.logging.JettyLoggingServiceProvider.*(..)", "new org.eclipse.jetty.logging.JettyLoggerFactory.<init>(..)", "* org.eclipse.jetty.logging.JettyLoggerFactory.*(..)", "*[] org.eclipse.jetty.logging.JettyLoggerFactory.*(..)", "*.* org.eclipse.jetty.logging.JettyLoggerFactory.*(..)", "*.*.* org.eclipse.jetty.logging.JettyLoggerFactory.*(..)", "*.*.*.* org.eclipse.jetty.logging.JettyLoggerFactory.*(..)", "*.*.*.*.* org.eclipse.jetty.logging.JettyLoggerFactory.*(..)", "new org.eclipse.jetty.logging.StdErrAppender.<init>(..)", "* org.eclipse.jetty.logging.StdErrAppender.*(..)", "*[] org.eclipse.jetty.logging.StdErrAppender.*(..)", "*.* org.eclipse.jetty.logging.StdErrAppender.*(..)", "*.*.* org.eclipse.jetty.logging.StdErrAppender.*(..)", "*.*.*.* org.eclipse.jetty.logging.StdErrAppender.*(..)", "*.*.*.*.* org.eclipse.jetty.logging.StdErrAppender.*(..)", "new org.eclipse.jetty.logging.Timestamp.<init>(..)", "* org.eclipse.jetty.logging.Timestamp.*(..)", "*[] org.eclipse.jetty.logging.Timestamp.*(..)", "*.* org.eclipse.jetty.logging.Timestamp.*(..)", "*.*.* org.eclipse.jetty.logging.Timestamp.*(..)", "*.*.*.* org.eclipse.jetty.logging.Timestamp.*(..)", "*.*.*.*.* org.eclipse.jetty.logging.Timestamp.*(..)", "new org.eclipse.jetty.logging.Timestamp$Tick.<init>(..)", "* org.eclipse.jetty.logging.Timestamp$Tick.*(..)", "*[] org.eclipse.jetty.logging.Timestamp$Tick.*(..)", "*.* org.eclipse.jetty.logging.Timestamp$Tick.*(..)", "*.*.* org.eclipse.jetty.logging.Timestamp$Tick.*(..)", "*.*.*.* org.eclipse.jetty.logging.Timestamp$Tick.*(..)", "*.*.*.*.* org.eclipse.jetty.logging.Timestamp$Tick.*(..)", "new org.eclipse.jetty.logging.JettyLogger.<init>(..)", "* org.eclipse.jetty.logging.JettyLogger.*(..)", "*[] org.eclipse.jetty.logging.JettyLogger.*(..)", "*.* org.eclipse.jetty.logging.JettyLogger.*(..)", "*.*.* org.eclipse.jetty.logging.JettyLogger.*(..)", "*.*.*.* org.eclipse.jetty.logging.JettyLogger.*(..)", "*.*.*.*.* org.eclipse.jetty.logging.JettyLogger.*(..)" ]
+    },
+    "saveAll" : true,
+    "javaVersion" : "11.0.16",
+    "measurementStrategy" : "SEQUENTIAL",
+    "statisticsConfig" : {
+      "type1error" : 0.01,
+      "type2error" : 0.01,
+      "outlierFactor" : 3.29,
+      "statisticTest" : "T_TEST"
+    },
+    "executionConfig" : {
+      "includes" : [ "demo.project.gradle.ExampleTest#test" ],
+      "testGoal" : "test",
+      "timeout" : 300000,
+      "redirectSubprocessOutputToFile" : true,
+      "useTieredCompilation" : false,
+      "removeSnapshots" : false,
+      "useAlternativeBuildfile" : false,
+      "excludeLog4jSlf4jImpl" : false,
+      "excludeLog4jToSlf4j" : false,
+      "executeBeforeClassInMeasurement" : false,
+      "onlyMeasureWorkload" : false,
+      "showStart" : false,
+      "redirectToNull" : true,
+      "createDetailDebugFiles" : true
+    },
+    "fixedCommitConfig" : {
+      "commit" : "65aba5fbd67a97362ff922c3660445337ba2c1d0",
+      "commitOld" : "9ab5e502c7a23e5a0cd8f87a795b4e6cbdea496e"
+    }
+  },
+  "causeConfig" : {
+    "splitAggregated" : true,
+    "minTime" : 0.01,
+    "ignoreEOIs" : true,
+    "rcaStrategy" : "UNTIL_SOURCE_CHANGE",
+    "levels" : 1,
+    "testCase" : {
+      "clazz" : "demo.project.gradle.ExampleTest",
+      "method" : "test",
+      "module" : "",
+      "params" : null
+    },
+    "propertyFolder" : "/home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/properties_demo-project-gradle_7_3_3-java17"
+  },
+  "nodes" : {
+    "call" : "demo.project.gradle.ExampleTest#test",
+    "kiekerPattern" : "public void demo.project.gradle.ExampleTest.test()",
+    "otherKiekerPattern" : "public void demo.project.gradle.ExampleTest.test()",
+    "module" : "",
+    "statistic" : {
+      "meanOld" : 3596700.9375,
+      "meanCurrent" : 3.65912335625E7,
+      "deviationOld" : 398226.7344617351,
+      "deviationCurrent" : 185315.04911764257,
+      "vms" : 4,
+      "callsOld" : 8,
+      "calls" : 8,
+      "tvalue" : -150.23681637254668
+    },
+    "childs" : [ {
+      "call" : "demo.project.gradle.ExampleClass#calleeMethod",
+      "kiekerPattern" : "protected void demo.project.gradle.ExampleClass.calleeMethod()",
+      "otherKiekerPattern" : "protected void demo.project.gradle.ExampleClass.calleeMethod()",
+      "module" : "",
+      "statistic" : {
+        "meanOld" : 2907542.5,
+        "meanCurrent" : 3.61165083125E7,
+        "deviationOld" : 357463.9794381387,
+        "deviationCurrent" : 155716.42354685534,
+        "vms" : 4,
+        "callsOld" : 8,
+        "calls" : 8,
+        "tvalue" : -170.34265468384754
+      },
+      "childs" : [ {
+        "call" : "demo.project.gradle.Callee#method1",
+        "kiekerPattern" : "protected void demo.project.gradle.Callee.method1()",
+        "otherKiekerPattern" : "protected void demo.project.gradle.Callee.method1()",
+        "module" : "",
+        "statistic" : {
+          "meanOld" : 2841697.8125,
+          "meanCurrent" : 3.603834525E7,
+          "deviationOld" : 329039.7252490555,
+          "deviationCurrent" : 139073.71196659227,
+          "vms" : 4,
+          "callsOld" : 8,
+          "calls" : 8,
+          "tvalue" : -185.8592519296792
+        },
+        "childs" : [ {
+          "call" : "demo.project.gradle.Callee#innerMethod",
+          "kiekerPattern" : "private void demo.project.gradle.Callee.innerMethod()",
+          "otherKiekerPattern" : "private void demo.project.gradle.Callee.innerMethod()",
+          "module" : "",
+          "statistic" : {
+            "meanOld" : 2724498.0625,
+            "meanCurrent" : 3.59710515625E7,
+            "deviationOld" : 360474.6827174192,
+            "deviationCurrent" : 135620.8846446873,
+            "vms" : 4,
+            "callsOld" : 8,
+            "calls" : 8,
+            "tvalue" : -172.6453070131365
+          },
+          "childs" : [ ],
+          "values" : {
+            "values" : {
+              "0" : [ {
+                "mean" : 3.595965425E7,
+                "variance" : 1.0773454935502494E14,
+                "n" : 2,
+                "max" : 4.1967833E7,
+                "min" : 2.0415114E7,
+                "sum" : 7.19193085E7,
+                "standardDeviation" : 1.0379525487951024E7
+              } ],
+              "1" : [ {
+                "mean" : 3.599803075E7,
+                "variance" : 1.0940153153186625E14,
+                "n" : 2,
+                "max" : 4.1675169E7,
+                "min" : 2.031612E7,
+                "sum" : 7.19960615E7,
+                "standardDeviation" : 1.0459518704599474E7
+              } ],
+              "2" : [ {
+                "mean" : 3.612788125E7,
+                "variance" : 1.1120818003089225E14,
+                "n" : 2,
+                "max" : 4.1972241E7,
+                "min" : 2.0324928E7,
+                "sum" : 7.22557625E7,
+                "standardDeviation" : 1.054552891186081E7
+              } ],
+              "3" : [ {
+                "mean" : 3.579864E7,
+                "variance" : 1.0013786403516333E14,
+                "n" : 2,
+                "max" : 4.1203006E7,
+                "min" : 2.0794982E7,
+                "sum" : 7.159728E7,
+                "standardDeviation" : 1.0006890827582927E7
+              } ]
+            }
+          },
+          "valuesPredecessor" : {
+            "values" : {
+              "0" : [ {
+                "mean" : 2490695.25,
+                "variance" : 7.444981780629167E11,
+                "n" : 2,
+                "max" : 3218205.0,
+                "min" : 1250758.0,
+                "sum" : 4981390.5,
+                "standardDeviation" : 862843.0784696118
+              } ],
+              "1" : [ {
+                "mean" : 2677593.75,
+                "variance" : 5.352254884315833E11,
+                "n" : 2,
+                "max" : 3607655.0,
+                "min" : 1870181.0,
+                "sum" : 5355187.5,
+                "standardDeviation" : 731591.0663967838
+              } ],
+              "2" : [ {
+                "mean" : 2481730.25,
+                "variance" : 7.204119120595833E11,
+                "n" : 2,
+                "max" : 3063873.0,
+                "min" : 1247497.0,
+                "sum" : 4963460.5,
+                "standardDeviation" : 848770.8242273548
+              } ],
+              "3" : [ {
+                "mean" : 3247973.0,
+                "variance" : 2.9982654376886665E12,
+                "n" : 2,
+                "max" : 5670427.0,
+                "min" : 1597655.0,
+                "sum" : 6495946.0,
+                "standardDeviation" : 1731550.010161031
+              } ]
+            }
+          }
+        } ],
+        "values" : {
+          "values" : {
+            "0" : [ {
+              "mean" : 3.601918525E7,
+              "variance" : 1.0639129619817294E14,
+              "n" : 2,
+              "max" : 4.1996078E7,
+              "min" : 2.057224E7,
+              "sum" : 7.20383705E7,
+              "standardDeviation" : 1.0314615659256186E7
+            } ],
+            "1" : [ {
+              "mean" : 3.605032275E7,
+              "variance" : 1.082124493502576E14,
+              "n" : 2,
+              "max" : 4.1697388E7,
+              "min" : 2.0453897E7,
+              "sum" : 7.21006455E7,
+              "standardDeviation" : 1.040252129775554E7
+            } ],
+            "2" : [ {
+              "mean" : 3.621147725E7,
+              "variance" : 1.0962980509024295E14,
+              "n" : 2,
+              "max" : 4.200233E7,
+              "min" : 2.0521297E7,
+              "sum" : 7.24229545E7,
+              "standardDeviation" : 1.0470425258328477E7
+            } ],
+            "3" : [ {
+              "mean" : 3.587239575E7,
+              "variance" : 9.847768020326823E13,
+              "n" : 2,
+              "max" : 4.1247298E7,
+              "min" : 2.09941E7,
+              "sum" : 7.17447915E7,
+              "standardDeviation" : 9923592.101818183
+            } ]
+          }
+        },
+        "valuesPredecessor" : {
+          "values" : {
+            "0" : [ {
+              "mean" : 2537045.25,
+              "variance" : 6.760817048655834E11,
+              "n" : 2,
+              "max" : 3237671.0,
+              "min" : 1361161.0,
+              "sum" : 5074090.5,
+              "standardDeviation" : 822241.8773484986
+            } ],
+            "1" : [ {
+              "mean" : 2721595.0,
+              "variance" : 4.863052090993333E11,
+              "n" : 2,
+              "max" : 3626957.0,
+              "min" : 1985862.0,
+              "sum" : 5443190.0,
+              "standardDeviation" : 697355.8697676053
+            } ],
+            "2" : [ {
+              "mean" : 2801731.5,
+              "variance" : 9.1845013775E10,
+              "n" : 2,
+              "max" : 3080898.0,
+              "min" : 2472025.0,
+              "sum" : 5603463.0,
+              "standardDeviation" : 303059.4228447616
+            } ],
+            "3" : [ {
+              "mean" : 3306419.5,
+              "variance" : 2.867410663382334E12,
+              "n" : 2,
+              "max" : 5689901.0,
+              "min" : 1735067.0,
+              "sum" : 6612839.0,
+              "standardDeviation" : 1693343.0436217978
+            } ]
+          }
+        }
+      } ],
+      "values" : {
+        "values" : {
+          "0" : [ {
+            "mean" : 3.6092518E7,
+            "variance" : 1.0391235040719266E14,
+            "n" : 2,
+            "max" : 4.201717E7,
+            "min" : 2.082771E7,
+            "sum" : 7.2185036E7,
+            "standardDeviation" : 1.0193740746516593E7
+          } ],
+          "1" : [ {
+            "mean" : 3.613795225E7,
+            "variance" : 1.0479582407512161E14,
+            "n" : 2,
+            "max" : 4.1702394E7,
+            "min" : 2.0789958E7,
+            "sum" : 7.22759045E7,
+            "standardDeviation" : 1.0236983153015424E7
+          } ],
+          "2" : [ {
+            "mean" : 3.6307128E7,
+            "variance" : 1.0610925967210267E14,
+            "n" : 2,
+            "max" : 4.2022851E7,
+            "min" : 2.0871841E7,
+            "sum" : 7.2614256E7,
+            "standardDeviation" : 1.030093489311056E7
+          } ],
+          "3" : [ {
+            "mean" : 3.5928435E7,
+            "variance" : 9.646505881087798E13,
+            "n" : 2,
+            "max" : 4.1252705E7,
+            "min" : 2.1203117E7,
+            "sum" : 7.185687E7,
+            "standardDeviation" : 9821662.731476681
+          } ]
+        }
+      },
+      "valuesPredecessor" : {
+        "values" : {
+          "0" : [ {
+            "mean" : 2585894.75,
+            "variance" : 5.464578296569167E11,
+            "n" : 2,
+            "max" : 3242216.0,
+            "min" : 1541410.0,
+            "sum" : 5171789.5,
+            "standardDeviation" : 739227.8604442048
+          } ],
+          "1" : [ {
+            "mean" : 2780111.75,
+            "variance" : 4.0237744312625E11,
+            "n" : 2,
+            "max" : 3631920.0,
+            "min" : 2183331.0,
+            "sum" : 5560223.5,
+            "standardDeviation" : 634332.2813212725
+          } ],
+          "2" : [ {
+            "mean" : 2846766.25,
+            "variance" : 6.268401823358331E10,
+            "n" : 2,
+            "max" : 3085116.0,
+            "min" : 2622392.0,
+            "sum" : 5693532.5,
+            "standardDeviation" : 250367.76596355872
+          } ],
+          "3" : [ {
+            "mean" : 3417397.25,
+            "variance" : 2.525901041439583E12,
+            "n" : 2,
+            "max" : 5716131.0,
+            "min" : 2121556.0,
+            "sum" : 6834794.5,
+            "standardDeviation" : 1589308.353164855
+          } ]
+        }
+      }
+    } ],
+    "values" : {
+      "values" : {
+        "0" : [ {
+          "mean" : 3.649380225E7,
+          "variance" : 8.869423831621825E13,
+          "n" : 2,
+          "max" : 4.2029992E7,
+          "min" : 2.2395109E7,
+          "sum" : 7.29876045E7,
+          "standardDeviation" : 9417761.852808673
+        } ],
+        "1" : [ {
+          "mean" : 3.6652506E7,
+          "variance" : 8.516709749871666E13,
+          "n" : 2,
+          "max" : 4.1712487E7,
+          "min" : 2.2817903E7,
+          "sum" : 7.3305012E7,
+          "standardDeviation" : 9228602.14218365
+        } ],
+        "2" : [ {
+          "mean" : 3.682041025E7,
+          "variance" : 8.647637940952958E13,
+          "n" : 2,
+          "max" : 4.2034466E7,
+          "min" : 2.288934E7,
+          "sum" : 7.36408205E7,
+          "standardDeviation" : 9299267.681356935
+        } ],
+        "3" : [ {
+          "mean" : 3.639821575E7,
+          "variance" : 7.951601865134025E13,
+          "n" : 2,
+          "max" : 4.1264818E7,
+          "min" : 2.3030078E7,
+          "sum" : 7.27964315E7,
+          "standardDeviation" : 8917175.486180602
+        } ]
+      }
+    },
+    "valuesPredecessor" : {
+      "values" : {
+        "0" : [ {
+          "mean" : 3243302.0,
+          "variance" : 4.0811406506266675E11,
+          "n" : 2,
+          "max" : 4126457.0,
+          "min" : 2643107.0,
+          "sum" : 6486604.0,
+          "standardDeviation" : 638838.0585584008
+        } ],
+        "1" : [ {
+          "mean" : 3268247.25,
+          "variance" : 5.548537034802501E11,
+          "n" : 2,
+          "max" : 4103021.0,
+          "min" : 2446496.0,
+          "sum" : 6536494.5,
+          "standardDeviation" : 744885.0270211169
+        } ],
+        "2" : [ {
+          "mean" : 4010151.25,
+          "variance" : 4.749505101180916E12,
+          "n" : 2,
+          "max" : 7264130.0,
+          "min" : 2631354.0,
+          "sum" : 8020302.5,
+          "standardDeviation" : 2179335.931237063
+        } ],
+        "3" : [ {
+          "mean" : 3865103.25,
+          "variance" : 1.7800194157575833E12,
+          "n" : 2,
+          "max" : 5725711.0,
+          "min" : 2689856.0,
+          "sum" : 7730206.5,
+          "standardDeviation" : 1334173.6827555785
+        } ]
+      }
+    }
+  }
+}

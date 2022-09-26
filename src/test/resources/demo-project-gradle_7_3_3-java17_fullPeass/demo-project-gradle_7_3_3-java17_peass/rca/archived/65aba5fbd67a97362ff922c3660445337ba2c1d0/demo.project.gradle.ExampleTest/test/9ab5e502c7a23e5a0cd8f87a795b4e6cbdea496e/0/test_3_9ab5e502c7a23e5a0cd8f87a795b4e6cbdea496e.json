@@ -1,0 +1,47 @@
+{
+  "clazz" : "demo.project.gradle.ExampleTest",
+  "methods" : [ {
+    "method" : "test",
+    "datacollectorResults" : [ {
+      "name" : "de.dagere.kopeme.datacollection.TimeDataCollectorNoGC",
+      "chunks" : [ ],
+      "results" : [ {
+        "value" : 8051056.75,
+        "deviation" : 0.6657537195401629,
+        "min" : 3907694.0,
+        "max" : 1.5508625E7,
+        "warmup" : 0,
+        "iterations" : 4,
+        "repetitions" : 2,
+        "commit" : null,
+        "vmRunConfiguration" : {
+          "showStart" : false,
+          "executeBeforeClassInMeasurement" : false,
+          "redirectToTemp" : false,
+          "redirectToNull" : true,
+          "useKieker" : true
+        },
+        "javaVersion" : "17.0.2",
+        "cpu" : "model name : Intel(R) Core(TM) i7-10850H CPU @ 2.70GHz",
+        "memory" : "MemTotal: 12362808 kB",
+        "date" : 1663771961739,
+        "fulldata" : {
+          "fileName" : null,
+          "values" : [ {
+            "startTime" : 1663771961531,
+            "value" : 15508625
+          }, {
+            "startTime" : 1663771961547,
+            "value" : 8383265
+          }, {
+            "startTime" : 1663771961555,
+            "value" : 3907694
+          }, {
+            "startTime" : 1663771961559,
+            "value" : 4404643
+          } ]
+        }
+      } ]
+    } ]
+  } ]
+}

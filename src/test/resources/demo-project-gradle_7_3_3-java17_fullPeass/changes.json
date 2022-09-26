@@ -1,0 +1,20 @@
+{
+  "commitCount" : 1,
+  "changeCount" : 1,
+  "testcaseCount" : 1,
+  "statisticsConfig" : null,
+  "commitChanges" : {
+    "65aba5fbd67a97362ff922c3660445337ba2c1d0" : {
+      "testcaseChanges" : {
+        "demo.project.gradle.ExampleTest" : [ {
+          "diff" : "view_65aba5fbd67a97362ff922c3660445337ba2c1d0/diffs/ExampleTest#test.txt",
+          "method" : "test",
+          "oldTime" : 1.17970378125E7,
+          "changePercent" : -320.20841195807606,
+          "tvalue" : -29.54674914697777,
+          "vms" : 4
+        } ]
+      }
+    }
+  }
+}

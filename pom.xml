@@ -169,6 +169,13 @@
       <groupId>org.jenkins-ci.plugins.workflow</groupId>
       <artifactId>workflow-support</artifactId>
     </dependency>
+    <dependency>
+      <groupId>de.dagere.peass</groupId>
+      <artifactId>dependency</artifactId>
+      <version>${peass.version}</version>
+      <classifier>tests</classifier>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>

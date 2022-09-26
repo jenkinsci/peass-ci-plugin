@@ -1,0 +1,39 @@
+{
+  "versions" : {
+    "9ab5e502c7a23e5a0cd8f87a795b4e6cbdea496e" : {
+      "properties" : { },
+      "commitText" : "Initial commit ",
+      "committer" : "maw@hbt.de Matti Wilhelmi"
+    },
+    "65aba5fbd67a97362ff922c3660445337ba2c1d0" : {
+      "properties" : {
+        "demo.project.gradle.ExampleTest" : [ {
+          "method" : "test",
+          "addedMap" : {
+            "Thread.sleep" : 1
+          },
+          "removedMap" : {
+            "Thread.sleep" : 1
+          },
+          "oldTime" : 0.0,
+          "changePercent" : 0.0,
+          "calls" : 4,
+          "callsOld" : 4,
+          "affectedClasses" : 1,
+          "affectedLines" : 2,
+          "newLines" : 0,
+          "oldLines" : 0,
+          "diff" : null,
+          "affectsSource" : true,
+          "affectsTestSource" : false,
+          "affectedMethods" : [ "demo.project.gradle.Callee#innerMethod" ],
+          "types" : [ ],
+          "guessedTypes" : [ ],
+          "traceChangeType" : "NO_CALL_CHANGE"
+        } ]
+      },
+      "commitText" : "Increased Thread.sleep to 20ms in Callee ",
+      "committer" : "maw@hbt.de Matti Wilhelmi"
+    }
+  }
+}

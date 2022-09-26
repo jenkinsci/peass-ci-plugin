@@ -1,0 +1,19 @@
+{
+  "statistics" : {
+    "65aba5fbd67a97362ff922c3660445337ba2c1d0" : {
+      "demo.project.gradle.ExampleTest#test" : {
+        "meanOld" : 1.17970378125E7,
+        "meanCurrent" : 4.957214525E7,
+        "deviationOld" : 2053114.8875432583,
+        "deviationCurrent" : 1524081.9748694487,
+        "vms" : 4,
+        "callsOld" : 4,
+        "calls" : 4,
+        "tvalue" : -29.54674914697777,
+        "predecessor" : "9ab5e502c7a23e5a0cd8f87a795b4e6cbdea496e",
+        "isBimodal" : false,
+        "change" : true
+      }
+    }
+  }
+}

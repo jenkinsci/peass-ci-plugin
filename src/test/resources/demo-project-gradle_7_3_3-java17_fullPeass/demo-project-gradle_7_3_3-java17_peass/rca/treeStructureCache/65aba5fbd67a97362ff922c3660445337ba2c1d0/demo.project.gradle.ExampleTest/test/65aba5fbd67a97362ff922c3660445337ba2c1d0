@@ -1,0 +1,25 @@
+{
+  "call" : "demo.project.gradle.ExampleTest#test",
+  "kiekerPattern" : "public void demo.project.gradle.ExampleTest.test()",
+  "otherKiekerPattern" : null,
+  "module" : "",
+  "children" : [ {
+    "call" : "demo.project.gradle.ExampleClass#calleeMethod",
+    "kiekerPattern" : "protected void demo.project.gradle.ExampleClass.calleeMethod()",
+    "otherKiekerPattern" : null,
+    "module" : "",
+    "children" : [ {
+      "call" : "demo.project.gradle.Callee#method1",
+      "kiekerPattern" : "protected void demo.project.gradle.Callee.method1()",
+      "otherKiekerPattern" : null,
+      "module" : "",
+      "children" : [ {
+        "call" : "demo.project.gradle.Callee#innerMethod",
+        "kiekerPattern" : "private void demo.project.gradle.Callee.innerMethod()",
+        "otherKiekerPattern" : null,
+        "module" : "",
+        "children" : [ ]
+      } ]
+    } ]
+  } ]
+}

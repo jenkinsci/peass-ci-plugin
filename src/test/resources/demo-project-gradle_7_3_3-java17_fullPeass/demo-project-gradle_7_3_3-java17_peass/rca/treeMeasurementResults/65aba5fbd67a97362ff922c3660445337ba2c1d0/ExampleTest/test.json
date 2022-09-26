@@ -1,0 +1,139 @@
+{
+  "measurementConfig" : {
+    "vms" : 4,
+    "earlyStop" : false,
+    "warmup" : 2,
+    "iterations" : 2,
+    "repetitions" : 2,
+    "logFullData" : true,
+    "useGC" : false,
+    "callSyncBetweenVMs" : true,
+    "waitTimeBetweenVMs" : 1000,
+    "kiekerConfig" : {
+      "useKieker" : true,
+      "useSourceInstrumentation" : true,
+      "useSelectiveInstrumentation" : true,
+      "useAggregation" : true,
+      "useCircularQueue" : true,
+      "enableAdaptiveMonitoring" : false,
+      "adaptiveInstrumentation" : false,
+      "kiekerAggregationInterval" : 5000,
+      "record" : "DURATION",
+      "onlyOneCallRecording" : false,
+      "extractMethod" : false,
+      "traceSizeInMb" : 100,
+      "kiekerQueueSize" : 10000000,
+      "createDefaultConstructor" : false,
+      "kiekerWaitTime" : 10,
+      "excludeForTracing" : [ "new org.eclipse.jetty.logging.JettyLevel.<init>(..)", "* org.eclipse.jetty.logging.JettyLevel.*(..)", "*[] org.eclipse.jetty.logging.JettyLevel.*(..)", "*.* org.eclipse.jetty.logging.JettyLevel.*(..)", "*.*.* org.eclipse.jetty.logging.JettyLevel.*(..)", "*.*.*.* org.eclipse.jetty.logging.JettyLevel.*(..)", "*.*.*.*.* org.eclipse.jetty.logging.JettyLevel.*(..)", "new org.eclipse.jetty.logging.JettyLoggerConfiguration.<init>(..)", "* org.eclipse.jetty.logging.JettyLoggerConfiguration.*(..)", "*[] org.eclipse.jetty.logging.JettyLoggerConfiguration.*(..)", "*.* org.eclipse.jetty.logging.JettyLoggerConfiguration.*(..)", "*.*.* org.eclipse.jetty.logging.JettyLoggerConfiguration.*(..)", "*.*.*.* org.eclipse.jetty.logging.JettyLoggerConfiguration.*(..)", "*.*.*.*.* org.eclipse.jetty.logging.JettyLoggerConfiguration.*(..)", "new org.eclipse.jetty.logging.JettyLoggingServiceProvider.<init>(..)", "* org.eclipse.jetty.logging.JettyLoggingServiceProvider.*(..)", "*[] org.eclipse.jetty.logging.JettyLoggingServiceProvider.*(..)", "*.* org.eclipse.jetty.logging.JettyLoggingServiceProvider.*(..)", "*.*.* org.eclipse.jetty.logging.JettyLoggingServiceProvider.*(..)", "*.*.*.* org.eclipse.jetty.logging.JettyLoggingServiceProvider.*(..)", "*.*.*.*.* org.eclipse.jetty.logging.JettyLoggingServiceProvider.*(..)", "new org.eclipse.jetty.logging.JettyLoggerFactory.<init>(..)", "* org.eclipse.jetty.logging.JettyLoggerFactory.*(..)", "*[] org.eclipse.jetty.logging.JettyLoggerFactory.*(..)", "*.* org.eclipse.jetty.logging.JettyLoggerFactory.*(..)", "*.*.* org.eclipse.jetty.logging.JettyLoggerFactory.*(..)", "*.*.*.* org.eclipse.jetty.logging.JettyLoggerFactory.*(..)", "*.*.*.*.* org.eclipse.jetty.logging.JettyLoggerFactory.*(..)", "new org.eclipse.jetty.logging.StdErrAppender.<init>(..)", "* org.eclipse.jetty.logging.StdErrAppender.*(..)", "*[] org.eclipse.jetty.logging.StdErrAppender.*(..)", "*.* org.eclipse.jetty.logging.StdErrAppender.*(..)", "*.*.* org.eclipse.jetty.logging.StdErrAppender.*(..)", "*.*.*.* org.eclipse.jetty.logging.StdErrAppender.*(..)", "*.*.*.*.* org.eclipse.jetty.logging.StdErrAppender.*(..)", "new org.eclipse.jetty.logging.Timestamp.<init>(..)", "* org.eclipse.jetty.logging.Timestamp.*(..)", "*[] org.eclipse.jetty.logging.Timestamp.*(..)", "*.* org.eclipse.jetty.logging.Timestamp.*(..)", "*.*.* org.eclipse.jetty.logging.Timestamp.*(..)", "*.*.*.* org.eclipse.jetty.logging.Timestamp.*(..)", "*.*.*.*.* org.eclipse.jetty.logging.Timestamp.*(..)", "new org.eclipse.jetty.logging.Timestamp$Tick.<init>(..)", "* org.eclipse.jetty.logging.Timestamp$Tick.*(..)", "*[] org.eclipse.jetty.logging.Timestamp$Tick.*(..)", "*.* org.eclipse.jetty.logging.Timestamp$Tick.*(..)", "*.*.* org.eclipse.jetty.logging.Timestamp$Tick.*(..)", "*.*.*.* org.eclipse.jetty.logging.Timestamp$Tick.*(..)", "*.*.*.*.* org.eclipse.jetty.logging.Timestamp$Tick.*(..)", "new org.eclipse.jetty.logging.JettyLogger.<init>(..)", "* org.eclipse.jetty.logging.JettyLogger.*(..)", "*[] org.eclipse.jetty.logging.JettyLogger.*(..)", "*.* org.eclipse.jetty.logging.JettyLogger.*(..)", "*.*.* org.eclipse.jetty.logging.JettyLogger.*(..)", "*.*.*.* org.eclipse.jetty.logging.JettyLogger.*(..)", "*.*.*.*.* org.eclipse.jetty.logging.JettyLogger.*(..)" ]
+    },
+    "saveAll" : true,
+    "javaVersion" : "11.0.16",
+    "measurementStrategy" : "SEQUENTIAL",
+    "statisticsConfig" : {
+      "type1error" : 0.01,
+      "type2error" : 0.01,
+      "outlierFactor" : 3.29,
+      "statisticTest" : "T_TEST"
+    },
+    "executionConfig" : {
+      "includes" : [ "demo.project.gradle.ExampleTest#test" ],
+      "testGoal" : "test",
+      "timeout" : 300000,
+      "redirectSubprocessOutputToFile" : true,
+      "useTieredCompilation" : false,
+      "removeSnapshots" : false,
+      "useAlternativeBuildfile" : false,
+      "excludeLog4jSlf4jImpl" : false,
+      "excludeLog4jToSlf4j" : false,
+      "executeBeforeClassInMeasurement" : false,
+      "onlyMeasureWorkload" : false,
+      "showStart" : false,
+      "redirectToNull" : true,
+      "createDetailDebugFiles" : true
+    },
+    "fixedCommitConfig" : {
+      "commit" : "65aba5fbd67a97362ff922c3660445337ba2c1d0",
+      "commitOld" : "9ab5e502c7a23e5a0cd8f87a795b4e6cbdea496e"
+    }
+  },
+  "causeConfig" : {
+    "splitAggregated" : true,
+    "minTime" : 0.01,
+    "ignoreEOIs" : true,
+    "rcaStrategy" : "UNTIL_SOURCE_CHANGE",
+    "levels" : 1,
+    "testCase" : {
+      "clazz" : "demo.project.gradle.ExampleTest",
+      "method" : "test",
+      "module" : "",
+      "params" : null
+    },
+    "propertyFolder" : "/home/maw/Schreibtisch/workspace/mawHBT/peass-ci-plugin/work/workspace/demo-project-gradle_7_3_3-java17/demo-project-gradle_7_3_3-java17/../demo-project-gradle_7_3_3-java17_fullPeass/properties_demo-project-gradle_7_3_3-java17"
+  },
+  "nodes" : {
+    "call" : "demo.project.gradle.ExampleTest#test",
+    "kiekerPattern" : "public void demo.project.gradle.ExampleTest.test()",
+    "otherKiekerPattern" : "public void demo.project.gradle.ExampleTest.test()",
+    "module" : "",
+    "statistic" : {
+      "meanOld" : 3596700.9375,
+      "meanCurrent" : 3.65912335625E7,
+      "deviationOld" : 398226.7344617351,
+      "deviationCurrent" : 185315.04911764257,
+      "vms" : 4,
+      "callsOld" : 8,
+      "calls" : 8,
+      "tvalue" : -150.23681637254668
+    },
+    "childs" : [ {
+      "call" : "demo.project.gradle.ExampleClass#calleeMethod",
+      "kiekerPattern" : "protected void demo.project.gradle.ExampleClass.calleeMethod()",
+      "otherKiekerPattern" : "protected void demo.project.gradle.ExampleClass.calleeMethod()",
+      "module" : "",
+      "statistic" : {
+        "meanOld" : 2907542.5,
+        "meanCurrent" : 3.61165083125E7,
+        "deviationOld" : 357463.9794381387,
+        "deviationCurrent" : 155716.42354685534,
+        "vms" : 4,
+        "callsOld" : 8,
+        "calls" : 8,
+        "tvalue" : -170.34265468384754
+      },
+      "childs" : [ {
+        "call" : "demo.project.gradle.Callee#method1",
+        "kiekerPattern" : "protected void demo.project.gradle.Callee.method1()",
+        "otherKiekerPattern" : "protected void demo.project.gradle.Callee.method1()",
+        "module" : "",
+        "statistic" : {
+          "meanOld" : 2841697.8125,
+          "meanCurrent" : 3.603834525E7,
+          "deviationOld" : 329039.7252490555,
+          "deviationCurrent" : 139073.71196659227,
+          "vms" : 4,
+          "callsOld" : 8,
+          "calls" : 8,
+          "tvalue" : -185.8592519296792
+        },
+        "childs" : [ {
+          "call" : "demo.project.gradle.Callee#innerMethod",
+          "kiekerPattern" : "private void demo.project.gradle.Callee.innerMethod()",
+          "otherKiekerPattern" : "private void demo.project.gradle.Callee.innerMethod()",
+          "module" : "",
+          "statistic" : {
+            "meanOld" : 2724498.0625,
+            "meanCurrent" : 3.59710515625E7,
+            "deviationOld" : 360474.6827174192,
+            "deviationCurrent" : 135620.8846446873,
+            "vms" : 4,
+            "callsOld" : 8,
+            "calls" : 8,
+            "tvalue" : -172.6453070131365
+          },
+          "childs" : [ ]
+        } ]
+      } ]
+    } ]
+  }
+}
