@@ -100,12 +100,7 @@ public class OneJobImporter {
             
             LOG.debug("Importing {}, Changes: {}", commit, (changes != null ? changes.getTestcaseChanges().size() : null));
             
-            copiedSelection.addCall(commit, commitSelection.getValue());
-            CommitStaticSelection commitStaticSelection = staticSelection.getCommits().get(commit);
-            copiedStaticSelection.getCommits().put(commit, commitStaticSelection);
-
-            Constants.OBJECTMAPPER.writeValue(new File(fullPeassFolder, "traceTestSelection_" + projectName + ".json"), copiedSelection);
-            Constants.OBJECTMAPPER.writeValue(new File(fullPeassFolder, "staticTestSelection_" + projectName + ".json"), copiedStaticSelection);
+            prepareRTS(copiedStaticSelection, copiedSelection, commitSelection, commit);
             if (changes != null && !changes.getTestcaseChanges().isEmpty()) {
                prepareData(commit, predecessor);
 
@@ -117,6 +112,16 @@ public class OneJobImporter {
       }
       
       triggerBuild(projectName);
+   }
+
+   private void prepareRTS(StaticTestSelection copiedStaticSelection, ExecutionData copiedSelection, Entry<String, TestSet> commitSelection, String commit)
+         throws IOException, StreamWriteException, DatabindException {
+      copiedSelection.addCall(commit, commitSelection.getValue());
+      CommitStaticSelection commitStaticSelection = staticSelection.getCommits().get(commit);
+      copiedStaticSelection.getCommits().put(commit, commitStaticSelection);
+
+      Constants.OBJECTMAPPER.writeValue(new File(fullPeassFolder, "traceTestSelection_" + projectName + ".json"), copiedSelection);
+      Constants.OBJECTMAPPER.writeValue(new File(fullPeassFolder, "staticTestSelection_" + projectName + ".json"), copiedStaticSelection);
    }
 
    private void prepareData(String commit, String predecessor)
