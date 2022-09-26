@@ -86,6 +86,7 @@ When looking at this, you can see the histogram of the averages of you VM runs a
 
 # Known Problems
 - Peass only works if you use the latest version of JUnit, i.e. 4.13.x or 5.9.x, or JMH, i.e. 1.35. If you import an older version of JUnit (or it is imported by plugins you use, e.g. spring boot), please update your JUnit dependency. It is currently not possible to maintain and check the compatibility with older versions of the testing / benchmarking tools. 
+- Gradle creates logs that might become huge (https://github.com/gradle/gradle/issues/2688). Gradle itself does not provide a solution for this. Peass might trigger this problem extensively, since it calls Gradle builds very often (only if you use Gradle as your build system, for sure). To overcome this, you might want to regularly call something like `find ~/.gradle/daemon/ -name "*.out.log" -exec rm {} \;`
 
 # Development
 
