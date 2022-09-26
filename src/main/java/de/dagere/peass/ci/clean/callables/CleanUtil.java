@@ -12,11 +12,11 @@ public class CleanUtil {
       File projectFolder = new File(folder, projectName);
       if (projectFolder.exists()) {
          try {
-            PeassFolders folders = new PeassFolders(projectFolder);
-            FileUtils.deleteDirectory(folders.getProjectFolder());
-            if (folders.getPeassFolder().exists()) {
-               System.out.println("Deleting " + folders.getPeassFolder().getAbsolutePath());
-               FileUtils.deleteDirectory(folders.getPeassFolder());
+            PeassFolders peassFolders = new PeassFolders(projectFolder);
+            FileUtils.deleteDirectory(peassFolders.getProjectFolder());
+            if (peassFolders.getPeassFolder().exists()) {
+               System.out.println("Deleting " + peassFolders.getPeassFolder().getAbsolutePath());
+               FileUtils.deleteDirectory(peassFolders.getPeassFolder());
             }
          } catch (RuntimeException e) {
             System.err.println("For some reason, folder was already cleaned partially; consider fully cleaning manually");
