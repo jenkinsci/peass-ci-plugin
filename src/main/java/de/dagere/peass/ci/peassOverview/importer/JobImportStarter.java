@@ -19,6 +19,9 @@ public class JobImportStarter implements Callable<Void> {
    
    @Option(names = { "-authentication", "--authentication" }, description = "Authentication, e.g. myUser:012312 (password should be encrypted)", required = false)
    protected String authentication;
+   
+   @Option(names = { "-timeout", "--timeout" }, description = "Timeout in seconds, default: 10", required = false)
+   protected int timeout = 10;
 
    public static void main(String[] args) {
       final CommandLine commandLine = new CommandLine(new JobImportStarter());
@@ -27,7 +30,7 @@ public class JobImportStarter implements Callable<Void> {
 
    @Override
    public Void call() throws Exception {
-      OneJobImporter oneJobImporter = new OneJobImporter(projectResultsFolder, workspaceFolder, url, authentication);
+      OneJobImporter oneJobImporter = new OneJobImporter(projectResultsFolder, workspaceFolder, url, authentication, timeout);
       oneJobImporter.startImport();
       return null;
    }

@@ -28,7 +28,6 @@ import de.dagere.kopeme.kopemedata.VMResult;
 import de.dagere.kopeme.kopemedata.VMResultChunk;
 import de.dagere.peass.analysis.changes.Changes;
 import de.dagere.peass.analysis.changes.ProjectChanges;
-import de.dagere.peass.ci.rca.RCAExecutor;
 import de.dagere.peass.dependency.analysis.data.TestSet;
 import de.dagere.peass.dependency.persistence.CommitStaticSelection;
 import de.dagere.peass.dependency.persistence.ExecutionData;
@@ -53,19 +52,22 @@ public class OneJobImporter {
 
    private final String projectName;
 
+   private final int timeout;
+
    private final String url;
    private final String authentication;
 
    private final CommitList commits = new CommitList();
 
-   public OneJobImporter(File projectResultsFolder, File workspaceFolder, String url, String authentication) throws StreamReadException, DatabindException, IOException {
+   public OneJobImporter(File projectResultsFolder, File workspaceFolder, String url, String authentication, int timeout)
+         throws StreamReadException, DatabindException, IOException {
       this.projectResultsFolder = projectResultsFolder;
       this.workspaceFolder = workspaceFolder;
       this.url = url;
       this.authentication = authentication;
+      this.timeout = timeout;
       fullPeassFolder = new File(workspaceFolder.getParentFile(), workspaceFolder.getName() + "_fullPeass");
-      
-      
+
       projectName = projectResultsFolder.getName();
 
       File staticSelectionFile = new File(projectResultsFolder, "results/staticTestSelection_" + projectName + ".json");
@@ -116,7 +118,7 @@ public class OneJobImporter {
 
                triggerBuild(projectName);
 
-               Thread.sleep(10000);
+               Thread.sleep(timeout * 1000);
             }
          }
       }
@@ -132,7 +134,7 @@ public class OneJobImporter {
 
       Constants.OBJECTMAPPER.writeValue(new File(fullPeassFolder, "traceTestSelection_" + projectName + ".json"), copiedSelection);
       Constants.OBJECTMAPPER.writeValue(new File(fullPeassFolder, "staticTestSelection_" + projectName + ".json"), copiedStaticSelection);
-      
+
       File commitTraceFolder = new File(traceFolder, "view_" + commit);
       File commitFullPeassTraceFolder = new File(fullPeassTraceFolder, "view_" + commit);
       if (!commitFullPeassTraceFolder.exists() && commitTraceFolder.exists()) {
