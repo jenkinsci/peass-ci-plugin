@@ -172,7 +172,7 @@
     <dependency>
       <groupId>de.dagere.peass</groupId>
       <artifactId>dependency</artifactId>
-      <version>0.2.3-SNAPSHOT</version>
+      <version>${peass.version}</version>
       <classifier>tests</classifier>
       <scope>test</scope>
     </dependency>
@@ -195,17 +195,6 @@
         <configuration>
           <excludeFilterFile>spotbugs-exclude.xml</excludeFilterFile>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <executions>
-          <execution>
-            <goals>
-              <goal>test-jar</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>
