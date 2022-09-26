@@ -59,16 +59,15 @@ public class OneJobImporter {
 
    private final CommitList commits = new CommitList();
 
-   public OneJobImporter(File projectResultsFolder, File workspaceFolder, String url, String authentication, int timeout)
+   public OneJobImporter(File projectResultsFolder, File workspaceFolder, String url, String authentication, String projectName, int timeout)
          throws StreamReadException, DatabindException, IOException {
       this.projectResultsFolder = projectResultsFolder;
       this.workspaceFolder = workspaceFolder;
       this.url = url;
       this.authentication = authentication;
       this.timeout = timeout;
+      this.projectName = projectName;
       fullPeassFolder = new File(workspaceFolder.getParentFile(), workspaceFolder.getName() + "_fullPeass");
-
-      projectName = projectResultsFolder.getName();
 
       File staticSelectionFile = new File(projectResultsFolder, "results/staticTestSelection_" + projectName + ".json");
       File executionFile = new File(projectResultsFolder, "results/traceTestSelection_" + projectName + ".json");
