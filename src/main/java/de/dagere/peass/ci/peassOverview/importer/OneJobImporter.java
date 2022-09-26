@@ -75,7 +75,9 @@ public class OneJobImporter {
          throw new RuntimeException("Folder that should contain traces " + traceFolder + " did not exist");
       }
       fullPeassTraceFolder = new File(fullPeassFolder, "views_" + projectName);
-      fullPeassFolder.mkdirs();
+      if (!fullPeassFolder.mkdirs()) {
+         LOG.debug("Folder already existing");
+      }
 
       staticSelection = Constants.OBJECTMAPPER.readValue(staticSelectionFile, StaticTestSelection.class);
       executionData = Constants.OBJECTMAPPER.readValue(executionFile, ExecutionData.class);
