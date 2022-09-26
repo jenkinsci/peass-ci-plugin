@@ -39,9 +39,9 @@ import de.dagere.peass.vcs.GitCommit;
 import de.dagere.peass.vcs.GitUtils;
 
 public class OneJobImporter {
-   
+
    private static final Logger LOG = LogManager.getLogger(OneJobImporter.class);
-   
+
    private final StaticTestSelection staticSelection;
    private final ExecutionData executionData;
    private final ProjectChanges projectChanges;
@@ -49,6 +49,7 @@ public class OneJobImporter {
    private final File workspaceFolder;
    private final File projectResultsFolder;
    private final File fullPeassFolder;
+   private final File traceFolder, fullPeassTraceFolder;
 
    private final String projectName;
 
@@ -63,11 +64,18 @@ public class OneJobImporter {
       this.url = url;
       this.authentication = authentication;
       fullPeassFolder = new File(workspaceFolder.getParentFile(), workspaceFolder.getName() + "_fullPeass");
-
+      
+      
       projectName = projectResultsFolder.getName();
 
       File staticSelectionFile = new File(projectResultsFolder, "results/staticTestSelection_" + projectName + ".json");
       File executionFile = new File(projectResultsFolder, "results/traceTestSelection_" + projectName + ".json");
+      traceFolder = new File(projectResultsFolder, "results/views_" + projectName);
+      if (!traceFolder.exists()) {
+         throw new RuntimeException("Folder that should contain traces " + traceFolder + " did not exist");
+      }
+      fullPeassTraceFolder = new File(fullPeassFolder, "views_" + projectName);
+      fullPeassFolder.mkdirs();
 
       staticSelection = Constants.OBJECTMAPPER.readValue(staticSelectionFile, StaticTestSelection.class);
       executionData = Constants.OBJECTMAPPER.readValue(executionFile, ExecutionData.class);
@@ -89,17 +97,17 @@ public class OneJobImporter {
       copiedStaticSelection.setInitialcommit(staticSelection.getInitialcommit());
       ExecutionData copiedSelection = new ExecutionData();
 
-      LOG.info("Importing " + executionData.getCommits().size() +  " commits");
-      
+      LOG.info("Importing " + executionData.getCommits().size() + " commits");
+
       for (Entry<String, TestSet> commitSelection : executionData.getCommits().entrySet()) {
          String commit = commitSelection.getKey();
          if (!commit.equals(staticSelection.getInitialcommit().getCommit())) {
             String predecessor = commitSelection.getValue().getPredecessor();
-            
+
             Changes changes = projectChanges.getCommitChanges(commit);
-            
+
             LOG.debug("Importing {}, Changes: {}", commit, (changes != null ? changes.getTestcaseChanges().size() : null));
-            
+
             prepareRTS(copiedStaticSelection, copiedSelection, commitSelection, commit);
             if (changes != null && !changes.getTestcaseChanges().isEmpty()) {
                prepareData(commit, predecessor);
@@ -110,7 +118,7 @@ public class OneJobImporter {
             }
          }
       }
-      
+
       triggerBuild(projectName);
    }
 
@@ -122,6 +130,12 @@ public class OneJobImporter {
 
       Constants.OBJECTMAPPER.writeValue(new File(fullPeassFolder, "traceTestSelection_" + projectName + ".json"), copiedSelection);
       Constants.OBJECTMAPPER.writeValue(new File(fullPeassFolder, "staticTestSelection_" + projectName + ".json"), copiedStaticSelection);
+      
+      File commitFullPeassTraceFolder = new File(fullPeassTraceFolder, "view_" + commit);
+      if (!commitFullPeassTraceFolder.exists()) {
+         File commitTraceFolder = new File(traceFolder, "view_" + commit);
+         FileUtils.copyDirectory(commitTraceFolder, commitFullPeassTraceFolder);
+      }
    }
 
    private void prepareData(String commit, String predecessor)
@@ -137,7 +151,6 @@ public class OneJobImporter {
 
       importMeasurementFolder(commit, predecessor, fakeMeasurementFolder);
 
-     
    }
 
    private void importRCAData(String commit) throws IOException {
@@ -186,17 +199,17 @@ public class OneJobImporter {
    private void triggerBuild(String projectName) throws MalformedURLException, IOException, UnsupportedEncodingException {
       URL urlObject = new URL(url);
       URLConnection uc = urlObject.openConnection();
-      
+
       if (authentication != null) {
          String userpass = authentication;
          String basicAuth = "Basic " + new String(Base64.getEncoder().encode(userpass.getBytes("UTF-8")), "UTF-8");
-         
+
          uc.setRequestProperty("Authorization", basicAuth);
       }
-      
+
       try (BufferedReader reader = new BufferedReader(new InputStreamReader(uc.getInputStream(), "UTF-8"))) {
          for (String line; (line = reader.readLine()) != null;) {
-            
+
             System.out.println(line);
          }
       }
