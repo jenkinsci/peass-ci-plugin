@@ -19,6 +19,7 @@ import de.dagere.peass.analysis.changes.Change;
 import de.dagere.peass.analysis.changes.Changes;
 import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.ci.NonIncludedTestRemover;
+import de.dagere.peass.config.FixedCommitConfig;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.ChangedEntity;
 import de.dagere.peass.dependency.analysis.data.TestCase;
@@ -100,6 +101,7 @@ public class RCAExecutor {
 
    private boolean checkNeedsRCA(final Changes commitChanges) throws IOException, JsonParseException, JsonMappingException {
       boolean needsRCA = false;
+      FixedCommitConfig commitConfig = config.getFixedCommitConfig();
       for (Entry<String, List<Change>> testcases : commitChanges.getTestcaseChanges().entrySet()) {
          for (Change change : testcases.getValue()) {
             final TestMethodCall testCase = TestMethodCall.createFromClassString(testcases.getKey(), change.getMethod());
@@ -108,14 +110,17 @@ public class RCAExecutor {
                final File expectedResultFile = getExpectedRCAFile(testCase);
                if (!expectedResultFile.exists()) {
                   needsRCA = true;
+                  LOG.debug("Did not find commit {} vs {} of testcase {}", commitConfig.getCommit(), commitConfig.getCommitOld(), testCase);
                } else {
                   CauseSearchData lastData = Constants.OBJECTMAPPER.readValue(expectedResultFile, CauseSearchData.class);
-                  if (lastData.getMeasurementConfig().getFixedCommitConfig().getCommit().equals(config.getFixedCommitConfig().getCommit())
-                        && lastData.getMeasurementConfig().getFixedCommitConfig().getCommitOld().equals(config.getFixedCommitConfig().getCommitOld())) {
-                     LOG.debug("Found commit {} vs {} of testcase {}", config.getFixedCommitConfig().getCommit(), config.getFixedCommitConfig().getCommitOld(), testCase);
+                  String commitInData = lastData.getMeasurementConfig().getFixedCommitConfig().getCommit();
+                  String commitOldInData = lastData.getMeasurementConfig().getFixedCommitConfig().getCommitOld();
+                  if (commitInData.equals(commitConfig.getCommit())
+                        && commitOldInData.equals(commitConfig.getCommitOld())) {
+                     LOG.debug("Found commit {} vs {} of testcase {}", commitConfig.getCommit(), commitConfig.getCommitOld(), testCase);
                      LOG.debug("RCA-file: {}", expectedResultFile.getAbsolutePath());
                   } else {
-                     LOG.debug("Did not find commit {} vs {} of testcase {}", config.getFixedCommitConfig().getCommit(), config.getFixedCommitConfig().getCommitOld(), testCase);
+                     LOG.debug("Did not find commit {} vs {} of testcase {}", commitConfig.getCommit(), commitConfig.getCommitOld(), testCase);
                      needsRCA = true;
                   }
                }
