@@ -172,7 +172,7 @@ public class OneJobImporter {
             if (folderCandidate.isDirectory()) {
                File treeMeasurementResultCandidate = new File(folderCandidate, "treeMeasurementResults/" + commit);
                if (treeMeasurementResultCandidate.exists()) {
-                  importRCACommitFolder(jobCommitFolder, rcaCommitFolder);
+                  importRCACommitFolder(jobCommitFolder, treeMeasurementResultCandidate);
                }
             }
          }
