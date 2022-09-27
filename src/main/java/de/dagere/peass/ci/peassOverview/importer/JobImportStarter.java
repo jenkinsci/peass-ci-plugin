@@ -25,7 +25,7 @@ public class JobImportStarter implements Callable<Void> {
    protected String authentication;
 
    @Option(names = { "-timeout", "--timeout" }, description = "Timeout in seconds, default: 10", required = false)
-   protected int timeout = 10;
+   protected int timeout = 25;
 
    public static void main(String[] args) {
       final CommandLine commandLine = new CommandLine(new JobImportStarter());
