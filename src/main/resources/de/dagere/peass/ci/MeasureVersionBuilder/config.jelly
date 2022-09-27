@@ -137,7 +137,7 @@
           </f:entry>
         </td>
         <td>
-          <f:entry title="${%versionDiff}" field="versionDiff" description="${%versionDiffDescr}">
+          <f:entry title="${%commitDiff}" field="commitDiff" description="${%commitDiffDescr}">
             <f:textbox default="1" />
           </f:entry>
         </td>

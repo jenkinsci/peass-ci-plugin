@@ -20,7 +20,7 @@ public class MeasureVersionBuilderConfigCreationTest {
    @Test
    public void testConfigCreation() throws JsonParseException, JsonMappingException, IOException {
       MeasureVersionBuilder builder = new MeasureVersionBuilder();
-      builder.setVersionDiff(3);
+      builder.setCommitDiff(3);
       builder.setNightlyBuild(false);
 
       MeasurementConfig measurementConfig = builder.getMeasurementConfig();
@@ -32,7 +32,7 @@ public class MeasureVersionBuilderConfigCreationTest {
    public void testConfigCreationNightlyAndVersionDiff() throws JsonParseException, JsonMappingException, IOException {
       MeasureVersionBuilder builder = new MeasureVersionBuilder();
       builder.setNightlyBuild(true);
-      builder.setVersionDiff(2);
+      builder.setCommitDiff(2);
 
       Assertions.assertThrows(RuntimeException.class, () -> {
          MeasurementConfig measurementConfig = builder.getMeasurementConfig();

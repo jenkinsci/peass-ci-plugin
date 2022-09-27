@@ -97,7 +97,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private boolean showStart = false;
 
    private boolean nightlyBuild = true;
-   private int versionDiff = 1;
+   private int commitDiff = 1;
    private int traceSizeInMb = 100;
    private int importLogSizeInMb = 100;
 
@@ -351,10 +351,10 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          throw new RuntimeException("Aggregation may only be used with source instrumentation currently.");
       }
 
-      if (versionDiff <= 0) {
-         throw new RuntimeException("The version difference should be at least 1, but was " + versionDiff);
+      if (commitDiff <= 0) {
+         throw new RuntimeException("The version difference should be at least 1, but was " + commitDiff);
       }
-      if (nightlyBuild && versionDiff != 1) {
+      if (nightlyBuild && commitDiff != 1) {
          throw new RuntimeException("If nightly build is set, do not set versionDiff! nightlyBuild will automatically select the last tested version.");
       }
 
@@ -455,7 +455,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       if (nightlyBuild) {
          oldVersion = null;
       } else {
-         oldVersion = "HEAD~" + versionDiff;
+         oldVersion = "HEAD~" + commitDiff;
       }
       return oldVersion;
    }
@@ -537,13 +537,13 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       this.nightlyBuild = nightlyBuild;
    }
 
-   public int getVersionDiff() {
-      return versionDiff;
+   public int getCommitDiff() {
+      return commitDiff;
    }
 
    @DataBoundSetter
-   public void setVersionDiff(final int versionDiff) {
-      this.versionDiff = versionDiff;
+   public void setCommitDiff(int commitDiff) {
+      this.commitDiff = commitDiff;
    }
 
    public int getTraceSizeInMb() {
