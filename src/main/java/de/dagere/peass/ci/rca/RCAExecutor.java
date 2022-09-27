@@ -112,10 +112,10 @@ public class RCAExecutor {
                   CauseSearchData lastData = Constants.OBJECTMAPPER.readValue(expectedResultFile, CauseSearchData.class);
                   if (lastData.getMeasurementConfig().getFixedCommitConfig().getCommit().equals(config.getFixedCommitConfig().getCommit())
                         && lastData.getMeasurementConfig().getFixedCommitConfig().getCommitOld().equals(config.getFixedCommitConfig().getCommitOld())) {
-                     LOG.debug("Found version {} vs {} of testcase {}", config.getFixedCommitConfig().getCommit(), config.getFixedCommitConfig().getCommitOld(), testCase);
+                     LOG.debug("Found commit {} vs {} of testcase {}", config.getFixedCommitConfig().getCommit(), config.getFixedCommitConfig().getCommitOld(), testCase);
                      LOG.debug("RCA-file: {}", expectedResultFile.getAbsolutePath());
                   } else {
-                     LOG.debug("Did not find version {} vs {} of testcase {}", config.getFixedCommitConfig().getCommit(), config.getFixedCommitConfig().getCommitOld(), testCase);
+                     LOG.debug("Did not find commit {} vs {} of testcase {}", config.getFixedCommitConfig().getCommit(), config.getFixedCommitConfig().getCommitOld(), testCase);
                      needsRCA = true;
                   }
                }
