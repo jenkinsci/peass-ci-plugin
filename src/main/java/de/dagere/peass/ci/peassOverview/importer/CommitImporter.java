@@ -83,6 +83,11 @@ public class CommitImporter {
             FileUtils.copyDirectory(clazzFolder, jobClazzFolder);
          }
       }
+      
+      File parentFile = new File(fullPeassFolder, "rcaLogs");
+      System.out.println("RCA log folder creation: " + parentFile.mkdirs());
+      
+      FileUtils.touch(new File(parentFile, commit + "_" + predecessor + ".txt"));
    }
 
    private void importMeasurementFolder(File fakeMeasurementFolder)
