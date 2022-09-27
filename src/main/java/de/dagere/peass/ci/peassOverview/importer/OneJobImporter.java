@@ -2,6 +2,7 @@ package de.dagere.peass.ci.peassOverview.importer;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -14,6 +15,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -173,7 +175,20 @@ public class OneJobImporter {
 
    private void importMeasurementFolder(String commit, String predecessor, File fakeMeasurementFolder)
          throws IOException, StreamReadException, DatabindException, StreamWriteException {
-      File measurementsFullFolder = new File(projectResultsFolder, "measurement-results/measurementsFull");
+      File measurementResultFolder = new File(projectResultsFolder, "measurement-results");
+      File measurementsFullFolder = new File(measurementResultFolder, "measurementsFull");
+      if (measurementsFullFolder.exists()) {
+         copyCommitData(commit, predecessor, fakeMeasurementFolder, measurementsFullFolder);
+      } else {
+         for (File chunkFolder : measurementResultFolder.listFiles((FilenameFilter) new WildcardFileFilter("chunk*") )) {
+            File chunkMeasurementsFullFolder = new File(chunkFolder, "measurementsFull");
+            copyCommitData(commit, predecessor, fakeMeasurementFolder, chunkMeasurementsFullFolder);
+         }
+      }
+   }
+
+   private void copyCommitData(String commit, String predecessor, File fakeMeasurementFolder, File measurementsFullFolder)
+         throws IOException, StreamReadException, DatabindException, StreamWriteException {
       File[] jsonFiles = measurementsFullFolder.listFiles();
       if (jsonFiles != null) {
          for (File jsonFile : jsonFiles) {
