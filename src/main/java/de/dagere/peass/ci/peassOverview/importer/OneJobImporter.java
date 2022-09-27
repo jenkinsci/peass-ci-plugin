@@ -168,11 +168,14 @@ public class OneJobImporter {
       if (rcaCommitFolder.exists()) {
          importRCACommitFolder(jobCommitFolder, rcaCommitFolder);
       } else {
-         for (File folderCandidate : rcaContentFolder.listFiles()) {
-            if (folderCandidate.isDirectory()) {
-               File treeMeasurementResultCandidate = new File(folderCandidate, "treeMeasurementResults/" + commit);
-               if (treeMeasurementResultCandidate.exists()) {
-                  importRCACommitFolder(jobCommitFolder, treeMeasurementResultCandidate);
+         File[] rcaFolders = rcaContentFolder.listFiles();
+         if (rcaFolders != null) {
+            for (File folderCandidate : rcaFolders) {
+               if (folderCandidate.isDirectory()) {
+                  File treeMeasurementResultCandidate = new File(folderCandidate, "treeMeasurementResults/" + commit);
+                  if (treeMeasurementResultCandidate.exists()) {
+                     importRCACommitFolder(jobCommitFolder, treeMeasurementResultCandidate);
+                  }
                }
             }
          }
