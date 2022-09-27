@@ -115,17 +115,17 @@ public class PeassOverviewAction extends VisibleAction {
    }
    
    public String getRCAUrl(String project, String commit, String testcase) {
-//      System.out.println("Getting url: " + project + " " + commit + " " + testcase);
-      
       RCAMapping rcaMapping = projectRCAMappings.get(project);
       if (rcaMapping != null) {
          System.out.println("Mapping detected");
          CommitRCAURLs commitMapping = rcaMapping.getCommits().get(commit);
-         TestMethodCall testMethod = TestMethodCall.createFromString(testcase);
-         System.out.println("Method: " + testMethod);
-         String url = commitMapping.getExecutionURLs().get(testMethod);
-         System.out.println("URL: " + url);
-         return url;
+         if (commitMapping != null) {
+            TestMethodCall testMethod = TestMethodCall.createFromString(testcase);
+            System.out.println("Method: " + testMethod);
+            String url = commitMapping.getExecutionURLs().get(testMethod);
+            System.out.println("URL: " + url);
+            return url;
+         }
       }
       return null;
    }

@@ -163,7 +163,23 @@ public class OneJobImporter {
       if (!jobCommitFolder.mkdirs() && !jobCommitFolder.exists()) {
          throw new RuntimeException("Could not create " + jobCommitFolder);
       }
-      File rcaCommitFolder = new File(projectResultsFolder, "rca-results/treeMeasurementResults/" + commit);
+      File rcaContentFolder = new File(projectResultsFolder, "rca-results");
+      File rcaCommitFolder = new File(rcaContentFolder, "treeMeasurementResults/" + commit);
+      if (rcaCommitFolder.exists()) {
+         importRCACommitFolder(jobCommitFolder, rcaCommitFolder);
+      } else {
+         for (File folderCandidate : rcaContentFolder.listFiles()) {
+            if (folderCandidate.isDirectory()) {
+               File treeMeasurementResultCandidate = new File(folderCandidate, "treeMeasurementResults/" + commit);
+               if (treeMeasurementResultCandidate.exists()) {
+                  importRCACommitFolder(jobCommitFolder, rcaCommitFolder);
+               }
+            }
+         }
+      }
+   }
+
+   private void importRCACommitFolder(File jobCommitFolder, File rcaCommitFolder) throws IOException {
       File[] clazzFolders = rcaCommitFolder.listFiles();
       if (clazzFolders != null) {
          for (File clazzFolder : clazzFolders) {
