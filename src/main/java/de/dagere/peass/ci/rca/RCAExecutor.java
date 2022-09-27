@@ -56,8 +56,7 @@ public class RCAExecutor {
       this.comparator = new CommitComparatorInstance(Arrays.asList(config.getFixedCommitConfig().getCommitOld(), config.getFixedCommitConfig().getCommit()));
    }
 
-   public void executeRCAs()
-         throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException {
+   public void executeRCAs() throws IOException {
       Changes commitChanges = changes.getCommitChanges(config.getFixedCommitConfig().getCommit());
 
       boolean needsRCA = checkNeedsRCA(commitChanges);
@@ -99,7 +98,7 @@ public class RCAExecutor {
 
    }
 
-   private boolean checkNeedsRCA(final Changes commitChanges) throws IOException, JsonParseException, JsonMappingException {
+   private boolean checkNeedsRCA(final Changes commitChanges) throws IOException {
       boolean needsRCA = false;
       FixedCommitConfig commitConfig = config.getFixedCommitConfig();
       for (Entry<String, List<Change>> testcases : commitChanges.getTestcaseChanges().entrySet()) {
@@ -148,7 +147,7 @@ public class RCAExecutor {
    }
 
    private void executeRCA(final MeasurementConfig config, final TestMethodCall testCase)
-         throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException {
+         throws IOException, InterruptedException {
       final CauseSearcherConfig causeSearcherConfig = new CauseSearcherConfig(testCase, causeConfig);
       config.getKiekerConfig().setUseKieker(true);
 
@@ -158,7 +157,7 @@ public class RCAExecutor {
       CauseSearcher tester = SearchCauseStarter.getCauseSeacher(config, causeSearcherConfig, alternateFolders, reader, comparator);
       tester.search();
    }
-   
+
    public List<TestCase> getFailedTests() {
       return failedTests;
    }
