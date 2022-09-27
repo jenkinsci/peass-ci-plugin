@@ -52,7 +52,7 @@ public class OneJobImporter {
    private final File fullPeassFolder;
    private final File traceFolder, fullPeassTraceFolder;
 
-   private final String projectName;
+   private final String jenkinsProjectName;
 
    private final int timeout;
 
@@ -68,7 +68,7 @@ public class OneJobImporter {
       this.url = url;
       this.authentication = authentication;
       this.timeout = timeout;
-      this.projectName = projectName;
+      this.jenkinsProjectName = workspaceFolder.getName();
       fullPeassFolder = new File(workspaceFolder.getParentFile(), workspaceFolder.getName() + "_fullPeass");
 
       File staticSelectionFile = new File(projectResultsFolder, "results/staticTestSelection_" + projectName + ".json");
@@ -77,7 +77,7 @@ public class OneJobImporter {
       if (!traceFolder.exists()) {
          throw new RuntimeException("Folder that should contain traces " + traceFolder + " did not exist");
       }
-      fullPeassTraceFolder = new File(fullPeassFolder, "views_" + projectName);
+      fullPeassTraceFolder = new File(fullPeassFolder, "views_" + jenkinsProjectName);
       if (!fullPeassFolder.mkdirs()) {
          LOG.debug("Folder already existing");
       }
@@ -86,7 +86,7 @@ public class OneJobImporter {
       executionData = Constants.OBJECTMAPPER.readValue(executionFile, ExecutionData.class);
       projectChanges = Constants.OBJECTMAPPER.readValue(new File(projectResultsFolder, "measurement-results/changes.json"), ProjectChanges.class);
 
-      File jenkinsPropertyFolder = new File(fullPeassFolder, "properties_" + projectName);
+      File jenkinsPropertyFolder = new File(fullPeassFolder, "properties_" + jenkinsProjectName);
       File resultsPropertyFolder = new File(projectResultsFolder, "results/properties_" + projectName);
       FileUtils.copyDirectory(resultsPropertyFolder, jenkinsPropertyFolder);
 
@@ -117,14 +117,14 @@ public class OneJobImporter {
             if (commitSelection.getValue().getTestMethods().size() > 0) {
                prepareData(commit, predecessor);
 
-               triggerBuild(projectName);
+               triggerBuild();
 
                Thread.sleep(timeout * 1000);
             }
          }
       }
 
-      triggerBuild(projectName);
+      triggerBuild();
    }
 
    private void prepareRTS(StaticTestSelection copiedStaticSelection, ExecutionData copiedSelection, Entry<String, TestSet> commitSelection, String commit)
@@ -133,8 +133,8 @@ public class OneJobImporter {
       CommitStaticSelection commitStaticSelection = staticSelection.getCommits().get(commit);
       copiedStaticSelection.getCommits().put(commit, commitStaticSelection);
 
-      Constants.OBJECTMAPPER.writeValue(new File(fullPeassFolder, "traceTestSelection_" + projectName + ".json"), copiedSelection);
-      Constants.OBJECTMAPPER.writeValue(new File(fullPeassFolder, "staticTestSelection_" + projectName + ".json"), copiedStaticSelection);
+      Constants.OBJECTMAPPER.writeValue(new File(fullPeassFolder, "traceTestSelection_" + jenkinsProjectName + ".json"), copiedSelection);
+      Constants.OBJECTMAPPER.writeValue(new File(fullPeassFolder, "staticTestSelection_" + jenkinsProjectName + ".json"), copiedStaticSelection);
 
       File commitTraceFolder = new File(traceFolder, "view_" + commit);
       File commitFullPeassTraceFolder = new File(fullPeassTraceFolder, "view_" + commit);
@@ -159,7 +159,7 @@ public class OneJobImporter {
    }
 
    private void importRCAData(String commit) throws IOException {
-      File jobCommitFolder = new File(fullPeassFolder, projectName + "_peass/rca/treeMeasurementResults/" + commit);
+      File jobCommitFolder = new File(fullPeassFolder, jenkinsProjectName + "_peass/rca/treeMeasurementResults/" + commit);
       if (!jobCommitFolder.mkdirs() && !jobCommitFolder.exists()) {
          throw new RuntimeException("Could not create " + jobCommitFolder);
       }
@@ -180,9 +180,12 @@ public class OneJobImporter {
       if (measurementsFullFolder.exists()) {
          copyCommitData(commit, predecessor, fakeMeasurementFolder, measurementsFullFolder);
       } else {
-         for (File chunkFolder : measurementResultFolder.listFiles((FilenameFilter) new WildcardFileFilter("chunk*") )) {
-            File chunkMeasurementsFullFolder = new File(chunkFolder, "measurementsFull");
-            copyCommitData(commit, predecessor, fakeMeasurementFolder, chunkMeasurementsFullFolder);
+         File[] chunkFolders = measurementResultFolder.listFiles((FilenameFilter) new WildcardFileFilter("chunk*"));
+         if (chunkFolders != null) {
+            for (File chunkFolder : chunkFolders) {
+               File chunkMeasurementsFullFolder = new File(chunkFolder, "measurementsFull");
+               copyCommitData(commit, predecessor, fakeMeasurementFolder, chunkMeasurementsFullFolder);
+            }
          }
       }
    }
@@ -214,7 +217,7 @@ public class OneJobImporter {
       }
    }
 
-   private void triggerBuild(String projectName) throws MalformedURLException, IOException, UnsupportedEncodingException {
+   private void triggerBuild() throws MalformedURLException, IOException, UnsupportedEncodingException {
       URL urlObject = new URL(url);
       URLConnection uc = urlObject.openConnection();
 
