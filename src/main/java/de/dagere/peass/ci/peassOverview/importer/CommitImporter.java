@@ -45,13 +45,13 @@ public class CommitImporter {
 
       GitUtils.goToCommit(commit, workspaceFolder);
 
-      importRCAData(commit);
+      importRCAData();
 
-      importMeasurementFolder(commit, predecessor, fakeMeasurementFolder);
+      importMeasurementFolder(fakeMeasurementFolder);
 
    }
 
-   private void importRCAData(String commit) throws IOException {
+   private void importRCAData() throws IOException {
       File jobCommitFolder = new File(fullPeassFolder, jenkinsProjectName + "_peass/rca/treeMeasurementResults/" + commit);
       if (!jobCommitFolder.mkdirs() && !jobCommitFolder.exists()) {
          throw new RuntimeException("Could not create " + jobCommitFolder);
@@ -85,7 +85,7 @@ public class CommitImporter {
       }
    }
 
-   private void importMeasurementFolder(String commit, String predecessor, File fakeMeasurementFolder)
+   private void importMeasurementFolder(File fakeMeasurementFolder)
          throws IOException, StreamReadException, DatabindException, StreamWriteException {
       File measurementResultFolder = new File(projectResultsFolder, "measurement-results");
       File measurementsFullFolder = new File(measurementResultFolder, "measurementsFull");
