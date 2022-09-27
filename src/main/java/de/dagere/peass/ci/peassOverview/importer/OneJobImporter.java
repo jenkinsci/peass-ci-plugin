@@ -112,7 +112,7 @@ public class OneJobImporter {
             LOG.debug("Importing {}, Changes: {}", commit, (changes != null ? changes.getTestcaseChanges().size() : null));
 
             prepareRTS(copiedStaticSelection, copiedSelection, commitSelection, commit);
-            if (changes != null && !changes.getTestcaseChanges().isEmpty()) {
+            if (commitSelection.getValue().getTestMethods().size() > 0) {
                prepareData(commit, predecessor);
 
                triggerBuild(projectName);
