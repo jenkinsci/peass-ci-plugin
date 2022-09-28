@@ -119,9 +119,10 @@ public class MeasurementOverviewAction extends VisibleAction {
    }
 
    public TestcaseStatistic getTestcaseStatistic(final String testcase) {
-      Entry<String, Map<TestMethodCall, TestcaseStatistic>> testcaseStatisticEntry = statistics.getStatistics().entrySet().iterator().next();
-      Map<TestMethodCall, TestcaseStatistic> testcaseStatistic = testcaseStatisticEntry.getValue();
-      return testcaseStatistic.get(TestMethodCall.createFromString(testcase));
+      String commit = config.getFixedCommitConfig().getCommit();
+      Map<TestMethodCall, TestcaseStatistic> testcaseStatistic = statistics.getStatistics().get(commit);
+      TestMethodCall testcaseObject = TestMethodCall.createFromString(testcase);
+      return testcaseStatistic.get(testcaseObject);
    }
 
    public TestcaseStatistic getNoWarmupStatistic(final String testcase) {
