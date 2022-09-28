@@ -56,7 +56,7 @@ public class RemoteRCA implements FileCallable<RCAResult>, Serializable {
       
       if (logFile.exists()) {
          listener.getLogger().println("RCA log file " + logFile + " already exists - not rerunning RCA if it isn't deleted");
-         return new RCAResult(false, new LinkedList<>());
+         return new RCAResult(true, new LinkedList<>());
       }
       
       if (measurementConfig.getExecutionConfig().isRedirectSubprocessOutputToFile()) {
