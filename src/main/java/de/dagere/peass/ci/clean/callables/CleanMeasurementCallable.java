@@ -36,7 +36,7 @@ public class CleanMeasurementCallable implements FileCallable<Boolean> {
          File folder = new File(potentialSlaveWorkspace.getParentFile(), projectName + PeassFolders.PEASS_FULL_POSTFIX);
          ResultsFolders resultsFolders = new ResultsFolders(folder, projectName);
 
-         deleteAllMeasurementData(projectName, folder, resultsFolders);
+         deleteAllMeasurementData(resultsFolders);
 
          return true;
       } catch (IOException e) {
@@ -47,24 +47,22 @@ public class CleanMeasurementCallable implements FileCallable<Boolean> {
       }
    }
    
-   public static void cleanFolder(final String projectName, final File folder) throws IOException {
-      System.out.println("Trying " + folder + " " + projectName);
-      ResultsFolders resultsFolders = new ResultsFolders(folder, projectName);
+   public static void cleanFolder(final ResultsFolders resultsFolders) throws IOException {
       
-      File trendFile = new File(folder, TrendFileUtil.TREND_FILE_NAME);
+      File trendFile = new File(resultsFolders.getResultFolder(), TrendFileUtil.TREND_FILE_NAME);
       if (trendFile.exists()) {
          System.out.println("Deleting " + trendFile);
          System.out.println("Success: " + trendFile.delete());
       }
 
-      deleteAllMeasurementData(projectName, folder, resultsFolders);
+      deleteAllMeasurementData(resultsFolders);
    }
 
-   private static void deleteAllMeasurementData(final String projectName, final File folder, final ResultsFolders resultsFolders) throws IOException {
+   private static void deleteAllMeasurementData(final ResultsFolders resultsFolders) throws IOException {
       deleteResultFiles(resultsFolders);
       deleteLogFolders(resultsFolders);
 
-      deleteCopiedFolders(folder);
+      deleteCopiedFolders(resultsFolders.getResultFolder());
    }
 
    private static void deleteCopiedFolders(final File folder) throws IOException {
