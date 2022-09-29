@@ -35,7 +35,9 @@ public class CleanRCACallable implements FileCallable<Boolean> {
       try (final JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
          String projectName = potentialSlaveWorkspace.getName();
          File folder = new File(potentialSlaveWorkspace.getParentFile(), projectName + PeassFolders.PEASS_FULL_POSTFIX);
-         cleanFolder(projectName, folder);
+         ResultsFolders resultsFolders = new ResultsFolders(folder, projectName);
+
+         cleanFolder(resultsFolders);
 
          return true;
       } catch (IOException e) {
@@ -46,11 +48,9 @@ public class CleanRCACallable implements FileCallable<Boolean> {
       }
    }
 
-   public static void cleanFolder(final String projectName, final File folder) throws IOException {
-      System.out.println("Trying " + folder + " " + projectName);
-      ResultsFolders resultsFolders = new ResultsFolders(folder, projectName);
+   public static void cleanFolder(final ResultsFolders resultsFolders) throws IOException {
 
-      File visualizationFolder = new File(folder, VisualizationFolderManager.VISUALIZATION_FOLDER_NAME);
+      File visualizationFolder = new File(resultsFolders.getResultFolder(), VisualizationFolderManager.VISUALIZATION_FOLDER_NAME);
       if (visualizationFolder.exists()) {
          System.out.println("Deleting " + visualizationFolder);
          FileUtils.deleteDirectory(visualizationFolder);

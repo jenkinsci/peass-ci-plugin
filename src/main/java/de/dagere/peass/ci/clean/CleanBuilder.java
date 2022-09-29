@@ -76,7 +76,7 @@ public class CleanBuilder extends Builder implements SimpleBuildStep, Serializab
             run.setResult(Result.FAILURE);
             return;
          }
-         CleanRCACallable.cleanFolder(projectName, localWorkspace);
+         CleanRCACallable.cleanFolder(resultsFolders);
       } else {
          listener.getLogger().println("RCA cleaning disabled");
       }
