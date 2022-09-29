@@ -52,12 +52,16 @@ public class CleanRCACallable implements FileCallable<Boolean> {
 
       deleteLogFolders(resultsFolders);
 
+      deleteVisualizationFolder(resultsFolders);
+
+   }
+
+   private static void deleteVisualizationFolder(final ResultsFolders resultsFolders) throws IOException {
       File visualizationFolder = new File(resultsFolders.getResultFolder(), VisualizationFolderManager.VISUALIZATION_FOLDER_NAME);
       if (visualizationFolder.exists()) {
          System.out.println("Deleting " + visualizationFolder);
          FileUtils.deleteDirectory(visualizationFolder);
       }
-      
    }
 
    private static void deleteLogFolders(final ResultsFolders resultsFolders) throws IOException {
