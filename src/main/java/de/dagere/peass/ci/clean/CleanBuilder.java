@@ -15,6 +15,7 @@ import de.dagere.peass.ci.MeasureVersionBuilder;
 import de.dagere.peass.ci.clean.callables.CleanMeasurementCallable;
 import de.dagere.peass.ci.clean.callables.CleanRCACallable;
 import de.dagere.peass.ci.clean.callables.CleanRTSCallable;
+import de.dagere.peass.folders.ResultsFolders;
 import hudson.EnvVars;
 import hudson.Extension;
 import hudson.FilePath;
@@ -46,7 +47,8 @@ public class CleanBuilder extends Builder implements SimpleBuildStep, Serializab
       listener.getLogger().println("Cleaning");
 
       final File localWorkspace = new File(run.getRootDir(), ".." + File.separator + ".." + File.separator + MeasureVersionBuilder.PEASS_FOLDER_NAME).getCanonicalFile();
-      String projectName = new File(workspace.getRemote()).getName();
+      final String projectName = new File(workspace.getRemote()).getName();
+      final ResultsFolders resultsFolders = new ResultsFolders(localWorkspace, projectName);
 
       if (cleanRTS) {
          boolean worked = workspace.act(new CleanRTSCallable(listener));
@@ -54,7 +56,7 @@ public class CleanBuilder extends Builder implements SimpleBuildStep, Serializab
             run.setResult(Result.FAILURE);
             return;
          }
-         CleanRTSCallable.cleanFolder(projectName, localWorkspace);
+         CleanRTSCallable.cleanFolder(resultsFolders);
       } else {
          listener.getLogger().println("Regression Test Selection cleaning disabled");
       }
