@@ -68,19 +68,23 @@ public class CleanRCACallable implements FileCallable<Boolean> {
       System.out.println("Deleting " + resultsFolders.getRCALogFolder());
       FileUtils.deleteDirectory(resultsFolders.getRCALogFolder());
 
+      cleanCauseSearchFolders(resultsFolders);
+
+   }
+
+   private static void cleanCauseSearchFolders(final ResultsFolders resultsFolders) throws IOException {
       CauseSearchFolders causeSearchFolders = resultsFolders.getPeassFolders();
       if (causeSearchFolders != null) {
          if (causeSearchFolders.getRcaFolder().exists()) {
-            System.out.println("Deleting: " + causeSearchFolders.getRcaFolder());
+            System.out.println("Cleaning: " + causeSearchFolders.getRcaFolder());
             FileUtils.cleanDirectory(causeSearchFolders.getRcaFolder());
          }
 
-         System.out.println("Deleting: " + causeSearchFolders.getRCALogFolder());
+         System.out.println("Cleaning: " + causeSearchFolders.getRCALogFolder());
          FileUtils.cleanDirectory(causeSearchFolders.getRCALogFolder());
       } else {
          System.err.println("Project folder " + resultsFolders.getPeassFolders()+ " was not existing - not cleaning");
       }
-
    }
 
 }
