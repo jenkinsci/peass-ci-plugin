@@ -49,10 +49,7 @@ public class CleanRTSCallable implements FileCallable<Boolean> {
       }
    }
    
-   public static void cleanFolder(final String projectName, final File folder) throws IOException {
-      System.out.println("Trying " + folder + " " + projectName);
-      ResultsFolders resultsFolders = new ResultsFolders(folder, projectName);
-
+   public static void cleanFolder(final ResultsFolders resultsFolders) throws IOException {
       deleteResultFiles(resultsFolders);
       deleteLogFolders(resultsFolders);
    }
