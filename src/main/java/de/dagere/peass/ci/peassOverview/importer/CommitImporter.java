@@ -73,6 +73,17 @@ public class CommitImporter {
             }
          }
       }
+      
+      touchRCALogfile();
+   }
+
+   private void touchRCALogfile() throws IOException {
+      File parentFile = new File(fullPeassFolder, "rcaLogs");
+      System.out.println("RCA log folder creation: " + parentFile.mkdirs());
+      
+      File rcaLogFile = new File(parentFile, commit + "_" + predecessor + ".txt");
+      FileUtils.touch(rcaLogFile);
+      System.out.println("Created: " + rcaLogFile);
    }
 
    private void importRCACommitFolder(File jobCommitFolder, File rcaCommitFolder) throws IOException {
@@ -83,13 +94,6 @@ public class CommitImporter {
             FileUtils.copyDirectory(clazzFolder, jobClazzFolder);
          }
       }
-      
-      File parentFile = new File(fullPeassFolder, "rcaLogs");
-      System.out.println("RCA log folder creation: " + parentFile.mkdirs());
-      
-      File rcaLogFile = new File(parentFile, commit + "_" + predecessor + ".txt");
-      FileUtils.touch(rcaLogFile);
-      System.out.println("Created: " + rcaLogFile);
    }
 
    private void importMeasurementFolder(File fakeMeasurementFolder)
