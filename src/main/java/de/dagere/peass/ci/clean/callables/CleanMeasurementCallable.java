@@ -64,8 +64,6 @@ public class CleanMeasurementCallable implements FileCallable<Boolean> {
       deleteResultFiles(resultsFolders);
       deleteLogFolders(resultsFolders);
 
-      CleanUtil.cleanProjectFolder(folder, projectName);
-
       deleteCopiedFolders(folder);
    }
 
