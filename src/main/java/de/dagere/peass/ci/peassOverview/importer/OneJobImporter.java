@@ -121,6 +121,7 @@ public class OneJobImporter {
                triggerBuild();
 
                Thread.sleep(timeout * 1000);
+               FileUtils.deleteDirectory(new File(fullPeassFolder, jenkinsProjectName + "_peass/rca/"));
             }
          }
       }
@@ -143,8 +144,6 @@ public class OneJobImporter {
          FileUtils.copyDirectory(commitTraceFolder, commitFullPeassTraceFolder);
       }
    }
-
-   
 
    private void triggerBuild() throws MalformedURLException, IOException, UnsupportedEncodingException {
       URL urlObject = new URL(url);

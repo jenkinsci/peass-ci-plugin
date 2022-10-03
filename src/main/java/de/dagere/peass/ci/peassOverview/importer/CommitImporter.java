@@ -18,6 +18,7 @@ import de.dagere.kopeme.kopemedata.Kopemedata;
 import de.dagere.kopeme.kopemedata.TestMethod;
 import de.dagere.kopeme.kopemedata.VMResult;
 import de.dagere.kopeme.kopemedata.VMResultChunk;
+import de.dagere.peass.dependency.analysis.data.ChangedEntity;
 import de.dagere.peass.utils.Constants;
 import de.dagere.peass.vcs.GitUtils;
 
@@ -48,10 +49,11 @@ public class CommitImporter {
       importRCAData();
 
       importMeasurementFolder(fakeMeasurementFolder);
-
    }
 
    private void importRCAData() throws IOException {
+      touchRCALogfile();
+      
       File jobCommitFolder = new File(fullPeassFolder, jenkinsProjectName + "_peass/rca/treeMeasurementResults/" + commit);
       if (!jobCommitFolder.mkdirs() && !jobCommitFolder.exists()) {
          throw new RuntimeException("Could not create " + jobCommitFolder);
@@ -73,14 +75,12 @@ public class CommitImporter {
             }
          }
       }
-      
-      touchRCALogfile();
    }
 
    private void touchRCALogfile() throws IOException {
       File parentFile = new File(fullPeassFolder, "rcaLogs");
       System.out.println("RCA log folder creation: " + parentFile.mkdirs());
-      
+
       File rcaLogFile = new File(parentFile, commit + "_" + predecessor + ".txt");
       FileUtils.touch(rcaLogFile);
       System.out.println("Created: " + rcaLogFile);
@@ -133,6 +133,24 @@ public class CommitImporter {
                      copiedData.getChunks().add(chunk);
                      File resultFile = new File(fakeMeasurementFolder, jsonFile.getName());
                      Constants.OBJECTMAPPER.writeValue(resultFile, copiedData);
+
+                     String clazzWithoutModule = clazzName.substring(clazzName.indexOf(ChangedEntity.MODULE_SEPARATOR) + 1);
+                     File measurementsFolder = new File(measurementsFullFolder, "measurements");
+                     if (measurementsFolder.exists()) {
+                        File runFolder = new File(measurementsFolder, clazzWithoutModule + "/" + commit);
+                        File commitFolder = new File(runFolder, commit);
+                        File predecessorFolder = new File(runFolder, predecessor);
+                        if (predecessorFolder.exists() && commitFolder.exists()) {
+                           File runFolderCopied = new File(fakeMeasurementFolder, "measurements/" + clazzWithoutModule + "/" + commit);
+                           runFolderCopied.mkdirs();
+                           FileUtils.copyDirectory(commitFolder, new File(runFolderCopied, commit));
+                           FileUtils.copyDirectory(predecessorFolder, new File(runFolderCopied, predecessor));
+                        } else {
+                           System.err.println("Folder " + predecessorFolder + " or " + commitFolder + " missing");
+                        }
+                     } else {
+                        System.err.println("Folder " + measurementsFolder.getAbsolutePath() + " missing");
+                     }
                   }
                }
             }
