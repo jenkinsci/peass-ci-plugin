@@ -142,7 +142,7 @@ public class CommitImporter {
                         File predecessorFolder = new File(runFolder, predecessor);
                         if (predecessorFolder.exists() && commitFolder.exists()) {
                            File runFolderCopied = new File(fakeMeasurementFolder, "measurements/" + clazzWithoutModule + "/" + commit);
-                           runFolderCopied.mkdirs();
+                           System.out.println("Creating folder: " + runFolderCopied.mkdirs());
                            FileUtils.copyDirectory(commitFolder, new File(runFolderCopied, commit));
                            FileUtils.copyDirectory(predecessorFolder, new File(runFolderCopied, predecessor));
                         } else {
