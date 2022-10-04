@@ -37,8 +37,6 @@ public class CleanRTSCallable implements FileCallable<Boolean> {
 
          cleanFolder(resultsFolders);
 
-         CleanUtil.cleanProjectFolder(folder, projectName);
-
          return true;
       } catch (IOException e) {
          listener.getLogger().println("Exception thrown");
