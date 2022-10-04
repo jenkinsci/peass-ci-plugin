@@ -30,9 +30,9 @@ public abstract class CleanCallable implements FileCallable<Boolean> {
    @Override
    public Boolean invoke(final File potentialSlaveWorkspace, final VirtualChannel channel) throws IOException, InterruptedException {
       try (final JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
-         String projectName = potentialSlaveWorkspace.getName();
-         File folder = new File(potentialSlaveWorkspace.getParentFile(), projectName + PeassFolders.PEASS_FULL_POSTFIX);
-         ResultsFolders resultsFolders = new ResultsFolders(folder, projectName);
+         final String projectName = potentialSlaveWorkspace.getName();
+         final File folder = new File(potentialSlaveWorkspace.getParentFile(), projectName + PeassFolders.PEASS_FULL_POSTFIX);
+         final ResultsFolders resultsFolders = new ResultsFolders(folder, projectName);
 
          cleanFolder(resultsFolders);
 
