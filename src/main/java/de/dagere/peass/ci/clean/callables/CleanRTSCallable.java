@@ -35,8 +35,7 @@ public class CleanRTSCallable implements FileCallable<Boolean> {
          File folder = new File(potentialSlaveWorkspace.getParentFile(), projectName + PeassFolders.PEASS_FULL_POSTFIX);
          ResultsFolders resultsFolders = new ResultsFolders(folder, projectName);
 
-         deleteResultFiles(resultsFolders);
-         deleteLogFolders(resultsFolders);
+         cleanFolder(resultsFolders);
 
          CleanUtil.cleanProjectFolder(folder, projectName);
 
@@ -49,10 +48,7 @@ public class CleanRTSCallable implements FileCallable<Boolean> {
       }
    }
    
-   public static void cleanFolder(final String projectName, final File folder) throws IOException {
-      System.out.println("Trying " + folder + " " + projectName);
-      ResultsFolders resultsFolders = new ResultsFolders(folder, projectName);
-
+   public static void cleanFolder(final ResultsFolders resultsFolders) throws IOException {
       deleteResultFiles(resultsFolders);
       deleteLogFolders(resultsFolders);
    }
