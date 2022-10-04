@@ -35,7 +35,9 @@ public class CleanRCACallable implements FileCallable<Boolean> {
       try (final JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
          String projectName = potentialSlaveWorkspace.getName();
          File folder = new File(potentialSlaveWorkspace.getParentFile(), projectName + PeassFolders.PEASS_FULL_POSTFIX);
-         cleanFolder(projectName, folder);
+         ResultsFolders resultsFolders = new ResultsFolders(folder, projectName);
+
+         cleanFolder(resultsFolders);
 
          return true;
       } catch (IOException e) {
@@ -46,36 +48,43 @@ public class CleanRCACallable implements FileCallable<Boolean> {
       }
    }
 
-   public static void cleanFolder(final String projectName, final File folder) throws IOException {
-      System.out.println("Trying " + folder + " " + projectName);
-      ResultsFolders resultsFolders = new ResultsFolders(folder, projectName);
+   public static void cleanFolder(final ResultsFolders resultsFolders) throws IOException {
 
-      File visualizationFolder = new File(folder, VisualizationFolderManager.VISUALIZATION_FOLDER_NAME);
+      deleteLogFolders(resultsFolders);
+
+      deleteVisualizationFolder(resultsFolders);
+
+   }
+
+   private static void deleteVisualizationFolder(final ResultsFolders resultsFolders) throws IOException {
+      File visualizationFolder = new File(resultsFolders.getResultFolder(), VisualizationFolderManager.VISUALIZATION_FOLDER_NAME);
       if (visualizationFolder.exists()) {
          System.out.println("Deleting " + visualizationFolder);
          FileUtils.deleteDirectory(visualizationFolder);
       }
-      
-      deleteRCALogFolder(resultsFolders);
    }
 
-   private static void deleteRCALogFolder(final ResultsFolders resultsFolders) throws IOException {
+   private static void deleteLogFolders(final ResultsFolders resultsFolders) throws IOException {
       System.out.println("Deleting " + resultsFolders.getRCALogFolder());
       FileUtils.deleteDirectory(resultsFolders.getRCALogFolder());
 
-      CauseSearchFolders folders = resultsFolders.getPeassFolders();
-      if (folders != null) {
-         if (folders.getRcaFolder().exists()) {
-            System.out.println("Deleting: " + folders.getRcaFolder());
-            FileUtils.cleanDirectory(folders.getRcaFolder());
+      cleanCauseSearchFolders(resultsFolders);
+
+   }
+
+   private static void cleanCauseSearchFolders(final ResultsFolders resultsFolders) throws IOException {
+      CauseSearchFolders causeSearchFolders = resultsFolders.getPeassFolders();
+      if (causeSearchFolders != null) {
+         if (causeSearchFolders.getRcaFolder().exists()) {
+            System.out.println("Cleaning: " + causeSearchFolders.getRcaFolder());
+            FileUtils.cleanDirectory(causeSearchFolders.getRcaFolder());
          }
 
-         System.out.println("Deleting: " + folders.getRCALogFolder());
-         FileUtils.cleanDirectory(folders.getRCALogFolder());
+         System.out.println("Cleaning: " + causeSearchFolders.getRCALogFolder());
+         FileUtils.cleanDirectory(causeSearchFolders.getRCALogFolder());
       } else {
          System.err.println("Project folder " + resultsFolders.getPeassFolders()+ " was not existing - not cleaning");
       }
-
    }
 
 }
