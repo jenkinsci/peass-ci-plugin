@@ -15,7 +15,6 @@ public class CleanRTSCallable extends CleanCallable {
       super(listener);
    }
 
-   @Override
    public void cleanFolder(final ResultsFolders resultsFolders) throws IOException{
       deleteResultFiles(resultsFolders);
       deleteLogFolders(resultsFolders);

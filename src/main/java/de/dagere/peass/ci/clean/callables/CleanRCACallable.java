@@ -18,7 +18,6 @@ public class CleanRCACallable extends CleanCallable {
       super(listener);
    }
 
-   @Override
    public void cleanFolder(final ResultsFolders resultsFolders) throws IOException {
 
       deleteLogFolders(resultsFolders);
