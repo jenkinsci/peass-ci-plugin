@@ -66,7 +66,7 @@ public class CleanBuilder extends Builder implements SimpleBuildStep, Serializab
             run.setResult(Result.FAILURE);
             return;
          }
-         CleanMeasurementCallable.cleanFolder(resultsFolders);
+         new CleanMeasurementCallable(listener).cleanFolder(resultsFolders);
       } else {
          listener.getLogger().println("Measurement cleaning disabled");
       }
