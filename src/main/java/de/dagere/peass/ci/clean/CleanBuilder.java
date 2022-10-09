@@ -56,7 +56,7 @@ public class CleanBuilder extends Builder implements SimpleBuildStep, Serializab
             run.setResult(Result.FAILURE);
             return;
          }
-         CleanRTSCallable.cleanFolder(resultsFolders);
+         new CleanRTSCallable(listener).cleanFolder(resultsFolders);
       } else {
          listener.getLogger().println("Regression Test Selection cleaning disabled");
       }
@@ -66,7 +66,7 @@ public class CleanBuilder extends Builder implements SimpleBuildStep, Serializab
             run.setResult(Result.FAILURE);
             return;
          }
-         CleanMeasurementCallable.cleanFolder(resultsFolders);
+         new CleanMeasurementCallable(listener).cleanFolder(resultsFolders);
       } else {
          listener.getLogger().println("Measurement cleaning disabled");
       }
@@ -76,7 +76,7 @@ public class CleanBuilder extends Builder implements SimpleBuildStep, Serializab
             run.setResult(Result.FAILURE);
             return;
          }
-         CleanRCACallable.cleanFolder(resultsFolders);
+         new CleanRCACallable(listener).cleanFolder(resultsFolders);
       } else {
          listener.getLogger().println("RCA cleaning disabled");
       }
