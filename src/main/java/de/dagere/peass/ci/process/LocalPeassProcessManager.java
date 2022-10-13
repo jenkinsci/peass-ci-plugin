@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -127,6 +128,12 @@ public class LocalPeassProcessManager {
       listener.getLogger().println(Arrays.toString(new RuntimeException().getStackTrace()));
       listener.getLogger().println("Remote Peass path: " + remotePeassPath);
       FilePath remotePeassFolder = new FilePath(workspace.getChannel(), remotePeassPath);
+
+      FileUtils.deleteDirectory(localWorkspace);
+      if (!localWorkspace.mkdirs()) {
+         listener.getLogger().println("Could not re-create " + localWorkspace);
+      }
+      
       DirScanner.Glob dirScanner = new DirScanner.Glob("**/*,**/.git/**", "", false);
       int count = remotePeassFolder.copyRecursiveTo(dirScanner, new FilePath(localWorkspace), "Copy including git folder");
       listener.getLogger().println("Copied " + count + " files from " + remotePeassFolder + " to " + localWorkspace.getAbsolutePath());
