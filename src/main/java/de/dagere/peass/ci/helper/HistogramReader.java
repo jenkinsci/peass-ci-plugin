@@ -47,8 +47,8 @@ public class HistogramReader {
       return updatedConfigurations;
    }
 
-   private void readFile(final Map<String, HistogramValues> measurements, final File xmlResultFile) {
-      Kopemedata data = JSONDataLoader.loadData(xmlResultFile);
+   private void readFile(final Map<String, HistogramValues> measurements, final File jsonResultFile) {
+      Kopemedata data = JSONDataLoader.loadData(jsonResultFile);
       // This assumes measurements are only executed once; if this is not the case, the matching result would need to be searched
       final TestMethod testcase = data.getMethods().get(0);
       VMResultChunk chunk = testcase.getDatacollectorResults().get(0).getChunks().get(0);
