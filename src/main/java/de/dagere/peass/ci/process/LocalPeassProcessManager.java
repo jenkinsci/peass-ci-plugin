@@ -192,7 +192,7 @@ public class LocalPeassProcessManager {
       return changes;
    }
 
-   private ProjectStatistics readStatistics() {
+   public ProjectStatistics readStatistics() {
       final File statisticsFile = results.getStatisticsFile();
       ProjectStatistics statistics;
       if (statisticsFile.exists()) {

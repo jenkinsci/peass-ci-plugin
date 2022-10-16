@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -31,6 +32,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import de.dagere.peass.analysis.changes.ProjectChanges;
+import de.dagere.peass.analysis.measurement.ProjectStatistics;
 import de.dagere.peass.ci.logs.rts.AggregatedRTSResult;
 import de.dagere.peass.ci.process.IncludeExcludeParser;
 import de.dagere.peass.ci.process.JenkinsLogRedirector;
@@ -49,6 +51,7 @@ import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.execution.utils.EnvironmentVariables;
 import de.dagere.peass.measurement.rca.CauseSearcherConfig;
 import de.dagere.peass.measurement.rca.RCAStrategy;
+import de.dagere.peass.measurement.statistics.data.TestcaseStatistic;
 import hudson.EnvVars;
 import hudson.Extension;
 import hudson.FilePath;
@@ -220,7 +223,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    }
 
    private void runAllSteps(final Run<?, ?> run, final FilePath workspace, final TaskListener listener, final File localWorkspace, final PeassProcessConfiguration peassConfig)
-         throws IOException, InterruptedException, JsonParseException, JsonMappingException, JsonGenerationException, Exception {
+         throws IOException, InterruptedException, JsonParseException, Exception {
       final LocalPeassProcessManager processManager = new LocalPeassProcessManager(peassConfig, workspace, localWorkspace, listener, run);
 
       AggregatedRTSResult rtsResult = processManager.rts();
@@ -243,18 +246,39 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
       if (rtsResult.getResult().getTests().size() > 0) {
          measure(run, processManager, rtsResult.getResult().getTests());
+         
+         checkStatistics(run, peassConfig, processManager, rtsResult);
       } else {
          listener.getLogger().println("No tests selected; no measurement executed");
       }
    }
 
+   private void checkStatistics(final Run<?, ?> run, final PeassProcessConfiguration peassConfig, final LocalPeassProcessManager processManager, AggregatedRTSResult rtsResult) {
+      ProjectStatistics statistics = processManager.readStatistics();
+      String commit = peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit();
+      Map<TestMethodCall, TestcaseStatistic> currentCommitStatistics = statistics.getStatistics().get(commit);
+      Set<TestMethodCall> missingMeasurements = new HashSet<>();
+      
+      for (TestMethodCall calledMethod : rtsResult.getResult().getTests()) {
+         if (!currentCommitStatistics.containsKey(calledMethod)) {
+            missingMeasurements.add(calledMethod);
+         }
+      }
+      if (missingMeasurements.size() > 0) {
+         if (!run.getResult().equals(Result.FAILURE)) {
+            run.setResult(Result.UNSTABLE);
+         }
+      }
+   }
+
    private void measure(final Run<?, ?> run, final LocalPeassProcessManager processManager, final Set<TestMethodCall> tests)
-         throws IOException, InterruptedException, JsonParseException, JsonMappingException, JsonGenerationException, Exception {
+         throws IOException, InterruptedException, Exception {
       boolean worked = processManager.measure(tests);
       if (!worked) {
          run.setResult(Result.FAILURE);
          return;
       }
+
       ProjectChanges changes = processManager.visualizeMeasurementResults(run);
 
       if (executeRCA) {
@@ -263,9 +287,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          processManager.visualizeRCAResults(run, changes);
          if (!rcaWorked) {
             run.setResult(Result.FAILURE);
-            return;
          }
-
       }
    }
 
@@ -554,11 +576,11 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public void setTraceSizeInMb(final int traceSizeInMb) {
       this.traceSizeInMb = traceSizeInMb;
    }
-   
+
    public int getImportLogSizeInMb() {
       return importLogSizeInMb;
    }
-   
+
    @DataBoundSetter
    public void setImportLogSizeInMb(int importLogSizeInMb) {
       this.importLogSizeInMb = importLogSizeInMb;
