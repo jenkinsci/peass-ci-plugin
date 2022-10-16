@@ -247,14 +247,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
       if (rtsResult.getResult().getTests().size() > 0) {
          measure(run, processManager, rtsResult.getResult().getTests());
-         
+
          checkStatistics(run, peassConfig, listener, processManager, rtsResult);
       } else {
          listener.getLogger().println("No tests selected; no measurement executed");
       }
    }
 
-   private void checkStatistics(final Run<?, ?> run, final PeassProcessConfiguration peassConfig, TaskListener listener, final LocalPeassProcessManager processManager, AggregatedRTSResult rtsResult) {
+   private void checkStatistics(final Run<?, ?> run, final PeassProcessConfiguration peassConfig, TaskListener listener, final LocalPeassProcessManager processManager,
+         AggregatedRTSResult rtsResult) {
       ProjectStatistics statistics = processManager.readStatistics();
       String commit = peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit();
       Map<TestMethodCall, TestcaseStatistic> currentCommitStatistics = statistics.getStatistics().get(commit);
@@ -263,7 +264,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          return;
       }
       Set<TestMethodCall> missingMeasurements = new HashSet<>();
-      
+
       for (TestMethodCall calledMethod : rtsResult.getResult().getTests()) {
          if (!currentCommitStatistics.containsKey(calledMethod)) {
             missingMeasurements.add(calledMethod);
@@ -271,7 +272,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       }
       if (missingMeasurements.size() > 0) {
          listener.getLogger().println("Did not succeed with all measurements, marking as unstable. Missing: " + missingMeasurements);
-         if (run.getResult() == null || run.getResult().equals(Result.FAILURE)) {
+         if (run.getResult() == null || Result.FAILURE.equals(run.getResult())) {
             run.setResult(Result.UNSTABLE);
          }
       }
