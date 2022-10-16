@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
@@ -19,8 +18,7 @@ public class TrendFileUtil {
 
    public static final String TREND_FILE_NAME = "trend.json";
 
-   public static void persistTrend(final Run<?, ?> run, final File localWorkspace, final ProjectStatistics statistics)
-         throws IOException, JsonParseException, JsonMappingException, JsonGenerationException {
+   public static void persistTrend(final Run<?, ?> run, final File localWorkspace, final ProjectStatistics statistics) {
       File trendFile = new File(localWorkspace, TREND_FILE_NAME);
       BuildMeasurementValues values = getValues(trendFile);
       if (statistics.getStatistics().size() > 0) {
@@ -28,7 +26,11 @@ public class TrendFileUtil {
             addFakePredecessorStatistics(run, statistics, values);
          }
          values.addMeasurement(statistics, run.getNumber());
-         Constants.OBJECTMAPPER.writeValue(trendFile, values);
+         try {
+            Constants.OBJECTMAPPER.writeValue(trendFile, values);
+         } catch (IOException e) {
+            throw new RuntimeException(e);
+         }
       }
    }
 
@@ -54,10 +56,14 @@ public class TrendFileUtil {
       return values;
    }
 
-   private static BuildMeasurementValues getValues(final File trendFile) throws IOException, JsonParseException, JsonMappingException {
+   private static BuildMeasurementValues getValues(final File trendFile) {
       BuildMeasurementValues values;
       if (trendFile.exists()) {
-         values = Constants.OBJECTMAPPER.readValue(trendFile, BuildMeasurementValues.class);
+         try {
+            values = Constants.OBJECTMAPPER.readValue(trendFile, BuildMeasurementValues.class);
+         } catch (IOException e) {
+            throw new RuntimeException(e);
+         }
       } else {
          values = new BuildMeasurementValues();
       }

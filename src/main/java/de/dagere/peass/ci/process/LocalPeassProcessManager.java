@@ -137,8 +137,7 @@ public class LocalPeassProcessManager {
       rtsVisualizationCreator.visualize(run, logSummary);
    }
 
-   public ProjectChanges visualizeMeasurementResults(final Run<?, ?> run)
-         throws IOException, JsonParseException, JsonMappingException, JsonGenerationException {
+   public ProjectChanges visualizeMeasurementResults(final Run<?, ?> run) {
       File dataFolder = results.getVersionFullResultsFolder(peassConfig.getMeasurementConfig());
       final HistogramReader histogramReader = new HistogramReader(peassConfig.getMeasurementConfig(), dataFolder);
       final Map<String, HistogramValues> measurements = histogramReader.readMeasurements();
@@ -178,22 +177,30 @@ public class LocalPeassProcessManager {
       return noWarmupStatistics;
    }
 
-   private ProjectChanges getChanges() throws IOException, JsonParseException, JsonMappingException {
+   private ProjectChanges getChanges() {
       final File changeFile = results.getChangeFile();
       final ProjectChanges changes;
       if (changeFile.exists()) {
-         changes = Constants.OBJECTMAPPER.readValue(changeFile, ProjectChanges.class);
+         try {
+            changes = Constants.OBJECTMAPPER.readValue(changeFile, ProjectChanges.class);
+         } catch (IOException e) {
+            throw new RuntimeException(e);
+         }
       } else {
          changes = new ProjectChanges();
       }
       return changes;
    }
 
-   private ProjectStatistics readStatistics() throws IOException {
+   private ProjectStatistics readStatistics() {
       final File statisticsFile = results.getStatisticsFile();
       ProjectStatistics statistics;
       if (statisticsFile.exists()) {
-         statistics = Constants.OBJECTMAPPER.readValue(statisticsFile, ProjectStatistics.class);
+         try {
+            statistics = Constants.OBJECTMAPPER.readValue(statisticsFile, ProjectStatistics.class);
+         } catch (IOException e) {
+            throw new RuntimeException(e);
+         }
       } else {
          statistics = new ProjectStatistics();
       }

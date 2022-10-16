@@ -223,26 +223,26 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          throws IOException, InterruptedException, JsonParseException, JsonMappingException, JsonGenerationException, Exception {
       final LocalPeassProcessManager processManager = new LocalPeassProcessManager(peassConfig, workspace, localWorkspace, listener, run);
 
-      AggregatedRTSResult tests = processManager.rts();
-      listener.getLogger().println("Tests: " + tests);
-      if (tests == null || !tests.getResult().isRunning()) {
+      AggregatedRTSResult rtsResult = processManager.rts();
+      listener.getLogger().println("Tests: " + rtsResult);
+      if (rtsResult == null || !rtsResult.getResult().isRunning()) {
          run.setResult(Result.FAILURE);
          return;
       }
 
-      if (tests.isRtsAllError() || failOnRtsError && tests.isRtsAnyError()) {
+      if (rtsResult.isRtsAllError() || failOnRtsError && rtsResult.isRtsAnyError()) {
          run.setResult(Result.FAILURE);
          return;
       }
 
-      if (!failOnRtsError && tests.isRtsAnyError()) {
+      if (!failOnRtsError && rtsResult.isRtsAnyError()) {
          run.setResult(Result.UNSTABLE);
       }
 
-      processManager.visualizeRTSResults(run, tests.getLogSummary());
+      processManager.visualizeRTSResults(run, rtsResult.getLogSummary());
 
-      if (tests.getResult().getTests().size() > 0) {
-         measure(run, processManager, tests.getResult().getTests());
+      if (rtsResult.getResult().getTests().size() > 0) {
+         measure(run, processManager, rtsResult.getResult().getTests());
       } else {
          listener.getLogger().println("No tests selected; no measurement executed");
       }
