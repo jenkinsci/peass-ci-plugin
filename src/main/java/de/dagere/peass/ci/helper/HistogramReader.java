@@ -30,14 +30,14 @@ public class HistogramReader {
    public Map<String, HistogramValues> readMeasurements() {
       final Map<String, HistogramValues> measurements = new TreeMap<>();
       if (fullResultsFolder.exists() && fullResultsFolder.isDirectory()) {
-         File[] xmlFiles = fullResultsFolder.listFiles((FileFilter) new WildcardFileFilter("*.json"));
-         if (xmlFiles == null) {
+         File[] jsonFiles = fullResultsFolder.listFiles((FileFilter) new WildcardFileFilter("*.json"));
+         if (jsonFiles == null) {
             System.out.println("No json-Files were found, measurements is empty!");
             return measurements;
          }
 
-         for (File xmlResultFile : xmlFiles) {
-            readFile(measurements, xmlResultFile);
+         for (File jsonResultFile : jsonFiles) {
+            readFile(measurements, jsonResultFile);
          }
       }
       return measurements;
