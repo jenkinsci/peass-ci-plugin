@@ -173,8 +173,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
          try (JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
             PeassProcessConfiguration peassConfig = buildConfiguration(workspace, env, listener, patternForBuild);
-            boolean versionIsUsable = checkVersion(run, listener, peassConfig);
-            if (versionIsUsable) {
+            boolean commitIsUsable = checkCommit(run, listener, peassConfig);
+            if (commitIsUsable) {
                runAllSteps(run, workspace, listener, localWorkspace, peassConfig);
             }
          } catch (Throwable e) {
@@ -208,18 +208,18 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       return patternForBuild;
    }
 
-   private boolean checkVersion(final Run<?, ?> run, final TaskListener listener, final PeassProcessConfiguration peassConfig) {
-      boolean versionIsUsable;
-      String version = peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit();
-      String versionOld = peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommitOld();
-      if (version.equals(versionOld)) {
-         listener.getLogger().print("Version " + version + " equals " + versionOld + "; please check your configuration");
+   private boolean checkCommit(final Run<?, ?> run, final TaskListener listener, final PeassProcessConfiguration peassConfig) {
+      boolean commitIsUsable;
+      String commit = peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit();
+      String commitOld = peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommitOld();
+      if (commit.equals(commitOld)) {
+         listener.getLogger().print("Commit " + commit + " equals " + commitOld + "; please check your configuration");
          run.setResult(Result.FAILURE);
-         versionIsUsable = false;
+         commitIsUsable = false;
       } else {
-         versionIsUsable = true;
+         commitIsUsable = true;
       }
-      return versionIsUsable;
+      return commitIsUsable;
    }
 
    private void runAllSteps(final Run<?, ?> run, final FilePath workspace, final TaskListener listener, final File localWorkspace, final PeassProcessConfiguration peassConfig)
