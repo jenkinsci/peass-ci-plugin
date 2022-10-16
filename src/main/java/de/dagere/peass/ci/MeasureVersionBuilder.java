@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 import javax.servlet.ServletException;
 
 import org.jenkinsci.Symbol;
+import org.jfree.util.Log;
 import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
@@ -247,16 +248,20 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       if (rtsResult.getResult().getTests().size() > 0) {
          measure(run, processManager, rtsResult.getResult().getTests());
          
-         checkStatistics(run, peassConfig, processManager, rtsResult);
+         checkStatistics(run, peassConfig, listener, processManager, rtsResult);
       } else {
          listener.getLogger().println("No tests selected; no measurement executed");
       }
    }
 
-   private void checkStatistics(final Run<?, ?> run, final PeassProcessConfiguration peassConfig, final LocalPeassProcessManager processManager, AggregatedRTSResult rtsResult) {
+   private void checkStatistics(final Run<?, ?> run, final PeassProcessConfiguration peassConfig, TaskListener listener, final LocalPeassProcessManager processManager, AggregatedRTSResult rtsResult) {
       ProjectStatistics statistics = processManager.readStatistics();
       String commit = peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit();
       Map<TestMethodCall, TestcaseStatistic> currentCommitStatistics = statistics.getStatistics().get(commit);
+      if (currentCommitStatistics == null) {
+         run.setResult(Result.UNSTABLE);
+         return;
+      }
       Set<TestMethodCall> missingMeasurements = new HashSet<>();
       
       for (TestMethodCall calledMethod : rtsResult.getResult().getTests()) {
@@ -265,7 +270,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          }
       }
       if (missingMeasurements.size() > 0) {
-         if (!run.getResult().equals(Result.FAILURE)) {
+         listener.getLogger().println("Did not succeed with all measurements, marking as unstable. Missing: " + missingMeasurements);
+         if (run.getResult() == null || run.getResult().equals(Result.FAILURE)) {
             run.setResult(Result.UNSTABLE);
          }
       }
