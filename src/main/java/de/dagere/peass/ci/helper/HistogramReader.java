@@ -42,7 +42,7 @@ public class HistogramReader {
       }
       return measurements;
    }
-   
+
    public Map<String, MeasurementConfig> getUpdatedConfigurations() {
       return updatedConfigurations;
    }
@@ -52,15 +52,15 @@ public class HistogramReader {
       // This assumes measurements are only executed once; if this is not the case, the matching result would need to be searched
       final TestMethod testcase = data.getMethods().get(0);
       VMResultChunk chunk = testcase.getDatacollectorResults().get(0).getChunks().get(0);
-      
+
       String testcaseKey = new TestMethodCall(data).toString();
-      
+
       MeasurementConfig currentConfig = getUpdatedConfiguration(testcaseKey, testcase, chunk);
-      
+
       HistogramValues values = loadResults(chunk, currentConfig);
-      
+
       boolean moreThanOneMeasurement = values.getValuesCurrent().length > 1 && values.getValuesBefore().length > 1;
-      
+
       if (moreThanOneMeasurement) {
          measurements.put(testcaseKey, values);
       }
@@ -78,19 +78,19 @@ public class HistogramReader {
       MeasurementConfig currentConfig = new MeasurementConfig(measurementConfig);
       int iterations = (int) MultipleVMTestUtil.getMinIterationCount(chunk.getResults());
       if (iterations != currentConfig.getAllIterations()) {
-         currentConfig.setIterations((int) Math.ceil(iterations/2d));
-         currentConfig.setWarmup(iterations/2);
+         currentConfig.setIterations((int) Math.ceil(iterations / 2d));
+         currentConfig.setWarmup(iterations / 2);
       }
-      
+
       currentConfig.setRepetitions((int) MultipleVMTestUtil.getMinRepetitionCount(chunk.getResults()));
-      
+
       if (currentConfig.getAllIterations() != measurementConfig.getAllIterations() ||
             currentConfig.getRepetitions() != measurementConfig.getRepetitions()) {
          updatedConfigurations.put(testcaseKey, currentConfig);
       }
       return currentConfig;
    }
-   
+
    public boolean measurementConfigurationUpdated() {
       return !updatedConfigurations.isEmpty();
    }
