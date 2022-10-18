@@ -109,6 +109,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private boolean displayLogs = true;
    private boolean displayRCALogs = true;
    private boolean generateCoverageSelection = false;
+   private boolean generateTwiceExecutability = false;
    private boolean useGC;
    private boolean measureJMH;
 
@@ -308,7 +309,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          peassEnv.getEnvironmentVariables().put(entry.getKey(), entry.getValue());
       }
 
-      TestSelectionConfig dependencyConfig = new TestSelectionConfig(1, false, true, generateCoverageSelection, writeAsZip);
+      TestSelectionConfig dependencyConfig = new TestSelectionConfig(1, false, true, generateCoverageSelection, generateTwiceExecutability, writeAsZip);
       configWithRealGitVersions.getExecutionConfig().setGitCryptKey(peassEnv.getEnvironmentVariables().get("GIT_CRYPT_KEY"));
       PeassProcessConfiguration peassConfig = new PeassProcessConfiguration(updateSnapshotDependencies, configWithRealGitVersions, dependencyConfig,
             peassEnv, importLogSizeInMb,
