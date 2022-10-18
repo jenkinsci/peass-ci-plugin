@@ -142,7 +142,11 @@
           </f:entry>
         </td>
         <td>
-          <f:entry title="${%generateCoverageSelection}" field="generateCoverageSelection" description="${%generateCoverageSelectionDescr}">
+          <f:entry title="${%generateTwiceExecutability}" field="generateTwiceExecutability" description="${%generateTwiceExecutabilityDescr}">
+            <f:checkbox />
+          </f:entry>
+          <br />
+          <f:entry title="${%generateTwiceExecutability}" field="generateTwiceExecutability" description="${%generateTwiceExecutabilityDescr}">
             <f:checkbox />
           </f:entry>
         </td>

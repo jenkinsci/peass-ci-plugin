@@ -631,6 +631,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public boolean isGenerateCoverageSelection() {
       return generateCoverageSelection;
    }
+   
+   @DataBoundSetter
+   public void setGenerateTwiceExecutability(boolean generateTwiceExecutability) {
+      this.generateTwiceExecutability = generateTwiceExecutability;
+   }
+   
+   public boolean isGenerateTwiceExecutability() {
+      return generateTwiceExecutability;
+   }
 
    @DataBoundSetter
    public void setRedirectSubprocessOutputToFile(final boolean redirectSubprocessOutputToFile) {
