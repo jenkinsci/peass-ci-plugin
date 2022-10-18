@@ -52,7 +52,7 @@ public class TestRTSLogFileReaderMultimodule {
       Map<TestMethodCall, RTSLogData> rtsVmRunsPredecessor = reader.getRtsVmRuns(RTSLogFileTestUtil.COMMIT_OLD, new TestSet());
       Assert.assertEquals(2, rtsVmRunsPredecessor.size());
       RTSLogData rtsLogData = rtsVmRunsPredecessor.get(TestRTSLogFileReader.TEST1);
-      Assert.assertEquals(RTSLogFileTestUtil.COMMIT_OLD, rtsLogData.getVersion());
+      Assert.assertEquals(RTSLogFileTestUtil.COMMIT_OLD, rtsLogData.getCommit());
       Assert.assertTrue(rtsLogData.isSuccess());
 
       String rtsLog = reader.getRTSLog();

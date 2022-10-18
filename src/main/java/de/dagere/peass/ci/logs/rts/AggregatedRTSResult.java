@@ -16,10 +16,10 @@ public class AggregatedRTSResult {
       this.result = result;
       boolean isContainsSuccess = false;
       if (logSummary != null) {
-         isContainsSuccess = logSummary.isVersionContainsSuccess() || logSummary.isPredecessorContainsSuccess();
+         isContainsSuccess = logSummary.isCommitContainsSuccess() || logSummary.isPredecessorContainsSuccess();
 
-         rtsAnyError = logSummary.isErrorInCurrentVersionOccured() || logSummary.isErrorInPredecessorVersionOccured();
-         rtsAllError = logSummary.isErrorInCurrentVersionOccured() && !isContainsSuccess;
+         rtsAnyError = logSummary.isErrorInCurrentCommitOccured() || logSummary.isErrorInPredecessorCommitOccured();
+         rtsAllError = logSummary.isErrorInCurrentCommitOccured() && !isContainsSuccess;
 
       } else {
          rtsAnyError = true;

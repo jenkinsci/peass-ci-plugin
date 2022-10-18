@@ -108,7 +108,7 @@ public class RTSActionCreator {
       for (Map.Entry<TestMethodCall, RTSLogData> rtsLogData : rtsVmRuns.entrySet()) {
          String methodLogData = getLogData(rtsLogData.getValue().getMethodFile());
          String cleanLogData = getLogData(rtsLogData.getValue().getCleanFile());
-         RTSLogAction logAction = new RTSLogAction(IdHelper.getId(), rtsLogData.getValue().getVersion(), rtsLogData.getKey(), cleanLogData, methodLogData);
+         RTSLogAction logAction = new RTSLogAction(IdHelper.getId(), rtsLogData.getValue().getCommit(), rtsLogData.getKey(), cleanLogData, methodLogData);
          run.addAction(logAction);
       }
       return rtsVmRuns;

@@ -35,41 +35,41 @@ public class RTSLogSummary {
       return logSummary;
    }
 
-   private final boolean errorInCurrentVersionOccured;
-   private final boolean errorInPredecessorVersionOccured;
-   private final boolean versionContainsSuccess;
+   private final boolean errorInCurrentCommitOccured;
+   private final boolean errorInPredecessorCommitOccured;
+   private final boolean commitContainsSuccess;
    private final boolean predecessorContainsSuccess;
-   private final boolean versionContainsParametrizedwhithoutIndex;
+   private final boolean commitContainsParametrizedwhithoutIndex;
    private final boolean predecessorContainsParametrizedwhithoutIndex;
 
-   public RTSLogSummary(final boolean errorInCurrentVersionOccured, final boolean errorInPredecessorVersionOccured, boolean versionContainsSuccess,
-         boolean predecessorContainsSuccess, boolean versionContainsParametrizedwhithoutIndex, boolean predecessorContainsParametrizedwhithoutIndex) {
-      this.errorInCurrentVersionOccured = errorInCurrentVersionOccured;
-      this.errorInPredecessorVersionOccured = errorInPredecessorVersionOccured;
-      this.versionContainsSuccess = versionContainsSuccess;
+   public RTSLogSummary(final boolean errorInCurrentCommitOccured, final boolean errorInPredecessorCommitOccured, boolean commitContainsSuccess,
+         boolean predecessorContainsSuccess, boolean commitContainsParametrizedwhithoutIndex, boolean predecessorContainsParametrizedwhithoutIndex) {
+      this.errorInCurrentCommitOccured = errorInCurrentCommitOccured;
+      this.errorInPredecessorCommitOccured = errorInPredecessorCommitOccured;
+      this.commitContainsSuccess = commitContainsSuccess;
       this.predecessorContainsSuccess = predecessorContainsSuccess;
-      this.versionContainsParametrizedwhithoutIndex = versionContainsParametrizedwhithoutIndex;
+      this.commitContainsParametrizedwhithoutIndex = commitContainsParametrizedwhithoutIndex;
       this.predecessorContainsParametrizedwhithoutIndex = predecessorContainsParametrizedwhithoutIndex;
    }
 
-   public boolean isErrorInCurrentVersionOccured() {
-      return errorInCurrentVersionOccured;
+   public boolean isErrorInCurrentCommitOccured() {
+      return errorInCurrentCommitOccured;
    }
 
-   public boolean isErrorInPredecessorVersionOccured() {
-      return errorInPredecessorVersionOccured;
+   public boolean isErrorInPredecessorCommitOccured() {
+      return errorInPredecessorCommitOccured;
    }
 
-   public boolean isVersionContainsSuccess() {
-      return versionContainsSuccess;
+   public boolean isCommitContainsSuccess() {
+      return commitContainsSuccess;
    }
 
    public boolean isPredecessorContainsSuccess() {
       return predecessorContainsSuccess;
    }
 
-   public boolean isVersionContainsParametrizedwhithoutIndex() {
-      return versionContainsParametrizedwhithoutIndex;
+   public boolean isCommitContainsParametrizedwhithoutIndex() {
+      return commitContainsParametrizedwhithoutIndex;
    }
 
    public boolean isPredecessorContainsParametrizedwhithoutIndex() {

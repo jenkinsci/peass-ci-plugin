@@ -9,7 +9,7 @@
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
 
       <h1>Regression Test Selection Log Overview</h1>
-      Current commit: ${it.getVersion()} Predecessor commit: ${it.getVersionOld()}
+      Current commit: ${it.getCommit()} Predecessor commit: ${it.getCommitOld()}
       <br />
       <j:if test="${it.isRedirectSubprocessOutputToFile()}">
         <a href="../rtsLog">Peass Regression Test Selection Log</a>
@@ -58,7 +58,7 @@
               <td> ${run}</td>
               <td>
                 <j:if test='${it.getVmRuns().get(run) != null}'>
-                  <a href="../rtsLog_${run.getLinkUsable()}_${it.getVmRuns().get(run).getVersion()}">${it.getVmRuns().get(run).getShortVersion()}</a>
+                  <a href="../rtsLog_${run.getLinkUsable()}_${it.getVmRuns().get(run).getCommit()}">${it.getVmRuns().get(run).getShortCommit()}</a>
 
                       <j:if test="${it.getVmRuns().get(run).isParameterizedWithoutIndex()}">
                         <i class="fa fa-exclamation-triangle" title="Regression test selection contains parameterizedTest" style="color: orange"></i>
@@ -76,7 +76,7 @@
               </td>
                 <td>
                   <j:if test='${it.getPredecessorVmRuns().get(run) != null}'>
-                    <a href="../rtsLog_${run.getLinkUsable()}_${it.getPredecessorVmRuns().get(run).getVersion()}">${it.getPredecessorVmRuns().get(run).getShortVersion()}</a>
+                    <a href="../rtsLog_${run.getLinkUsable()}_${it.getPredecessorVmRuns().get(run).getCommit()}">${it.getPredecessorVmRuns().get(run).getShortCommit()}</a>
 
                       <j:if test="${it.getPredecessorVmRuns().get(run).isParameterizedWithoutIndex()}">
                         <i class="fa fa-exclamation-triangle" title="Regression test selection contains parameterizedTest" style="color: orange"></i>

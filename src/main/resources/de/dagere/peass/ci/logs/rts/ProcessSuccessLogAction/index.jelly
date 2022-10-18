@@ -6,7 +6,7 @@
     </l:side-panel>
     <l:main-panel>
 
-      <h1>Process Success Run Version: ${it.version}</h1>
+      <h1>Process Success Run Commit: ${it.commit}</h1>
       <pre>${it.log}</pre>
 
 

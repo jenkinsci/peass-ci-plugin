@@ -80,11 +80,11 @@ public class RTSVisualizationAction extends VisibleAction {
       return twiceExecutableTests.getTestMethods().contains(test);
    }
 
-   public String getVersion() {
+   public String getCommit() {
       return commit;
    }
 
-   public String getVersionOld() {
+   public String getCommitOld() {
       return commitOld;
    }
 

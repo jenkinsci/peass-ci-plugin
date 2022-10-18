@@ -18,7 +18,7 @@ public class RTSLogOverviewAction extends VisibleAction {
    private boolean staticallySelectedTests;
    private Map<TestMethodCall, RTSLogData> vmRuns;
    private Map<TestMethodCall, RTSLogData> predecessorVmRuns;
-   private final String version, versionOld;
+   private final String commit, commitOld;
    private boolean redirectSubprocessOutputToFile;
 
    public RTSLogOverviewAction(int id, final Map<String, File> processSuccessRuns, final Map<TestMethodCall, RTSLogData> vmRuns, final Map<TestMethodCall, RTSLogData> predecessorVmRuns,
@@ -28,8 +28,8 @@ public class RTSLogOverviewAction extends VisibleAction {
       this.vmRuns = vmRuns;
       this.predecessorVmRuns = predecessorVmRuns;
       this.processSuccessRunSucceeded = processSuccessRunSucceeded;
-      this.version = commit;
-      this.versionOld = commitOld;
+      this.commit = commit;
+      this.commitOld = commitOld;
       this.redirectSubprocessOutputToFile = redirectSubprocessOutputToFile;
    }
    
@@ -56,12 +56,12 @@ public class RTSLogOverviewAction extends VisibleAction {
       return processSuccessRunSucceeded;
    }
 
-   public String getVersion() {
-      return version;
+   public String getCommit() {
+      return commit;
    }
 
-   public String getVersionOld() {
-      return versionOld;
+   public String getCommitOld() {
+      return commitOld;
    }
 
    public boolean isStaticChanges() {

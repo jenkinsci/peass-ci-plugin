@@ -17,9 +17,9 @@ public class TestRTSLogSummary {
    public void testEmptyResult() {
       RTSLogSummary summary = RTSLogSummary.createLogSummary(new HashMap<>(), new HashMap<>());
 
-      Assert.assertFalse(summary.isErrorInCurrentVersionOccured());
-      Assert.assertFalse(summary.isErrorInPredecessorVersionOccured());
-      Assert.assertFalse(summary.isVersionContainsParametrizedwhithoutIndex());
+      Assert.assertFalse(summary.isErrorInCurrentCommitOccured());
+      Assert.assertFalse(summary.isErrorInPredecessorCommitOccured());
+      Assert.assertFalse(summary.isCommitContainsParametrizedwhithoutIndex());
    }
 
    @Test
@@ -31,13 +31,13 @@ public class TestRTSLogSummary {
       rtsVmRunsPredecessor.put(new TestMethodCall("TestMe", "test"), new RTSLogData(null, null, null, success, false, false));
       RTSLogSummary summary = RTSLogSummary.createLogSummary(rtsVmRuns, rtsVmRunsPredecessor);
 
-      Assert.assertFalse(summary.isErrorInCurrentVersionOccured());
-      Assert.assertFalse(summary.isErrorInPredecessorVersionOccured());
+      Assert.assertFalse(summary.isErrorInCurrentCommitOccured());
+      Assert.assertFalse(summary.isErrorInPredecessorCommitOccured());
 
-      Assert.assertTrue(summary.isVersionContainsSuccess());
+      Assert.assertTrue(summary.isCommitContainsSuccess());
       Assert.assertTrue(summary.isPredecessorContainsSuccess());
 
-      Assert.assertFalse(summary.isVersionContainsParametrizedwhithoutIndex());
+      Assert.assertFalse(summary.isCommitContainsParametrizedwhithoutIndex());
    }
 
    @Test
@@ -49,13 +49,13 @@ public class TestRTSLogSummary {
       rtsVmRunsPredecessor.put(TestMethodCall.createFromString("TestMe#test([0])"), new RTSLogData(null, null, null, success, true, false));
       RTSLogSummary summary = RTSLogSummary.createLogSummary(rtsVmRuns, rtsVmRunsPredecessor);
 
-      Assert.assertFalse(summary.isErrorInCurrentVersionOccured());
-      Assert.assertFalse(summary.isErrorInPredecessorVersionOccured());
+      Assert.assertFalse(summary.isErrorInCurrentCommitOccured());
+      Assert.assertFalse(summary.isErrorInPredecessorCommitOccured());
 
-      Assert.assertTrue(summary.isVersionContainsSuccess());
+      Assert.assertTrue(summary.isCommitContainsSuccess());
       Assert.assertTrue(summary.isPredecessorContainsSuccess());
 
-      Assert.assertTrue(summary.isVersionContainsParametrizedwhithoutIndex());
+      Assert.assertTrue(summary.isCommitContainsParametrizedwhithoutIndex());
       Assert.assertTrue(summary.isPredecessorContainsParametrizedwhithoutIndex());
 
       AggregatedRTSResult aggregatedResult = new AggregatedRTSResult(summary, null);
@@ -76,13 +76,13 @@ public class TestRTSLogSummary {
       rtsVmRunsPredecessor.put(TestMethodCall.createFromString("TestMe#test2([0])"), new RTSLogData(null, null, null, success, true, false));
       RTSLogSummary summary = RTSLogSummary.createLogSummary(rtsVmRuns, rtsVmRunsPredecessor);
 
-      Assert.assertFalse(summary.isErrorInCurrentVersionOccured());
-      Assert.assertTrue(summary.isErrorInPredecessorVersionOccured());
+      Assert.assertFalse(summary.isErrorInCurrentCommitOccured());
+      Assert.assertTrue(summary.isErrorInPredecessorCommitOccured());
 
-      Assert.assertTrue(summary.isVersionContainsSuccess());
+      Assert.assertTrue(summary.isCommitContainsSuccess());
       Assert.assertTrue(summary.isPredecessorContainsSuccess());
 
-      Assert.assertTrue(summary.isVersionContainsParametrizedwhithoutIndex());
+      Assert.assertTrue(summary.isCommitContainsParametrizedwhithoutIndex());
       Assert.assertTrue(summary.isPredecessorContainsParametrizedwhithoutIndex());
 
       AggregatedRTSResult aggregatedResult = new AggregatedRTSResult(summary, null);

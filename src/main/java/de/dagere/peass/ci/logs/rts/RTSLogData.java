@@ -21,11 +21,11 @@ public class RTSLogData {
       this.ignored = ignored;
    }
 
-   public String getVersion() {
+   public String getCommit() {
       return commit;
    }
 
-   public String getShortVersion() {
+   public String getShortCommit() {
       return TraceWriter.getShortCommit(commit);
    }
 

@@ -6,7 +6,7 @@
     </l:side-panel>
     <l:main-panel>
 
-      <h1>Regression Test Selection VM Run: ${it.version} ${it.testcase}</h1>
+      <h1>Regression Test Selection VM Run: ${it.commit} ${it.testcase}</h1>
       <h2>Cleaning Log</h2>
       <pre>${it.cleanLog}</pre>
       <h2>Regular Execution Log</h2>

@@ -16,10 +16,10 @@ public class TestAggregatedRTSResult {
    @Test
    public void testNoError() {
       RTSLogSummary summary = Mockito.mock(RTSLogSummary.class);
-      Mockito.when(summary.isErrorInCurrentVersionOccured()).thenReturn(false);
-      Mockito.when(summary.isErrorInPredecessorVersionOccured()).thenReturn(false);
+      Mockito.when(summary.isErrorInCurrentCommitOccured()).thenReturn(false);
+      Mockito.when(summary.isErrorInPredecessorCommitOccured()).thenReturn(false);
       Mockito.when(summary.isPredecessorContainsSuccess()).thenReturn(true);
-      Mockito.when(summary.isVersionContainsSuccess()).thenReturn(true);
+      Mockito.when(summary.isCommitContainsSuccess()).thenReturn(true);
 
       RTSResult rtsResult = new RTSResult(new HashSet<TestMethodCall>(), true);
       AggregatedRTSResult result = new AggregatedRTSResult(summary, rtsResult);
@@ -31,10 +31,10 @@ public class TestAggregatedRTSResult {
    @Test
    public void testNoTest() {
       RTSLogSummary summary = Mockito.mock(RTSLogSummary.class);
-      Mockito.when(summary.isErrorInCurrentVersionOccured()).thenReturn(false);
-      Mockito.when(summary.isErrorInPredecessorVersionOccured()).thenReturn(false);
+      Mockito.when(summary.isErrorInCurrentCommitOccured()).thenReturn(false);
+      Mockito.when(summary.isErrorInPredecessorCommitOccured()).thenReturn(false);
       Mockito.when(summary.isPredecessorContainsSuccess()).thenReturn(false);
-      Mockito.when(summary.isVersionContainsSuccess()).thenReturn(false);
+      Mockito.when(summary.isCommitContainsSuccess()).thenReturn(false);
 
       RTSResult rtsResult = new RTSResult(new HashSet<TestMethodCall>(), true);
       AggregatedRTSResult result = new AggregatedRTSResult(summary, rtsResult);
@@ -46,10 +46,10 @@ public class TestAggregatedRTSResult {
    @Test
    public void testAnError() {
       RTSLogSummary summary = Mockito.mock(RTSLogSummary.class);
-      Mockito.when(summary.isErrorInCurrentVersionOccured()).thenReturn(true);
-      Mockito.when(summary.isErrorInPredecessorVersionOccured()).thenReturn(false);
+      Mockito.when(summary.isErrorInCurrentCommitOccured()).thenReturn(true);
+      Mockito.when(summary.isErrorInPredecessorCommitOccured()).thenReturn(false);
       Mockito.when(summary.isPredecessorContainsSuccess()).thenReturn(true);
-      Mockito.when(summary.isVersionContainsSuccess()).thenReturn(true);
+      Mockito.when(summary.isCommitContainsSuccess()).thenReturn(true);
 
       RTSResult rtsResult = new RTSResult(new HashSet<TestMethodCall>(), true);
       AggregatedRTSResult result = new AggregatedRTSResult(summary, rtsResult);

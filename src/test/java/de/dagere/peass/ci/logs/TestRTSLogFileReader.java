@@ -53,7 +53,7 @@ public class TestRTSLogFileReader {
       Map<TestMethodCall, RTSLogData> rtsVmRunsPredecessor = reader.getRtsVmRuns("33ce17c04b5218c25c40137d4d09f40fbb3e4f0f", new TestSet());
       Assert.assertEquals(2, rtsVmRunsPredecessor.size());
       RTSLogData rtsLogData = rtsVmRunsPredecessor.get(TEST1);
-      Assert.assertEquals("33ce17c04b5218c25c40137d4d09f40fbb3e4f0f", rtsLogData.getVersion());
+      Assert.assertEquals("33ce17c04b5218c25c40137d4d09f40fbb3e4f0f", rtsLogData.getCommit());
       Assert.assertTrue(rtsLogData.isSuccess());
       Assert.assertFalse(rtsLogData.isParameterizedWithoutIndex());
    }
