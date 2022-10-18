@@ -116,8 +116,8 @@ public class RTSVisualizationCreator {
       if (coverageInfoFile.exists()) {
          LOG.info("Reading {}", coverageInfoFile);
          CoverageSelectionInfo executions = Constants.OBJECTMAPPER.readValue(coverageInfoFile, CoverageSelectionInfo.class);
-         CoverageSelectionCommit currentVersion = executions.getVersions().get(peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit());
-         return currentVersion;
+         CoverageSelectionCommit currentCommit = executions.getCommits().get(peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit());
+         return currentCommit;
       } else {
          LOG.info("File {} was not found, RTS coverage based selection info might be incomplete", coverageInfoFile.getAbsoluteFile());
       }
