@@ -9,6 +9,8 @@ import de.dagere.peass.ci.Messages;
 import de.dagere.peass.ci.VisibleAction;
 import de.dagere.peass.ci.logs.rts.RTSLogSummary;
 import de.dagere.peass.config.TestSelectionConfig;
+import de.dagere.peass.dependency.analysis.data.TestSet;
+import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.dependency.traces.coverage.CoverageSelectionCommit;
 import io.jenkins.cli.shaded.org.jvnet.localizer.ResourceBundleHolder;
 
@@ -19,21 +21,23 @@ public class RTSVisualizationAction extends VisibleAction {
    private final TestSelectionConfig config;
    private final Map<String, List<String>> staticSelection;
    private final List<String> dynamicSelection;
-   private final String version, versionOld;
+   private final String commit, commitOld;
    private final RTSLogSummary logSummary;
 
    private final CoverageSelectionCommit coverageSelection;
+   private final TestSet twiceExecutableTests;
 
    public RTSVisualizationAction(int id, final TestSelectionConfig config, final Map<String, List<String>> staticSelection, final List<String> dynamicSelection,
          final CoverageSelectionCommit coverageSelection,
-         final String version, final String versionOld, final RTSLogSummary logSummary) {
+         TestSet twiceExecutableTests, final String commit, final String commitOld, final RTSLogSummary logSummary) {
       super(id);
       this.config = config;
       this.staticSelection = staticSelection;
       this.dynamicSelection = dynamicSelection;
       this.coverageSelection = coverageSelection;
-      this.version = version;
-      this.versionOld = versionOld;
+      this.twiceExecutableTests = twiceExecutableTests;
+      this.commit = commit;
+      this.commitOld = commitOld;
       this.logSummary = logSummary;
    }
 
@@ -69,13 +73,19 @@ public class RTSVisualizationAction extends VisibleAction {
    public CoverageSelectionCommit getCoveragebasedSelection() {
       return coverageSelection;
    }
+   
+   public boolean isTwiceExecutable(String testcase) {
+      // TODO In general, the action should use TestMethodCall instances to keep type safety; this needs some refactoring
+      TestMethodCall test = TestMethodCall.createFromString(testcase);
+      return twiceExecutableTests.getTestMethods().contains(test);
+   }
 
    public String getVersion() {
-      return version;
+      return commit;
    }
 
    public String getVersionOld() {
-      return versionOld;
+      return commitOld;
    }
 
    public RTSLogSummary getLogSummary() {

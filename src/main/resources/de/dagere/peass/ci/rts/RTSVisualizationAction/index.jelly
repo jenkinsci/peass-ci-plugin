@@ -107,10 +107,22 @@
             <br />
         </j:if>
         
-        <j:forEach var="testcase" items="${it.dynamicSelection}">
-          <a href="../rts_${testcase.replace('#', '_')}"> ${testcase} </a>
-          <br />
-        </j:forEach>
+        <table>
+          <j:forEach var="testcase" items="${it.dynamicSelection}">
+            <tr>
+              <td>
+                <a href="../rts_${testcase.replace('#', '_')}"> ${testcase} </a>
+              </td>
+              <td>
+                <j:if test="${!it.isTwiceExecutable(testcase)}">
+                  <i class="fa fa-exclamation-triangle" title="Test not executable twice" style="color: orange"></i>
+                   This test was not executable twice without an error, and is therefore not further considered.
+                   <br />
+                </j:if>
+              </td>
+            </tr>
+          </j:forEach>
+        </table>
 
       </j:if>
 

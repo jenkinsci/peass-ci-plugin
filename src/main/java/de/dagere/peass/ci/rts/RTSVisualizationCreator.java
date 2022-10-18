@@ -50,13 +50,14 @@ public class RTSVisualizationCreator {
          Map<String, List<String>> staticSelection = readStaticSelection(run);
 
          List<String> traceSelectedTests = readTraceBasedSelection(run);
-         CoverageSelectionCommit coverageSelectedTests = readCoverageSelection(run);
+         CoverageSelectionCommit coverageSelectedTests = readCoverageSelection();
+         TestSet twiceExecutableTests = readTwiceExecutability();
 
-         System.out.println("Selected: " + traceSelectedTests + " Coverage: " + coverageSelectedTests);
+         LOG.info("Selected: " + traceSelectedTests + " Coverage: " + coverageSelectedTests);
 
          FixedCommitConfig fixedCommitConfig = peassConfig.getMeasurementConfig().getFixedCommitConfig();
          RTSVisualizationAction rtsVisualizationAction = new RTSVisualizationAction(IdHelper.getId(), peassConfig.getDependencyConfig(), staticSelection, traceSelectedTests,
-               coverageSelectedTests,
+               coverageSelectedTests, twiceExecutableTests,
                fixedCommitConfig.getCommit(), fixedCommitConfig.getCommitOld(),
                logSummary);
          run.addAction(rtsVisualizationAction);
@@ -101,7 +102,7 @@ public class RTSVisualizationCreator {
          TestSet tests = traceSelections.getCommits().get(peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit());
 
          if (tests != null) {
-            for (TestCase test : tests.getTests()) {
+            for (TestCase test : tests.getTestMethods()) {
                selectedTests.add(test.toString());
             }
          }
@@ -111,7 +112,7 @@ public class RTSVisualizationCreator {
       return selectedTests;
    }
 
-   private CoverageSelectionCommit readCoverageSelection(final Run<?, ?> run) throws IOException, JsonParseException, JsonMappingException {
+   private CoverageSelectionCommit readCoverageSelection() throws IOException {
       File coverageInfoFile = localWorkspace.getCoverageInfoFile();
       if (coverageInfoFile.exists()) {
          LOG.info("Reading {}", coverageInfoFile);
@@ -120,6 +121,19 @@ public class RTSVisualizationCreator {
          return currentCommit;
       } else {
          LOG.info("File {} was not found, RTS coverage based selection info might be incomplete", coverageInfoFile.getAbsoluteFile());
+      }
+      return null;
+   }
+   
+   private TestSet readTwiceExecutability() throws IOException {
+      File twiceExecutabilityFile = localWorkspace.getTwiceExecutableFile();
+      if (twiceExecutabilityFile.exists()) {
+         LOG.info("Reading {}", twiceExecutabilityFile);
+         ExecutionData executions = Constants.OBJECTMAPPER.readValue(twiceExecutabilityFile, ExecutionData.class);
+         TestSet currentCommit = executions.getCommits().get(peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit());
+         return currentCommit;
+      } else {
+         LOG.info("File {} was not found, twice executability was probably not checked", twiceExecutabilityFile.getAbsoluteFile());
       }
       return null;
    }
