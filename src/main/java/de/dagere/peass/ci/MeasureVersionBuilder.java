@@ -142,6 +142,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
    private String testTransformer = "de.dagere.peass.testtransformation.JUnitTestTransformer";
    private String testExecutor = "default";
+   
+   private String xmx;
 
    private String clazzFolders = ExecutionConfigMixin.CLAZZ_FOLDERS_DEFAULT;
    private String testClazzFolders = ExecutionConfigMixin.TEST_FOLDERS_DEFAULT;
@@ -448,6 +450,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       if (pl != null && !"".equals(pl)) {
          executionConfig.setPl(pl);
       }
+      
+      executionConfig.setXmx(xmx);
 
       if (executionConfig.isExecuteBeforeClassInMeasurement() && executionConfig.isOnlyMeasureWorkload()) {
          throw new RuntimeException("executeBeforeClassInMeasurement may only be activated if onlyMeasureWorkload is deactivated!");
@@ -887,6 +891,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    @DataBoundSetter
    public void setTestTransformer(final String testTransformer) {
       this.testTransformer = testTransformer;
+   }
+   
+   public String getXmx() {
+      return xmx;
+   }
+   
+   @DataBoundSetter
+   public void setXmx(String xmx) {
+      this.xmx = xmx;
    }
 
    public String getClazzFolders() {

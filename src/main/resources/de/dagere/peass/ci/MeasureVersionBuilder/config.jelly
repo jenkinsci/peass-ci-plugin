@@ -290,6 +290,10 @@
           <f:entry title="${%testTransformer}" field="testTransformer" description="${%testTransformerDescr}">
             <f:textbox default="de.dagere.peass.testtransformation.JUnitTestTransformer" />
           </f:entry>
+          <br />
+          <f:entry title="${%xmx}" field="xmx" description="${%xmxDescr}">
+            <f:textbox/>
+          </f:entry>
         </td>
       </tr>
       <tr>
