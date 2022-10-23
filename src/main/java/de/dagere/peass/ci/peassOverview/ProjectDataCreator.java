@@ -57,13 +57,13 @@ public class ProjectDataCreator {
                projectName = analyzeProject(run, listener, projectData, project, projectName, projectWorkspace);
             } else {
                listener.getLogger().println("Could not analyze " + projectPath + ": expected file " + projectWorkspace.getAbsolutePath() + " did not exist");
-               projectData.put(projectName, new ProjectData(null, null, null, true));
+               projectData.put(projectName, new ProjectData(null, null, null, null, null, null, true));
             }
          } catch (IOException e) {
             listener.getLogger().println("Could not analyze " + projectPath);
             LOG.error("Was not able to analyze project {}", projectName);
             e.printStackTrace();
-            projectData.put(projectName, new ProjectData(null, null, null, true));
+            projectData.put(projectName, new ProjectData(null, null, null, null, null, null, true));
          }
       }
       return projectData;
@@ -115,19 +115,28 @@ public class ProjectDataCreator {
 
       List<String> includedCommits = findIncludedCommits(resultsFolders);
 
-      StaticTestSelection selection = Constants.OBJECTMAPPER.readValue(resultsFolders.getStaticTestSelectionFile(), StaticTestSelection.class);
+      StaticTestSelection staticSelection = Constants.OBJECTMAPPER.readValue(resultsFolders.getStaticTestSelectionFile(), StaticTestSelection.class);
 
-      removeNotIncludedCommits(includedCommits, selection);
+      removeNotIncludedCommits(includedCommits, staticSelection);
 
+      ExecutionData executionData = null, twiceExecutabilitySelection = null, coverageSelection = null;
       if (resultsFolders.getTraceTestSelectionFile().exists()) {
-         ExecutionData data = Constants.OBJECTMAPPER.readValue(resultsFolders.getTraceTestSelectionFile(), ExecutionData.class);
+         executionData = Constants.OBJECTMAPPER.readValue(resultsFolders.getTraceTestSelectionFile(), ExecutionData.class);
 
-         PeassOverviewUtils.removeNotTraceSelectedTests(selection, data);
+         PeassOverviewUtils.removeNotTraceSelectedTests(staticSelection, executionData);
+      }
+      
+      if (resultsFolders.getTwiceExecutableFile().exists()) {
+         twiceExecutabilitySelection = Constants.OBJECTMAPPER.readValue(resultsFolders.getTwiceExecutableFile(), ExecutionData.class);
+      }
+      
+      if (resultsFolders.getCoverageSelectionFile().exists()) {
+         coverageSelection = Constants.OBJECTMAPPER.readValue(resultsFolders.getCoverageSelectionFile(), ExecutionData.class);
       }
 
       ProjectChanges projectChanges = getChanges(listener, resultsFolders);
       ProjectStatistics statistics = getStatistics(listener, resultsFolders);
-      ProjectData currentProjectData = new ProjectData(selection, projectChanges, statistics, false);
+      ProjectData currentProjectData = new ProjectData(staticSelection, executionData, twiceExecutabilitySelection, coverageSelection, projectChanges, statistics, false);
       return currentProjectData;
    }
 

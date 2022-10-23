@@ -16,17 +16,36 @@ import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.analysis.data.TestSet;
 import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.dependency.persistence.CommitStaticSelection;
+import de.dagere.peass.dependency.persistence.ExecutionData;
 import de.dagere.peass.dependency.persistence.StaticTestSelection;
 import de.dagere.peass.measurement.statistics.data.TestcaseStatistic;
 
 public class ProjectData {
    private final StaticTestSelection selection;
+   private final ExecutionData executionData, twiceExecutabilitySelection, coverageSelection;
    private final ProjectChanges changes;
    private final ProjectStatistics statistics;
    private final boolean containsError;
 
+   public ProjectData(StaticTestSelection selection, ExecutionData executionData, ExecutionData twiceExecutabilitySelection, ExecutionData coverageSelection,
+         ProjectChanges changes, ProjectStatistics statistics, boolean containsError) {
+      this.selection = selection;
+      this.executionData = executionData;
+      this.twiceExecutabilitySelection = twiceExecutabilitySelection;
+      this.coverageSelection = coverageSelection;
+      this.changes = changes;
+      this.statistics = statistics;
+      this.containsError = containsError;
+   }
+
+   /**
+    * @deprecated only present to keep existing overviews working; will be removed on next release
+    */
    public ProjectData(StaticTestSelection selection, ProjectChanges changes, ProjectStatistics statistics, boolean containsError) {
       this.selection = selection;
+      this.executionData = null;
+      this.twiceExecutabilitySelection = null;
+      this.coverageSelection = null;
       this.changes = changes;
       this.statistics = statistics;
       this.containsError = containsError;
@@ -39,7 +58,7 @@ public class ProjectData {
    public ProjectChanges getChanges() {
       return changes;
    }
-   
+
    public ProjectStatistics getStatistics() {
       return statistics;
    }
@@ -101,7 +120,7 @@ public class ProjectData {
 
    private void addNoneTestCausingChanges(List<ChangeLine> result, String commit, List<String> changesWithNoTest) {
       if (changesWithNoTest.size() > 0) {
-         ChangeLine line = new ChangeLine(commit, changesWithNoTest, "none", Double.NaN);
+         ChangeLine line = new ChangeLine(commit, changesWithNoTest, "none", Double.NaN, null);
          result.add(line);
       }
    }
@@ -114,9 +133,35 @@ public class ProjectData {
 
          List<String> changesAsList = new LinkedList<>();
          changesAsList.addAll(oneTestEntry.getValue());
-         ChangeLine line = new ChangeLine(commit, changesAsList, test.toString(), changeValue);
+
+         DynamicallyUnselected dynamicallyUnselectedReason = getUnselectedReason(commit, test);
+         System.out.println("Test " + test + " dynamically unselected due to " + dynamicallyUnselectedReason);
+
+         ChangeLine line = new ChangeLine(commit, changesAsList, test.toString(), changeValue, dynamicallyUnselectedReason);
          result.add(line);
       }
+   }
+
+   private DynamicallyUnselected getUnselectedReason(String commit, TestMethodCall test) {
+      DynamicallyUnselected dynamicallyUnselectedReason = null;
+      if (coverageSelection != null) {
+         System.out.println("Checking coverage selection");
+         boolean selected = coverageSelection.commitContainsTest(commit, test);
+         if (!selected) {
+            dynamicallyUnselectedReason = DynamicallyUnselected.COVERAGE_SELECTION;
+         }
+      } else if (twiceExecutabilitySelection != null) {
+         boolean selected = twiceExecutabilitySelection.commitContainsTest(commit, test);
+         if (!selected) {
+            dynamicallyUnselectedReason = DynamicallyUnselected.TWICE_EXECUTABILITY;
+         }
+      } else if (executionData != null) {
+         boolean selected = executionData.commitContainsTest(commit, test);
+         if (!selected) {
+            dynamicallyUnselectedReason = DynamicallyUnselected.TRACE;
+         }
+      }
+      return dynamicallyUnselectedReason;
    }
 
    private double getChangeValue(String commit, TestMethodCall test) {

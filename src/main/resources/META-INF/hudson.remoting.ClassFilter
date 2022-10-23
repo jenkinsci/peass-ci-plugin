@@ -21,5 +21,6 @@ de.dagere.peass.dependency.analysis.data.TestCase
 de.dagere.peass.dependency.analysis.testData.TestMethodCall
 de.dagere.peass.dependency.analysis.testData.TestClazzCall
 de.dagere.peass.dependency.traces.coverage.CoverageSelectionCommit
+de.dagere.peass.dependency.persistence.ExecutionData
 de.dagere.peass.dependency.traces.coverage.TraceCallSummary
 de.dagere.peass.dependency.analysis.data.TestSet

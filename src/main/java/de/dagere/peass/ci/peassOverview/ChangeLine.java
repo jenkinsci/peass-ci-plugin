@@ -13,15 +13,17 @@ public class ChangeLine implements Serializable {
    private List<String> changedEntity;
    private String testcase;
    private double changePercent;
+   private DynamicallyUnselected dynamicallyUnselected;
 
    public ChangeLine() {
    }
 
-   public ChangeLine(String commit, List<String> changedEntity, String testcase, double changePercent) {
+   public ChangeLine(String commit, List<String> changedEntity, String testcase, double changePercent, DynamicallyUnselected dynamicallyUnselected) {
       this.commit = commit;
       this.changedEntity = changedEntity;
       this.testcase = testcase;
       this.changePercent = changePercent;
+      this.dynamicallyUnselected = dynamicallyUnselected;
    }
 
    public String getCommit() {
@@ -54,6 +56,14 @@ public class ChangeLine implements Serializable {
 
    public void setTestcase(String testcase) {
       this.testcase = testcase;
+   }
+
+   public DynamicallyUnselected getDynamicallyUnselected() {
+      return dynamicallyUnselected;
+   }
+
+   public void setDynamicallyUnselected(DynamicallyUnselected dynamicallyUnselected) {
+      this.dynamicallyUnselected = dynamicallyUnselected;
    }
 
    public List<String> getTestcaseVisible() {

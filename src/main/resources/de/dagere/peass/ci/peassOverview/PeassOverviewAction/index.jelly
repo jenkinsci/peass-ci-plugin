@@ -228,30 +228,34 @@
                             </div>
                           </j:when>
                           <j:when test="${change.isNaN(change.getChangePercent())}">
-                            <div style="background-color:rgba(255, 0, 0, 0.15); padding:2%;">
+                            <j:if test="${change.dynamicallyUnselected == null}">
+                              <div style="background-color:rgba(255, 0, 0, 0.15); padding:2%;">
                               Unmeasured
-                              <form action="updateUnmeasured" method="post" target='classificationResultFrame'> 
-                              <div style='display: none'>
-                                <f:textbox name='project' value="${project.getKey()}"/>
-                                <f:textbox name='commit' value="${lastCommit}"/>
-                                <f:textbox name='testcase' value="${change.getTestcase()}"/>
+                                <form action="updateUnmeasured" method="post" target='classificationResultFrame'> 
+                                  <div style='display: none'>
+                                    <f:textbox name='project' value="${project.getKey()}"/>
+                                    <f:textbox name='commit' value="${lastCommit}"/>
+                                    <f:textbox name='testcase' value="${change.getTestcase()}"/>
+                                  </div>
+                                  <f:entry name="classification" title="Choose Unmeasured Classificiation" field="classification">
+                                    <select name="classification">
+                                      <j:forEach var="option" items="${it.getUnmeasuredClassificationArray()}">
+                                        <j:if test="${it.getUnmeasuredClassification(project.getKey(), lastCommit, change.getTestcase()).equals(option)}">
+                                          <option value="${option}" selected="selected">${option}</option>
+                                        </j:if>
+                                         <j:if test="${!it.getUnmeasuredClassification(project.getKey(), lastCommit, change.getTestcase()).equals(option)}">
+                                          <option value="${option}">${option}</option>
+                                        </j:if>
+                                      </j:forEach>
+                                    </select>
+                                  </f:entry>
+                                  <f:submit method="updateUnmeasured" type="submit" title="Classify" with="project,commit,testcase,classification" />
+                                </form>
                               </div>
-                              <f:entry name="classification" title="Choose Unmeasured Classificiation" field="classification">
-                                <select name="classification">
-                                  <j:forEach var="option" items="${it.getUnmeasuredClassificationArray()}">
-                                    <j:if test="${it.getUnmeasuredClassification(project.getKey(), lastCommit, change.getTestcase()).equals(option)}">
-                                      <option value="${option}" selected="selected">${option}</option>
-                                    </j:if>
-                                     <j:if test="${!it.getUnmeasuredClassification(project.getKey(), lastCommit, change.getTestcase()).equals(option)}">
-                                      <option value="${option}">${option}</option>
-                                    </j:if>
-                                  </j:forEach>
-                                </select>
-                              </f:entry>
-                              <f:submit method="updateUnmeasured" type="submit" title="Classify" with="project,commit,testcase,classification" />
-                              
-                            </form>
-                            </div>
+                            </j:if>
+                            <j:if test="${change.dynamicallyUnselected != null}">
+                                This test was not selected by dynamic selection: ${change.dynamicallyUnselected}
+                            </j:if>
                           </j:when>
                         </j:choose>
                       </j:if>
