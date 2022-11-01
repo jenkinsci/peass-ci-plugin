@@ -125,6 +125,13 @@
           </f:entry>
         </td>
       </tr>
+      <tr>
+        <td>
+          <f:entry title="${%cleanGoal}" field="cleanGoal" description="${%cleanGoalDescr}">
+            <f:textbox default="cleanTest" />
+          </f:entry>
+        </td>
+      </tr>
     </table>
 
     <h1>${%VersionSelection}</h1>
