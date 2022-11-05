@@ -53,7 +53,8 @@
       </h2>
 
       <div id="dialogStaticallySelected" title="Statically Selected Changes">Peass-CI first selects changes by static code analysis. Therefore, all changes (which may affect a method or
-        all methods of a class) are generated and the tests, which call the changes, are derived.</div>
+        all methods of a class) are generated and the tests, which call the changes, are derived.
+      </div>
       <script>
         $( "#dialogStaticallySelected" ).dialog({ autoOpen: false });
       </script>
@@ -67,13 +68,15 @@
           <tr>
             <td>
               <j:forEach var="changeLine" items="${change.getKey()}">
-                ${changeLine}<br />
+                ${changeLine}
+                <br />
               </j:forEach>
             </td>
             <td>
               <j:forEach var="testcase" items="${change.getValue()}">
                 <j:forEach var="testcaseLine" items="${testcase}">
-                ${testcaseLine}<br />
+                  ${testcaseLine}
+                  <br />
                 </j:forEach>
               </j:forEach>
             </td>
@@ -90,23 +93,26 @@
         </h2>
 
         <div id="dialogTraceSelected" title="Trace Selected Changes">In the second step, the traces of the statically selected test cases are derived. Only test cases with a change
-          in the trace are selected.</div>
+          in the trace are selected.
+        </div>
         <script>
           $( "#dialogTraceSelected" ).dialog({ autoOpen: false });
         </script>
 
-        <j:if test="${it.getLogSummary().isCommitContainsParametrizedwhithoutIndex() || it.getLogSummary().isPredecessorContainsParametrizedwhithoutIndex()}">
+        <j:if
+          test="${it.getLogSummary().isCommitContainsParametrizedwhithoutIndex() || it.getLogSummary().isPredecessorContainsParametrizedwhithoutIndex()}">
           <i class="fa fa-exclamation-triangle" title="Regression test selection contains parameterizedTest" style="color: orange"></i>
-            Info: Regression test selection contains parameterizedTest.
-            <br />
+          Info: Regression test selection contains parameterizedTest.
+          <br />
         </j:if>
 
         <j:if test="${it.getLogSummary().isErrorInCurrentCommitOccured() || it.getLogSummary().isErrorInPredecessorCommitOccured()}">
           <i class="fa fa-exclamation-triangle" title="Regression test selection had error" style="color: red"></i>
-            Warning: An error occured during trace getting execution. Please check the logs for details and consider fixing the configuration or excluding the erroneous test cases.
-            <br />
+          Warning: An error occured during trace getting execution. Please check the logs for details and consider fixing the configuration or excluding the
+          erroneous test cases.
+          <br />
         </j:if>
-        
+
         <table>
           <j:forEach var="testcase" items="${it.dynamicSelection}">
             <tr>
@@ -116,8 +122,8 @@
               <td>
                 <j:if test="${!it.isTwiceExecutable(testcase)}">
                   <i class="fa fa-exclamation-triangle" title="Test not executable twice" style="color: orange"></i>
-                   This test was not executable twice without an error, and is therefore not further considered.
-                   <br />
+                  This test was not executable twice without an error, and is therefore not further considered.
+                  <br />
                 </j:if>
               </td>
             </tr>
@@ -139,11 +145,12 @@
         </h2>
 
         <div id="dialogCoverageSelected" title="Coverage Selected Changes">Finally, tests are selected in a way that every source code change is covered by at least one test case.
-          Deactivate this is you want to measure all trace-based selected tests.</div>
+          Deactivate this is you want to measure all trace-based selected tests.
+        </div>
         <script>
           $( "#dialogCoverageSelected" ).dialog({ autoOpen: false });
         </script>
-        <table>
+        <table class="data-table">
           <tr>
             <th>Test Cases</th>
             <th>Call Counts</th>
@@ -160,15 +167,36 @@
                 </j:if>
               </td>
               <td>
-                <j:forEach var="callCounts" items="${testcase.getValue().getCallCounts()}">
-                  <j:if test="${testcase.getValue().getSelectedChanges().contains(callCounts.getKey())}">
-                    <b>${callCounts.getKey()}: ${callCounts.getValue()}</b>
-                  </j:if>
-                  <j:if test="${!testcase.getValue().getSelectedChanges().contains(callCounts.getKey())}">
-                    ${callCounts.getKey()}: ${callCounts.getValue()}
-                  </j:if>
-                  <br />
-                </j:forEach>
+                <j:choose>
+                  <j:when test="${testcase.getValue().getCallCounts().size() &lt; 5}">
+                    <j:forEach var="callCounts" items="${testcase.getValue().getCallCounts()}">
+                      <j:if test="${testcase.getValue().getSelectedChanges().contains(callCounts.getKey())}">
+                        <b>${callCounts.getKey()}: ${callCounts.getValue()}</b>
+                      </j:if>
+                      <j:if test="${!testcase.getValue().getSelectedChanges().contains(callCounts.getKey())}">
+                        ${callCounts.getKey()}: ${callCounts.getValue()}
+                      </j:if>
+                      <br />
+                    </j:forEach>
+                  </j:when>
+                  <j:otherwise>
+                    <details>
+                      <summary>
+                        Overall calls: ${testcase.getValue().getCallCounts().size()}
+                      </summary>
+                      <j:forEach var="callCounts" items="${testcase.getValue().getCallCounts()}">
+                        <j:if test="${testcase.getValue().getSelectedChanges().contains(callCounts.getKey())}">
+                          <b>${callCounts.getKey()}: ${callCounts.getValue()}</b>
+                        </j:if>
+                        <j:if test="${!testcase.getValue().getSelectedChanges().contains(callCounts.getKey())}">
+                          ${callCounts.getKey()}: ${callCounts.getValue()}
+                        </j:if>
+                        <br />
+                      </j:forEach>
+                    </details>
+                  </j:otherwise>
+                </j:choose>
+
               </td>
               <td>${testcase.getValue().getOverallScore()}</td>
             </tr>
