@@ -65,7 +65,6 @@ public class RTSVisualizationAction extends VisibleAction {
 
    }
 
-
    public List<String> getDynamicSelection() {
       return dynamicSelection;
    }
@@ -73,11 +72,15 @@ public class RTSVisualizationAction extends VisibleAction {
    public CoverageSelectionCommit getCoveragebasedSelection() {
       return coverageSelection;
    }
-   
+
    public boolean isTwiceExecutable(String testcase) {
       // TODO In general, the action should use TestMethodCall instances to keep type safety; this needs some refactoring
       TestMethodCall test = TestMethodCall.createFromString(testcase);
-      return twiceExecutableTests.getTestMethods().contains(test);
+      if (twiceExecutableTests != null) {
+         return twiceExecutableTests.getTestMethods().contains(test);
+      } else {
+         return true;
+      }
    }
 
    public String getCommit() {
