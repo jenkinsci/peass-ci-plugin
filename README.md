@@ -92,7 +92,7 @@ When looking at this, you can see the histogram of the averages of you VM runs a
 
 Building and updating to the latest Peass version from git is only required if you need the latest changes, e.g. if you want to change something yourself or you want to check whether a bug has been fixed. Otherwise, just use the release.
 
-If you see an error, do not hesitate to file an issue. If you know what you are doing, you can also create a PR, but we will only merge working PRs.
+If you see an error, do not hesitate to file an issue. If you know what you are doing, you can also create a PR, but we will only merge working PRs **against the develop branch**. Please do not create PRs against main, as this branch is only merged when a state is considered stable for releasing (and passed integration testing outside the repository itself).
 
 ## Building
 
