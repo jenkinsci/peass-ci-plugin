@@ -131,6 +131,11 @@
             <f:textbox default="cleanTest" />
           </f:entry>
         </td>
+        <td>
+          <f:entry title="${%clearMockitoCaches}" field="clearMockitoCaches" description="${%clearMockitoCachesDescr}">
+            <f:checkbox />
+          </f:entry>
+        </td>
       </tr>
     </table>
 

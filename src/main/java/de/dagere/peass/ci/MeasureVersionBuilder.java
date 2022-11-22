@@ -123,6 +123,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private StatisticalTests statisticalTest = StatisticalTests.T_TEST;
 
    private boolean executeBeforeClassInMeasurement = false;
+   private boolean clearMockitoCaches = false;
    private boolean onlyMeasureWorkload = false;
    private boolean onlyOneCallRecording = false;
 
@@ -347,6 +348,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       listener.getLogger().println("Fail on error in RTS: " + failOnRtsError);
       listener.getLogger().println("Redirect subprocess output to file: " + redirectSubprocessOutputToFile);
       listener.getLogger().println("CleanGoal: " + cleanGoal);
+      listener.getLogger().println("Execute @BeforeClass in measurement: " + executeBeforeClassInMeasurement);
+      listener.getLogger().println("Clear mockito caches: " + clearMockitoCaches);
    }
 
    private String getJobName(final Run<?, ?> run) {
@@ -410,6 +413,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       executionConfig.setTimeout(timeout * 60l * 1000);
 
       executionConfig.setExecuteBeforeClassInMeasurement(executeBeforeClassInMeasurement);
+      executionConfig.setClearMockitoCaches(clearMockitoCaches);
       executionConfig.setOnlyMeasureWorkload(onlyMeasureWorkload);
       if (onlyMeasureWorkload && repetitions != 1) {
          throw new RuntimeException("If onlyMeasureWorkload is set, repetitions should be 1, but are " + repetitions);
@@ -462,6 +466,10 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
       if (executionConfig.isExecuteBeforeClassInMeasurement() && executionConfig.isOnlyMeasureWorkload()) {
          throw new RuntimeException("executeBeforeClassInMeasurement may only be activated if onlyMeasureWorkload is deactivated!");
+      }
+
+      if (executionConfig.isClearMockitoCaches() && !executionConfig.isExecuteBeforeClassInMeasurement()) {
+         throw new RuntimeException("ClearMockitoCaches may only be activated if executeBeforeClassInMeasurement is activated!");
       }
    }
 
@@ -754,6 +762,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    @DataBoundSetter
    public void setExecuteBeforeClassInMeasurement(final boolean executeBeforeClassInMeasurement) {
       this.executeBeforeClassInMeasurement = executeBeforeClassInMeasurement;
+   }
+
+   public boolean isClearMockitoCaches() {
+      return clearMockitoCaches;
+   }
+
+   @DataBoundSetter
+   public void setClearMockitoCaches(final boolean clearMockitoCaches) {
+      this.clearMockitoCaches = clearMockitoCaches;
    }
 
    public boolean isOnlyMeasureWorkload() {
