@@ -62,9 +62,9 @@ public class RCAVisualizer {
       File rcaResults = visualizationFolders.getRcaResultFolder();
 
       Changes versionChanges = changes.getCommitChanges(measurementConfig.getFixedCommitConfig().getCommit());
-      File versionVisualizationFolder = new File(visualizationFolder, measurementConfig.getFixedCommitConfig().getCommit());
+      File commitVisualizationFolder = new File(visualizationFolder, measurementConfig.getFixedCommitConfig().getCommit());
 
-      createVisualizationActions(rcaResults, versionChanges, versionVisualizationFolder);
+      createVisualizationActions(rcaResults, versionChanges, commitVisualizationFolder);
    }
 
    private VisualizeRCAStarter preparePeassVisualizer(final File resultFolder) {
@@ -78,11 +78,11 @@ public class RCAVisualizer {
       return visualizer;
    }
 
-   private void createVisualizationActions(final File rcaResults, final Changes versionChanges, final File versionVisualizationFolder) throws IOException {
-      String longestPrefix = getLongestPrefix(versionChanges.getTestcaseChanges().keySet());
+   private void createVisualizationActions(final File rcaResults, final Changes commitChanges, final File commitVisualizationFolder) throws IOException {
+      String longestPrefix = getLongestPrefix(commitChanges.getTestcaseChanges().keySet());
 
-      LOG.info("Creating actions: " + versionChanges.getTestcaseChanges().size());
-      for (Entry<String, List<Change>> testcases : versionChanges.getTestcaseChanges().entrySet()) {
+      LOG.info("Creating actions: " + commitChanges.getTestcaseChanges().size());
+      for (Entry<String, List<Change>> testcases : commitChanges.getTestcaseChanges().entrySet()) {
          for (Change change : testcases.getValue()) {
             final String actionName;
             final String fileName;
@@ -93,7 +93,7 @@ public class RCAVisualizer {
                actionName = testcases.getKey() + "_" + change.getMethod();
                fileName = testcases.getKey() + File.separator + change.getMethod();
             }
-            File jsFile = new File(versionVisualizationFolder, fileName + ".js");
+            File jsFile = new File(commitVisualizationFolder, fileName + ".js");
             LOG.info("Trying to copy {} Exists: {}", jsFile.getAbsolutePath(), jsFile.exists());
             if (jsFile.exists()) {
                createRCAAction(rcaResults, longestPrefix, testcases, change, actionName, jsFile);
