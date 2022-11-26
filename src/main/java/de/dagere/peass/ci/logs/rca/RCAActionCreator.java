@@ -6,18 +6,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.ci.helper.IdHelper;
 import de.dagere.peass.ci.logs.InternalLogAction;
 import de.dagere.peass.ci.logs.LogFileReader;
 import de.dagere.peass.ci.logs.LogFiles;
 import de.dagere.peass.ci.logs.LogUtil;
+import de.dagere.peass.ci.rca.RCAVisualizer;
 import de.dagere.peass.config.FixedCommitConfig;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import hudson.model.Run;
 
 public class RCAActionCreator {
+   private static final Logger LOG = LogManager.getLogger(RCAActionCreator.class);
+
    private final LogFileReader reader;
    private final Run<?, ?> run;
    private final PeassProcessConfiguration peassConfig;
@@ -37,10 +43,15 @@ public class RCAActionCreator {
 
       Map<TestCase, List<RCALevel>> testLevelMap = createRCALogActions(reader);
 
-      FixedCommitConfig fixedCommitConfig = measurementConfig.getFixedCommitConfig();
-      RCALogOverviewAction rcaOverviewAction = new RCALogOverviewAction(IdHelper.getId(), testLevelMap, fixedCommitConfig.getCommit().substring(0, 6),
-            fixedCommitConfig.getCommitOld().substring(0, 6), measurementConfig.getExecutionConfig().isRedirectSubprocessOutputToFile());
-      run.addAction(rcaOverviewAction);
+      if (testLevelMap.size() > 0) {
+         FixedCommitConfig fixedCommitConfig = measurementConfig.getFixedCommitConfig();
+         RCALogOverviewAction rcaOverviewAction = new RCALogOverviewAction(IdHelper.getId(), testLevelMap, fixedCommitConfig.getCommit().substring(0, 6),
+               fixedCommitConfig.getCommitOld().substring(0, 6), measurementConfig.getExecutionConfig().isRedirectSubprocessOutputToFile());
+         run.addAction(rcaOverviewAction);
+      } else {
+         LOG.info("No RCA logs have been created, therefore, no log overview is created.");
+      }
+
    }
 
    private void createOverallActionLog() {
@@ -83,7 +94,7 @@ public class RCAActionCreator {
       } else {
          logData = "Log file could not be found";
       }
-      
+
       run.addAction(new RCALogAction(IdHelper.getId(), testcase.getKey(), vmId, levelId, commit, logData));
    }
 }
