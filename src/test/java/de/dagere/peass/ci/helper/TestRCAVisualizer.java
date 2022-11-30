@@ -77,6 +77,6 @@ public class TestRCAVisualizer {
    private void initFolders() throws IOException {
       final File projectFolder = new File(folder.getRoot(), "project");
       final CauseSearchFolders peassFolders = new CauseSearchFolders(projectFolder);
-      FileUtils.copyDirectory(new File("src/test/resources/demo-results/rca/rca_data"), peassFolders.getRcaTreeFolder());
+      FileUtils.copyDirectory(new File("src/test/resources/demo-results/rca/rca"), peassFolders.getRcaTreeFolder().getParentFile());
    }
 }
