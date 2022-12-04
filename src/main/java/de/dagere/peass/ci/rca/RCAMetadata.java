@@ -47,12 +47,17 @@ public class RCAMetadata {
       FileUtils.copyFile(mainJsFile, rcaDestFile);
       
       File predecessorJsFile = new File(commitVisualizationFolder, fileName + "_" + config.getCommitOld() + ".js");
-      final File predecessorDestFile = getPredecessorFile();
-      FileUtils.copyFile(predecessorJsFile, predecessorDestFile);
+      
+      if (predecessorJsFile.exists()) {
+         final File predecessorDestFile = getPredecessorFile();
+         FileUtils.copyFile(predecessorJsFile, predecessorDestFile);
+      }
       
       File currentJsFile = new File(commitVisualizationFolder, fileName + "_" + config.getCommit() + ".js");
-      final File currentDestFile = getCurrentFile();
-      FileUtils.copyFile(currentJsFile, currentDestFile);
+      if (currentJsFile.exists()) {
+         final File currentDestFile = getCurrentFile();
+         FileUtils.copyFile(currentJsFile, currentDestFile);
+      }
    }
 
    public File getCurrentFile() {

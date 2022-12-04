@@ -105,8 +105,8 @@ public class RCAVisualizer {
       final String displayName = metadata.getActionName().substring(longestPrefix.length());
 
       final String mainTreeJSContent = peassConfig.getLogText(rcaDestFile);
-      final String predecessorTreeJSContent = peassConfig.getLogText(metadata.getPredecessorFile());
-      final String currentTreeJSContent = peassConfig.getLogText(metadata.getCurrentFile());
+      final String predecessorTreeJSContent = metadata.getPredecessorFile().exists() ? peassConfig.getLogText(metadata.getPredecessorFile()) : null;
+      final String currentTreeJSContent = metadata.getCurrentFile().exists() ? peassConfig.getLogText(metadata.getCurrentFile()) : null;
       
       RCAVisualizationAction visualizationAction = new RCAVisualizationAction(IdHelper.getId(), displayName, mainTreeJSContent, predecessorTreeJSContent, currentTreeJSContent);
       run.addAction(visualizationAction);
