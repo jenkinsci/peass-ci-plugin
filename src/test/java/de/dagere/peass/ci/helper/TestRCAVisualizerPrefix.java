@@ -19,6 +19,7 @@ import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.ci.RCAVisualizationAction;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
+import de.dagere.peass.ci.rca.RCAMetadata;
 import de.dagere.peass.ci.rca.RCAVisualizer;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.utils.Constants;
@@ -85,8 +86,9 @@ public class TestRCAVisualizerPrefix {
       
       for (Entry<String, List<Change>> testcases : versionChanges.getTestcaseChanges().entrySet()) {
          for (Change change : testcases.getValue()) {
-            final String name = testcases.getKey() + "_" + change.getMethod();
-            rcaVisualizer.createRCAAction(new File("target/"), longestPrefix, testcases, change, name, changefile);
+//            final String name = testcases.getKey() + "_" + change.getMethod();
+            RCAMetadata metadata = new RCAMetadata(change, testcases, peassConfig.getMeasurementConfig().getFixedCommitConfig(), visualizationResultFolder);
+            rcaVisualizer.createRCAAction(new File("target/"), longestPrefix, testcases, change, metadata, changefile);
          }
       }
       return run;

@@ -1,4 +1,3 @@
-
 var i = 0,
 	duration = 750,
 	root;
@@ -14,6 +13,14 @@ var svg = d3.select("#tree").append("svg")
 	.attr("height", height + margin.top + margin.bottom)
   .append("g")
 	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var faster_removed = textures.paths().d("crosses")
+.background("#99FF99")
+.thicker();
+
+var slower_added = textures.paths().d("caps")
+.background("#FF9999")
+.thicker();
 
 var faster_changed = textures.lines()
 .background("#00FF00")
@@ -31,6 +38,8 @@ var equal_changed = textures.lines()
 .background("#FFF")
 .thicker();
 
+svg.call(faster_removed);
+svg.call(slower_added);
 svg.call(faster_changed);
 svg.call(slower_changed);
 svg.call(unknown_changed);
@@ -39,20 +48,28 @@ svg.call(equal_changed);
 root = treeData[0];
 root.x0 = height / 2;
 root.y0 = 0;
-
+  
 update(root);
 
 d3.select(self.frameElement).style("height", "500px");
 
 function getTexture(node) {
   if (node.hasSourceChange) { 
-    switch (node.state) {
-      case 'FASTER': return faster_changed.url();
-      case 'SLOWER': return slower_changed.url();
-      case 'UNKNOWN': return unknown_changed.url();
-      case null: return equal_changed.url();
+    if (node.kiekerPattern == "ADDED") {
+      return faster_removed.url();
     }
-  } else return node.color;
+    if (node.otherKiekerPattern == "ADDED") {
+      return slower_added.url();
+    }
+    switch (node.state) {
+	  case 'FASTER': return faster_changed.url();
+	  case 'SLOWER': return slower_changed.url();
+	  case 'UNKNOWN': return unknown_changed.url();
+	  case null: return equal_changed.url();
+	}
+  }
+  else 
+	return node.color;
 }
 
 function update(source) {
@@ -180,7 +197,7 @@ function collapseNode(parent){
 function fallbackCopyTextToClipboard(text) {
   var textArea = document.createElement("textarea");
   textArea.value = text;
-
+  
   // Avoid scrolling to bottom
   textArea.style.top = "0";
   textArea.style.left = "0";
@@ -222,23 +239,22 @@ function diffUsingJS(text1, text2, outputDiv) {
 }
 
 function shownode(node) {
-  var minValue = Math.min(node.statistic.meanCurrent, node.statistic.meanOld);
-  var factor, unit;
-  if (minValue <= 1000) {
-    unit = "n";
-    factor = 1;
-  } else if (minValue <= 1000000) {
-    unit = "&#x00B5;";
-    factor = 1000;
-  } else if (minValue <= 1000000000) {
-    unit = "m";
-    factor = 1000000;
-  } else {
-    unit = ""
-    factor = 1000000000;
-  }
-
-  if (node.statistic != null){
+  if (node.statistic != null) {
+    var minValue = Math.min(node.statistic.meanCurrent, node.statistic.meanOld);
+    var factor, unit;
+    if (minValue <= 1000) {
+      unit = "n";
+      factor = 1;
+    } else if (minValue <= 1000000) {
+      unit = "&#x00B5;";
+      factor = 1000;
+    } else if (minValue <= 1000000000) {
+      unit = "m";
+      factor = 1000000;
+    } else {
+      unit = ""
+      factor = 1000000000;
+    } 
 	  infos.innerHTML="<table class='data-table'>" +
       "<tr><th>Property</th><th>Predecessor</th><th>Current</th></tr>"+
       "<tr><td>Mean</td><td>" + round(node.statistic.meanOld / factor).toLocaleString() + " " + unit + "s</td><td>" + round(node.statistic.meanCurrent / factor).toLocaleString() + " " + unit + "s</td></tr>"+
@@ -246,41 +262,55 @@ function shownode(node) {
       "<tr><td>In-VM-Deviation</td><td>" + round(node.inVMDeviationPredecessor).toLocaleString() + "</td><td>" + round(node.inVMDeviation).toLocaleString() + "</td></tr>" +
       "</table> VMs: " + node.statistic.vms +
       " T=" + round(node.statistic.tvalue).toLocaleString();
-  } else {
+  } else if (typeof infos !== 'undefined') {
 	  infos.innerHTML = "No statistic";
   }
-  if (node.key != node.otherKey){
-    diffUsingJS(source["old"][node.key], source["current"][node.otherKey], quelltext);
-  } else {
+  
+  if (node.otherKey == null){
     var sourceCurrent = source["current"][node.key];
-    var sourceOld = source["old"][node.key];
-    if (sourceCurrent != null && sourceOld != null){
-      if (sourceCurrent == sourceOld) {
-        var code = source["current"][node.key];
-      	const highlightedCode = hljs.highlight("java", code).value;
-    	quelltext.innerHTML="<pre>"+highlightedCode+"</pre>";
-      } else {
-    	  diffUsingJS(sourceOld, sourceCurrent, quelltext);
+    const highlightedCode = hljs.highlight("java", source["current"][node.key]).value;
+    quelltext.innerHTML="<pre>"+highlightedCode+"</pre>";
+  } else {
+    if (node.key != node.otherKey){
+      var sourceCurrent = source["current"][node.otherKey];
+      var sourceOld = source["old"][node.key];
+      diffUsingJS(sourceOld, sourceCurrent, quelltext);
+    } else {
+      var sourceCurrent = source["current"][node.key];
+      var sourceOld = source["old"][node.key];
+      if (sourceCurrent != null && sourceOld != null){
+        if (sourceCurrent == sourceOld) {
+          const highlightedCode = hljs.highlight("java", source["current"][node.key]).value;
+      	  quelltext.innerHTML="<pre>"+highlightedCode+"</pre>";
+        } else {
+          diffUsingJS(sourceOld, sourceCurrent, quelltext);
+        }
       }
     }
   }
-
-  var inspectLink = "<p class='button-wrap'>";
-  if (node.ess != -1){
-    if (jenkins) {
-      inspectLink += "<a role='button' href='dashboard?ess="+node.ess+"&call=" + encodeURIComponent(node.call)+"' target='parent'>Inspect Node</a><br><br>";
+  
+  var inspectLink = "";
+  if (node.ess != -1) {
+    if (typeof jenkins !== 'undefined') {
+      inspectLink = "<a href='"+treeData[0].call.replace("#", "_") +"_dashboard.html?ess="+node.ess+"&call=" + encodeURIComponent(node.call)+"' target='parent'>Inspect Node</a><br><br>";
     } else {
-      inspectLink += "<a role='button' href='"+treeData[0].call.replace("#", "_") +"_dashboard.html?ess="+node.ess+"&call=" + encodeURIComponent(node.call)+"' target='parent'>Inspect Node</a><br><br>";
+      var methodName = treeData[0].call.substr(treeData[0].call.indexOf("#")+1);
+      inspectLink = "<a href='"+methodName +"_dashboard.html?ess="+node.ess+"&call=" + encodeURIComponent(node.call)+"' target='parent'>Inspect Node</a><br><br>";
     }
-    inspectLink+="</p>";
   }
-  if (node.kiekerPattern != node.otherKiekerPattern) {
-  	kieker.innerHTML = node.kiekerPattern + " " + node.otherKiekerPattern;
-  } else {
-  	kieker.innerHTML = node.kiekerPattern + "<br>" + node.otherKiekerPattern;
+  
+  if (typeof histogramm !== 'undefined') {
+    if (node.kiekerPattern != node.otherKiekerPattern) {
+    	histogramm.innerHTML=node.kiekerPattern + " " + node.otherKiekerPattern + inspectLink;
+    } else {
+      if (node.kiekerPattern.length > 100) {
+        histogramm.innerHTML=node.kiekerPattern.replace("(", " (").replaceAll(",",", ") + inspectLink;
+      } else {
+        histogramm.innerHTML=node.kiekerPattern + inspectLink;
+      }
+    }
+    plotOverallHistogram("histogramm", node);
   }
-  histogrammLink.innerHTML = inspectLink;
-  plotOverallHistogram("histogramm", node);
 }
 
 shownode(root);

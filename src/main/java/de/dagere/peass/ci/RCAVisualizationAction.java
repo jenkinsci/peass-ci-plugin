@@ -10,11 +10,14 @@ public class RCAVisualizationAction extends VisibleAction {
 
    private String displayName;
    private final String jsData;
+   private final String predecessorCommitTreeJS, currentCommitTreeJS;
    
-   public RCAVisualizationAction(int id, final String displayName, final String jsData) {
+   public RCAVisualizationAction(int id, final String displayName, final String jsData, String predecessorCommitTreeJS, String currentCommitTreeJS) {
       super(id);
       this.displayName = displayName;
       this.jsData = jsData;
+      this.predecessorCommitTreeJS = predecessorCommitTreeJS;
+      this.currentCommitTreeJS = currentCommitTreeJS;
    }
    
    @Override
@@ -38,8 +41,15 @@ public class RCAVisualizationAction extends VisibleAction {
       return content;
    }
    
-   public String getDataJS() throws IOException {
+   public String getDataJS() {
       return jsData;
-      
+   }
+   
+   public String getPredecessorCommitTreeJS() {
+      return predecessorCommitTreeJS;
+   }
+   
+   public String getCurrentCommitTreeJS() {
+      return currentCommitTreeJS;
    }
 }

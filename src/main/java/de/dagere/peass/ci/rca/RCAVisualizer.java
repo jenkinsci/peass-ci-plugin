@@ -61,10 +61,10 @@ public class RCAVisualizer {
 
       File rcaResults = visualizationFolders.getRcaResultFolder();
 
-      Changes versionChanges = changes.getCommitChanges(measurementConfig.getFixedCommitConfig().getCommit());
+      Changes commitChanges = changes.getCommitChanges(measurementConfig.getFixedCommitConfig().getCommit());
       File commitVisualizationFolder = new File(visualizationFolder, measurementConfig.getFixedCommitConfig().getCommit());
 
-      createVisualizationActions(rcaResults, versionChanges, commitVisualizationFolder);
+      createVisualizationActions(rcaResults, commitChanges, commitVisualizationFolder);
    }
 
    private VisualizeRCAStarter preparePeassVisualizer(final File resultFolder) {
@@ -84,19 +84,12 @@ public class RCAVisualizer {
       LOG.info("Creating actions: " + commitChanges.getTestcaseChanges().size());
       for (Entry<String, List<Change>> testcases : commitChanges.getTestcaseChanges().entrySet()) {
          for (Change change : testcases.getValue()) {
-            final String actionName;
-            final String fileName;
-            if (change.getParams() != null) {
-               actionName = testcases.getKey() + "_" + change.getMethod() + "(" + change.getParams() + ")";
-               fileName = testcases.getKey() + File.separator + change.getMethod() + "(" + change.getParams() + ")";
-            } else {
-               actionName = testcases.getKey() + "_" + change.getMethod();
-               fileName = testcases.getKey() + File.separator + change.getMethod();
-            }
-            File jsFile = new File(commitVisualizationFolder, fileName + ".js");
+            RCAMetadata metadata = new RCAMetadata(change, testcases, peassConfig.getMeasurementConfig().getFixedCommitConfig(), rcaResults);
+            File jsFile = new File(commitVisualizationFolder, metadata.getFileName() + ".js");
             LOG.info("Trying to copy {} Exists: {}", jsFile.getAbsolutePath(), jsFile.exists());
             if (jsFile.exists()) {
-               createRCAAction(rcaResults, longestPrefix, testcases, change, actionName, jsFile);
+               metadata.copyFiles(commitVisualizationFolder);
+               createRCAAction(rcaResults, longestPrefix, testcases, change, metadata, jsFile);
             } else {
                LOG.error("An error occured: " + jsFile.getAbsolutePath() + " not found");
             }
@@ -104,18 +97,18 @@ public class RCAVisualizer {
       }
    }
 
-   public void createRCAAction(final File rcaResults, final String longestPrefix, final Entry<String, List<Change>> testcases, final Change change, final String name,
-         final File jsFile)
+   public void createRCAAction(final File rcaResults, final String longestPrefix, final Entry<String, List<Change>> testcases, final Change change, RCAMetadata metadata, File jsFile)
          throws IOException {
-      final String destName = testcases.getKey() + "_" + change.getMethod() + ".js";
-      final File rcaDestFile = new File(rcaResults, destName);
-      FileUtils.copyFile(jsFile, rcaDestFile);
+      final File rcaDestFile = metadata.getRCAMainFile();
 
-      LOG.info("Adding: " + rcaDestFile + " " + name);
-      final String displayName = name.substring(longestPrefix.length());
+      LOG.info("Adding: " + rcaDestFile + " " + metadata.getActionName());
+      final String displayName = metadata.getActionName().substring(longestPrefix.length());
 
-      final String content = peassConfig.getLogText(rcaDestFile);
-      RCAVisualizationAction visualizationAction = new RCAVisualizationAction(IdHelper.getId(), displayName, content);
+      final String mainTreeJSContent = peassConfig.getLogText(rcaDestFile);
+      final String predecessorTreeJSContent = peassConfig.getLogText(metadata.getPredecessorFile());
+      final String currentTreeJSContent = peassConfig.getLogText(metadata.getCurrentFile());
+      
+      RCAVisualizationAction visualizationAction = new RCAVisualizationAction(IdHelper.getId(), displayName, mainTreeJSContent, predecessorTreeJSContent, currentTreeJSContent);
       run.addAction(visualizationAction);
       TestMethodCall testMethodCall = TestMethodCall.createFromString(testcases.getKey() + "#" + change.getMethodWithParams());
       String url = run.getNumber() + "/" + visualizationAction.getUrlName();
