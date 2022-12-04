@@ -88,7 +88,7 @@
           <div id="quelltext">Quelltext</div>
         </div>
       </div>
-      <j:set var="dataJS" value="${it.getPredecessorCommitTreeJS()}" />
+      <j:set var="dataJS" value="${it.getCurrentCommitTreeJS()}" />
       <script>
         ${dataJS}
       </script>
