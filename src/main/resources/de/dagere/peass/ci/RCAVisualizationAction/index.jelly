@@ -79,6 +79,17 @@
 				</div>
 				<div class="card header-card">
 					<div id="testcaseDiv"></div>
+                    <div id="testcaseDiv2"> 
+                      <p class='button-wrap'>
+                        <a role='button' href='dashboard?call=overall&amp;ess=-1' target='parent'>Inspect Overall Measurement</a>
+                      </p>
+                        <p class='button-wrap'>
+                          <a role='button' href='current' target='parent'>Inspect Predecessor Commit Tree</a>
+                        </p>
+                        <p class='button-wrap'>
+                          <a role='button' href='current' target='parent'>Inspect Current Commit Tree</a>
+                        </p>
+                     </div>
 				</div>
 			</div>
 			<div class="visualization-row">
