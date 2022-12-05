@@ -11,6 +11,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.fasterxml.jackson.core.exc.StreamReadException;
+import com.fasterxml.jackson.databind.DatabindException;
 import com.sun.xml.xsom.impl.scd.Iterators.Map;
 
 import de.dagere.peass.analysis.changes.Change;
@@ -114,9 +116,7 @@ public class RCAVisualizer {
       
       TestMethodCall testMethodCall = TestMethodCall.createFromString(testcases.getKey() + "#" + change.getMethodWithParams());
       
-      String commitName = peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit();
-      CommitList commitList = Constants.OBJECTMAPPER.readValue(visualizationFolders.getResultsFolders().getCommitMetadataFile(), CommitList.class);
-      GitCommit commit = commitList.getCommit(commitName);
+      GitCommit commit = getCommit();
       
       RCAVisualizationAction visualizationAction = new RCAVisualizationAction(IdHelper.getId(), displayName, mainTreeJSContent, predecessorTreeJSContent, currentTreeJSContent, commit, testMethodCall.toString());
       run.addAction(visualizationAction);
@@ -124,6 +124,19 @@ public class RCAVisualizer {
       String url = run.getNumber() + "/" + visualizationAction.getUrlName();
       mapping.addMapping(measurementConfig.getFixedCommitConfig().getCommit(), testMethodCall, url);
       Constants.OBJECTMAPPER.writeValue(visualizationFolders.getResultsFolders().getRCAMappingFile(), mapping);
+   }
+
+   private GitCommit getCommit() throws IOException, StreamReadException, DatabindException {
+      String commitName = peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit();
+      GitCommit commit;
+      File commitMetadataFile = visualizationFolders.getResultsFolders().getCommitMetadataFile();
+      if (commitMetadataFile.exists()) {
+         CommitList commitList = Constants.OBJECTMAPPER.readValue(commitMetadataFile, CommitList.class);
+         commit = commitList.getCommit(commitName);
+      } else {
+         commit = null;
+      }
+      return commit;
    }
 
    public static String getLongestPrefix(final Set<String> tests) {
