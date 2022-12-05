@@ -11,6 +11,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.sun.xml.xsom.impl.scd.Iterators.Map;
+
 import de.dagere.peass.analysis.changes.Change;
 import de.dagere.peass.analysis.changes.Changes;
 import de.dagere.peass.analysis.changes.ProjectChanges;
@@ -21,6 +23,8 @@ import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.utils.Constants;
+import de.dagere.peass.vcs.CommitList;
+import de.dagere.peass.vcs.GitCommit;
 import de.dagere.peass.visualization.VisualizeRCAStarter;
 import hudson.model.Run;
 
@@ -108,9 +112,15 @@ public class RCAVisualizer {
       final String predecessorTreeJSContent = metadata.getPredecessorFile().exists() ? peassConfig.getLogText(metadata.getPredecessorFile()) : null;
       final String currentTreeJSContent = metadata.getCurrentFile().exists() ? peassConfig.getLogText(metadata.getCurrentFile()) : null;
       
-      RCAVisualizationAction visualizationAction = new RCAVisualizationAction(IdHelper.getId(), displayName, mainTreeJSContent, predecessorTreeJSContent, currentTreeJSContent);
-      run.addAction(visualizationAction);
       TestMethodCall testMethodCall = TestMethodCall.createFromString(testcases.getKey() + "#" + change.getMethodWithParams());
+      
+      String commitName = peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit();
+      CommitList commitList = Constants.OBJECTMAPPER.readValue(visualizationFolders.getResultsFolders().getCommitMetadataFile(), CommitList.class);
+      GitCommit commit = commitList.getCommit(commitName);
+      
+      RCAVisualizationAction visualizationAction = new RCAVisualizationAction(IdHelper.getId(), displayName, mainTreeJSContent, predecessorTreeJSContent, currentTreeJSContent, commit, testMethodCall.toString());
+      run.addAction(visualizationAction);
+      
       String url = run.getNumber() + "/" + visualizationAction.getUrlName();
       mapping.addMapping(measurementConfig.getFixedCommitConfig().getCommit(), testMethodCall, url);
       Constants.OBJECTMAPPER.writeValue(visualizationFolders.getResultsFolders().getRCAMappingFile(), mapping);

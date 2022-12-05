@@ -6,18 +6,24 @@ import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.IOUtils;
 
+import de.dagere.peass.vcs.GitCommit;
+
 public class RCAVisualizationAction extends VisibleAction {
 
    private String displayName;
    private final String jsData;
    private final String predecessorCommitTreeJS, currentCommitTreeJS;
+   private final GitCommit commit;
+   private final String testcase;
    
-   public RCAVisualizationAction(int id, final String displayName, final String jsData, String predecessorCommitTreeJS, String currentCommitTreeJS) {
+   public RCAVisualizationAction(int id, final String displayName, final String jsData, String predecessorCommitTreeJS, String currentCommitTreeJS, GitCommit commit, String testcase) {
       super(id);
       this.displayName = displayName;
       this.jsData = jsData;
       this.predecessorCommitTreeJS = predecessorCommitTreeJS;
       this.currentCommitTreeJS = currentCommitTreeJS;
+      this.commit = commit;
+      this.testcase = testcase;
    }
    
    @Override
@@ -51,5 +57,17 @@ public class RCAVisualizationAction extends VisibleAction {
    
    public String getCurrentCommitTreeJS() {
       return currentCommitTreeJS;
+   }
+   
+   public String getCommit() { 
+      return commit != null ? commit.getTag() : null;
+   }
+   
+   public String getTestcase() {
+      return testcase;
+   }
+   
+   public String getComitter() {
+      return commit != null ? commit.getComitter() : null;
    }
 }

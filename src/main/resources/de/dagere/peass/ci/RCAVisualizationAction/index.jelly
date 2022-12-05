@@ -80,6 +80,8 @@
 				<div class="card header-card">
 					<div id="testcaseDiv"></div>
                     <div id="testcaseDiv2"> 
+                      Commit: ${it.getCommit()} Committer: ${it.getComitter()} <br />
+                      Testcase: ${it.getTestcase()}
                       <p class='button-wrap'>
                         <a role='button' href='dashboard?call=overall&amp;ess=-1' target='parent'>Inspect Overall Measurement</a>
                       </p>
