@@ -73,6 +73,7 @@ public class RCAVisualizer {
 
    private VisualizeRCAStarter preparePeassVisualizer(final File resultFolder) {
       VisualizeRCAStarter visualizer = new VisualizeRCAStarter();
+      visualizer.setCommit(measurementConfig.getFixedCommitConfig().getCommit());
       File dataFolder = visualizationFolders.getDataFolder();
       visualizer.setData(new File[] { dataFolder });
       File propertyFolder = visualizationFolders.getPropertyFolder();
