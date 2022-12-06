@@ -70,16 +70,7 @@ public class RCAExecutor {
 
          for (Entry<String, List<Change>> testcases : commitChanges.getTestcaseChanges().entrySet()) {
             for (Change change : testcases.getValue()) {
-               final TestMethodCall testCase;
-               String testClazzName = testcases.getKey();
-               if (testClazzName.contains(ChangedEntity.MODULE_SEPARATOR)) {
-                  int moduleSeparatorIndex = testClazzName.indexOf(ChangedEntity.MODULE_SEPARATOR);
-                  String module = testClazzName.substring(0, moduleSeparatorIndex);
-                  String testclazz = testClazzName.substring(moduleSeparatorIndex + 1, testClazzName.length());
-                  testCase = new TestMethodCall(testclazz, change.getMethod(), module, change.getParams());
-               } else {
-                  testCase = new TestMethodCall(testClazzName, change.getMethod(), "", change.getParams());
-               }
+               final TestMethodCall testCase = getTestMethodCall(testcases, change);
                boolean match = NonIncludedTestRemover.isTestIncluded(testCase, config.getExecutionConfig());
                if (match) {
                   try {
@@ -96,6 +87,20 @@ public class RCAExecutor {
          }
       }
 
+   }
+
+   private TestMethodCall getTestMethodCall(Entry<String, List<Change>> testcases, Change change) {
+      final TestMethodCall testCase;
+      String testClazzName = testcases.getKey();
+      if (testClazzName.contains(ChangedEntity.MODULE_SEPARATOR)) {
+         int moduleSeparatorIndex = testClazzName.indexOf(ChangedEntity.MODULE_SEPARATOR);
+         String module = testClazzName.substring(0, moduleSeparatorIndex);
+         String testclazz = testClazzName.substring(moduleSeparatorIndex + 1, testClazzName.length());
+         testCase = new TestMethodCall(testclazz, change.getMethod(), module, change.getParams());
+      } else {
+         testCase = new TestMethodCall(testClazzName, change.getMethod(), "", change.getParams());
+      }
+      return testCase;
    }
 
    private boolean checkNeedsRCA(final Changes commitChanges) throws IOException {
@@ -129,8 +134,7 @@ public class RCAExecutor {
       return needsRCA;
    }
 
-   private void analyseChange(final MeasurementConfig currentConfig, final TestMethodCall testCase)
-         throws IOException, InterruptedException, XmlPullParserException, AnalysisConfigurationException {
+   private void analyseChange(final MeasurementConfig currentConfig, final TestMethodCall testCase) throws IOException, InterruptedException {
       final File expectedResultFile = getExpectedRCAFile(testCase);
       LOG.info("Testing {}", expectedResultFile);
       if (!expectedResultFile.exists()) {
