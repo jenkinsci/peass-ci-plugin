@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import de.dagere.peass.ci.PeassProcessConfiguration;
+import de.dagere.peass.ci.TestConstants;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
-import de.dagere.peass.ci.logs.RTSLogFileReader;
 import de.dagere.peass.ci.logs.rts.RTSLogData;
 import de.dagere.peass.config.FixedCommitConfig;
 import de.dagere.peass.config.MeasurementConfig;
@@ -36,7 +36,7 @@ public class TestRTSLogFileReaderParameterized {
          FileUtils.deleteDirectory(currentDir);
       }
 
-      File sourceFile = new File("src/test/resources/demo-results-logs/demo-parameterized_fullPeass");
+      File sourceFile = new File(TestConstants.RESOURCE_FOLDER, "demo-results-logs/demo-parameterized_fullPeass");
       FileUtils.copyDirectory(sourceFile, currentDir);
    }
 

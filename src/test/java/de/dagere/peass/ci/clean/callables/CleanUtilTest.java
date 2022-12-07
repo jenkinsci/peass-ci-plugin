@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 
 import de.dagere.peass.TestConstants;
 import de.dagere.peass.TestUtil;
-import de.dagere.peass.ci.clean.callables.CleanUtil;
 import de.dagere.peass.folders.PeassFolders;
 
 public class CleanUtilTest {

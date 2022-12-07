@@ -20,8 +20,6 @@ import de.dagere.peass.analysis.measurement.ProjectStatistics;
 import de.dagere.peass.ci.MeasureVersionBuilder;
 import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
-import de.dagere.peass.ci.logs.LogFileReader;
-import de.dagere.peass.ci.logs.LogFiles;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.analysis.data.deserializer.TestMethodCallKeyDeserializer;

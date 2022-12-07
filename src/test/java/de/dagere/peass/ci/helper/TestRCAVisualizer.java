@@ -17,7 +17,6 @@ import org.mockito.Mockito;
 import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.ci.RCAVisualizationAction;
-import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.rca.RCAVisualizer;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.folders.CauseSearchFolders;

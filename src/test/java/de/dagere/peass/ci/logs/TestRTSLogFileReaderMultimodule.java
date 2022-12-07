@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
-import de.dagere.peass.ci.logs.RTSLogFileReader;
+import de.dagere.peass.ci.TestConstants;
 import de.dagere.peass.ci.logs.rts.RTSLogData;
 import de.dagere.peass.dependency.analysis.data.TestSet;
 import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
@@ -24,7 +24,7 @@ public class TestRTSLogFileReaderMultimodule {
 
    @BeforeEach
    public void init() throws IOException {
-      File source = new File("src/test/resources/demo-results-logs/demo-vis2-multimodule_peass");
+      File source = new File(TestConstants.RESOURCE_FOLDER, "demo-results-logs/demo-vis2-multimodule_peass");
       util.init(source);
    }
 

@@ -10,7 +10,6 @@ import org.mockito.Mockito;
 import de.dagere.peass.ci.MeasureVersionBuilder;
 import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
-import de.dagere.peass.ci.logs.RTSLogFileReader;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.dependency.traces.TraceWriter;

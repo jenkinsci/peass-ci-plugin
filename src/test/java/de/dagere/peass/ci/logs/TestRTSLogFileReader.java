@@ -9,7 +9,7 @@ import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import de.dagere.peass.ci.logs.RTSLogFileReader;
+import de.dagere.peass.ci.TestConstants;
 import de.dagere.peass.ci.logs.rts.RTSLogData;
 import de.dagere.peass.dependency.analysis.data.TestSet;
 import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
@@ -23,7 +23,7 @@ public class TestRTSLogFileReader {
 
    @BeforeEach
    public void init() throws IOException {
-      File source = new File("src/test/resources/demo-results-logs/demo-vis2_peass");
+      File source = new File(TestConstants.RESOURCE_FOLDER, "demo-results-logs/demo-vis2_peass");
       util.init(source);
    }
 
