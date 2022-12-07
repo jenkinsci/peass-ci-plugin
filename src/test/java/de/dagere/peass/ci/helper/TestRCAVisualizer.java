@@ -1,6 +1,7 @@
 package de.dagere.peass.ci.helper;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
@@ -69,14 +70,19 @@ public class TestRCAVisualizer {
       Assert.assertEquals("CalleeTest_onlyCallMethod1", argument.getValue().getDisplayName());
 
       File resultFolder = visualizationResultFolder.listFiles()[0];
-      File htmlFile = resultFolder.listFiles()[0];
+      File jsFile = resultFolder.listFiles(new FileFilter() {
+         @Override
+         public boolean accept(File pathname) {
+            return !pathname.isDirectory();
+         }
+      } )[0];
 
-      MatcherAssert.assertThat(htmlFile.getName(), Matchers.endsWith(".js"));
+      MatcherAssert.assertThat(jsFile.getName(), Matchers.endsWith(".js"));
    }
 
    private void initFolders() throws IOException {
       final File projectFolder = new File(folder.getRoot(), "project");
       final CauseSearchFolders peassFolders = new CauseSearchFolders(projectFolder);
-      FileUtils.copyDirectory(new File("src/test/resources/demo-results/rca/rca_data"), peassFolders.getRcaTreeFolder());
+      FileUtils.copyDirectory(new File("src/test/resources/demo-results/rca/rca"), peassFolders.getRcaTreeFolder().getParentFile());
    }
 }

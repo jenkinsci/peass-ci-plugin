@@ -6,10 +6,12 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import com.fasterxml.jackson.core.exc.StreamReadException;
+import com.fasterxml.jackson.databind.DatabindException;
 
 import de.dagere.peass.analysis.changes.Change;
 import de.dagere.peass.analysis.changes.Changes;
@@ -21,6 +23,8 @@ import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.utils.Constants;
+import de.dagere.peass.vcs.CommitList;
+import de.dagere.peass.vcs.GitCommit;
 import de.dagere.peass.visualization.VisualizeRCAStarter;
 import hudson.model.Run;
 
@@ -61,14 +65,15 @@ public class RCAVisualizer {
 
       File rcaResults = visualizationFolders.getRcaResultFolder();
 
-      Changes versionChanges = changes.getCommitChanges(measurementConfig.getFixedCommitConfig().getCommit());
-      File versionVisualizationFolder = new File(visualizationFolder, measurementConfig.getFixedCommitConfig().getCommit());
+      Changes commitChanges = changes.getCommitChanges(measurementConfig.getFixedCommitConfig().getCommit());
+      File commitVisualizationFolder = new File(visualizationFolder, measurementConfig.getFixedCommitConfig().getCommit());
 
-      createVisualizationActions(rcaResults, versionChanges, versionVisualizationFolder);
+      createVisualizationActions(rcaResults, commitChanges, commitVisualizationFolder);
    }
 
    private VisualizeRCAStarter preparePeassVisualizer(final File resultFolder) {
       VisualizeRCAStarter visualizer = new VisualizeRCAStarter();
+      visualizer.setCommit(measurementConfig.getFixedCommitConfig().getCommit());
       File dataFolder = visualizationFolders.getDataFolder();
       visualizer.setData(new File[] { dataFolder });
       File propertyFolder = visualizationFolders.getPropertyFolder();
@@ -78,25 +83,18 @@ public class RCAVisualizer {
       return visualizer;
    }
 
-   private void createVisualizationActions(final File rcaResults, final Changes versionChanges, final File versionVisualizationFolder) throws IOException {
-      String longestPrefix = getLongestPrefix(versionChanges.getTestcaseChanges().keySet());
+   private void createVisualizationActions(final File rcaResults, final Changes commitChanges, final File commitVisualizationFolder) throws IOException {
+      String longestPrefix = getLongestPrefix(commitChanges.getTestcaseChanges().keySet());
 
-      LOG.info("Creating actions: " + versionChanges.getTestcaseChanges().size());
-      for (Entry<String, List<Change>> testcases : versionChanges.getTestcaseChanges().entrySet()) {
+      LOG.info("Creating actions: " + commitChanges.getTestcaseChanges().size());
+      for (Entry<String, List<Change>> testcases : commitChanges.getTestcaseChanges().entrySet()) {
          for (Change change : testcases.getValue()) {
-            final String actionName;
-            final String fileName;
-            if (change.getParams() != null) {
-               actionName = testcases.getKey() + "_" + change.getMethod() + "(" + change.getParams() + ")";
-               fileName = testcases.getKey() + File.separator + change.getMethod() + "(" + change.getParams() + ")";
-            } else {
-               actionName = testcases.getKey() + "_" + change.getMethod();
-               fileName = testcases.getKey() + File.separator + change.getMethod();
-            }
-            File jsFile = new File(versionVisualizationFolder, fileName + ".js");
+            RCAMetadata metadata = new RCAMetadata(change, testcases, peassConfig.getMeasurementConfig().getFixedCommitConfig(), rcaResults);
+            File jsFile = new File(commitVisualizationFolder, metadata.getFileName() + ".js");
             LOG.info("Trying to copy {} Exists: {}", jsFile.getAbsolutePath(), jsFile.exists());
             if (jsFile.exists()) {
-               createRCAAction(rcaResults, longestPrefix, testcases, change, actionName, jsFile);
+               metadata.copyFiles(commitVisualizationFolder);
+               createRCAAction(rcaResults, longestPrefix, testcases, change, metadata, jsFile);
             } else {
                LOG.error("An error occured: " + jsFile.getAbsolutePath() + " not found");
             }
@@ -104,23 +102,40 @@ public class RCAVisualizer {
       }
    }
 
-   public void createRCAAction(final File rcaResults, final String longestPrefix, final Entry<String, List<Change>> testcases, final Change change, final String name,
-         final File jsFile)
+   public void createRCAAction(final File rcaResults, final String longestPrefix, final Entry<String, List<Change>> testcases, final Change change, RCAMetadata metadata, File jsFile)
          throws IOException {
-      final String destName = testcases.getKey() + "_" + change.getMethod() + ".js";
-      final File rcaDestFile = new File(rcaResults, destName);
-      FileUtils.copyFile(jsFile, rcaDestFile);
+      final File rcaDestFile = metadata.getRCAMainFile();
 
-      LOG.info("Adding: " + rcaDestFile + " " + name);
-      final String displayName = name.substring(longestPrefix.length());
+      LOG.info("Adding: " + rcaDestFile + " " + metadata.getActionName());
+      final String displayName = metadata.getActionName().substring(longestPrefix.length());
 
-      final String content = peassConfig.getLogText(rcaDestFile);
-      RCAVisualizationAction visualizationAction = new RCAVisualizationAction(IdHelper.getId(), displayName, content);
-      run.addAction(visualizationAction);
+      final String mainTreeJSContent = peassConfig.getLogText(rcaDestFile);
+      final String predecessorTreeJSContent = metadata.getPredecessorFile().exists() ? peassConfig.getLogText(metadata.getPredecessorFile()) : null;
+      final String currentTreeJSContent = metadata.getCurrentFile().exists() ? peassConfig.getLogText(metadata.getCurrentFile()) : null;
+      
       TestMethodCall testMethodCall = TestMethodCall.createFromString(testcases.getKey() + "#" + change.getMethodWithParams());
+      
+      GitCommit commit = getCommit();
+      
+      RCAVisualizationAction visualizationAction = new RCAVisualizationAction(IdHelper.getId(), displayName, mainTreeJSContent, predecessorTreeJSContent, currentTreeJSContent, commit, testMethodCall.toString());
+      run.addAction(visualizationAction);
+      
       String url = run.getNumber() + "/" + visualizationAction.getUrlName();
       mapping.addMapping(measurementConfig.getFixedCommitConfig().getCommit(), testMethodCall, url);
       Constants.OBJECTMAPPER.writeValue(visualizationFolders.getResultsFolders().getRCAMappingFile(), mapping);
+   }
+
+   private GitCommit getCommit() throws IOException, StreamReadException, DatabindException {
+      String commitName = peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit();
+      GitCommit commit;
+      File commitMetadataFile = visualizationFolders.getResultsFolders().getCommitMetadataFile();
+      if (commitMetadataFile.exists()) {
+         CommitList commitList = Constants.OBJECTMAPPER.readValue(commitMetadataFile, CommitList.class);
+         commit = commitList.getCommit(commitName);
+      } else {
+         commit = null;
+      }
+      return commit;
    }
 
    public static String getLongestPrefix(final Set<String> tests) {

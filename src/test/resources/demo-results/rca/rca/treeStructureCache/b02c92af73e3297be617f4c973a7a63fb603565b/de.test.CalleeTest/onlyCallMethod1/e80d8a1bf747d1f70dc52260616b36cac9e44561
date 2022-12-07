@@ -1,0 +1,21 @@
+{
+    "call" : "de.test.CalleeTest#onlyCallMethod1",
+    "kiekerPattern" : "public void de.test.CalleeTest.onlyCallMethod1()",
+    "otherKiekerPattern" : "public void de.test.CalleeTest.onlyCallMethod1()",
+    "children" : [ {
+      "call" : "de.test.Callee#<init>",
+      "kiekerPattern" : "public new de.test.Callee.<init>()",
+      "otherKiekerPattern" : "public new de.test.Callee.<init>()",
+      "children" : [ ]
+    }, {
+      "call" : "de.test.Callee#method1",
+      "kiekerPattern" : "public void de.test.Callee.method1()",
+      "otherKiekerPattern" : "public void de.test.Callee.method1()",
+      "children" : [ {
+        "call" : "de.test.Callee#innerMethod",
+        "kiekerPattern" : "private void de.test.Callee.innerMethod()",
+        "otherKiekerPattern" : "private void de.test.Callee.innerMethod()",
+        "children" : [ ]
+      } ]
+    } ]
+  }

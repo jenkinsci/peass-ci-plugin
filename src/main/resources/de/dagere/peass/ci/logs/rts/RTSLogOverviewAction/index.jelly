@@ -7,6 +7,10 @@
     <l:main-panel>
       <st:include page="/style.jelly" optional="false" />
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+      <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css" />
+      <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+      <script> jq$ = jQuery.noConflict();</script>
 
       <h1>Regression Test Selection Log Overview</h1>
       Current commit: ${it.getCommit()} Predecessor commit: ${it.getCommitOld()}
@@ -49,9 +53,25 @@
 
         <table class="data-table">
           <tr>
-            <th>Testcase</th>
-            <th>Current Commit Run</th>
-            <th>Predecessor Commit Run (if Present)</th>
+            <th>${%testcase}</th>
+            <th>${%currentCommitRun}
+              <a href='#' onClick='jq$( "#dialogCurrentCommit" ).dialog( "open" );'>
+                <i class="fa fa-question-circle" title='Display Help' style="font-size:24px"></i>
+              </a>
+              <div id="dialogCurrentCommit" title="${%currentCommitHintTitle}">${%currentCommitHint}</div>
+                <script>
+                  jq$("#dialogCurrentCommit").dialog({ autoOpen: false });
+                </script>
+            </th>
+            <th>${%predecessorCommitRun}
+              <a href='#' onClick='jq$( "#dialogPredecessorCommit" ).dialog( "open" );'>
+                <i class="fa fa-question-circle" title='Display Help' style="font-size:24px"></i>
+              </a>
+              <div id="dialogPredecessorCommit" title="${%predecessorCommitHintTitle}">${%predecessorCommitHint}</div>
+                <script>
+                  jq$("#dialogPredecessorCommit").dialog({ autoOpen: false });
+                </script> 
+            </th>
           </tr>
           <j:forEach var="run" items="${it.getAllTests()}">
             <tr>

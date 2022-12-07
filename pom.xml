@@ -13,13 +13,13 @@
   <version>${revision}-${changelist}</version>
   <packaging>hpi</packaging>
   <properties>
-    <jenkins.version>2.346.1</jenkins.version>
+    <jenkins.version>2.346.3</jenkins.version>
     <maven.test.redirectTestOutputToFile>false</maven.test.redirectTestOutputToFile>
     <!-- The revision reflects the Peass core version, 2.1.11 uses Peass 0.1.11. -->
     <revision>2.3.3</revision>
     <changelist>999999-SNAPSHOT</changelist>
     <gitHubRepo>jenkinsci/peass-ci-plugin</gitHubRepo>
-    <peass.version>0.3.3-SNAPSHOT</peass.version>
+    <peass.version>0.3.3</peass.version>
   </properties>
   <!-- Jenkins discourages usage of names like peass-jenkins-plugin or peass-plugin (https://www.jenkins.io/doc/developer/publishing/requesting-hosting/), therefore 
     it's just peass-ci -->
@@ -109,12 +109,6 @@
       <scope>test</scope>
     </dependency>
 
-
-    <dependency>
-      <groupId>com.github.javaparser</groupId>
-      <artifactId>javaparser-core</artifactId>
-      <version>3.24.4</version>
-    </dependency>
 
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>

@@ -24,3 +24,5 @@ de.dagere.peass.dependency.traces.coverage.CoverageSelectionCommit
 de.dagere.peass.dependency.persistence.ExecutionData
 de.dagere.peass.dependency.traces.coverage.TraceCallSummary
 de.dagere.peass.dependency.analysis.data.TestSet
+de.dagere.peass.vcs.GitCommit
+de.dagere.peass.vcs.CommitList
