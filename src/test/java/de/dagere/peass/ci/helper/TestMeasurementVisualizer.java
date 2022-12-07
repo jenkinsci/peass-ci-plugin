@@ -11,21 +11,22 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import de.dagere.peass.ci.MeasurementVisualizationAction;
-import de.dagere.peass.ci.helper.DefaultMeasurementVisualizer;
-import de.dagere.peass.ci.helper.VisualizationFolderManager;
+import de.dagere.peass.ci.TestConstants;
 import de.dagere.peass.measurement.statistics.data.TestcaseStatistic;
 import hudson.model.Run;
 
 public class TestMeasurementVisualizer {
 
+   
+   
    @Test
    public void testParameterizedVisualization() {
       HashSet<String> tests = new LinkedHashSet<>();
       tests.add("de.dagere.peass.ExampleTest#test(JUNIT_PARAMETERIZED-0)");
       tests.add("de.dagere.peass.ExampleTest#test(JUNIT_PARAMETERIZED-1)");
 
-      File exampleDataFolder = new File(
-            "src/test/resources/demo-results-measurements/measurement_a12a0b7f4c162794fca0e7e3fcc6ea3b3a2cbc2b_49f75e8877c2e9b7cf6b56087121a35fdd73ff8b/");
+      File exampleDataFolder = new File(TestConstants.RESOURCE_FOLDER, 
+            "demo-results-measurements/measurement_a12a0b7f4c162794fca0e7e3fcc6ea3b3a2cbc2b_49f75e8877c2e9b7cf6b56087121a35fdd73ff8b/");
       Run run = Mockito.mock(Run.class);
       VisualizationFolderManager visualizationFolderManager = Mockito.mock(VisualizationFolderManager.class);
       DefaultMeasurementVisualizer visualizer = new DefaultMeasurementVisualizer(exampleDataFolder, "a12a0b7f4c162794fca0e7e3fcc6ea3b3a2cbc2b", run, visualizationFolderManager,
