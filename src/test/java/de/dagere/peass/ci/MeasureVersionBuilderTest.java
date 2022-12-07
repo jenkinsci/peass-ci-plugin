@@ -66,8 +66,8 @@ public class MeasureVersionBuilderTest {
       FilePath path = project.getSomeWorkspace();
       
       File projectFolder = new File(path.toString());
-      GitProjectBuilder gitbuilder = new GitProjectBuilder(projectFolder, new File(TestConstants.RESOURCE_FOLDER, "peass-demo/version1"));
-      gitbuilder.addVersion(new File(TestConstants.RESOURCE_FOLDER, "peass-demo/version2"), "Slower Version");
+      GitProjectBuilder gitbuilder = new GitProjectBuilder(projectFolder, new File(TestConstants.RESOURCE_FOLDER, "peass-demo/commit1"));
+      gitbuilder.addVersion(new File(TestConstants.RESOURCE_FOLDER, "peass-demo/commit2"), "Slower Commit");
    }
 
    private MeasureVersionBuilder createSimpleBuilder() {
