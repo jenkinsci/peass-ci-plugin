@@ -143,7 +143,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
    private String testTransformer = "de.dagere.peass.testtransformation.JUnitTestTransformer";
    private String testExecutor = "default";
-   
+
    private String xmx;
 
    private String clazzFolders = ExecutionConfigMixin.CLAZZ_FOLDERS_DEFAULT;
@@ -243,6 +243,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       }
 
       if (!failOnRtsError && rtsResult.isRtsAnyError()) {
+         listener.getLogger().println("Setting build to unstable, since RTS error occured");
          run.setResult(Result.UNSTABLE);
       }
 
@@ -264,6 +265,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       Map<TestMethodCall, TestcaseStatistic> currentCommitStatistics = statistics.getStatistics().get(commit);
       if (currentCommitStatistics == null) {
          run.setResult(Result.UNSTABLE);
+         listener.getLogger().println("Setting build to unstable, since measurement error occured");
          return;
       }
       Set<TestMethodCall> missingMeasurements = new HashSet<>();
@@ -461,7 +463,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       if (pl != null && !"".equals(pl)) {
          executionConfig.setPl(pl);
       }
-      
+
       executionConfig.setXmx(xmx);
 
       if (executionConfig.isExecuteBeforeClassInMeasurement() && executionConfig.isOnlyMeasureWorkload()) {
@@ -650,12 +652,12 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public boolean isGenerateCoverageSelection() {
       return generateCoverageSelection;
    }
-   
+
    @DataBoundSetter
    public void setGenerateTwiceExecutability(boolean generateTwiceExecutability) {
       this.generateTwiceExecutability = generateTwiceExecutability;
    }
-   
+
    public boolean isGenerateTwiceExecutability() {
       return generateTwiceExecutability;
    }
@@ -925,11 +927,11 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public void setTestTransformer(final String testTransformer) {
       this.testTransformer = testTransformer;
    }
-   
+
    public String getXmx() {
       return xmx;
    }
-   
+
    @DataBoundSetter
    public void setXmx(String xmx) {
       this.xmx = xmx;
