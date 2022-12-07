@@ -29,6 +29,7 @@ public class TestMeasurementVisualizer {
             "demo-results-measurements/measurement_a12a0b7f4c162794fca0e7e3fcc6ea3b3a2cbc2b_49f75e8877c2e9b7cf6b56087121a35fdd73ff8b/");
       Run run = Mockito.mock(Run.class);
       VisualizationFolderManager visualizationFolderManager = Mockito.mock(VisualizationFolderManager.class);
+      Mockito.when(visualizationFolderManager.getVisualizationFolder()).thenReturn(new File("target"));
       DefaultMeasurementVisualizer visualizer = new DefaultMeasurementVisualizer(exampleDataFolder, "a12a0b7f4c162794fca0e7e3fcc6ea3b3a2cbc2b", run, visualizationFolderManager,
             tests);
 
