@@ -97,8 +97,8 @@ public class DefaultMeasurementVisualizer {
          LOG.info("Statistic: {}", kopemeDataNode.getStatistic());
          noWarmupStatistics.put(testcase.toString(), kopemeDataNode.getStatistic());
 
-         File versionVisualizationFolder = new File(visualizationFolders.getVisualizationFolder(), commit);
-         File kopemeVisualizationFolder = new File(versionVisualizationFolder, "pure_kopeme");
+         File commitVisualizationFolder = new File(visualizationFolders.getVisualizationFolder(), commit);
+         File kopemeVisualizationFolder = new File(commitVisualizationFolder, "pure_kopeme");
          if (!kopemeVisualizationFolder.mkdirs()) {
             LOG.error("Creating file {} was not possibley", kopemeVisualizationFolder);
          }
