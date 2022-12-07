@@ -12,8 +12,6 @@ import org.mockito.Mockito;
 
 import de.dagere.peass.ci.MeasurementOverviewAction;
 import de.dagere.peass.ci.TestConstants;
-import de.dagere.peass.ci.helper.HistogramReader;
-import de.dagere.peass.ci.helper.HistogramValues;
 import de.dagere.peass.config.MeasurementConfig;
 
 public class TestHistogramReader {

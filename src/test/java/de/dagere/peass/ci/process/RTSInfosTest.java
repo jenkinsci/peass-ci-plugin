@@ -11,7 +11,6 @@ import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
 
 import de.dagere.peass.ci.PeassProcessConfiguration;
-import de.dagere.peass.ci.process.RTSInfos;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.folders.ResultsFolders;
 

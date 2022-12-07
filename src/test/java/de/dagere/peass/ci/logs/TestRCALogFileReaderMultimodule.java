@@ -20,7 +20,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import de.dagere.peass.ci.MeasureVersionBuilder;
 import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
-import de.dagere.peass.ci.logs.LogFileReader;
 import de.dagere.peass.ci.logs.rca.RCALevel;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.data.TestCase;

@@ -3,8 +3,6 @@ package de.dagere.peass.ci.helper;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
-import de.dagere.peass.ci.helper.UnitConverter;
-
 public class TestUnitConverter {
 
    final double nanoSecondMean = 123;

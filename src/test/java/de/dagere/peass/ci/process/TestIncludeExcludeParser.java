@@ -7,8 +7,6 @@ import org.hamcrest.collection.IsIterableWithSize;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
-import de.dagere.peass.ci.process.IncludeExcludeParser;
-
 public class TestIncludeExcludeParser {
 
    @Test
