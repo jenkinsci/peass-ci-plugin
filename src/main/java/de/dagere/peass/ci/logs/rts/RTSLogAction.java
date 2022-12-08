@@ -4,14 +4,14 @@ import de.dagere.peass.ci.VisibleAction;
 import de.dagere.peass.dependency.analysis.data.TestCase;
 
 public class RTSLogAction extends VisibleAction {
-   private final String version;
+   private final String commit;
    private final TestCase testcase;
    private final String cleanLog;
    private final String log;
 
-   public RTSLogAction(int id, final String version, final TestCase testcase, final String cleanLog, final String log) {
+   public RTSLogAction(int id, final String commit, final TestCase testcase, final String cleanLog, final String log) {
       super(id);
-      this.version = version;
+      this.commit = commit;
       this.testcase = testcase;
       this.cleanLog = cleanLog;
       this.log = log;
@@ -19,11 +19,11 @@ public class RTSLogAction extends VisibleAction {
    
    @Override
    public String getUrlName() {
-      return "rtsLog_" + testcase.getLinkUsable() + "_" + version;
+      return "rtsLog_" + testcase.getLinkUsable() + "_" + commit;
    }
 
    public String getVersion() {
-      return version;
+      return commit;
    }
 
    public TestCase getTestcase() {

@@ -18,9 +18,9 @@ import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.dependency.traces.TraceFileManager;
 import de.dagere.peass.dependency.traces.TraceWriter;
 
-public class RTSLogFileVersionReader {
+public class RTSLogFileCommitReader {
 
-   private static final Logger LOG = LogManager.getLogger(RTSLogFileVersionReader.class);
+   private static final Logger LOG = LogManager.getLogger(RTSLogFileCommitReader.class);
    private final VisualizationFolderManager visualizationFolders;
 
    private final String commit;
@@ -29,7 +29,7 @@ public class RTSLogFileVersionReader {
    private File methodFile;
    private TestMethodCall test;
 
-   public RTSLogFileVersionReader(final VisualizationFolderManager visualizationFolders, final String commit) {
+   public RTSLogFileCommitReader(final VisualizationFolderManager visualizationFolders, final String commit) {
       this.visualizationFolders = visualizationFolders;
       this.commit = commit;
    }

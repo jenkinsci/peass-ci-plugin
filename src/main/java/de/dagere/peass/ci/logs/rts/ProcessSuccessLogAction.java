@@ -5,13 +5,13 @@ import de.dagere.peass.ci.VisibleAction;
 public class ProcessSuccessLogAction extends VisibleAction {
    private final String displayName;
    private final String log;
-   private final String version;
+   private final String commit;
 
-   public ProcessSuccessLogAction(int id, final String displayName, final String log, final String version) {
+   public ProcessSuccessLogAction(int id, final String displayName, final String log, final String commit) {
       super(id);
       this.displayName = displayName;
       this.log = log;
-      this.version = version;
+      this.commit = commit;
    }
 
    @Override
@@ -24,7 +24,7 @@ public class ProcessSuccessLogAction extends VisibleAction {
    }
 
    public String getVersion() {
-      return version;
+      return commit;
    }
 
    @Override

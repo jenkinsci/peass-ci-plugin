@@ -89,8 +89,8 @@ public class RTSActionCreator {
 
          // String logData = FileUtils.readFileToString(processSuccessRun.getValue(), StandardCharsets.UTF_8);
          /**
-          * This is not exactly what is required here - if process sucess runs are realy executed for both versions (which currently does not happen by default), than the value
-          * should be obtained for both versions
+          * This is not exactly what is required here - if process sucess runs are realy executed for both commits (which currently does not happen by default), than the value
+          * should be obtained for both commits
           */
          processSuccessRunSucceeded.put(processSuccessRun.getKey(), reader.isVersionRunWasSuccess());
          ProcessSuccessLogAction processSuccessAction = new ProcessSuccessLogAction(IdHelper.getId(), "processSuccessRun_" + processSuccessRun.getKey(), logData,

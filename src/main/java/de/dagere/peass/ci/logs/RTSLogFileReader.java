@@ -82,9 +82,9 @@ public class RTSLogFileReader {
                testClazzFolders.put(examinedFolder, "");
             } else if (examinedFolder.isDirectory()) {
                String module = examinedFolder.getName();
-               File[] versionFiles = examinedFolder.listFiles((FilenameFilter) new WildcardFileFilter("log_*"));
-               if (versionFiles != null) {
-                  for (File testClazzFolder : versionFiles) {
+               File[] commitFiles = examinedFolder.listFiles((FilenameFilter) new WildcardFileFilter("log_*"));
+               if (commitFiles != null) {
+                  for (File testClazzFolder : commitFiles) {
                      testClazzFolders.put(testClazzFolder, module);
                   }
                }
@@ -93,8 +93,8 @@ public class RTSLogFileReader {
       } else {
          LOG.info("Expected rts commit folder {} did not exist", commitFolder);
       }
-      RTSLogFileVersionReader RTSLogFileVersionReader = new RTSLogFileVersionReader(visualizationFolders, commit);
-      return RTSLogFileVersionReader.getClazzLogs(testClazzFolders, ignoredTests);
+      RTSLogFileCommitReader RTSLogFileCommitReader = new RTSLogFileCommitReader(visualizationFolders, commit);
+      return RTSLogFileCommitReader.getClazzLogs(testClazzFolders, ignoredTests);
 
    }
 

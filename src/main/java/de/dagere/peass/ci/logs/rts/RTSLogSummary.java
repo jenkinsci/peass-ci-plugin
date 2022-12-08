@@ -20,18 +20,18 @@ public class RTSLogSummary {
    private static final Logger LOG = LogManager.getLogger(RTSLogSummary.class);
 
    public static RTSLogSummary createLogSummary(Map<TestMethodCall, RTSLogData> rtsVmRuns, Map<TestMethodCall, RTSLogData> rtsVmRunsPredecessor) {
-      boolean versionContainsFailure = rtsVmRuns.values().stream().anyMatch(log -> !log.isSuccess() && !log.isIgnored());
+      boolean commitContainsFailure = rtsVmRuns.values().stream().anyMatch(log -> !log.isSuccess() && !log.isIgnored());
       boolean predecessorContainsFailure = rtsVmRunsPredecessor.values().stream().anyMatch(log -> !log.isSuccess() && !log.isIgnored());
 
-      boolean versionContainsSuccess = rtsVmRuns.values().stream().anyMatch(log -> log.isSuccess());
+      boolean commitContainsSuccess = rtsVmRuns.values().stream().anyMatch(log -> log.isSuccess());
       boolean predecessorContainsSuccess = rtsVmRunsPredecessor.values().stream().anyMatch(log -> log.isSuccess());
 
-      boolean versionContainsParametrizedwhithoutIndex = rtsVmRuns.values().stream().anyMatch(log -> log.isParameterizedWithoutIndex());
+      boolean commitContainsParametrizedwhithoutIndex = rtsVmRuns.values().stream().anyMatch(log -> log.isParameterizedWithoutIndex());
       boolean predecessorContainsParametrizedwhithoutIndex = rtsVmRunsPredecessor.values().stream().anyMatch(log -> log.isParameterizedWithoutIndex());
 
-      LOG.debug("Errors in logs: current: {} predecessor: {}", versionContainsFailure, predecessorContainsFailure);
-      RTSLogSummary logSummary = new RTSLogSummary(versionContainsFailure, predecessorContainsFailure, versionContainsSuccess, predecessorContainsSuccess,
-            versionContainsParametrizedwhithoutIndex, predecessorContainsParametrizedwhithoutIndex);
+      LOG.debug("Errors in logs: current: {} predecessor: {}", commitContainsFailure, predecessorContainsFailure);
+      RTSLogSummary logSummary = new RTSLogSummary(commitContainsFailure, predecessorContainsFailure, commitContainsSuccess, predecessorContainsSuccess,
+            commitContainsParametrizedwhithoutIndex, predecessorContainsParametrizedwhithoutIndex);
       return logSummary;
    }
 
