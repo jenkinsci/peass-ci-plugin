@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
+import org.jvnet.hudson.test.recipes.WithTimeout;
 
 import de.dagere.peass.ci.helper.GitProjectBuilder;
 import hudson.FilePath;
@@ -37,9 +38,9 @@ public class MeasureVersionBuilderTest {
    }
    
    @Test
+   // The tests sometimes fails in GH Actions or ci.jenkins.io because of timeout - therefore, the timeout is increased
+   @WithTimeout(300)
    public void testFullBuild() throws Exception {
-      // On Github actions, this test currently fails because of timeout - try to use higher timeout
-      jenkins.timeout = 5 * 60;
       
       FreeStyleProject project = jenkins.createFreeStyleProject();
       initProjectFolder(project);
