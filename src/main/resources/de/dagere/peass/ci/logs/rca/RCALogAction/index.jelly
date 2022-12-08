@@ -5,7 +5,7 @@
       <st:include page="sidepanel.jelly" it="${it.run}" optional="true" />
     </l:side-panel>
     <l:main-panel>
-      <h1>RCA Log ${it.test} VM: ${it.getVmId()} Level: ${it.level} Version: ${it.version}</h1>
+      <h1>RCA Log ${it.test} VM: ${it.getVmId()} Level: ${it.level} Commit: ${it.version}</h1>
       <pre>
         ${it.log}
       </pre>

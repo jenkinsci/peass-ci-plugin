@@ -10,7 +10,7 @@ public class LogAction extends VisibleAction {
    protected final String displayName;
    private final TestCase test;
    private final int vmId;
-   private final String version;
+   private final String commit;
    private final String logData;
 
    public LogAction(int id, final TestCase test, final int vmId, final String commit, final String logData) {
@@ -22,7 +22,7 @@ public class LogAction extends VisibleAction {
       this.displayName = displayName;
       this.test = test;
       this.vmId = vmId;
-      this.version = commit;
+      this.commit = commit;
       this.logData = logData;
    }
 
@@ -40,7 +40,7 @@ public class LogAction extends VisibleAction {
    }
 
    public String getVersion() {
-      return version;
+      return commit;
    }
 
    public String getLogData() {
