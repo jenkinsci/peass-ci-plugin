@@ -23,7 +23,7 @@ import de.dagere.peass.measurement.statistics.data.TestcaseStatistic;
 import hudson.model.Run;
 
 /**
- * Tests the behaviour of trendfile creation: For the first time, the measurement values of the version and its predecessor is added. Afterwards, only the current version is added (otherwise, the trendfile would contain 
+ * Tests the behaviour of trendfile creation: For the first time, the measurement values of the commit and its predecessor is added. Afterwards, only the current version is added (otherwise, the trendfile would contain 
  * very frequent changes)
  * @author DaGeRe
  *
@@ -32,7 +32,7 @@ public class TestTrendFileUtil {
 
    private static final File LOCAL_WORKSPACE = new File("target");
 
-   private static final int VERSION_INDEX = 15;
+   private static final int COMMIT_INDEX = 15;
 
    @Before
    public void cleanTrendfile() {
@@ -46,19 +46,19 @@ public class TestTrendFileUtil {
 
       ProjectStatistics simpleStatistics = buildStatistics();
 
-      Mockito.when(run.getNumber()).thenReturn(VERSION_INDEX);
+      Mockito.when(run.getNumber()).thenReturn(COMMIT_INDEX);
       TrendFileUtil.persistTrend(run, LOCAL_WORKSPACE, simpleStatistics);
 
       checkFirstAddition();
 
-      Mockito.when(run.getNumber()).thenReturn(VERSION_INDEX + 1);
+      Mockito.when(run.getNumber()).thenReturn(COMMIT_INDEX + 1);
       TrendFileUtil.persistTrend(run, LOCAL_WORKSPACE, simpleStatistics);
 
       BuildMeasurementValues values = TrendFileUtil.readMeasurementValues(LOCAL_WORKSPACE);
       TestMeasurementValues testcaseValues = values.getValues().get("DemoTest#methodA");
       Assert.assertEquals(testcaseValues.getStatistics().size(), 3);
-      Assert.assertEquals(testcaseValues.getStatistics().get(VERSION_INDEX + 1).getMeanOld(), 1, 0.01);
-      Assert.assertEquals(testcaseValues.getStatistics().get(VERSION_INDEX + 1).getMeanCurrent(), 2, 0.01);
+      Assert.assertEquals(testcaseValues.getStatistics().get(COMMIT_INDEX + 1).getMeanOld(), 1, 0.01);
+      Assert.assertEquals(testcaseValues.getStatistics().get(COMMIT_INDEX + 1).getMeanCurrent(), 2, 0.01);
    }
 
    private void checkFirstAddition() throws JsonParseException, JsonMappingException, IOException, InterruptedException {
@@ -68,11 +68,11 @@ public class TestTrendFileUtil {
       TestMeasurementValues testcaseValues = values.getValues().get("DemoTest#methodA");
       Assert.assertEquals(testcaseValues.getStatistics().size(), 2);
 
-      Assert.assertEquals(testcaseValues.getStatistics().get(VERSION_INDEX - 1).getMeanOld(), 0, 0.01);
-      Assert.assertEquals(testcaseValues.getStatistics().get(VERSION_INDEX - 1).getMeanCurrent(), 1, 0.01);
+      Assert.assertEquals(testcaseValues.getStatistics().get(COMMIT_INDEX - 1).getMeanOld(), 0, 0.01);
+      Assert.assertEquals(testcaseValues.getStatistics().get(COMMIT_INDEX - 1).getMeanCurrent(), 1, 0.01);
 
-      Assert.assertEquals(testcaseValues.getStatistics().get(VERSION_INDEX).getMeanOld(), 1, 0.01);
-      Assert.assertEquals(testcaseValues.getStatistics().get(VERSION_INDEX).getMeanCurrent(), 2, 0.01);
+      Assert.assertEquals(testcaseValues.getStatistics().get(COMMIT_INDEX).getMeanOld(), 1, 0.01);
+      Assert.assertEquals(testcaseValues.getStatistics().get(COMMIT_INDEX).getMeanCurrent(), 2, 0.01);
    }
 
    private ProjectStatistics buildStatistics() {

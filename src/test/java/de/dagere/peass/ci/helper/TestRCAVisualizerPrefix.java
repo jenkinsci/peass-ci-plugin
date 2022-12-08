@@ -69,9 +69,9 @@ public class TestRCAVisualizerPrefix {
 
    private Run createChangefileActions(final File changefile) throws IOException, StreamReadException, DatabindException {
       ProjectChanges changes = Constants.OBJECTMAPPER.readValue(changefile, ProjectChanges.class);
-      Changes versionChanges = changes.getCommitChanges().values().iterator().next();
+      Changes commitChanges = changes.getCommitChanges().values().iterator().next();
 
-      String longestPrefix = RCAVisualizer.getLongestPrefix(versionChanges.getTestcaseChanges().keySet());
+      String longestPrefix = RCAVisualizer.getLongestPrefix(commitChanges.getTestcaseChanges().keySet());
       
       Run run = Mockito.mock(Run.class);
       MeasurementConfig measurementConfig = new MeasurementConfig(2);
@@ -83,7 +83,7 @@ public class TestRCAVisualizerPrefix {
       PeassProcessConfiguration peassConfig = new PeassProcessConfiguration(false, measurementConfig, null, null, 0, false, false, false, null);
       RCAVisualizer rcaVisualizer = new RCAVisualizer(peassConfig, visualizationFolders, null, run);
       
-      for (Entry<String, List<Change>> testcases : versionChanges.getTestcaseChanges().entrySet()) {
+      for (Entry<String, List<Change>> testcases : commitChanges.getTestcaseChanges().entrySet()) {
          for (Change change : testcases.getValue()) {
 //            final String name = testcases.getKey() + "_" + change.getMethod();
             RCAMetadata metadata = new RCAMetadata(change, testcases, peassConfig.getMeasurementConfig().getFixedCommitConfig(), visualizationResultFolder);
