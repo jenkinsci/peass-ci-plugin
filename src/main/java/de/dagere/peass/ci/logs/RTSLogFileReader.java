@@ -27,7 +27,7 @@ public class RTSLogFileReader {
    private final PeassProcessConfiguration peassConfig;
    private final MeasurementConfig measurementConfig;
    private final boolean logsExisting;
-   private final boolean versionRunWasSuccess;
+   private final boolean commitRunWasSuccess;
 
    public RTSLogFileReader(final VisualizationFolderManager visualizationFolders, final PeassProcessConfiguration peassConfig) {
       this.visualizationFolders = visualizationFolders;
@@ -39,10 +39,10 @@ public class RTSLogFileReader {
       LOG.info("RTS log overview file: {} Exists: {}", rtsLogOverviewFile, rtsLogOverviewFile.exists());
       logsExisting = rtsLogOverviewFile.exists();
 
-      versionRunWasSuccess = isVersionRunSuccess(visualizationFolders, measurementConfig);
+      commitRunWasSuccess = isCommitRunSuccess(visualizationFolders, measurementConfig);
    }
 
-   private boolean isVersionRunSuccess(final VisualizationFolderManager visualizationFolders, final MeasurementConfig measurementConfig) {
+   private boolean isCommitRunSuccess(final VisualizationFolderManager visualizationFolders, final MeasurementConfig measurementConfig) {
       boolean success = false;
       File dependencyFile = visualizationFolders.getResultsFolders().getStaticTestSelectionFile();
       if (dependencyFile.exists()) {
@@ -64,7 +64,7 @@ public class RTSLogFileReader {
    }
 
    public boolean isVersionRunWasSuccess() {
-      return versionRunWasSuccess;
+      return commitRunWasSuccess;
    }
 
    public boolean isLogsExisting() {

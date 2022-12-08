@@ -143,10 +143,10 @@ public class RTSVisualizationCreator {
       File staticSelectionFile = localWorkspace.getStaticTestSelectionFile();
       if (staticSelectionFile.exists()) {
          StaticTestSelection staticTestSelection = Constants.OBJECTMAPPER.readValue(staticSelectionFile, StaticTestSelection.class);
-         CommitStaticSelection version = staticTestSelection.getCommits().get(peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit());
+         CommitStaticSelection commit = staticTestSelection.getCommits().get(peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit());
 
-         if (version != null) {
-            addVersionDataToChangeliste(staticSelection, version);
+         if (commit != null) {
+            addCommitDataToChangeliste(staticSelection, commit);
          } else {
             LOG.info("No change has been detected in " + peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit());
          }
@@ -157,8 +157,8 @@ public class RTSVisualizationCreator {
       return staticSelection;
    }
 
-   private void addVersionDataToChangeliste(final Map<String, List<String>> changesList, final CommitStaticSelection version) {
-      for (Map.Entry<ChangedEntity, TestSet> entry : version.getChangedClazzes().entrySet()) {
+   private void addCommitDataToChangeliste(final Map<String, List<String>> changesList, final CommitStaticSelection commit) {
+      for (Map.Entry<ChangedEntity, TestSet> entry : commit.getChangedClazzes().entrySet()) {
          List<String> tests = new LinkedList<>();
          for (TestCase test : entry.getValue().getTests()) {
             tests.add(test.toString());

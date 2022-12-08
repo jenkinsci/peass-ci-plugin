@@ -22,9 +22,9 @@ public class BuildMeasurementValues {
    }
 
    @JsonIgnore
-   public void addMeasurement(final ProjectStatistics currentVersionStatistics, final int buildNumber) {
-      for (Entry<String, Map<TestMethodCall, TestcaseStatistic>> version : currentVersionStatistics.getStatistics().entrySet()) {
-         for (Map.Entry<TestMethodCall, TestcaseStatistic> testcase : version.getValue().entrySet()) {
+   public void addMeasurement(final ProjectStatistics currentCommitStatistics, final int buildNumber) {
+      for (Entry<String, Map<TestMethodCall, TestcaseStatistic>> commit : currentCommitStatistics.getStatistics().entrySet()) {
+         for (Map.Entry<TestMethodCall, TestcaseStatistic> testcase : commit.getValue().entrySet()) {
             final String testcaseName = testcase.getKey().toString();
             TestMeasurementValues testcasePersistedValues = values.get(testcaseName);
             if (testcasePersistedValues == null) {

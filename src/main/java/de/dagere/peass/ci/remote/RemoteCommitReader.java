@@ -12,7 +12,7 @@ import hudson.FilePath.FileCallable;
 import hudson.model.TaskListener;
 import hudson.remoting.VirtualChannel;
 
-public class RemoteVersionReader implements FileCallable<MeasurementConfig> {
+public class RemoteCommitReader implements FileCallable<MeasurementConfig> {
 
    private static final long serialVersionUID = -1266048917282327539L;
 
@@ -20,7 +20,7 @@ public class RemoteVersionReader implements FileCallable<MeasurementConfig> {
 
    private final TaskListener listener;
 
-   public RemoteVersionReader(final MeasurementConfig measurementConfig, final TaskListener listener) {
+   public RemoteCommitReader(final MeasurementConfig measurementConfig, final TaskListener listener) {
       this.measurementConfig = measurementConfig;
       this.listener = listener;
    }
@@ -32,11 +32,11 @@ public class RemoteVersionReader implements FileCallable<MeasurementConfig> {
    @Override
    public MeasurementConfig invoke(final File workspaceFolder, final VirtualChannel channel) throws IOException, InterruptedException {
       try (JenkinsLogRedirector redirector = new JenkinsLogRedirector(listener)) {
-         final String version = GitUtils.getName("HEAD", workspaceFolder);
-         measurementConfig.getFixedCommitConfig().setCommit(version);
+         final String commit = GitUtils.getName("HEAD", workspaceFolder);
+         measurementConfig.getFixedCommitConfig().setCommit(commit);
          if (measurementConfig.getFixedCommitConfig().getCommitOld() != null) {
-            final String versionOld = GitUtils.getName(measurementConfig.getFixedCommitConfig().getCommitOld(), workspaceFolder);
-            measurementConfig.getFixedCommitConfig().setCommitOld(versionOld);
+            final String commitOld = GitUtils.getName(measurementConfig.getFixedCommitConfig().getCommitOld(), workspaceFolder);
+            measurementConfig.getFixedCommitConfig().setCommitOld(commitOld);
          }
          return measurementConfig;
       } catch (Throwable e) {

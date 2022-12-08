@@ -62,7 +62,7 @@ public class RCAExecutor {
       boolean needsRCA = checkNeedsRCA(commitChanges);
 
       if (needsRCA) {
-         LOG.info("At least one testcase was not successfully executed in the last build for the current version - executing RCA");
+         LOG.info("At least one testcase was not successfully executed in the last build for the current commit - executing RCA");
          // saveOldPeassFolder();
 
          MeasurementConfig currentConfig = new MeasurementConfig(config);

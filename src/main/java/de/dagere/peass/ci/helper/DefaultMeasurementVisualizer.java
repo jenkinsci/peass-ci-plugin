@@ -39,10 +39,10 @@ public class DefaultMeasurementVisualizer {
    private final Set<String> tests;
    private final Map<String, TestcaseStatistic> noWarmupStatistics = new HashMap<>();
 
-   public DefaultMeasurementVisualizer(final File dataFolder, final String version, final Run<?, ?> run, final VisualizationFolderManager visualizationFolders,
+   public DefaultMeasurementVisualizer(final File dataFolder, final String commit, final Run<?, ?> run, final VisualizationFolderManager visualizationFolders,
          final Set<String> tests) {
       this.dataFolder = dataFolder;
-      this.commit = version;
+      this.commit = commit;
       this.run = run;
       this.visualizationFolders = visualizationFolders;
       this.tests = tests;

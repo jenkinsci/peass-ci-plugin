@@ -79,7 +79,7 @@ public class LocalPeassProcessManager {
       copyFromRemote();
       if (result != null) {
          String commitOld = result.getCommitOld();
-         listener.getLogger().println("Setting predecessor version, obtained by RTS: " + commitOld);
+         listener.getLogger().println("Setting predecessor commit, obtained by RTS: " + commitOld);
          peassConfig.getMeasurementConfig().getFixedCommitConfig().setCommitOld(commitOld);
       }
       if (peassConfig.isDisplayRTSLogs()) {
@@ -157,9 +157,9 @@ public class LocalPeassProcessManager {
 
       Map<String, TestcaseStatistic> noWarmupStatistics = createPureMeasurementVisualization(run, dataFolder, measurements);
 
-      Changes versionChanges = changes.getCommitChanges(peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit());
+      Changes commitChanges = changes.getCommitChanges(peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit());
 
-      final MeasurementOverviewAction action = new MeasurementOverviewAction(IdHelper.getId(), peassConfig.getMeasurementConfig(), versionChanges, statistics,
+      final MeasurementOverviewAction action = new MeasurementOverviewAction(IdHelper.getId(), peassConfig.getMeasurementConfig(), commitChanges, statistics,
             noWarmupStatistics, measurements, histogramReader.getUpdatedConfigurations());
       run.addAction(action);
 

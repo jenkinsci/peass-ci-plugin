@@ -16,9 +16,9 @@ public class PeassOverviewUtils {
       for (String commit : selection.getCommitNames()) {
          TestSet commitTraceSelection = data.getCommits().get(commit);
          if (commitTraceSelection != null) {
-            CommitStaticSelection versionStaticSelection = selection.getCommits().get(commit);
-            if (versionStaticSelection != null) {
-               for (Map.Entry<ChangedEntity, TestSet> changedEntity : versionStaticSelection.getChangedClazzes().entrySet()) {
+            CommitStaticSelection commitStaticSelection = selection.getCommits().get(commit);
+            if (commitStaticSelection != null) {
+               for (Map.Entry<ChangedEntity, TestSet> changedEntity : commitStaticSelection.getChangedClazzes().entrySet()) {
                   Set<TestMethodCall> tests = new HashSet<>(changedEntity.getValue().getTestMethods());
 
                   for (TestMethodCall test : tests) {

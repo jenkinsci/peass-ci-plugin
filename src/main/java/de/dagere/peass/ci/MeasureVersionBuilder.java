@@ -36,7 +36,7 @@ import de.dagere.peass.ci.logs.rts.AggregatedRTSResult;
 import de.dagere.peass.ci.process.IncludeExcludeParser;
 import de.dagere.peass.ci.process.JenkinsLogRedirector;
 import de.dagere.peass.ci.process.LocalPeassProcessManager;
-import de.dagere.peass.ci.remote.RemoteVersionReader;
+import de.dagere.peass.ci.remote.RemoteCommitReader;
 import de.dagere.peass.config.ExecutionConfig;
 import de.dagere.peass.config.FixedCommitConfig;
 import de.dagere.peass.config.KiekerConfig;
@@ -330,11 +330,11 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private MeasurementConfig generateMeasurementConfig(final FilePath workspace, final TaskListener listener)
          throws IOException, InterruptedException {
       final MeasurementConfig measurementConfig = getMeasurementConfig();
-      listener.getLogger().println("Starting RemoteVersionReader");
-      final RemoteVersionReader remoteVersionReader = new RemoteVersionReader(measurementConfig, listener);
+      listener.getLogger().println("Starting RemoteCommitReader");
+      final RemoteCommitReader remoteVersionReader = new RemoteCommitReader(measurementConfig, listener);
       final MeasurementConfig configWithRealGitVersions = workspace.act(remoteVersionReader);
       FixedCommitConfig fixedCommitConfig = configWithRealGitVersions.getFixedCommitConfig();
-      listener.getLogger().println("Read version: " + fixedCommitConfig.getCommit() + " " + fixedCommitConfig.getCommitOld());
+      listener.getLogger().println("Read commit: " + fixedCommitConfig.getCommit() + " " + fixedCommitConfig.getCommitOld());
       return configWithRealGitVersions;
    }
 
@@ -390,15 +390,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       }
 
       if (commitDiff <= 0) {
-         throw new RuntimeException("The version difference should be at least 1, but was " + commitDiff);
+         throw new RuntimeException("The commit difference should be at least 1, but was " + commitDiff);
       }
       if (nightlyBuild && commitDiff != 1) {
-         throw new RuntimeException("If nightly build is set, do not set versionDiff! nightlyBuild will automatically select the last tested version.");
+         throw new RuntimeException("If nightly build is set, do not set commitDiff! nightlyBuild will automatically select the last tested commit.");
       }
 
       config.getFixedCommitConfig().setCommit("HEAD");
-      final String oldVersion = getOldVersion();
-      config.getFixedCommitConfig().setCommitOld(oldVersion);
+      final String oldCommit = getOldCommit();
+      config.getFixedCommitConfig().setCommitOld(oldCommit);
 
       parameterizeExecutionConfig(config.getExecutionConfig());
 
@@ -499,7 +499,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       kiekerConfig.setKiekerWaitTime(kiekerWaitTime);
    }
 
-   private String getOldVersion() throws IOException, JsonParseException, JsonMappingException {
+   private String getOldCommit() throws IOException, JsonParseException, JsonMappingException {
       final String oldVersion;
       if (nightlyBuild) {
          oldVersion = null;

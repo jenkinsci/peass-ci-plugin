@@ -132,11 +132,11 @@ public class LogFileReader {
 
    public Map<TestCase, List<RCALevel>> getRCATestcases() {
       CauseSearchFolders causeFolders = visualizationFolders.getPeassRCAFolders();
-      File versionTreeFolder = new File(causeFolders.getRcaTreeFolder(), measurementConfig.getFixedCommitConfig().getCommit());
+      File commitTreeFolder = new File(causeFolders.getRcaTreeFolder(), measurementConfig.getFixedCommitConfig().getCommit());
       Map<TestCase, List<RCALevel>> testcases = new HashMap<>();
-      File[] versionFiles = versionTreeFolder.listFiles();
-      if (versionFiles != null) {
-         for (File testcaseName : versionFiles) {
+      File[] commitFiles = commitTreeFolder.listFiles();
+      if (commitFiles != null) {
+         for (File testcaseName : commitFiles) {
             File[] testcaseFiles = testcaseName.listFiles((FilenameFilter) new WildcardFileFilter("*.json"));
             if (testcaseFiles != null) {
                for (File jsonFileName : testcaseFiles) {
