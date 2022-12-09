@@ -51,7 +51,9 @@ public class EnvironmentVariables implements Serializable {
             File potentialWrapper = new File(projectFolder, "mvnw.cmd");
             if (potentialWrapper.exists()) {
                try {
-                  return potentialWrapper.getCanonicalPath();
+                  String canonicalPath = potentialWrapper.getCanonicalPath();
+                  System.out.println("Returning canonical path: " + canonicalPath);
+                  return canonicalPath;
                } catch (IOException e) {
                   System.err.println("Was not able to get canonical path");
                   e.printStackTrace();
