@@ -52,7 +52,7 @@ public class EnvironmentVariables implements Serializable {
             if (potentialWrapper.exists()) {
                try {
                   String canonicalPath = potentialWrapper.getCanonicalPath();
-                  System.out.println("Returning canonical path: " + canonicalPath);
+                  System.out.println("Returning canonical path: " + canonicalPath + " " + potentialWrapper.canExecute());
                   return canonicalPath;
                } catch (IOException e) {
                   System.err.println("Was not able to get canonical path");
