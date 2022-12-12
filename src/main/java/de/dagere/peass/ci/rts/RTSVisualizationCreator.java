@@ -72,7 +72,7 @@ public class RTSVisualizationCreator {
 
    private void visualizeTest(final Run<?, ?> run, final String traceSelectedTest) throws IOException {
       TestMethodCall testcase = TestMethodCall.createFromString(traceSelectedTest);
-      File traceFolder = localWorkspace.getVersionDiffFolder(peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit());
+      File traceFolder = localWorkspace.getCommitDiffFolder(peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit());
       String traceSource = readText(testcase, traceFolder);
 
       RTSTraceAction traceAction = new RTSTraceAction(IdHelper.getId(), traceSelectedTest, traceSource);

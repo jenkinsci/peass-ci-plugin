@@ -28,7 +28,7 @@ public class CorrectRunChecker {
    boolean predecessorRunning = false;
 
    public CorrectRunChecker(final TestMethodCall testcase, final int vmId, final MeasurementConfig measurementConfig, final VisualizationFolderManager visualizationFolders) {
-      File basicResultFolder = visualizationFolders.getResultsFolders().getVersionFullResultsFolder(measurementConfig);
+      File basicResultFolder = visualizationFolders.getResultsFolders().getCommitFullResultsFolder(measurementConfig);
       File detailResultsFolder = new File(basicResultFolder, "measurements");
 
       FixedCommitConfig fixedCommitConfig = measurementConfig.getFixedCommitConfig();

@@ -145,7 +145,7 @@ public class LocalPeassProcessManager {
    }
 
    public ProjectChanges visualizeMeasurementResults(final Run<?, ?> run) {
-      File dataFolder = results.getVersionFullResultsFolder(peassConfig.getMeasurementConfig());
+      File dataFolder = results.getCommitFullResultsFolder(peassConfig.getMeasurementConfig());
       final HistogramReader histogramReader = new HistogramReader(peassConfig.getMeasurementConfig(), dataFolder);
       final Map<String, HistogramValues> measurements = histogramReader.readMeasurements();
 
