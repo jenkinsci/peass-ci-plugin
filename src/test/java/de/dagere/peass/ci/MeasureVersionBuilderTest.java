@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Rule;
 import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
@@ -41,6 +42,8 @@ public class MeasureVersionBuilderTest {
    // The tests sometimes fails in GH Actions or ci.jenkins.io because of timeout - therefore, the timeout is increased
    @WithTimeout(300)
    public void testFullBuild() throws Exception {
+      // Ignore this test on Jenkins infrastructure, since there is a problem with the file system
+      Assume.assumeFalse(new File(".").getAbsolutePath().startsWith("C:\\Jenkins"));
       
       FreeStyleProject project = jenkins.createFreeStyleProject();
       initProjectFolder(project);
