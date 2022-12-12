@@ -84,10 +84,10 @@ public class RTSVisualizationCreator {
       System.out.println("Trace file: " + traceFile.getAbsolutePath());
       String traceSource = "";
       if (traceFile.exists()) {
-         traceSource = TraceFileUtil.getText(traceFile).stream().collect(Collectors.joining("\n"));
+         traceSource = peassConfig.getLogText(traceFile);
       } else {
          File zipTraceFile = new File(traceFolder, testcase.getShortClazz() + "#" + testcase.getMethod() + TraceFileManager.ZIP_ENDING);
-         if (zipTraceFile.exists()) {
+         if (zipTraceFile.exists() && peassConfig.isAllowedFilesize(zipTraceFile)) {
             traceSource = TraceFileUtil.getText(zipTraceFile).stream().collect(Collectors.joining("\n"));
          }
       }
@@ -124,7 +124,7 @@ public class RTSVisualizationCreator {
       }
       return null;
    }
-   
+
    private TestSet readTwiceExecutability() throws IOException {
       File twiceExecutabilityFile = localWorkspace.getTwiceExecutableFile();
       if (twiceExecutabilityFile.exists()) {

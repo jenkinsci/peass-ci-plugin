@@ -87,4 +87,9 @@ public class PeassProcessConfiguration implements Serializable {
       }
       return logData;
    }
+
+   public boolean isAllowedFilesize(File logfile) {
+      long filesize = logfile.length() / (1024 * 1024);
+      return filesize < getImportLogSizeInMb();
+   }
 }
