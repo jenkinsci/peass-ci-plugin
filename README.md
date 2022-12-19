@@ -3,7 +3,7 @@ Peass-CI
 
 Detecting and understanding performance changes is hard: Commits (often) contain many changes, so it is hard to keep track of every effect on the performance, and optimizations of the JVM might cause code changes to have unexpected side effects. By measuring the performance with statistic rigor, we can detect and understand perfromance changes and thereby avoid regressions.
 
-The Peass-CI-Plugin enables a continuous performance measurement for Java projects in an Jenkins server. Peass-CI currently supports the following workload types:
+The Peass-CI-Plugin (based on [Peass](https://github.com/DaGeRe/peass), from Performance analysis of software system) enables a continuous performance measurement for Java projects in an Jenkins server. Peass-CI currently supports the following workload types:
 - JUnit 3,4 or 5 tests (which are transformed into performance unit tests)
 - JMH benchmarks.
 
