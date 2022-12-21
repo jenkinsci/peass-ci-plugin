@@ -362,5 +362,53 @@
         </td>
       </tr>
     </table>
+
+    <h1>${%Android}</h1>
+    ${%AndroidDescr}
+    <table>
+      <tr>
+        <td>
+          <f:entry title="${%useAnbox}" field="useAnbox" description="${%useAnboxDescr}">
+            <f:checkbox />
+          </f:entry>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <f:entry title="${%androidManifest}" field="androidManifest" description="${%androidManifestDescr}">
+            <f:textbox default="app/src/main/AndroidManifest.xml" />
+          </f:entry>
+        </td>
+        <td>
+          <f:entry title="${%androidCompileSdkVersion}" field="androidCompileSdkVersion" description="${%androidCompileSdkVersionDescr}">
+            <f:textbox/>
+          </f:entry>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <f:entry title="${%androidMinSdkVersion}" field="androidMinSdkVersion" description="${%androidMinSdkVersionDescr}">
+            <f:textbox/>
+          </f:entry>
+        </td>
+        <td>
+          <f:entry title="${%androidTargetSdkVersion}" field="androidTargetSdkVersion" description="${%androidTargetSdkVersionDescr}">
+            <f:textbox/>
+          </f:entry>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <f:entry title="${%androidGradleVersion}" field="androidGradleVersion" description="${%androidGradleVersionDescr}">
+            <f:textbox/>
+          </f:entry>
+        </td>
+        <td>
+          <f:entry title="${%androidGradleTasks}" field="androidGradleTasks" description="${%androidGradleTasksDescr}">
+            <f:textbox default="installDebug;installDebugAndroidTest" />
+          </f:entry>
+        </td>
+      </tr>
+    </table>
   </f:advanced>
 </j:jelly>
