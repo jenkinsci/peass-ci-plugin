@@ -130,6 +130,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private boolean updateSnapshotDependencies = false;
    private boolean removeSnapshots = false;
    private boolean useAlternativeBuildfile = false;
+   
+   private boolean useAnbox = false;
+   private String androidManifest = "app/src/main/AndroidManifest.xml";
+   private String androidCompileSdkVersion = "";
+   private String androidMinSdkVersion = "";
+   private String androidTargetSdkVersion = "";
+   private String androidGradleVersion = "";
+   private String androidGradleTasks = "installDebug;installDebugAndroidTest";
+   
    private boolean excludeLog4jSlf4jImpl = false;
    private boolean excludeLog4jToSlf4j = false;
 
@@ -352,6 +361,13 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       listener.getLogger().println("CleanGoal: " + cleanGoal);
       listener.getLogger().println("Execute @BeforeClass in measurement: " + executeBeforeClassInMeasurement);
       listener.getLogger().println("Clear mockito caches: " + clearMockitoCaches);
+      listener.getLogger().println("Use Anbox: " + useAnbox);
+      listener.getLogger().println("Android Manifest: " + androidManifest);
+      listener.getLogger().println("Android compileSdkVersion: " + androidCompileSdkVersion);
+      listener.getLogger().println("Android minSdkVersion: " + androidMinSdkVersion);
+      listener.getLogger().println("Android targetSdkVersion: " + androidTargetSdkVersion);
+      listener.getLogger().println("Android gradleVersion: " + androidGradleVersion);
+      listener.getLogger().println("Android gradleTasks: " + androidGradleTasks);
    }
 
    private String getJobName(final Run<?, ?> run) {
@@ -433,6 +449,14 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       executionConfig.setExcludeByRule(IncludeExcludeParser.getStringListSimple(excludeByRule));
 
       executionConfig.setUseAlternativeBuildfile(useAlternativeBuildfile);
+      executionConfig.setUseAnbox(useAnbox);
+      executionConfig.setAndroidManifest(androidManifest);
+      executionConfig.setAndroidCompileSdkVersion(androidCompileSdkVersion == "" ? null : androidCompileSdkVersion);
+      executionConfig.setAndroidMinSdkVersion(androidMinSdkVersion == "" ? null : androidMinSdkVersion);
+      executionConfig.setAndroidTargetSdkVersion(androidTargetSdkVersion == "" ? null : androidTargetSdkVersion);
+      executionConfig.setAndroidGradleVersion(androidGradleVersion == "" ? null : androidGradleVersion);
+      executionConfig.setAndroidGradleTasks(IncludeExcludeParser.getStringListSimple(androidGradleTasks));
+
       executionConfig.setRedirectSubprocessOutputToFile(redirectSubprocessOutputToFile);
 
       executionConfig.setTestTransformer(testTransformer);
@@ -473,6 +497,17 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       if (executionConfig.isClearMockitoCaches() && !executionConfig.isExecuteBeforeClassInMeasurement()) {
          throw new RuntimeException("ClearMockitoCaches may only be activated if executeBeforeClassInMeasurement is activated!");
       }
+      if (executionConfig.isUseAnbox()) {
+         if (executionConfig.getTestExecutor() != "de.dagere.peass.execution.gradle.AnboxTestExecutor") {
+            throw new RuntimeException("Emulator needs 'testExecutor' to be set to'de.dagere.peass.execution.gradle.AnboxTestExecutor'!");
+         }
+         if (executionConfig.getAndroidGradleTasks().size() == 0) {
+            throw new RuntimeException("No Gradle install tasks set! Emulator needs Gradle tasks to compile and install the tests on the emulator like 'installDebug;installDebugAndroidTest'");
+         }
+         if (executionConfig.getAndroidManifest() == "") {
+            throw new RuntimeException("No AndroidManifest.xml set! Default is 'app/src/main/AndroidManifest.xml'");
+         }
+      } 
    }
 
    private void parameterizeKiekerConfig(final KiekerConfig kiekerConfig) {
@@ -863,6 +898,69 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    @DataBoundSetter
    public void setUseAlternativeBuildfile(final boolean useAlternativeBuildfile) {
       this.useAlternativeBuildfile = useAlternativeBuildfile;
+   }
+
+   public boolean isUseAnbox() {
+      return useAnbox;
+   }
+
+   @DataBoundSetter
+   public void setUseAnbox(final boolean useAnbox) {
+      this.useAnbox = useAnbox;
+   }
+
+   public String getAndroidMinSdkVersion() {
+      return androidMinSdkVersion;
+   }
+
+   @DataBoundSetter
+   public void setAndroidMinSdkVersion(final String androidMinSdkVersion) {
+      this.androidMinSdkVersion = androidMinSdkVersion;
+   }
+
+   public String getAndroidManifest() {
+      return androidManifest;
+   }
+
+   @DataBoundSetter
+   public void setAndroidManifest(final String androidManifest) {
+      this.androidManifest = androidManifest;
+   }
+
+   public String getAndroidCompileSdkVersion() {
+      return androidCompileSdkVersion;
+   }
+   
+   @DataBoundSetter
+   public void setAndroidCompileSdkVersion(final String androidCompileSdkVersion) {
+      this.androidCompileSdkVersion = androidCompileSdkVersion;
+   }
+
+   public String getAndroidTargetSdkVersion() {
+      return androidTargetSdkVersion;
+   }
+   
+   @DataBoundSetter
+   public void setAndroidTargetSdkVersion(final String androidTargetSdkVersion) {
+      this.androidTargetSdkVersion = androidTargetSdkVersion;
+   }
+
+   public String getAndroidGradleVersion() {
+      return androidGradleVersion;
+   }
+
+   @DataBoundSetter
+   public void setAndroidGradleVersion(final String androidGradleVersion) {
+      this.androidGradleVersion = androidGradleVersion;
+   }
+
+   public String getAndroidGradleTasks() {
+      return androidGradleTasks;
+   }
+
+   @DataBoundSetter
+   public void setAndroidGradleTasks(final String androidGradleTasks) {
+      this.androidGradleTasks = androidGradleTasks;
    }
 
    public boolean isExcludeLog4jSlf4jImpl() {
