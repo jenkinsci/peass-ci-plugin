@@ -451,10 +451,10 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       executionConfig.setUseAlternativeBuildfile(useAlternativeBuildfile);
       executionConfig.setUseAnbox(useAnbox);
       executionConfig.setAndroidManifest(androidManifest);
-      executionConfig.setAndroidCompileSdkVersion(androidCompileSdkVersion == "" ? null : androidCompileSdkVersion);
-      executionConfig.setAndroidMinSdkVersion(androidMinSdkVersion == "" ? null : androidMinSdkVersion);
-      executionConfig.setAndroidTargetSdkVersion(androidTargetSdkVersion == "" ? null : androidTargetSdkVersion);
-      executionConfig.setAndroidGradleVersion(androidGradleVersion == "" ? null : androidGradleVersion);
+      executionConfig.setAndroidCompileSdkVersion(androidCompileSdkVersion.equals("") ? null : androidCompileSdkVersion);
+      executionConfig.setAndroidMinSdkVersion(androidMinSdkVersion.equals("") ? null : androidMinSdkVersion);
+      executionConfig.setAndroidTargetSdkVersion(androidTargetSdkVersion.equals("") ? null : androidTargetSdkVersion);
+      executionConfig.setAndroidGradleVersion(androidGradleVersion.equals("") ? null : androidGradleVersion);
       executionConfig.setAndroidGradleTasks(IncludeExcludeParser.getStringListSimple(androidGradleTasks));
 
       executionConfig.setRedirectSubprocessOutputToFile(redirectSubprocessOutputToFile);
@@ -498,13 +498,13 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          throw new RuntimeException("ClearMockitoCaches may only be activated if executeBeforeClassInMeasurement is activated!");
       }
       if (executionConfig.isUseAnbox()) {
-         if (executionConfig.getTestExecutor() != "de.dagere.peass.execution.gradle.AnboxTestExecutor") {
+         if (!executionConfig.getTestExecutor().equals("de.dagere.peass.execution.gradle.AnboxTestExecutor")) {
             throw new RuntimeException("Emulator needs 'testExecutor' to be set to'de.dagere.peass.execution.gradle.AnboxTestExecutor'!");
          }
          if (executionConfig.getAndroidGradleTasks().size() == 0) {
             throw new RuntimeException("No Gradle install tasks set! Emulator needs Gradle tasks to compile and install the tests on the emulator like 'installDebug;installDebugAndroidTest'");
          }
-         if (executionConfig.getAndroidManifest() == "") {
+         if (executionConfig.getAndroidManifest().equals("")) {
             throw new RuntimeException("No AndroidManifest.xml set! Default is 'app/src/main/AndroidManifest.xml'");
          }
       } 
