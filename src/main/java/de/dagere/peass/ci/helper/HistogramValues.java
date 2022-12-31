@@ -5,20 +5,20 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class HistogramValues {
 
-   private final double[] valuesBefore;
+   private final double[] valuesPredecessor;
    private final double[] valuesCurrent;
    private final MeasurementConfig currentConfig;
 
    @SuppressFBWarnings
-   public HistogramValues(final double[] valuesBefore, final double[] valuesCurrent, final MeasurementConfig currentConfig) {
-      this.valuesBefore = valuesBefore;
+   public HistogramValues(final double[] valuesPredecessor, final double[] valuesCurrent, final MeasurementConfig currentConfig) {
+      this.valuesPredecessor = valuesPredecessor;
       this.valuesCurrent = valuesCurrent;
       this.currentConfig = currentConfig;
    }
 
    @SuppressFBWarnings
    public double[] getValuesBefore() {
-      return valuesBefore;
+      return valuesPredecessor;
    }
 
    @SuppressFBWarnings

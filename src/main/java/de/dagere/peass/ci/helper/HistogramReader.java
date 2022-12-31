@@ -70,7 +70,7 @@ public class HistogramReader {
       ResultLoader loader = new ResultLoader(currentConfig);
       loader.loadChunk(chunk);
 
-      HistogramValues values = new HistogramValues(loader.getValsBefore(), loader.getValsAfter(), currentConfig);
+      HistogramValues values = new HistogramValues(loader.getValsPredecessor(), loader.getValsCurrent(), currentConfig);
       return values;
    }
 
