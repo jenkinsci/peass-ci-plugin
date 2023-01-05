@@ -12,7 +12,7 @@
       <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
       <script> jq$ = jQuery.noConflict();</script>
 
-      <h1>Regression Test Selection Log Overview</h1>
+      <h1>${it.getDisplayName()}</h1>
       Current commit: ${it.getCommit()} Predecessor commit: ${it.getCommitOld()}
       <br />
       <j:if test="${it.isRedirectSubprocessOutputToFile()}">

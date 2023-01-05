@@ -7,7 +7,7 @@
     <l:main-panel>
       <st:include page="/style.jelly" optional="false" />
       
-      <h1>Performance RCA Logs Overview</h1>
+      <h1>${it.getDisplayName()}</h1>
       <j:if test="${it.isRedirectSubprocessOutputToFile()}">
         <a href="../rcaLog">Root Cause Analysis Overall Log</a>
         <br />
