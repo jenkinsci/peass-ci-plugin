@@ -61,7 +61,7 @@
 
       <j:if test="${it.hasUpdatedConfigurations()}">
         ${AMP}
-        <a href='#' onClick='jq$( "#dialogUpdates" ).dialog( "open" );' style="font-size:24px; color: red;">
+        <a href='#' onClick='jq$( "#dialogUpdates" ).dialog( "open" );' style="font-size:24px; color: yellow;">
           <i class="fa fa-exclamation-triangle" title="Configuration has changed"></i>
         </a>
         <div id="dialogUpdates" title="${%updatedConfigurationTitle}">${%changedConfigurationHint}</div>

@@ -126,7 +126,7 @@
 
     <j:if test="${it.getUpdatedConfigurations().containsKey(testcase.getKey())}">
       <div id="dialogUpdates${testcase.getKey().replace('#','_')}" title="Configuration Updates">
-        <i class="fa fa-exclamation-triangle" title="Configuration has changed" style="color: red"></i>
+        <i class="fa fa-exclamation-triangle" title="Configuration has changed" style="color: yellow"></i>
         ${%changedConfigurationHint}
         <table>
           <tr>
