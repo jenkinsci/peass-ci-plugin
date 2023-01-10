@@ -6,9 +6,13 @@ import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 
+import de.dagere.peass.ci.ContinuousFolderUtil;
 import de.dagere.peass.ci.persistence.TrendFileUtil;
+import de.dagere.peass.folders.CauseSearchFolders;
 import de.dagere.peass.folders.ResultsFolders;
+import de.dagere.peass.vcs.VersionControlSystem;
 import hudson.model.TaskListener;
+import hudson.remoting.VirtualChannel;
 import io.jenkins.cli.shaded.org.apache.commons.io.filefilter.WildcardFileFilter;
 
 public class CleanMeasurementCallable extends CleanCallable {
@@ -17,6 +21,27 @@ public class CleanMeasurementCallable extends CleanCallable {
 
    public CleanMeasurementCallable(final TaskListener listener) {
       super(listener);
+   }
+   
+   @Override
+   public Boolean invoke(File workspaceFolder, VirtualChannel channel) throws IOException, InterruptedException {
+      try {
+         File vcsFolder = VersionControlSystem.findVCSFolder(workspaceFolder);
+         if (vcsFolder != null) {
+            File localFolder = ContinuousFolderUtil.getLocalFolder(vcsFolder);
+            String projectName = ContinuousFolderUtil.getSubFolderPath(workspaceFolder);
+            ResultsFolders resultsFolders = new ResultsFolders(localFolder, projectName);
+            cleanFolder(resultsFolders);
+            return true;
+         } else {
+            System.err.println("Did not find a repository in " + workspaceFolder + " - not cleaning this folder");
+            return false;
+         }
+         
+      } catch (Throwable t) {
+         t.printStackTrace();
+         return false;
+      }
    }
 
    public void cleanFolder(final ResultsFolders resultsFolders) throws IOException {
@@ -55,5 +80,10 @@ public class CleanMeasurementCallable extends CleanCallable {
    private static void deleteLogFolders(final ResultsFolders resultsFolders) throws IOException {
       System.out.println("Deleting " + resultsFolders.getMeasurementLogFolder());
       FileUtils.deleteDirectory(resultsFolders.getMeasurementLogFolder());
+      CauseSearchFolders peassFolders = resultsFolders.getPeassFolders();
+      if (peassFolders != null) {
+         System.out.println("Deleting: " + peassFolders.getLogFolders().getMeasureLogFolder());
+         FileUtils.deleteDirectory(peassFolders.getLogFolders().getMeasureLogFolder());
+      }
    }
 }
