@@ -87,7 +87,7 @@ public class TestRCAVisualizerPrefix {
          for (Change change : testcases.getValue()) {
 //            final String name = testcases.getKey() + "_" + change.getMethod();
             RCAMetadata metadata = new RCAMetadata(change, testcases, peassConfig.getMeasurementConfig().getFixedCommitConfig(), visualizationResultFolder);
-            rcaVisualizer.createRCAAction(new File("target/"), longestPrefix, testcases, change, metadata, changefile);
+            rcaVisualizer.createRCAAction(new File("target/"), longestPrefix, testcases, change, metadata);
          }
       }
       return run;
