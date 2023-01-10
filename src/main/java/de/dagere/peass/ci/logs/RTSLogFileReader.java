@@ -103,7 +103,7 @@ public class RTSLogFileReader {
             measurementConfig.getFixedCommitConfig().getCommitOld());
       try {
          LOG.debug("Reading RTS Log {}", rtsLogFile.getAbsolutePath());
-         return peassConfig.getLogText(rtsLogFile);
+         return peassConfig.getFileText(rtsLogFile);
       } catch (IOException e) {
          e.printStackTrace();
          return "RTS log not readable";
@@ -116,7 +116,7 @@ public class RTSLogFileReader {
       try {
          if (sourceReadLogFile.exists()) {
             LOG.debug("Reading Source Read Log {}", sourceReadLogFile.getAbsolutePath());
-            return peassConfig.getLogText(sourceReadLogFile);
+            return peassConfig.getFileText(sourceReadLogFile);
          } else {
             LOG.error("No source reading log available");
             return "No source reading log available";

@@ -84,7 +84,7 @@ public class RTSVisualizationCreator {
       System.out.println("Trace file: " + traceFile.getAbsolutePath());
       String traceSource = "";
       if (traceFile.exists()) {
-         traceSource = peassConfig.getLogText(traceFile);
+         traceSource = peassConfig.getFileText(traceFile);
       } else {
          File zipTraceFile = new File(traceFolder, testcase.getShortClazz() + "#" + testcase.getMethod() + TraceFileManager.ZIP_ENDING);
          if (zipTraceFile.exists() && peassConfig.isAllowedFilesize(zipTraceFile)) {

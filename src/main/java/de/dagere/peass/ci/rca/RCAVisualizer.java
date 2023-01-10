@@ -109,9 +109,9 @@ public class RCAVisualizer {
       LOG.info("Adding: " + rcaDestFile + " " + metadata.getActionName());
       final String displayName = metadata.getActionName().substring(longestPrefix.length());
 
-      final String mainTreeJSContent = peassConfig.getLogText(rcaDestFile);
-      final String predecessorTreeJSContent = metadata.getPredecessorFile().exists() ? peassConfig.getLogText(metadata.getPredecessorFile()) : null;
-      final String currentTreeJSContent = metadata.getCurrentFile().exists() ? peassConfig.getLogText(metadata.getCurrentFile()) : null;
+      final String mainTreeJSContent = peassConfig.getFileText(rcaDestFile);
+      final String predecessorTreeJSContent = metadata.getPredecessorFile().exists() ? peassConfig.getFileText(metadata.getPredecessorFile()) : null;
+      final String currentTreeJSContent = metadata.getCurrentFile().exists() ? peassConfig.getFileText(metadata.getCurrentFile()) : null;
       
       TestMethodCall testMethodCall = TestMethodCall.createFromString(testcases.getKey() + "#" + change.getMethodWithParams());
       

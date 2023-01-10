@@ -106,7 +106,7 @@ public class LogFileReader {
       try {
          if (measureLogFile.exists()) {
             LOG.debug("Reading {}", measureLogFile.getAbsolutePath());
-            String measureLog = processConfig.getLogText(measureLogFile);
+            String measureLog = processConfig.getFileText(measureLogFile);
             return measureLog;
          } else {
             return "Measurement log not readable; file " + measureLogFile.getAbsolutePath() + " did not exist";
@@ -122,7 +122,7 @@ public class LogFileReader {
             measurementConfig.getFixedCommitConfig().getCommitOld());
       try {
          LOG.debug("Reading {}", rcaLogFile.getAbsolutePath());
-         String rcaLog = processConfig.getLogText(rcaLogFile);
+         String rcaLog = processConfig.getFileText(rcaLogFile);
          return rcaLog;
       } catch (IOException e) {
          e.printStackTrace();

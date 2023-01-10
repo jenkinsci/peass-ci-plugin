@@ -90,7 +90,7 @@ public class RCAActionCreator {
    private void addLog(final Map.Entry<TestCase, List<RCALevel>> testcase, final int levelId, final int vmId, final File logFile, final String commit) throws IOException {
       String logData;
       if (logFile.exists()) {
-         logData = peassConfig.getLogText(logFile);
+         logData = peassConfig.getFileText(logFile);
       } else {
          logData = "Log file could not be found";
       }

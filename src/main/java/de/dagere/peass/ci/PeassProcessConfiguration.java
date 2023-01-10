@@ -77,15 +77,15 @@ public class PeassProcessConfiguration implements Serializable {
       return displayRCALogs;
    }
 
-   public String getLogText(File logfile) throws IOException {
-      String logData;
-      long filesize = logfile.length() / (1024 * 1024);
+   public String getFileText(File file) throws IOException {
+      String fileData;
+      long filesize = file.length() / (1024 * 1024);
       if (filesize < getImportLogSizeInMb()) {
-         logData = FileUtils.readFileToString(logfile, StandardCharsets.UTF_8);
+         fileData = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
       } else {
-         logData = "Could not import " + logfile + " since its size was " + filesize + " MB but only " + getImportLogSizeInMb() + " MB was allowed.";
+         fileData = "Could not import " + file + " since its size was " + filesize + " MB but only " + getImportLogSizeInMb() + " MB was allowed.";
       }
-      return logData;
+      return fileData;
    }
 
    public boolean isAllowedFilesize(File logfile) {

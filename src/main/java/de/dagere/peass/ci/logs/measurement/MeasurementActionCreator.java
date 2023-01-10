@@ -67,9 +67,9 @@ public class MeasurementActionCreator {
          TestCase testcase = entry.getKey();
          int vmId = 0;
          for (LogFiles files : entry.getValue()) {
-            String logData = processConfig.getLogText(files.getCurrent());
+            String logData = processConfig.getFileText(files.getCurrent());
             run.addAction(new LogAction(IdHelper.getId(), testcase, vmId, measurementConfig.getFixedCommitConfig().getCommit(), logData));
-            String logDataOld = processConfig.getLogText(files.getPredecessor());
+            String logDataOld = processConfig.getFileText(files.getPredecessor());
             run.addAction(new LogAction(IdHelper.getId(), testcase, vmId, measurementConfig.getFixedCommitConfig().getCommitOld(), logDataOld));
             vmId++;
          }

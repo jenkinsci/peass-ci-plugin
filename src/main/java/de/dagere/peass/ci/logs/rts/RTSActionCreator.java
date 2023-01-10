@@ -85,7 +85,7 @@ public class RTSActionCreator {
    private Map<String, File> createProcessSuccessRunsActions() throws IOException {
       Map<String, File> processSuccessRuns = reader.findProcessSuccessRuns();
       for (Map.Entry<String, File> processSuccessRun : processSuccessRuns.entrySet()) {
-         String logData = processConfig.getLogText(processSuccessRun.getValue());
+         String logData = processConfig.getFileText(processSuccessRun.getValue());
 
          // String logData = FileUtils.readFileToString(processSuccessRun.getValue(), StandardCharsets.UTF_8);
          /**
