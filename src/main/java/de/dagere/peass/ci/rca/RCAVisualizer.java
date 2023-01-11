@@ -22,10 +22,12 @@ import de.dagere.peass.ci.helper.IdHelper;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
+import de.dagere.peass.measurement.rca.data.CauseSearchData;
 import de.dagere.peass.utils.Constants;
 import de.dagere.peass.vcs.CommitList;
 import de.dagere.peass.vcs.GitCommit;
 import de.dagere.peass.visualization.VisualizeRCAStarter;
+import hudson.model.Result;
 import hudson.model.Run;
 
 public class RCAVisualizer {
@@ -89,6 +91,11 @@ public class RCAVisualizer {
       LOG.info("Creating actions: " + commitChanges.getTestcaseChanges().size());
       for (Entry<String, List<Change>> testcases : commitChanges.getTestcaseChanges().entrySet()) {
          for (Change change : testcases.getValue()) {
+            TestMethodCall testCall = TestMethodCall.createFromString(testcases.getKey());
+            String commit = measurementConfig.getFixedCommitConfig().getCommit();
+            File rcaTreeFile = visualizationFolders.getPeassRCAFolders().getRcaTreeFile(commit, testCall);
+            setUnstableIfNaNInRCA(rcaTreeFile);
+            
             RCAMetadata metadata = new RCAMetadata(change, testcases, peassConfig.getMeasurementConfig().getFixedCommitConfig(), rcaResults);
             File jsFile = new File(commitVisualizationFolder, metadata.getFileName() + ".js");
             LOG.info("Trying to copy {} Exists: {}", jsFile.getAbsolutePath(), jsFile.exists());
@@ -97,6 +104,18 @@ public class RCAVisualizer {
                createRCAAction(longestPrefix, testcases, change, metadata);
             } else {
                LOG.error("An error occured: " + jsFile.getAbsolutePath() + " not found");
+            }
+         }
+      }
+   }
+   
+   private void setUnstableIfNaNInRCA(final File rcaTreeFile) throws IOException {
+      if (rcaTreeFile.exists()) {
+         CauseSearchData data = Constants.OBJECTMAPPER.readValue(rcaTreeFile, CauseSearchData.class);
+         if (Double.isNaN(data.getNodes().getStatistic().getMeanCurrent()) ||
+               Double.isNaN(data.getNodes().getStatistic().getMeanOld())) {
+            if (run.getResult() == Result.SUCCESS) {
+               run.setResult(Result.UNSTABLE);
             }
          }
       }
