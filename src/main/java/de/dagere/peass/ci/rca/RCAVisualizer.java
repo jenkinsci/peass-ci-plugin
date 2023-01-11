@@ -94,7 +94,7 @@ public class RCAVisualizer {
             LOG.info("Trying to copy {} Exists: {}", jsFile.getAbsolutePath(), jsFile.exists());
             if (jsFile.exists()) {
                metadata.copyFiles(commitVisualizationFolder);
-               createRCAAction(rcaResults, longestPrefix, testcases, change, metadata);
+               createRCAAction(longestPrefix, testcases, change, metadata);
             } else {
                LOG.error("An error occured: " + jsFile.getAbsolutePath() + " not found");
             }
@@ -102,7 +102,7 @@ public class RCAVisualizer {
       }
    }
 
-   public void createRCAAction(final File rcaResults, final String longestPrefix, final Entry<String, List<Change>> testcases, final Change change, RCAMetadata metadata)
+   public void createRCAAction(final String longestPrefix, final Entry<String, List<Change>> testcases, final Change change, RCAMetadata metadata)
          throws IOException {
       final File rcaDestFile = metadata.getRCAMainFile();
 
