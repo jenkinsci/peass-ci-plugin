@@ -10,9 +10,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.fasterxml.jackson.core.exc.StreamReadException;
-import com.fasterxml.jackson.databind.DatabindException;
-
 import de.dagere.peass.analysis.changes.Change;
 import de.dagere.peass.analysis.changes.Changes;
 import de.dagere.peass.analysis.changes.ProjectChanges;
@@ -60,7 +57,7 @@ public class RCAVisualizer {
       mapping = readMapping;
    }
 
-   public void visualizeRCA() throws Exception {
+   public void visualizeRCA() throws IOException {
       final File visualizationFolder = visualizationFolders.getVisualizationFolder();
 
       VisualizeRCAStarter visualizer = preparePeassVisualizer(visualizationFolder);
@@ -80,7 +77,7 @@ public class RCAVisualizer {
       File dataFolder = visualizationFolders.getDataFolder();
       visualizer.setData(new File[] { dataFolder });
       File propertyFolder = visualizationFolders.getPropertyFolder();
-      LOG.info("Setting property folder: " + propertyFolder);
+      LOG.info("Setting property folder: {}", propertyFolder);
       visualizer.setPropertyFolder(propertyFolder);
       visualizer.setResultFolder(resultFolder);
       return visualizer;
@@ -89,7 +86,7 @@ public class RCAVisualizer {
    private void createVisualizationActions(final File rcaResults, final Changes commitChanges, final File commitVisualizationFolder) throws IOException {
       String longestPrefix = getLongestPrefix(commitChanges.getTestcaseChanges().keySet());
 
-      LOG.info("Creating actions: " + commitChanges.getTestcaseChanges().size());
+      LOG.info("Creating actions: {}", commitChanges.getTestcaseChanges().size());
       for (Entry<String, List<Change>> testcases : commitChanges.getTestcaseChanges().entrySet()) {
          final String clazzname = testcases.getKey();
          for (Change change : testcases.getValue()) {
@@ -104,7 +101,7 @@ public class RCAVisualizer {
                metadata.copyFiles(commitVisualizationFolder);
                createRCAAction(longestPrefix, testcases, change, metadata);
             } else {
-               LOG.error("An error occured: " + jsFile.getAbsolutePath() + " not found");
+               LOG.error("An error occured: {} not found", jsFile.getAbsolutePath());
             }
          }
       }
@@ -114,8 +111,7 @@ public class RCAVisualizer {
       final String methodName = change.getMethod();
       final TestMethodCall testCall = TestMethodCall.createFromClassString(clazzname, methodName);
       final String commit = measurementConfig.getFixedCommitConfig().getCommit();
-      final File rcaTreeFile = visualizationFolders.getPeassRCAFolders().getRcaTreeFile(commit, testCall);
-      return rcaTreeFile;
+      return visualizationFolders.getPeassRCAFolders().getRcaTreeFile(commit, testCall);
    }
 
    private void setUnstableIfNaNInRCA(final File rcaTreeFile) throws IOException {
@@ -144,7 +140,7 @@ public class RCAVisualizer {
          throws IOException {
       final File rcaDestFile = metadata.getRCAMainFile();
 
-      LOG.info("Adding: " + rcaDestFile + " " + metadata.getActionName());
+      LOG.info("Adding: {} and {}", rcaDestFile, metadata.getActionName());
       final String displayName = metadata.getActionName().substring(longestPrefix.length());
 
       final String mainTreeJSContent = peassConfig.getFileText(rcaDestFile);
@@ -164,7 +160,7 @@ public class RCAVisualizer {
       Constants.OBJECTMAPPER.writeValue(visualizationFolders.getResultsFolders().getRCAMappingFile(), mapping);
    }
 
-   private GitCommit getCommit() throws IOException, StreamReadException, DatabindException {
+   private GitCommit getCommit() throws IOException {
       String commitName = peassConfig.getMeasurementConfig().getFixedCommitConfig().getCommit();
       GitCommit commit;
       File commitMetadataFile = visualizationFolders.getResultsFolders().getCommitMetadataFile();
@@ -179,7 +175,7 @@ public class RCAVisualizer {
 
    public static String getLongestPrefix(final Set<String> tests) {
       String longestPrefix;
-      if (tests.size() > 0) {
+      if (!tests.isEmpty()) {
          longestPrefix = tests.iterator().next();
       } else {
          longestPrefix = "";
