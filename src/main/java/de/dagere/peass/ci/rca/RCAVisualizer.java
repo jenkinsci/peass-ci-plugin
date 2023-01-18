@@ -23,6 +23,7 @@ import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.measurement.rca.data.CauseSearchData;
+import de.dagere.peass.measurement.statistics.data.TestcaseStatistic;
 import de.dagere.peass.utils.Constants;
 import de.dagere.peass.vcs.CommitList;
 import de.dagere.peass.vcs.GitCommit;
@@ -120,13 +121,22 @@ public class RCAVisualizer {
    private void setUnstableIfNaNInRCA(final File rcaTreeFile) throws IOException {
       if (rcaTreeFile.exists()) {
          CauseSearchData data = Constants.OBJECTMAPPER.readValue(rcaTreeFile, CauseSearchData.class);
-         if (Double.isNaN(data.getNodes().getStatistic().getMeanCurrent()) ||
-               Double.isNaN(data.getNodes().getStatistic().getMeanOld())) {
-            if (run.getResult() == Result.SUCCESS) {
-               run.setResult(Result.UNSTABLE);
-            }
+         final boolean meanOldOrCurrentIsNaN = checkMeanOldOrCurrentIsNaN(data.getNodes().getStatistic());
+         final boolean resultIsNullOrSuccess = checkResultIsNullOrSuccess();
+
+         if (meanOldOrCurrentIsNaN && resultIsNullOrSuccess) {
+            run.setResult(Result.UNSTABLE);
          }
       }
+   }
+
+   private boolean checkMeanOldOrCurrentIsNaN(final TestcaseStatistic testcaseStatistic) {
+      return Double.isNaN(testcaseStatistic.getMeanCurrent()) ||
+            Double.isNaN(testcaseStatistic.getMeanOld());
+   }
+
+   private boolean checkResultIsNullOrSuccess() {
+      return run.getResult() == null || run.getResult() == Result.SUCCESS;
    }
 
    public void createRCAAction(final String longestPrefix, final Entry<String, List<Change>> testcases, final Change change, RCAMetadata metadata)
