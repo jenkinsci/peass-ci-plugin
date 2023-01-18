@@ -126,6 +126,7 @@ public class RCAVisualizer {
 
          if (meanOldOrCurrentIsNaN && resultIsNullOrSuccess) {
             run.setResult(Result.UNSTABLE);
+            LOG.warn("NaN for meanOld or meanCurrent was found in {}! Set buildstate to unstable.", rcaTreeFile.getAbsolutePath());
          }
       }
    }
