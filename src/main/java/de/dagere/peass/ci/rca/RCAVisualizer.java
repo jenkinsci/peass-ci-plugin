@@ -90,12 +90,12 @@ public class RCAVisualizer {
 
       LOG.info("Creating actions: " + commitChanges.getTestcaseChanges().size());
       for (Entry<String, List<Change>> testcases : commitChanges.getTestcaseChanges().entrySet()) {
+         final String clazzname = testcases.getKey();
          for (Change change : testcases.getValue()) {
-            TestMethodCall testCall = TestMethodCall.createFromString(testcases.getKey());
-            String commit = measurementConfig.getFixedCommitConfig().getCommit();
-            File rcaTreeFile = visualizationFolders.getPeassRCAFolders().getRcaTreeFile(commit, testCall);
+
+            final File rcaTreeFile = getRcaTreeFile(clazzname, change);
             setUnstableIfNaNInRCA(rcaTreeFile);
-            
+
             RCAMetadata metadata = new RCAMetadata(change, testcases, peassConfig.getMeasurementConfig().getFixedCommitConfig(), rcaResults);
             File jsFile = new File(commitVisualizationFolder, metadata.getFileName() + ".js");
             LOG.info("Trying to copy {} Exists: {}", jsFile.getAbsolutePath(), jsFile.exists());
@@ -108,7 +108,15 @@ public class RCAVisualizer {
          }
       }
    }
-   
+
+   private File getRcaTreeFile(final String clazzname, final Change change) {
+      final String methodName = change.getMethod();
+      final TestMethodCall testCall = TestMethodCall.createFromClassString(clazzname, methodName);
+      final String commit = measurementConfig.getFixedCommitConfig().getCommit();
+      final File rcaTreeFile = visualizationFolders.getPeassRCAFolders().getRcaTreeFile(commit, testCall);
+      return rcaTreeFile;
+   }
+
    private void setUnstableIfNaNInRCA(final File rcaTreeFile) throws IOException {
       if (rcaTreeFile.exists()) {
          CauseSearchData data = Constants.OBJECTMAPPER.readValue(rcaTreeFile, CauseSearchData.class);
@@ -131,14 +139,15 @@ public class RCAVisualizer {
       final String mainTreeJSContent = peassConfig.getFileText(rcaDestFile);
       final String predecessorTreeJSContent = metadata.getPredecessorFile().exists() ? peassConfig.getFileText(metadata.getPredecessorFile()) : null;
       final String currentTreeJSContent = metadata.getCurrentFile().exists() ? peassConfig.getFileText(metadata.getCurrentFile()) : null;
-      
+
       TestMethodCall testMethodCall = TestMethodCall.createFromString(testcases.getKey() + "#" + change.getMethodWithParams());
-      
+
       GitCommit commit = getCommit();
-      
-      RCAVisualizationAction visualizationAction = new RCAVisualizationAction(IdHelper.getId(), displayName, mainTreeJSContent, predecessorTreeJSContent, currentTreeJSContent, commit, testMethodCall.toString());
+
+      RCAVisualizationAction visualizationAction = new RCAVisualizationAction(IdHelper.getId(), displayName, mainTreeJSContent, predecessorTreeJSContent, currentTreeJSContent,
+            commit, testMethodCall.toString());
       run.addAction(visualizationAction);
-      
+
       String url = run.getNumber() + "/" + visualizationAction.getUrlName();
       mapping.addMapping(measurementConfig.getFixedCommitConfig().getCommit(), testMethodCall, url);
       Constants.OBJECTMAPPER.writeValue(visualizationFolders.getResultsFolders().getRCAMappingFile(), mapping);
