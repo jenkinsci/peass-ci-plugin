@@ -16,7 +16,7 @@
     <jenkins.version>2.346.3</jenkins.version>
     <maven.test.redirectTestOutputToFile>false</maven.test.redirectTestOutputToFile>
     <!-- The revision reflects the Peass core version, 2.1.11 uses Peass 0.1.11. -->
-    <revision>2.3.5-SNAPSHOT</revision>
+    <revision>2.3.5</revision>
     <changelist>999999-SNAPSHOT</changelist>
     <gitHubRepo>jenkinsci/peass-ci-plugin</gitHubRepo>
     <peass.version>0.3.5</peass.version>
