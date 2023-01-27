@@ -409,6 +409,13 @@
           </f:entry>
         </td>
       </tr>
+      <tr>
+        <td>
+          <f:entry title="${%androidTestPackageName}" field="androidTestPackageName" description="${%androidTestPackageNameDescr}">
+            <f:textbox/>
+          </f:entry>
+        </td>
+      </tr>
     </table>
   </f:advanced>
 </j:jelly>
