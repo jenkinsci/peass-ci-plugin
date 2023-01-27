@@ -138,6 +138,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private String androidTargetSdkVersion = "";
    private String androidGradleVersion = "";
    private String androidGradleTasks = "installDebug;installDebugAndroidTest";
+   private String androidTestPackageName = "";
    
    private boolean excludeLog4jSlf4jImpl = false;
    private boolean excludeLog4jToSlf4j = false;
@@ -361,13 +362,16 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       listener.getLogger().println("CleanGoal: " + cleanGoal);
       listener.getLogger().println("Execute @BeforeClass in measurement: " + executeBeforeClassInMeasurement);
       listener.getLogger().println("Clear mockito caches: " + clearMockitoCaches);
-      listener.getLogger().println("Use Anbox: " + useAnbox);
-      listener.getLogger().println("Android Manifest: " + androidManifest);
-      listener.getLogger().println("Android compileSdkVersion: " + androidCompileSdkVersion);
-      listener.getLogger().println("Android minSdkVersion: " + androidMinSdkVersion);
-      listener.getLogger().println("Android targetSdkVersion: " + androidTargetSdkVersion);
-      listener.getLogger().println("Android gradleVersion: " + androidGradleVersion);
-      listener.getLogger().println("Android gradleTasks: " + androidGradleTasks);
+      if (useAnbox) {
+         listener.getLogger().println("Use Anbox: " + useAnbox);
+         listener.getLogger().println("Android Manifest: " + androidManifest);
+         listener.getLogger().println("Android compileSdkVersion: " + androidCompileSdkVersion);
+         listener.getLogger().println("Android minSdkVersion: " + androidMinSdkVersion);
+         listener.getLogger().println("Android targetSdkVersion: " + androidTargetSdkVersion);
+         listener.getLogger().println("Android gradleVersion: " + androidGradleVersion);
+         listener.getLogger().println("Android gradleTasks: " + androidGradleTasks);
+         listener.getLogger().println("Android testPackageName: " + androidTestPackageName);
+      }
    }
 
    private String getJobName(final Run<?, ?> run) {
@@ -456,6 +460,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       executionConfig.setAndroidTargetSdkVersion(androidTargetSdkVersion.equals("") ? null : androidTargetSdkVersion);
       executionConfig.setAndroidGradleVersion(androidGradleVersion.equals("") ? null : androidGradleVersion);
       executionConfig.setAndroidGradleTasks(IncludeExcludeParser.getStringListSimple(androidGradleTasks));
+      executionConfig.setAndroidTestPackageName(androidTestPackageName.equals("") ? null : androidTestPackageName);
 
       executionConfig.setRedirectSubprocessOutputToFile(redirectSubprocessOutputToFile);
 
@@ -961,6 +966,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    @DataBoundSetter
    public void setAndroidGradleTasks(final String androidGradleTasks) {
       this.androidGradleTasks = androidGradleTasks;
+   }
+
+   public String getAndroidTestPackageName() {
+      return androidTestPackageName;
+   }
+
+   @DataBoundSetter
+   public void setAndroidTestPackageName(final String androidTestPackageName) {
+      this.androidTestPackageName = androidTestPackageName;
    }
 
    public boolean isExcludeLog4jSlf4jImpl() {
