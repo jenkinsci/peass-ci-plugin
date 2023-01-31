@@ -117,6 +117,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private String excludeByRule = "";
    private String properties = "";
    private String testGoal = "test";
+   private boolean linearizeHistory;
    private String pl = "";
 
    private RCAStrategy rcaStrategy = RCAStrategy.UNTIL_SOURCE_CHANGE;
@@ -354,6 +355,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       listener.getLogger().println("measureJMH: " + measureJMH);
       listener.getLogger().println("Includes: " + includes + " RCA: " + executeRCA);
       listener.getLogger().println("Excludes: " + excludes);
+      listener.getLogger().println("Commit history tracking model: " + (linearizeHistory? "Linear" : "Non-Linear"));
       listener.getLogger().println("Strategy: " + rcaStrategy + " Source Instrumentation: " + useSourceInstrumentation + " Aggregation: " + useAggregation);
       listener.getLogger().println("Create default constructor: " + createDefaultConstructor);
       listener.getLogger().println("Fail on error in RTS: " + failOnRtsError);
@@ -444,6 +446,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
       executionConfig.setIncludes(IncludeExcludeParser.getStringList(includes));
       executionConfig.setExcludes(IncludeExcludeParser.getStringList(excludes));
+
+      executionConfig.setLinearizeHistory(linearizeHistory);
 
       executionConfig.setIncludeByRule(IncludeExcludeParser.getStringListSimple(includeByRule));
       executionConfig.setExcludeByRule(IncludeExcludeParser.getStringListSimple(excludeByRule));
@@ -745,6 +749,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    @DataBoundSetter
    public void setExcludeByRule(String excludeByRule) {
       this.excludeByRule = excludeByRule;
+   }
+
+   @DataBoundSetter
+   public void setLinearizeHistory(boolean linearizeHistory){
+      this.linearizeHistory = linearizeHistory;
+   }
+
+   public boolean isLinearizeHistory() {
+      return linearizeHistory;
    }
 
    public boolean isExecuteRCA() {
