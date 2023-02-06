@@ -236,7 +236,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    }
 
    private void runAllSteps(final Run<?, ?> run, final FilePath workspace, final TaskListener listener, final File localWorkspace, final PeassProcessConfiguration peassConfig)
-         throws IOException, InterruptedException, JsonParseException, Exception {
+         throws Exception {
       final LocalPeassProcessManager processManager = new LocalPeassProcessManager(peassConfig, workspace, localWorkspace, listener, run);
 
       AggregatedRTSResult rtsResult = processManager.rts();
@@ -293,7 +293,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    }
 
    private void measure(final Run<?, ?> run, final LocalPeassProcessManager processManager, final Set<TestMethodCall> tests)
-         throws IOException, InterruptedException, Exception {
+         throws Exception {
       boolean worked = processManager.measure(tests);
       if (!worked) {
          run.setResult(Result.FAILURE);
@@ -374,7 +374,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       return run.getParent().getFullDisplayName();
    }
 
-   public MeasurementConfig getMeasurementConfig() throws JsonParseException, JsonMappingException, IOException {
+   public MeasurementConfig getMeasurementConfig() {
       if (significanceLevel == 0.0) {
          significanceLevel = 0.01;
       }
@@ -422,7 +422,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       return config;
    }
 
-   private void parameterizeExecutionConfig(final ExecutionConfig executionConfig) throws IOException, JsonParseException, JsonMappingException {
+   private void parameterizeExecutionConfig(final ExecutionConfig executionConfig) {
       if (measureJMH) {
          executionConfig.setTestTransformer("de.dagere.peass.dependency.jmh.JmhTestTransformer");
          executionConfig.setTestExecutor("de.dagere.peass.dependency.jmh.JmhTestExecutor");
@@ -534,7 +534,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       kiekerConfig.setKiekerWaitTime(kiekerWaitTime);
    }
 
-   private String getOldCommit() throws IOException, JsonParseException, JsonMappingException {
+   private String getOldCommit() {
       final String oldVersion;
       if (nightlyBuild) {
          oldVersion = null;
@@ -1121,8 +1121,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public static final class DescriptorImpl extends BuildStepDescriptor<Builder> {
 
       public FormValidation doCheckName(@QueryParameter final String value,
-            @QueryParameter final boolean useFrench)
-            throws IOException, ServletException {
+            @QueryParameter final boolean useFrench) {
          if (value.length() == 0)
             return FormValidation.error("Strange value: " + value);
          return FormValidation.ok();
