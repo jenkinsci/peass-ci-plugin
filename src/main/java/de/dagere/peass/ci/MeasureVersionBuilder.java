@@ -130,7 +130,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private boolean updateSnapshotDependencies = false;
    private boolean removeSnapshots = false;
    private boolean useAlternativeBuildfile = false;
-   
+
    private boolean useAnbox = false;
    private String androidManifest = "app/src/main/AndroidManifest.xml";
    private String androidCompileSdkVersion = "";
@@ -138,7 +138,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private String androidTargetSdkVersion = "";
    private String androidGradleVersion = "";
    private String androidGradleTasks = "installDebug;installDebugAndroidTest";
-   
+
    private boolean excludeLog4jSlf4jImpl = false;
    private boolean excludeLog4jToSlf4j = false;
 
@@ -502,12 +502,13 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
             throw new RuntimeException("Emulator needs 'testExecutor' to be set to'de.dagere.peass.execution.gradle.AnboxTestExecutor'!");
          }
          if (executionConfig.getAndroidGradleTasks().size() == 0) {
-            throw new RuntimeException("No Gradle install tasks set! Emulator needs Gradle tasks to compile and install the tests on the emulator like 'installDebug;installDebugAndroidTest'");
+            throw new RuntimeException(
+                  "No Gradle install tasks set! Emulator needs Gradle tasks to compile and install the tests on the emulator like 'installDebug;installDebugAndroidTest'");
          }
          if (executionConfig.getAndroidManifest().equals("")) {
             throw new RuntimeException("No AndroidManifest.xml set! Default is 'app/src/main/AndroidManifest.xml'");
          }
-      } 
+      }
    }
 
    private void parameterizeKiekerConfig(final KiekerConfig kiekerConfig) {
@@ -930,7 +931,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public String getAndroidCompileSdkVersion() {
       return androidCompileSdkVersion;
    }
-   
+
    @DataBoundSetter
    public void setAndroidCompileSdkVersion(final String androidCompileSdkVersion) {
       this.androidCompileSdkVersion = androidCompileSdkVersion;
@@ -939,7 +940,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public String getAndroidTargetSdkVersion() {
       return androidTargetSdkVersion;
    }
-   
+
    @DataBoundSetter
    public void setAndroidTargetSdkVersion(final String androidTargetSdkVersion) {
       this.androidTargetSdkVersion = androidTargetSdkVersion;
@@ -1192,8 +1193,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          }
          for (ListBoxModel.Option o : CredentialsProvider
                .listCredentials(StandardUsernameCredentials.class, project, project instanceof Queue.Task
-                     ? Tasks.getAuthenticationOf((Queue.Task) project)
-                     : ACL.SYSTEM,
+                           ? Tasks.getAuthenticationOf((Queue.Task) project)
+                           : ACL.SYSTEM,
                      new LinkedList<>(),
                      CredentialsMatchers.instanceOf(StandardUsernamePasswordCredentials.class))) {
             if (StringUtils.equals(value, o.value)) {
