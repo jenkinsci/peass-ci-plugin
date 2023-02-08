@@ -230,7 +230,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    }
 
    private void runAllSteps(final Run<?, ?> run, final FilePath workspace, final TaskListener listener, final File localWorkspace, final PeassProcessConfiguration peassConfig)
-         throws Exception {
+         throws IOException, InterruptedException {
       final LocalPeassProcessManager processManager = new LocalPeassProcessManager(peassConfig, workspace, localWorkspace, listener, run);
 
       AggregatedRTSResult rtsResult = processManager.rts();
@@ -286,8 +286,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       }
    }
 
-   private void measure(final Run<?, ?> run, final LocalPeassProcessManager processManager, final Set<TestMethodCall> tests)
-         throws Exception {
+   private void measure(final Run<?, ?> run, final LocalPeassProcessManager processManager, final Set<TestMethodCall> tests) throws IOException, InterruptedException {
       boolean worked = processManager.measure(tests);
       if (!worked) {
          run.setResult(Result.FAILURE);
