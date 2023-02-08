@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 
-import javax.servlet.ServletException;
-
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
@@ -114,8 +112,7 @@ public class CleanBuilder extends Builder implements SimpleBuildStep, Serializab
    public static final class DescriptorImpl extends BuildStepDescriptor<Builder> {
 
       public FormValidation doCheckName(@QueryParameter final String value,
-            @QueryParameter final boolean useFrench)
-            throws IOException, ServletException {
+            @QueryParameter final boolean useFrench) {
          if (value.length() == 0)
             return FormValidation.error("Strange value: " + value);
          return FormValidation.ok();
