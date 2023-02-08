@@ -172,10 +172,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          final File localWorkspace = new File(run.getRootDir(), ".." + File.separator + ".." + File.separator + PEASS_FOLDER_NAME).getCanonicalFile();
          printRunMetadata(run, workspace, listener, localWorkspace);
 
-         if (!localWorkspace.exists()) {
-            if (!localWorkspace.mkdirs()) {
-               throw new RuntimeException("Was not able to create folder");
-            }
+         if (!localWorkspace.exists() && !localWorkspace.mkdirs()) {
+            throw new RuntimeException("Was not able to create folder");
          }
 
          Pattern patternForBuild = getMaskingPattern(listener.getLogger());
