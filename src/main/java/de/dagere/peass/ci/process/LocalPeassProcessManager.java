@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import de.dagere.peass.analysis.changes.Changes;
 import de.dagere.peass.analysis.changes.ProjectChanges;
@@ -43,8 +41,6 @@ import hudson.model.TaskListener;
 import hudson.util.DirScanner;
 
 public class LocalPeassProcessManager {
-
-   private static final Logger LOG = LogManager.getLogger(LocalPeassProcessManager.class);
 
    private final FilePath workspace;
    private final File localWorkspace;
