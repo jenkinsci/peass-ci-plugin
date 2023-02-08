@@ -282,7 +282,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       }
       if (!missingMeasurements.isEmpty()) {
          listener.getLogger().println("Did not succeed with all measurements, marking as unstable. Missing: " + missingMeasurements);
-         if (run.getResult() == null || Result.FAILURE.equals(run.getResult())) {
+         if (run.getResult() == null) {
             run.setResult(Result.UNSTABLE);
          }
       }
