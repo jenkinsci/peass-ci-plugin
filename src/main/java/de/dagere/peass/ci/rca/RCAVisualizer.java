@@ -101,7 +101,8 @@ public class RCAVisualizer {
                metadata.copyFiles(commitVisualizationFolder);
                createRCAAction(longestPrefix, testcases, change, metadata);
             } else {
-               LOG.error("An error occured: {} not found", jsFile.getAbsolutePath());
+               run.setResult(Result.UNSTABLE);
+               LOG.error("An error occured: {} not found. Set buildstate to unstable.", jsFile.getAbsolutePath());
             }
          }
       }
