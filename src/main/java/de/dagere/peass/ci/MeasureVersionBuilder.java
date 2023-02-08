@@ -252,7 +252,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
       processManager.visualizeRTSResults(run, rtsResult.getLogSummary());
 
-      if (rtsResult.getResult().getTests().size() > 0) {
+      if (!rtsResult.getResult().getTests().isEmpty()) {
          measure(run, processManager, rtsResult.getResult().getTests());
 
          checkStatistics(run, peassConfig, listener, processManager, rtsResult);
@@ -278,7 +278,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
             missingMeasurements.add(calledMethod);
          }
       }
-      if (missingMeasurements.size() > 0) {
+      if (!missingMeasurements.isEmpty()) {
          listener.getLogger().println("Did not succeed with all measurements, marking as unstable. Missing: " + missingMeasurements);
          if (run.getResult() == null || Result.FAILURE.equals(run.getResult())) {
             run.setResult(Result.UNSTABLE);
@@ -495,7 +495,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          if (!executionConfig.getTestExecutor().equals("de.dagere.peass.execution.gradle.AnboxTestExecutor")) {
             throw new RuntimeException("Emulator needs 'testExecutor' to be set to'de.dagere.peass.execution.gradle.AnboxTestExecutor'!");
          }
-         if (executionConfig.getAndroidGradleTasks().size() == 0) {
+         if (executionConfig.getAndroidGradleTasks().isEmpty()) {
             throw new RuntimeException(
                   "No Gradle install tasks set! Emulator needs Gradle tasks to compile and install the tests on the emulator like 'installDebug;installDebugAndroidTest'");
          }
