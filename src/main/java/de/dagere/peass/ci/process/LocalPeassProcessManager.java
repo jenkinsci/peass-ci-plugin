@@ -10,12 +10,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.exc.StreamReadException;
-import com.fasterxml.jackson.databind.DatabindException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-
 import de.dagere.peass.analysis.changes.Changes;
 import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.analysis.measurement.ProjectStatistics;
@@ -94,8 +88,7 @@ public class LocalPeassProcessManager {
 
    }
 
-   private AggregatedRTSResult displayRTSLogs(RTSResult result)
-         throws StreamReadException, DatabindException, IOException {
+   private AggregatedRTSResult displayRTSLogs(RTSResult result) throws IOException {
       RTSInfos infos = RTSInfos.readInfosFromFolders(results, peassConfig);
       RTSLogSummary summary = logActionCreator.createRTSActions(infos);
       AggregatedRTSResult aggregatedRTSResult = new AggregatedRTSResult(summary, result);
@@ -113,7 +106,7 @@ public class LocalPeassProcessManager {
       return worked;
    }
 
-   public boolean rca(final ProjectChanges changes, CauseSearcherConfig causeSearcherConfig) throws IOException, InterruptedException, Exception {
+   public boolean rca(final ProjectChanges changes, CauseSearcherConfig causeSearcherConfig) throws IOException, InterruptedException {
       RemoteRCA remoteRCAExecutor = new RemoteRCA(peassConfig, causeSearcherConfig, changes, listener);
       RCAResult result = workspace.act(remoteRCAExecutor);
       copyFromRemote();
@@ -139,7 +132,7 @@ public class LocalPeassProcessManager {
       listener.getLogger().println("Copied " + count + " files from " + remotePeassFolder + " to " + localWorkspace.getAbsolutePath());
    }
 
-   public void visualizeRTSResults(final Run<?, ?> run, final RTSLogSummary logSummary) throws IOException {
+   public void visualizeRTSResults(final Run<?, ?> run, final RTSLogSummary logSummary) {
       RTSVisualizationCreator rtsVisualizationCreator = new RTSVisualizationCreator(results, peassConfig);
       rtsVisualizationCreator.visualize(run, logSummary);
    }
@@ -166,7 +159,7 @@ public class LocalPeassProcessManager {
       return changes;
    }
 
-   public void visualizeRCAResults(final Run<?, ?> run, final ProjectChanges changes) throws Exception, IOException {
+   public void visualizeRCAResults(final Run<?, ?> run, final ProjectChanges changes) throws IOException {
       final RCAVisualizer rcaVisualizer = new RCAVisualizer(peassConfig, visualizationFolders, changes, run);
       rcaVisualizer.visualizeRCA();
 
