@@ -32,7 +32,7 @@ public class TestRCAVisualizer {
    public TemporaryFolder folder = new TemporaryFolder(new File("target"));
 
    @Test
-   public void testHTMLGeneration() throws Exception {
+   public void testHTMLGeneration() throws IOException {
       final File testChangeFile = new File("src/test/resources/demo-results/rca/changes.json");
       ProjectChanges changes = Constants.OBJECTMAPPER.readValue(testChangeFile, ProjectChanges.class);
 
