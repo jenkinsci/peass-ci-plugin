@@ -289,9 +289,10 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    }
 
    private void measure(final Run<?, ?> run, final LocalPeassProcessManager processManager, final Set<TestMethodCall> tests) throws IOException, InterruptedException {
-      boolean worked = processManager.measure(tests);
-      if (!worked) {
-         run.setResult(Result.FAILURE);
+      final boolean measureWorked = processManager.measure(tests);
+      if (!measureWorked) {
+         //We don't want the whole build to fail, if measurements for single tests failed, so it's just UNSTABLE
+         run.setResult(Result.UNSTABLE);
          return;
       }
 
@@ -299,10 +300,11 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
       if (executeRCA) {
          final CauseSearcherConfig causeSearcherConfig = generateCauseSearchConfig();
-         boolean rcaWorked = processManager.rca(changes, causeSearcherConfig);
+         final boolean rcaWorked = processManager.rca(changes, causeSearcherConfig);
          processManager.visualizeRCAResults(run, changes);
          if (!rcaWorked) {
-            run.setResult(Result.FAILURE);
+            //We don't want the whole build to fail, if rca for single tests failed, so it's just UNSTABLE
+            run.setResult(Result.UNSTABLE);
          }
       }
    }
