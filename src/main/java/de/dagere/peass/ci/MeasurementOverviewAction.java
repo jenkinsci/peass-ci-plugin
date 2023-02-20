@@ -88,16 +88,16 @@ public class MeasurementOverviewAction extends VisibleAction {
    }
 
    public boolean testIsChanged(final String testcase) {
-      boolean isChanged = false;
+      final boolean isChanged = true;
       for (Entry<String, List<Change>> changeEntry : changes.getTestcaseChanges().entrySet()) {
          for (Change change : changeEntry.getValue()) {
             final String changedTestcase = changeEntry.getKey() + "#" + change.getMethod();
             if (testcase.equals(changedTestcase)) {
-               isChanged = true;
+               return isChanged;
             }
          }
       }
-      return isChanged;
+      return !isChanged;
    }
 
    public Map<String, HistogramValues> getMeasurements() {
