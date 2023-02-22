@@ -1,5 +1,6 @@
 package de.dagere.peass.ci.logs.measurement;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -67,12 +68,20 @@ public class MeasurementActionCreator {
          TestCase testcase = entry.getKey();
          int vmId = 0;
          for (LogFiles files : entry.getValue()) {
-            String logData = processConfig.getFileText(files.getCurrent());
-            run.addAction(new LogAction(IdHelper.getId(), testcase, vmId, measurementConfig.getFixedCommitConfig().getCommit(), logData));
-            String logDataOld = processConfig.getFileText(files.getPredecessor());
-            run.addAction(new LogAction(IdHelper.getId(), testcase, vmId, measurementConfig.getFixedCommitConfig().getCommitOld(), logDataOld));
+            addLogAction(run, testcase, vmId, measurementConfig.getFixedCommitConfig().getCommit(), files.getCurrent());
+            addLogAction(run, testcase, vmId, measurementConfig.getFixedCommitConfig().getCommitOld(), files.getPredecessor());
             vmId++;
          }
       }
    }
+
+   private void addLogAction(final Run<?, ?> run, TestCase testcase, int vmId, String commit, File logfile) throws IOException {
+      if (logfile.exists()) {
+         String logData = processConfig.getFileText(logfile);
+         run.addAction(new LogAction(IdHelper.getId(), testcase, vmId, commit, logData));
+      } else {
+         LOG.error("No Logfile could be found for {} and commit {}", testcase, commit);
+      }
+   }
+
 }
