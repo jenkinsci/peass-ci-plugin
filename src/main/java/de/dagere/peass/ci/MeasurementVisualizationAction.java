@@ -28,7 +28,7 @@ public class MeasurementVisualizationAction extends VisibleAction {
       return content;
    }
 
-   public String getDataJS() throws IOException {
+   public String getDataJS() {
       return jsData;
    }
 
