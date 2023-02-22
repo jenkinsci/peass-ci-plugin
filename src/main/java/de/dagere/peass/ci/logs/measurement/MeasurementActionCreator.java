@@ -44,7 +44,7 @@ public class MeasurementActionCreator {
       createOverallLogAction();
 
       Map<TestCase, List<LogFiles>> logFiles = reader.readAllTestcases(tests);
-      createLogActions(run, logFiles);
+      createLogActions(logFiles);
 
       FixedCommitConfig fixedCommitConfig = measurementConfig.getFixedCommitConfig();
       String shortCommit = fixedCommitConfig.getCommit().substring(0, 6);
@@ -62,20 +62,20 @@ public class MeasurementActionCreator {
       }
    }
 
-   private void createLogActions(final Run<?, ?> run, final Map<TestCase, List<LogFiles>> logFiles) throws IOException {
+   private void createLogActions(final Map<TestCase, List<LogFiles>> logFiles) throws IOException {
       for (Map.Entry<TestCase, List<LogFiles>> entry : logFiles.entrySet()) {
          LOG.debug("Creating {} log actions for {}", entry.getValue().size(), entry.getKey());
          TestCase testcase = entry.getKey();
          int vmId = 0;
          for (LogFiles files : entry.getValue()) {
-            addLogAction(run, testcase, vmId, measurementConfig.getFixedCommitConfig().getCommit(), files.getCurrent());
-            addLogAction(run, testcase, vmId, measurementConfig.getFixedCommitConfig().getCommitOld(), files.getPredecessor());
+            addLogAction(testcase, vmId, measurementConfig.getFixedCommitConfig().getCommit(), files.getCurrent());
+            addLogAction(testcase, vmId, measurementConfig.getFixedCommitConfig().getCommitOld(), files.getPredecessor());
             vmId++;
          }
       }
    }
 
-   private void addLogAction(final Run<?, ?> run, TestCase testcase, int vmId, String commit, File logfile) throws IOException {
+   private void addLogAction(TestCase testcase, int vmId, String commit, File logfile) throws IOException {
       if (logfile.exists()) {
          String logData = processConfig.getFileText(logfile);
          run.addAction(new LogAction(IdHelper.getId(), testcase, vmId, commit, logData));
