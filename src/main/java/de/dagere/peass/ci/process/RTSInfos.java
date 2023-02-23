@@ -3,9 +3,6 @@ package de.dagere.peass.ci.process;
 import java.io.File;
 import java.io.IOException;
 
-import com.fasterxml.jackson.core.exc.StreamReadException;
-import com.fasterxml.jackson.databind.DatabindException;
-
 import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.dependency.analysis.data.TestSet;
 import de.dagere.peass.dependency.persistence.CommitStaticSelection;
@@ -42,8 +39,7 @@ public class RTSInfos {
       return ignoredTestsPredecessor;
    }
 
-   public static RTSInfos readInfosFromFolders(final ResultsFolders results, final PeassProcessConfiguration peassConfig)
-         throws StreamReadException, DatabindException, IOException {
+   public static RTSInfos readInfosFromFolders(final ResultsFolders results, final PeassProcessConfiguration peassConfig) throws IOException {
       File staticTestSelectionFile = results.getStaticTestSelectionFile();
       if (staticTestSelectionFile.exists()) {
          boolean staticChanges = false;

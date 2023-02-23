@@ -1,13 +1,14 @@
 package de.dagere.peass.ci.logs;
 
 import java.io.File;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import de.dagere.kopeme.datastorage.JSONDataLoader;
-import de.dagere.kopeme.kopemedata.DatacollectorResult;
 import de.dagere.kopeme.kopemedata.Kopemedata;
+import de.dagere.kopeme.kopemedata.VMResult;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.config.FixedCommitConfig;
 import de.dagere.peass.config.MeasurementConfig;
@@ -16,9 +17,8 @@ import de.dagere.peass.folders.PeassFolders;
 
 /**
  * Checks wether a measurement run is correct by checking the XML result files
- * 
- * @author reichelt
  *
+ * @author reichelt
  */
 public class CorrectRunChecker {
 
@@ -43,20 +43,26 @@ public class CorrectRunChecker {
       predecessorRunning = checkIsRunning(vmId, resultFilePredecessor);
    }
 
-   private boolean checkIsRunning(final int vmId, final File resultFileCurrent) {
-      boolean isRunning = false;
-      if (resultFileCurrent.exists()) {
-         LOG.debug("Checking: {} - {} ", vmId, resultFileCurrent.getAbsolutePath());
-         Kopemedata data = JSONDataLoader.loadData(resultFileCurrent);
-         DatacollectorResult datacollector = data.getFirstTimeDataCollector();
-         if (datacollector.getResults().get(0) != null) {
-            isRunning = true;
-            LOG.debug("File and result are existing - success");
+   private boolean checkIsRunning(final int vmId, final File resultFile) {
+      final boolean isRunning = true;
+      if (resultFile.exists()) {
+         LOG.debug("Checking: {} - {} ", vmId, resultFile.getAbsolutePath());
+         Kopemedata data = JSONDataLoader.loadData(resultFile);
+         List<VMResult> vmResults = data.getMethods().get(0).getDatacollectorResults().get(0).getResults();
+         for (VMResult vmResult : vmResults) {
+            if (anyErrorOccurredInVM(vmResult)) {
+               return !isRunning;
+            }
          }
       } else {
-         LOG.debug("File {} missing", resultFileCurrent);
+         LOG.debug("File {} missing", resultFile);
+         return !isRunning;
       }
       return isRunning;
+   }
+
+   private boolean anyErrorOccurredInVM(final VMResult vmResult) {
+      return (vmResult.isError() || vmResult.isFailure() || vmResult.isSubthreadTimeout());
    }
 
    public boolean isCurrentRunning() {

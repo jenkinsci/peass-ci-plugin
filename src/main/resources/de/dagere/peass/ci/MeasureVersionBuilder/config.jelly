@@ -153,13 +153,23 @@
             <f:textbox default="1" />
           </f:entry>
         </td>
+      </tr>
+      <tr>
         <td>
           <f:entry title="${%generateCoverageSelection}" field="generateCoverageSelection" description="${%generateCoverageSelectionDescr}">
             <f:checkbox />
           </f:entry>
-          <br />
+        </td>
+        <td>
           <f:entry title="${%generateTwiceExecutability}" field="generateTwiceExecutability" description="${%generateTwiceExecutabilityDescr}">
             <f:checkbox />
+          </f:entry>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <f:entry title="${%linearizeHistory}" field="linearizeHistory" description="${%linearizeHistoryDescr}">
+            <f:checkbox default="true" />
           </f:entry>
         </td>
       </tr>
@@ -406,6 +416,13 @@
         <td>
           <f:entry title="${%androidGradleTasks}" field="androidGradleTasks" description="${%androidGradleTasksDescr}">
             <f:textbox default="installDebug;installDebugAndroidTest" />
+          </f:entry>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <f:entry title="${%androidTestPackageName}" field="androidTestPackageName" description="${%androidTestPackageNameDescr}">
+            <f:textbox/>
           </f:entry>
         </td>
       </tr>

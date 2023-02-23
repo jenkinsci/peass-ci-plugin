@@ -120,5 +120,7 @@ public class MeasureVersionBuilderConfigCreationTest {
       Assert.assertEquals("", builder.getAndroidTargetSdkVersion());
       Assert.assertEquals(null, measurementConfig.getExecutionConfig().getAndroidGradleVersion());
       Assert.assertEquals("", builder.getAndroidGradleVersion());
+      Assert.assertEquals(null, measurementConfig.getExecutionConfig().getAndroidTestPackageName());
+      Assert.assertEquals("", builder.getAndroidTestPackageName());
    }
 }

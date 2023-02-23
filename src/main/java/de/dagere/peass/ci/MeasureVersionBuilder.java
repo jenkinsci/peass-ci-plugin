@@ -14,8 +14,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
-import javax.servlet.ServletException;
-
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -27,8 +25,6 @@ import com.cloudbees.plugins.credentials.CredentialsProvider;
 import com.cloudbees.plugins.credentials.common.StandardListBoxModel;
 import com.cloudbees.plugins.credentials.common.StandardUsernameCredentials;
 import com.cloudbees.plugins.credentials.common.StandardUsernamePasswordCredentials;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 
 import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.analysis.measurement.ProjectStatistics;
@@ -117,6 +113,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private String excludeByRule = "";
    private String properties = "";
    private String testGoal = "test";
+   private boolean linearizeHistory;
    private String pl = "";
 
    private RCAStrategy rcaStrategy = RCAStrategy.UNTIL_SOURCE_CHANGE;
@@ -130,7 +127,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private boolean updateSnapshotDependencies = false;
    private boolean removeSnapshots = false;
    private boolean useAlternativeBuildfile = false;
-   
+
    private boolean useAnbox = false;
    private String androidManifest = "app/src/main/AndroidManifest.xml";
    private String androidCompileSdkVersion = "";
@@ -138,6 +135,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    private String androidTargetSdkVersion = "";
    private String androidGradleVersion = "";
    private String androidGradleTasks = "installDebug;installDebugAndroidTest";
+   private String androidTestPackageName = "";
    
    private boolean excludeLog4jSlf4jImpl = false;
    private boolean excludeLog4jToSlf4j = false;
@@ -176,10 +174,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          final File localWorkspace = new File(run.getRootDir(), ".." + File.separator + ".." + File.separator + PEASS_FOLDER_NAME).getCanonicalFile();
          printRunMetadata(run, workspace, listener, localWorkspace);
 
-         if (!localWorkspace.exists()) {
-            if (!localWorkspace.mkdirs()) {
-               throw new RuntimeException("Was not able to create folder");
-            }
+         if (!localWorkspace.exists() && !localWorkspace.mkdirs()) {
+            throw new RuntimeException("Was not able to create folder");
          }
 
          Pattern patternForBuild = getMaskingPattern(listener.getLogger());
@@ -236,7 +232,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    }
 
    private void runAllSteps(final Run<?, ?> run, final FilePath workspace, final TaskListener listener, final File localWorkspace, final PeassProcessConfiguration peassConfig)
-         throws IOException, InterruptedException, JsonParseException, Exception {
+         throws IOException, InterruptedException {
       final LocalPeassProcessManager processManager = new LocalPeassProcessManager(peassConfig, workspace, localWorkspace, listener, run);
 
       AggregatedRTSResult rtsResult = processManager.rts();
@@ -258,7 +254,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
       processManager.visualizeRTSResults(run, rtsResult.getLogSummary());
 
-      if (rtsResult.getResult().getTests().size() > 0) {
+      if (!rtsResult.getResult().getTests().isEmpty()) {
          measure(run, processManager, rtsResult.getResult().getTests());
 
          checkStatistics(run, peassConfig, listener, processManager, rtsResult);
@@ -284,19 +280,19 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
             missingMeasurements.add(calledMethod);
          }
       }
-      if (missingMeasurements.size() > 0) {
+      if (!missingMeasurements.isEmpty()) {
          listener.getLogger().println("Did not succeed with all measurements, marking as unstable. Missing: " + missingMeasurements);
-         if (run.getResult() == null || Result.FAILURE.equals(run.getResult())) {
+         if (run.getResult() == null) {
             run.setResult(Result.UNSTABLE);
          }
       }
    }
 
-   private void measure(final Run<?, ?> run, final LocalPeassProcessManager processManager, final Set<TestMethodCall> tests)
-         throws IOException, InterruptedException, Exception {
-      boolean worked = processManager.measure(tests);
-      if (!worked) {
-         run.setResult(Result.FAILURE);
+   private void measure(final Run<?, ?> run, final LocalPeassProcessManager processManager, final Set<TestMethodCall> tests) throws IOException, InterruptedException {
+      final boolean measureWorked = processManager.measure(tests);
+      if (!measureWorked) {
+         //We don't want the whole build to fail, if measurements for single tests failed, so it's just UNSTABLE
+         run.setResult(Result.UNSTABLE);
          return;
       }
 
@@ -304,10 +300,11 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
 
       if (executeRCA) {
          final CauseSearcherConfig causeSearcherConfig = generateCauseSearchConfig();
-         boolean rcaWorked = processManager.rca(changes, causeSearcherConfig);
+         final boolean rcaWorked = processManager.rca(changes, causeSearcherConfig);
          processManager.visualizeRCAResults(run, changes);
          if (!rcaWorked) {
-            run.setResult(Result.FAILURE);
+            //We don't want the whole build to fail, if rca for single tests failed, so it's just UNSTABLE
+            run.setResult(Result.UNSTABLE);
          }
       }
    }
@@ -354,6 +351,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       listener.getLogger().println("measureJMH: " + measureJMH);
       listener.getLogger().println("Includes: " + includes + " RCA: " + executeRCA);
       listener.getLogger().println("Excludes: " + excludes);
+      listener.getLogger().println("Commit history tracking model: " + (linearizeHistory? "Linear" : "Non-Linear"));
       listener.getLogger().println("Strategy: " + rcaStrategy + " Source Instrumentation: " + useSourceInstrumentation + " Aggregation: " + useAggregation);
       listener.getLogger().println("Create default constructor: " + createDefaultConstructor);
       listener.getLogger().println("Fail on error in RTS: " + failOnRtsError);
@@ -361,20 +359,23 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       listener.getLogger().println("CleanGoal: " + cleanGoal);
       listener.getLogger().println("Execute @BeforeClass in measurement: " + executeBeforeClassInMeasurement);
       listener.getLogger().println("Clear mockito caches: " + clearMockitoCaches);
-      listener.getLogger().println("Use Anbox: " + useAnbox);
-      listener.getLogger().println("Android Manifest: " + androidManifest);
-      listener.getLogger().println("Android compileSdkVersion: " + androidCompileSdkVersion);
-      listener.getLogger().println("Android minSdkVersion: " + androidMinSdkVersion);
-      listener.getLogger().println("Android targetSdkVersion: " + androidTargetSdkVersion);
-      listener.getLogger().println("Android gradleVersion: " + androidGradleVersion);
-      listener.getLogger().println("Android gradleTasks: " + androidGradleTasks);
+      if (useAnbox) {
+         listener.getLogger().println("Use Anbox: " + useAnbox);
+         listener.getLogger().println("Android Manifest: " + androidManifest);
+         listener.getLogger().println("Android compileSdkVersion: " + androidCompileSdkVersion);
+         listener.getLogger().println("Android minSdkVersion: " + androidMinSdkVersion);
+         listener.getLogger().println("Android targetSdkVersion: " + androidTargetSdkVersion);
+         listener.getLogger().println("Android gradleVersion: " + androidGradleVersion);
+         listener.getLogger().println("Android gradleTasks: " + androidGradleTasks);
+         listener.getLogger().println("Android testPackageName: " + androidTestPackageName);
+      }
    }
 
    private String getJobName(final Run<?, ?> run) {
       return run.getParent().getFullDisplayName();
    }
 
-   public MeasurementConfig getMeasurementConfig() throws JsonParseException, JsonMappingException, IOException {
+   public MeasurementConfig getMeasurementConfig() {
       if (significanceLevel == 0.0) {
          significanceLevel = 0.01;
       }
@@ -422,7 +423,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       return config;
    }
 
-   private void parameterizeExecutionConfig(final ExecutionConfig executionConfig) throws IOException, JsonParseException, JsonMappingException {
+   private void parameterizeExecutionConfig(final ExecutionConfig executionConfig) {
       if (measureJMH) {
          executionConfig.setTestTransformer("de.dagere.peass.dependency.jmh.JmhTestTransformer");
          executionConfig.setTestExecutor("de.dagere.peass.dependency.jmh.JmhTestExecutor");
@@ -445,6 +446,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       executionConfig.setIncludes(IncludeExcludeParser.getStringList(includes));
       executionConfig.setExcludes(IncludeExcludeParser.getStringList(excludes));
 
+      executionConfig.setLinearizeHistory(linearizeHistory);
+
       executionConfig.setIncludeByRule(IncludeExcludeParser.getStringListSimple(includeByRule));
       executionConfig.setExcludeByRule(IncludeExcludeParser.getStringListSimple(excludeByRule));
 
@@ -456,6 +459,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       executionConfig.setAndroidTargetSdkVersion(androidTargetSdkVersion.equals("") ? null : androidTargetSdkVersion);
       executionConfig.setAndroidGradleVersion(androidGradleVersion.equals("") ? null : androidGradleVersion);
       executionConfig.setAndroidGradleTasks(IncludeExcludeParser.getStringListSimple(androidGradleTasks));
+      executionConfig.setAndroidTestPackageName(androidTestPackageName.equals("") ? null : androidTestPackageName);
 
       executionConfig.setRedirectSubprocessOutputToFile(redirectSubprocessOutputToFile);
 
@@ -501,13 +505,14 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          if (!executionConfig.getTestExecutor().equals("de.dagere.peass.execution.gradle.AnboxTestExecutor")) {
             throw new RuntimeException("Emulator needs 'testExecutor' to be set to'de.dagere.peass.execution.gradle.AnboxTestExecutor'!");
          }
-         if (executionConfig.getAndroidGradleTasks().size() == 0) {
-            throw new RuntimeException("No Gradle install tasks set! Emulator needs Gradle tasks to compile and install the tests on the emulator like 'installDebug;installDebugAndroidTest'");
+         if (executionConfig.getAndroidGradleTasks().isEmpty()) {
+            throw new RuntimeException(
+                  "No Gradle install tasks set! Emulator needs Gradle tasks to compile and install the tests on the emulator like 'installDebug;installDebugAndroidTest'");
          }
          if (executionConfig.getAndroidManifest().equals("")) {
             throw new RuntimeException("No AndroidManifest.xml set! Default is 'app/src/main/AndroidManifest.xml'");
          }
-      } 
+      }
    }
 
    private void parameterizeKiekerConfig(final KiekerConfig kiekerConfig) {
@@ -534,7 +539,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       kiekerConfig.setKiekerWaitTime(kiekerWaitTime);
    }
 
-   private String getOldCommit() throws IOException, JsonParseException, JsonMappingException {
+   private String getOldCommit() {
       final String oldVersion;
       if (nightlyBuild) {
          oldVersion = null;
@@ -747,6 +752,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
       this.excludeByRule = excludeByRule;
    }
 
+   @DataBoundSetter
+   public void setLinearizeHistory(boolean linearizeHistory){
+      this.linearizeHistory = linearizeHistory;
+   }
+
+   public boolean isLinearizeHistory() {
+      return linearizeHistory;
+   }
+
    public boolean isExecuteRCA() {
       return executeRCA;
    }
@@ -930,7 +944,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public String getAndroidCompileSdkVersion() {
       return androidCompileSdkVersion;
    }
-   
+
    @DataBoundSetter
    public void setAndroidCompileSdkVersion(final String androidCompileSdkVersion) {
       this.androidCompileSdkVersion = androidCompileSdkVersion;
@@ -939,7 +953,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public String getAndroidTargetSdkVersion() {
       return androidTargetSdkVersion;
    }
-   
+
    @DataBoundSetter
    public void setAndroidTargetSdkVersion(final String androidTargetSdkVersion) {
       this.androidTargetSdkVersion = androidTargetSdkVersion;
@@ -961,6 +975,15 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    @DataBoundSetter
    public void setAndroidGradleTasks(final String androidGradleTasks) {
       this.androidGradleTasks = androidGradleTasks;
+   }
+
+   public String getAndroidTestPackageName() {
+      return androidTestPackageName;
+   }
+
+   @DataBoundSetter
+   public void setAndroidTestPackageName(final String androidTestPackageName) {
+      this.androidTestPackageName = androidTestPackageName;
    }
 
    public boolean isExcludeLog4jSlf4jImpl() {
@@ -1121,8 +1144,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
    public static final class DescriptorImpl extends BuildStepDescriptor<Builder> {
 
       public FormValidation doCheckName(@QueryParameter final String value,
-            @QueryParameter final boolean useFrench)
-            throws IOException, ServletException {
+            @QueryParameter final boolean useFrench) {
          if (value.length() == 0)
             return FormValidation.error("Strange value: " + value);
          return FormValidation.ok();
@@ -1193,8 +1215,8 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
          }
          for (ListBoxModel.Option o : CredentialsProvider
                .listCredentials(StandardUsernameCredentials.class, project, project instanceof Queue.Task
-                     ? Tasks.getAuthenticationOf((Queue.Task) project)
-                     : ACL.SYSTEM,
+                           ? Tasks.getAuthenticationOf((Queue.Task) project)
+                           : ACL.SYSTEM,
                      new LinkedList<>(),
                      CredentialsMatchers.instanceOf(StandardUsernamePasswordCredentials.class))) {
             if (StringUtils.equals(value, o.value)) {
