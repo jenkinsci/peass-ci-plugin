@@ -22,9 +22,9 @@ import de.dagere.peass.dependency.analysis.data.TestSet;
 import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import hudson.model.Run;
 
-public class RTSActionCreator {
+public class RTSLogActionCreator {
 
-   private static final Logger LOG = LogManager.getLogger(RTSActionCreator.class);
+   private static final Logger LOG = LogManager.getLogger(RTSLogActionCreator.class);
 
    private final RTSLogFileReader reader;
    private final Run<?, ?> run;
@@ -34,7 +34,7 @@ public class RTSActionCreator {
    private RTSLogSummary logSummary;
    private final Pattern pattern;
 
-   public RTSActionCreator(final RTSLogFileReader reader, final Run<?, ?> run, final PeassProcessConfiguration processConfig) {
+   public RTSLogActionCreator(final RTSLogFileReader reader, final Run<?, ?> run, final PeassProcessConfiguration processConfig) {
       this.reader = reader;
       this.run = run;
       this.processConfig = processConfig;
@@ -51,8 +51,8 @@ public class RTSActionCreator {
 
       Map<String, File> processSuccessRuns = createProcessSuccessRunsActions();
 
-      Map<TestMethodCall, RTSLogData> rtsVmRuns = createVersionRTSData(measurementConfig.getFixedCommitConfig().getCommit(), staticChanges.getIgnoredTestsCurrent());
-      Map<TestMethodCall, RTSLogData> rtsVmRunsPredecessor = createVersionRTSData(measurementConfig.getFixedCommitConfig().getCommitOld(),
+      Map<TestMethodCall, RTSLogData> rtsVmRuns = createCommitRTSData(measurementConfig.getFixedCommitConfig().getCommit(), staticChanges.getIgnoredTestsCurrent());
+      Map<TestMethodCall, RTSLogData> rtsVmRunsPredecessor = createCommitRTSData(measurementConfig.getFixedCommitConfig().getCommitOld(),
             staticChanges.getIgnoredTestsPredecessor());
 
       logSummary = RTSLogSummary.createLogSummary(rtsVmRuns, rtsVmRunsPredecessor);
@@ -102,7 +102,7 @@ public class RTSActionCreator {
 
    
 
-   private Map<TestMethodCall, RTSLogData> createVersionRTSData(final String commit, final TestSet ignoredTests) throws IOException {
+   private Map<TestMethodCall, RTSLogData> createCommitRTSData(final String commit, final TestSet ignoredTests) throws IOException {
       Map<TestMethodCall, RTSLogData> rtsVmRuns = reader.getRtsVmRuns(commit, ignoredTests);
       LOG.info("RTS Runs: {}", rtsVmRuns.size());
       for (Map.Entry<TestMethodCall, RTSLogData> rtsLogData : rtsVmRuns.entrySet()) {

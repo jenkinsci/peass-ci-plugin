@@ -69,7 +69,7 @@ public class RTSLogFileCommitReader {
                test = new TestMethodCall(clazz, method, module);
 
                boolean ignored = ignoredMethods.contains(method);
-               LOG.debug("Found method log file in {}{}", methodFile.getAbsolutePath(), ignored ? ", corresponding test was {} ignored/disabled" : "");
+               LOG.debug("Found method log file in {}, corresponding test was {}", methodFile.getAbsolutePath(), ignored ? "ignored/disabled" : " not ignored /disabled");
                addMethodLog(ignored);
             }
          }
