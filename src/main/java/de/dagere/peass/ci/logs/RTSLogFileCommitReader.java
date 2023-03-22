@@ -34,10 +34,10 @@ public class RTSLogFileCommitReader {
       this.commit = commit;
    }
 
-   public Map<TestMethodCall, RTSLogData> getClazzLogs(final Map<File, String> testClazzFolders, final TestSet ignoredTests) {
+   public Map<TestMethodCall, RTSLogData> getTestmethodLogs(final Map<File, String> testClazzFolders, final TestSet ignoredTests) {
       for (Entry<File, String> testClazzFolder : testClazzFolders.entrySet()) {
          Set<String> ignoredMethods = findIgnoredMethods(ignoredTests, testClazzFolder.getKey());
-         getClazzLog(testClazzFolder.getKey(), testClazzFolder.getValue(), ignoredMethods);
+         getTestmethodLog(testClazzFolder.getKey(), testClazzFolder.getValue(), ignoredMethods);
       }
       return files;
    }
@@ -54,7 +54,7 @@ public class RTSLogFileCommitReader {
       return Collections.emptySet();
    }
 
-   private void getClazzLog(final File testClazzFolder, final String module, Set<String> ignoredMethods) {
+   private void getTestmethodLog(final File testClazzFolder, final String module, Set<String> ignoredMethods) {
       LOG.debug("Looking for method files in {}", testClazzFolder.getAbsolutePath());
       File[] methodFiles;
       methodFiles = testClazzFolder.listFiles();

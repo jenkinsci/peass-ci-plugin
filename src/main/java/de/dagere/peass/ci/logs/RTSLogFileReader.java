@@ -94,7 +94,7 @@ public class RTSLogFileReader {
          LOG.info("Expected rts commit folder {} did not exist", commitFolder);
       }
       RTSLogFileCommitReader RTSLogFileCommitReader = new RTSLogFileCommitReader(visualizationFolders, commit);
-      return RTSLogFileCommitReader.getClazzLogs(testClazzFolders, ignoredTests);
+      return RTSLogFileCommitReader.getTestmethodLogs(testClazzFolders, ignoredTests);
 
    }
 
