@@ -87,8 +87,12 @@
                       <j:if test="${it.getVmRuns().get(run).isIgnored() }">
                         <i class="fa fa-exclamation-triangle" title="Test was disabled in the code" style="color: yellow"></i>
                       </j:if>
+                      
+                      <j:if test="${it.getVmRuns().get(run).isRemoved() }">
+                        <i class="fa fa-exclamation-triangle" title="Test was removed from the code" style="color: yellow"></i>
+                      </j:if>
 
-                      <j:if test="${!it.getVmRuns().get(run).isIgnored() &amp;&amp; !it.getVmRuns().get(run).isSuccess() }">
+                      <j:if test="${!it.getVmRuns().get(run).isIgnored() &amp;&amp; !it.getVmRuns().get(run).isRemoved() &amp;&amp; !it.getVmRuns().get(run).isSuccess() }">
                         <i class="fa fa-exclamation-triangle" title="Regression test selection had error" style="color: red"></i>
                       </j:if>
 

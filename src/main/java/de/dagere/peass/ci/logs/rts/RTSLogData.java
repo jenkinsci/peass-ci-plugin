@@ -11,14 +11,16 @@ public class RTSLogData {
    private final boolean success;
    private final boolean isParameterizedWithoutIndex;
    private final boolean ignored;
+   private final boolean removed;
 
-   public RTSLogData(final String commit, final File methodFile, final File cleanFile, final boolean success, boolean isParameterizedWithoutIndex, final boolean ignored) {
+   public RTSLogData(final String commit, final File methodFile, final File cleanFile, final boolean success, boolean isParameterizedWithoutIndex, final boolean ignored, boolean removed) {
       this.commit = commit;
       this.methodFile = methodFile;
       this.cleanFile = cleanFile;
       this.success = success;
       this.isParameterizedWithoutIndex = isParameterizedWithoutIndex;
       this.ignored = ignored;
+      this.removed = removed;
    }
 
    public String getCommit() {
@@ -47,5 +49,9 @@ public class RTSLogData {
 
    public boolean isIgnored() {
       return ignored;
+   }
+   
+   public boolean isRemoved() {
+      return removed;
    }
 }

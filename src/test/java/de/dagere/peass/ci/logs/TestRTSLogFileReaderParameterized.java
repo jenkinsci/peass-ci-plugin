@@ -54,14 +54,14 @@ public class TestRTSLogFileReaderParameterized {
       
       RTSLogFileReader reader = new RTSLogFileReader(visualizationFoldersMock, peassConfig);
 
-      Map<TestMethodCall, RTSLogData> rtsVmRuns = reader.getRtsVmRuns(COMMIT, new TestSet());
+      Map<TestMethodCall, RTSLogData> rtsVmRuns = reader.getRtsVmRuns(COMMIT, new TestSet(), new TestSet());
 
       RTSLogData data = rtsVmRuns.get(new TestMethodCall("de.dagere.peass.ExampleTest", "test", "", "JUNIT_PARAMETERIZED-1"));
       Assert.assertNotNull(data);
       Assert.assertFalse(data.isParameterizedWithoutIndex());
       Assert.assertTrue(data.isSuccess());
 
-      Map<TestMethodCall, RTSLogData> rtsVmRunsPredecessor = reader.getRtsVmRuns(COMMIT_OLD, new TestSet());
+      Map<TestMethodCall, RTSLogData> rtsVmRunsPredecessor = reader.getRtsVmRuns(COMMIT_OLD, new TestSet(), new TestSet());
       RTSLogData dataImplicitParameterized = rtsVmRunsPredecessor.get(new TestMethodCall("de.dagere.peass.ExampleTest", "test", ""));
       Assert.assertNotNull(dataImplicitParameterized);
       Assert.assertTrue(dataImplicitParameterized.isParameterizedWithoutIndex());

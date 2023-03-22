@@ -71,7 +71,7 @@ public class RTSLogFileReader {
       return logsExisting;
    }
 
-   public Map<TestMethodCall, RTSLogData> getRtsVmRuns(final String commit, final TestSet ignoredTests) {
+   public Map<TestMethodCall, RTSLogData> getRtsVmRuns(final String commit, final TestSet ignoredTests, final TestSet removedTests) {
       File commitFolder = new File(visualizationFolders.getPeassFolders().getDependencyLogFolder(), commit);
       File[] allFiles = commitFolder.listFiles();
       Map<File, String> testClazzFolders = new LinkedHashMap<>();
@@ -93,8 +93,8 @@ public class RTSLogFileReader {
       } else {
          LOG.info("Expected rts commit folder {} did not exist", commitFolder);
       }
-      RTSLogFileCommitReader RTSLogFileCommitReader = new RTSLogFileCommitReader(visualizationFolders, commit);
-      return RTSLogFileCommitReader.getTestmethodLogs(testClazzFolders, ignoredTests);
+      RTSLogFileCommitReader logFileCommitReader = new RTSLogFileCommitReader(visualizationFolders, commit, ignoredTests, removedTests);
+      return logFileCommitReader.getTestmethodLogs(testClazzFolders);
 
    }
 

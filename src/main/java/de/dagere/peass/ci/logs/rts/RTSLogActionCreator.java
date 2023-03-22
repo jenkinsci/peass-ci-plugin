@@ -51,9 +51,10 @@ public class RTSLogActionCreator {
 
       Map<String, File> processSuccessRuns = createProcessSuccessRunsActions();
 
-      Map<TestMethodCall, RTSLogData> rtsVmRuns = createCommitRTSData(measurementConfig.getFixedCommitConfig().getCommit(), staticChanges.getIgnoredTestsCurrent());
-      Map<TestMethodCall, RTSLogData> rtsVmRunsPredecessor = createCommitRTSData(measurementConfig.getFixedCommitConfig().getCommitOld(),
-            staticChanges.getIgnoredTestsPredecessor());
+      Map<TestMethodCall, RTSLogData> rtsVmRuns = createCommitRTSData(measurementConfig.getFixedCommitConfig().getCommit(), 
+            staticChanges.getIgnoredTestsCurrent(), staticChanges.getRemovedTestsCurrent());
+      Map<TestMethodCall, RTSLogData> rtsVmRunsPredecessor = createCommitRTSData(measurementConfig.getFixedCommitConfig().getCommitOld(),            
+            staticChanges.getIgnoredTestsPredecessor(), null);
 
       logSummary = RTSLogSummary.createLogSummary(rtsVmRuns, rtsVmRunsPredecessor);
 
@@ -102,8 +103,8 @@ public class RTSLogActionCreator {
 
    
 
-   private Map<TestMethodCall, RTSLogData> createCommitRTSData(final String commit, final TestSet ignoredTests) throws IOException {
-      Map<TestMethodCall, RTSLogData> rtsVmRuns = reader.getRtsVmRuns(commit, ignoredTests);
+   private Map<TestMethodCall, RTSLogData> createCommitRTSData(final String commit, final TestSet ignoredTests, final TestSet removedTests) throws IOException {
+      Map<TestMethodCall, RTSLogData> rtsVmRuns = reader.getRtsVmRuns(commit, ignoredTests, removedTests);
       LOG.info("RTS Runs: {}", rtsVmRuns.size());
       for (Map.Entry<TestMethodCall, RTSLogData> rtsLogData : rtsVmRuns.entrySet()) {
          String methodLogData = getLogData(rtsLogData.getValue().getMethodFile());

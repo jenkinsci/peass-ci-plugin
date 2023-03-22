@@ -39,7 +39,7 @@ public class TestRTSLogFileReaderMultimodule {
 
       Assert.assertTrue(reader.isLogsExisting());
 
-      Map<TestMethodCall, RTSLogData> rtsVmRuns = reader.getRtsVmRuns(RTSLogFileTestUtil.COMMIT, new TestSet());
+      Map<TestMethodCall, RTSLogData> rtsVmRuns = reader.getRtsVmRuns(RTSLogFileTestUtil.COMMIT, new TestSet(), new TestSet());
       Assert.assertEquals(2, rtsVmRuns.size());
 
       File dataFile1 = rtsVmRuns.get(TestRTSLogFileReader.TEST1).getMethodFile();
@@ -49,7 +49,7 @@ public class TestRTSLogFileReaderMultimodule {
       Assert.assertTrue(dataFile2.exists());
       Assert.assertFalse(logDataTest2.isSuccess());
 
-      Map<TestMethodCall, RTSLogData> rtsVmRunsPredecessor = reader.getRtsVmRuns(RTSLogFileTestUtil.COMMIT_OLD, new TestSet());
+      Map<TestMethodCall, RTSLogData> rtsVmRunsPredecessor = reader.getRtsVmRuns(RTSLogFileTestUtil.COMMIT_OLD, new TestSet(), new TestSet());
       Assert.assertEquals(2, rtsVmRunsPredecessor.size());
       RTSLogData rtsLogData = rtsVmRunsPredecessor.get(TestRTSLogFileReader.TEST1);
       Assert.assertEquals(RTSLogFileTestUtil.COMMIT_OLD, rtsLogData.getCommit());

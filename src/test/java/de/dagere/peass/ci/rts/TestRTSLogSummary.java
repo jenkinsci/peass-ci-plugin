@@ -27,8 +27,8 @@ public class TestRTSLogSummary {
       Map<TestMethodCall, RTSLogData> rtsVmRuns = new HashMap<>();
       Map<TestMethodCall, RTSLogData> rtsVmRunsPredecessor = new HashMap<>();
       boolean success = true;
-      rtsVmRuns.put(new TestMethodCall("TestMe", "test"), new RTSLogData(null, null, null, success, false, false));
-      rtsVmRunsPredecessor.put(new TestMethodCall("TestMe", "test"), new RTSLogData(null, null, null, success, false, false));
+      rtsVmRuns.put(new TestMethodCall("TestMe", "test"), new RTSLogData(null, null, null, success, false, false, false));
+      rtsVmRunsPredecessor.put(new TestMethodCall("TestMe", "test"), new RTSLogData(null, null, null, success, false, false, false));
       RTSLogSummary summary = RTSLogSummary.createLogSummary(rtsVmRuns, rtsVmRunsPredecessor);
 
       Assert.assertFalse(summary.isErrorInCurrentCommitOccured());
@@ -45,8 +45,8 @@ public class TestRTSLogSummary {
       Map<TestMethodCall, RTSLogData> rtsVmRuns = new HashMap<>();
       Map<TestMethodCall, RTSLogData> rtsVmRunsPredecessor = new HashMap<>();
       boolean success = true;
-      rtsVmRuns.put(TestMethodCall.createFromString("TestMe#test([0])"), new RTSLogData(null, null, null, success, true, false));
-      rtsVmRunsPredecessor.put(TestMethodCall.createFromString("TestMe#test([0])"), new RTSLogData(null, null, null, success, true, false));
+      rtsVmRuns.put(TestMethodCall.createFromString("TestMe#test([0])"), new RTSLogData(null, null, null, success, true, false, false));
+      rtsVmRunsPredecessor.put(TestMethodCall.createFromString("TestMe#test([0])"), new RTSLogData(null, null, null, success, true, false, false));
       RTSLogSummary summary = RTSLogSummary.createLogSummary(rtsVmRuns, rtsVmRunsPredecessor);
 
       Assert.assertFalse(summary.isErrorInCurrentCommitOccured());
@@ -69,11 +69,11 @@ public class TestRTSLogSummary {
       Map<TestMethodCall, RTSLogData> rtsVmRuns = new HashMap<>();
       Map<TestMethodCall, RTSLogData> rtsVmRunsPredecessor = new HashMap<>();
       boolean success = true;
-      rtsVmRuns.put(TestMethodCall.createFromString("TestMe#test([0])"), new RTSLogData(null, null, null, success, true, false));
-      rtsVmRunsPredecessor.put(TestMethodCall.createFromString("TestMe#test([0])"), new RTSLogData(null, null, null, success, true, false));
-      rtsVmRuns.put(TestMethodCall.createFromString("TestMe#test2([0])"), new RTSLogData(null, null, null, success, true, false));
+      rtsVmRuns.put(TestMethodCall.createFromString("TestMe#test([0])"), new RTSLogData(null, null, null, success, true, false, false));
+      rtsVmRunsPredecessor.put(TestMethodCall.createFromString("TestMe#test([0])"), new RTSLogData(null, null, null, success, true, false, false));
+      rtsVmRuns.put(TestMethodCall.createFromString("TestMe#test2([0])"), new RTSLogData(null, null, null, success, true, false, false));
       success = false;
-      rtsVmRunsPredecessor.put(TestMethodCall.createFromString("TestMe#test2([0])"), new RTSLogData(null, null, null, success, true, false));
+      rtsVmRunsPredecessor.put(TestMethodCall.createFromString("TestMe#test2([0])"), new RTSLogData(null, null, null, success, true, false, false));
       RTSLogSummary summary = RTSLogSummary.createLogSummary(rtsVmRuns, rtsVmRunsPredecessor);
 
       Assert.assertFalse(summary.isErrorInCurrentCommitOccured());

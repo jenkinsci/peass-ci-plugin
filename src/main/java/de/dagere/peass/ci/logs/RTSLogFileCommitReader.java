@@ -25,41 +25,59 @@ public class RTSLogFileCommitReader {
 
    private final String commit;
    private final Map<TestMethodCall, RTSLogData> files = new LinkedHashMap<>();
+   
+   private final TestSet ignoredTests;
+   private final TestSet removedTests;
+   
    private File testClazzFolder;
    private File methodFile;
    private TestMethodCall test;
 
-   public RTSLogFileCommitReader(final VisualizationFolderManager visualizationFolders, final String commit) {
+   public RTSLogFileCommitReader(final VisualizationFolderManager visualizationFolders, final String commit, 
+         final TestSet ignoredTests, final TestSet removedTests) {
       this.visualizationFolders = visualizationFolders;
       this.commit = commit;
+      this.ignoredTests = ignoredTests;
+      this.removedTests = removedTests;
    }
 
-   public Map<TestMethodCall, RTSLogData> getTestmethodLogs(final Map<File, String> testClazzFolders, final TestSet ignoredTests) {
+   public Map<TestMethodCall, RTSLogData> getTestmethodLogs(final Map<File, String> testClazzFolders) {
       for (Entry<File, String> testClazzFolder : testClazzFolders.entrySet()) {
-         Set<String> ignoredMethods = findIgnoredMethods(ignoredTests, testClazzFolder.getKey());
-         getTestmethodLog(testClazzFolder.getKey(), testClazzFolder.getValue(), ignoredMethods);
+         getTestmethodLog(testClazzFolder.getKey(), testClazzFolder.getValue());
       }
       return files;
    }
 
-   private Set<String> findIgnoredMethods(final TestSet ignoredTests, File testClazzFolder) {
+   private Set<String> findIgnoredMethods(String clazzName) {
       if (ignoredTests == null)
          return Collections.emptySet();
       for (Entry<TestClazzCall, Set<String>> ignoredTest : ignoredTests.entrySet()) {
-         String clazzName = extractClazzNameFromTestClazzFolder(testClazzFolder);
          if (ignoredTest.getKey().getClazz().equals(clazzName)) {
             return ignoredTest.getValue();
          }
       }
       return Collections.emptySet();
    }
+   
+   private Set<String> findRemovedMethods(String clazzName) {
+      if (removedTests == null)
+         return Collections.emptySet();
+      for (Entry<TestClazzCall, Set<String>> removedTest : removedTests.entrySet()) {
+         if (removedTest.getKey().getClazz().equals(clazzName)) {
+            return removedTest.getValue();
+         }
+      }
+      return Collections.emptySet();
+   }
 
-   private void getTestmethodLog(final File testClazzFolder, final String module, Set<String> ignoredMethods) {
+   private void getTestmethodLog(final File testClazzFolder, final String module) {
       LOG.debug("Looking for method files in {}", testClazzFolder.getAbsolutePath());
       File[] methodFiles;
       methodFiles = testClazzFolder.listFiles();
       if (methodFiles != null) {
          String clazz = extractClazzNameFromTestClazzFolder(testClazzFolder);
+         Set<String> ignoredMethods = findIgnoredMethods(clazz);
+         Set<String> removedMethods = findRemovedMethods(clazz);
          for (File methodFile : methodFiles) {
             LOG.debug("Looking for method log file in {}", methodFile.getAbsolutePath());
             if (!methodFile.isDirectory()) {
@@ -70,7 +88,8 @@ public class RTSLogFileCommitReader {
 
                boolean ignored = ignoredMethods.contains(method);
                LOG.debug("Found method log file in {}, corresponding test was {}", methodFile.getAbsolutePath(), ignored ? "ignored/disabled" : " not ignored /disabled");
-               addMethodLog(ignored);
+               boolean removed = removedMethods.contains(method);
+               addMethodLog(ignored, removed);
             }
          }
       }
@@ -80,23 +99,23 @@ public class RTSLogFileCommitReader {
       return testClazzFolder.getName().substring("log_".length());
    }
 
-   private void addMethodLog(final boolean ignored) {
+   private void addMethodLog(final boolean ignored, boolean removed) {
       File clazzDir = visualizationFolders.getResultsFolders().getClazzDir(commit, test);
       File viewMethodDir = new File(clazzDir, test.getMethodWithParams());
       boolean foundAnyParameterized = false;
 
       if ((!viewMethodDir.exists())) {
-         foundAnyParameterized = addParameterizedMethodLogs(clazzDir, null, ignored);
+         foundAnyParameterized = addParameterizedMethodLogs(clazzDir, null, ignored, removed);
       } else {
-         foundAnyParameterized = addParameterizedMethodLogs(clazzDir, viewMethodDir, ignored);
+         foundAnyParameterized = addParameterizedMethodLogs(clazzDir, viewMethodDir, ignored, removed);
       }
 
       if (!foundAnyParameterized) {
-         addRegularMethodLog(viewMethodDir, ignored);
+         addRegularMethodLog(viewMethodDir, ignored, removed);
       }
    }
 
-   private boolean addParameterizedMethodLogs(final File clazzDir, final File viewMethodDir, final boolean ignored) {
+   private boolean addParameterizedMethodLogs(final File clazzDir, final File viewMethodDir, final boolean ignored, boolean removed) {
       boolean foundAnyParameterized = false;
       File[] potentialParameterFiles = clazzDir.listFiles();
       if (potentialParameterFiles != null) {
@@ -110,13 +129,13 @@ public class RTSLogFileCommitReader {
                   String params = fileName.substring(test.getMethod().length() + 1, fileName.length() - 1);
                   test = new TestMethodCall(test.getClazz(), test.getMethod(), test.getModule(), params);
                   boolean runWasSuccessful = checkRunWasSuccessful(viewMethodDir);
-                  addMethodLogData(runWasSuccessful, false, ignored);
+                  addMethodLogData(runWasSuccessful, false, ignored, removed);
                } else {
                   test = new TestMethodCall(test.getClazz(), test.getMethod(), test.getModule());
                   /*
                    * runWasSuccessful is always true in this case we can't use checkRunWasSuccessful because no viewMethodDir exists if TestCase isParameterizedWithoutIndex
                    */
-                  addMethodLogData(true, true, ignored);
+                  addMethodLogData(true, true, ignored, removed);
                }
             }
          }
@@ -124,9 +143,9 @@ public class RTSLogFileCommitReader {
       return foundAnyParameterized;
    }
 
-   private void addRegularMethodLog(final File viewMethodDir, final boolean ignored) {
+   private void addRegularMethodLog(final File viewMethodDir, final boolean ignored, boolean removed) {
       boolean runWasSuccessful = checkRunWasSuccessful(viewMethodDir);
-      addMethodLogData(runWasSuccessful, false, ignored);
+      addMethodLogData(runWasSuccessful, false, ignored, removed);
    }
 
    private boolean checkRunWasSuccessful(final File viewMethodDir) {
@@ -135,9 +154,9 @@ public class RTSLogFileCommitReader {
       return (viewMethodFile.exists() || viewMethodFileZip.exists());
    }
 
-   private void addMethodLogData(final boolean runWasSuccessful, final boolean isParameterizedWithoutIndex, final boolean ignored) {
+   private void addMethodLogData(final boolean runWasSuccessful, final boolean isParameterizedWithoutIndex, final boolean ignored, boolean removed) {
       File cleanFile = new File(testClazzFolder, "clean" + File.separator + methodFile.getName());
-      RTSLogData data = new RTSLogData(commit, methodFile, cleanFile, runWasSuccessful, isParameterizedWithoutIndex, ignored);
+      RTSLogData data = new RTSLogData(commit, methodFile, cleanFile, runWasSuccessful, isParameterizedWithoutIndex, ignored, removed);
 
       files.put(test, data);
       LOG.debug("Adding log: {}", test);

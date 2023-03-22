@@ -10,17 +10,24 @@ import de.dagere.peass.dependency.persistence.StaticTestSelection;
 import de.dagere.peass.folders.ResultsFolders;
 import de.dagere.peass.utils.Constants;
 
+/**
+ * Stores results of one RTS run - it is necessary to store these reduced data instead of StaticTestSelection, so not all data get persisted for every commit (otherwise, this would be a lot of data).
+ * @author DaGeRe
+ *
+ */
 public class RTSInfos {
    private final boolean staticChanges;
    private final boolean staticallySelectedTests;
    private final TestSet ignoredTestsCurrent;
    private final TestSet ignoredTestsPredecessor;
+   private final TestSet removedTestsCurrent;
 
-   public RTSInfos(final boolean staticChanges, final boolean staticallySelectedTests, final TestSet ignoredTestsCurrent, final TestSet ignoredTestsPredecessor) {
+   public RTSInfos(final boolean staticChanges, final boolean staticallySelectedTests, final TestSet ignoredTestsCurrent, final TestSet ignoredTestsPredecessor, TestSet removedTestsCurrent) {
       this.staticChanges = staticChanges;
       this.staticallySelectedTests = staticallySelectedTests;
       this.ignoredTestsCurrent = ignoredTestsCurrent;
       this.ignoredTestsPredecessor = ignoredTestsPredecessor;
+      this.removedTestsCurrent = removedTestsCurrent;
    }
 
    public boolean isStaticChanges() {
@@ -37,6 +44,10 @@ public class RTSInfos {
 
    public TestSet getIgnoredTestsPredecessor() {
       return ignoredTestsPredecessor;
+   }
+   
+   public TestSet getRemovedTestsCurrent() {
+      return removedTestsCurrent;
    }
 
    public static RTSInfos readInfosFromFolders(final ResultsFolders results, final PeassProcessConfiguration peassConfig) throws IOException {
@@ -65,9 +76,9 @@ public class RTSInfos {
             ignoredTestsPredecessor = new TestSet();
          }
 
-         return new RTSInfos(staticChanges, hasStaticallySelectedTests, ignoredTestsCurrent, ignoredTestsPredecessor);
+         return new RTSInfos(staticChanges, hasStaticallySelectedTests, ignoredTestsCurrent, ignoredTestsPredecessor, commitSelection.getRemovedTests());
       } else {
-         return new RTSInfos(false, false, new TestSet(), new TestSet());
+         return new RTSInfos(false, false, new TestSet(), new TestSet(), null);
       }
    }
 }
