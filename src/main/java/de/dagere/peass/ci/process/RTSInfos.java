@@ -76,7 +76,7 @@ public class RTSInfos {
             ignoredTestsPredecessor = new TestSet();
          }
 
-         return new RTSInfos(staticChanges, hasStaticallySelectedTests, ignoredTestsCurrent, ignoredTestsPredecessor, commitSelection.getRemovedTests());
+         return new RTSInfos(staticChanges, hasStaticallySelectedTests, ignoredTestsCurrent, ignoredTestsPredecessor, commitSelection != null ? commitSelection.getRemovedTests() : null);
       } else {
          return new RTSInfos(false, false, new TestSet(), new TestSet(), null);
       }
