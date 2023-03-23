@@ -15,7 +15,7 @@ jobs:
        matrix:
           os: [ubuntu-latest] # no windows since kieker currently does not support windows execution
           # os: [ubuntu-latest, macos-latest, windows-latest] # Building all systems only works for release versions of Peass
-          java: [ 8, 11, 17 ]
+          java: [ 11, 17 ]
        fail-fast: false
     runs-on: ${{ matrix.os }}
     name: Java ${{ matrix.java }} ${{ matrix.os }}
