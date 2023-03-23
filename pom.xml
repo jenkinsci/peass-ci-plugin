@@ -19,7 +19,7 @@
     <revision>2.3.7</revision>
     <changelist>999999-SNAPSHOT</changelist>
     <gitHubRepo>jenkinsci/peass-ci-plugin</gitHubRepo>
-    <peass.version>0.3.7-SNAPSHOT</peass.version>
+    <peass.version>0.3.7</peass.version>
   </properties>
   <!-- Jenkins discourages usage of names like peass-jenkins-plugin or peass-plugin (https://www.jenkins.io/doc/developer/publishing/requesting-hosting/), therefore 
     it's just peass-ci -->
