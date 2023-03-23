@@ -63,7 +63,7 @@ public class RTSLogFileReader {
       return success;
    }
 
-   public boolean isVersionRunWasSuccess() {
+   public boolean isCommitRunWasSuccess() {
       return commitRunWasSuccess;
    }
 

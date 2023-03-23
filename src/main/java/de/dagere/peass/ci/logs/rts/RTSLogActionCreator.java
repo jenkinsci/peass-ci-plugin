@@ -93,7 +93,7 @@ public class RTSLogActionCreator {
           * This is not exactly what is required here - if process sucess runs are realy executed for both commits (which currently does not happen by default), than the value
           * should be obtained for both commits
           */
-         processSuccessRunSucceeded.put(processSuccessRun.getKey(), reader.isVersionRunWasSuccess());
+         processSuccessRunSucceeded.put(processSuccessRun.getKey(), reader.isCommitRunWasSuccess());
          ProcessSuccessLogAction processSuccessAction = new ProcessSuccessLogAction(IdHelper.getId(), "processSuccessRun_" + processSuccessRun.getKey(), logData,
                processSuccessRun.getKey());
          run.addAction(processSuccessAction);
