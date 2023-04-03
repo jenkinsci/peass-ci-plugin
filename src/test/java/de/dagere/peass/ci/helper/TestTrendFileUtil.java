@@ -14,11 +14,11 @@ import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
+import de.dagere.nodeDiffDetector.data.TestMethodCall;
 import de.dagere.peass.analysis.measurement.ProjectStatistics;
 import de.dagere.peass.ci.persistence.BuildMeasurementValues;
 import de.dagere.peass.ci.persistence.TestMeasurementValues;
 import de.dagere.peass.ci.persistence.TrendFileUtil;
-import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.measurement.statistics.data.TestcaseStatistic;
 import hudson.model.Run;
 

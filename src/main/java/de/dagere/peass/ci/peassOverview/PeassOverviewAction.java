@@ -25,6 +25,7 @@ import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 import org.kohsuke.stapler.interceptor.RequirePOST;
 
+import de.dagere.nodeDiffDetector.data.TestMethodCall;
 import de.dagere.peass.analysis.changes.Change;
 import de.dagere.peass.analysis.changes.Changes;
 import de.dagere.peass.ci.VisibleAction;
@@ -33,7 +34,6 @@ import de.dagere.peass.ci.peassOverview.classification.ClassifiedProject;
 import de.dagere.peass.ci.peassOverview.classification.TestcaseClassification;
 import de.dagere.peass.ci.rca.CommitRCAURLs;
 import de.dagere.peass.ci.rca.RCAMapping;
-import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.utils.Constants;
 import hudson.util.FormValidation;
 

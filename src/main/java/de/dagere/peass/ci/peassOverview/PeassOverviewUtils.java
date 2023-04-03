@@ -1,12 +1,12 @@
 package de.dagere.peass.ci.peassOverview;
 
 import java.util.HashSet;
-import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
-import de.dagere.peass.dependency.analysis.data.ChangedEntity;
+import de.dagere.nodeDiffDetector.data.TestMethodCall;
+import de.dagere.nodeDiffDetector.data.Type;
 import de.dagere.peass.dependency.analysis.data.TestSet;
-import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.dependency.persistence.CommitStaticSelection;
 import de.dagere.peass.dependency.persistence.ExecutionData;
 import de.dagere.peass.dependency.persistence.StaticTestSelection;
@@ -18,7 +18,7 @@ public class PeassOverviewUtils {
          if (commitTraceSelection != null) {
             CommitStaticSelection commitStaticSelection = selection.getCommits().get(commit);
             if (commitStaticSelection != null) {
-               for (Map.Entry<ChangedEntity, TestSet> changedEntity : commitStaticSelection.getChangedClazzes().entrySet()) {
+               for (Entry<Type, TestSet> changedEntity : commitStaticSelection.getChangedClazzes().entrySet()) {
                   Set<TestMethodCall> tests = new HashSet<>(changedEntity.getValue().getTestMethods());
 
                   for (TestMethodCall test : tests) {

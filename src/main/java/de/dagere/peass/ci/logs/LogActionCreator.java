@@ -3,6 +3,7 @@ package de.dagere.peass.ci.logs;
 import java.io.IOException;
 import java.util.Set;
 
+import de.dagere.nodeDiffDetector.data.TestMethodCall;
 import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.ci.helper.VisualizationFolderManager;
 import de.dagere.peass.ci.logs.measurement.MeasurementActionCreator;
@@ -10,7 +11,6 @@ import de.dagere.peass.ci.logs.rca.RCAActionCreator;
 import de.dagere.peass.ci.logs.rts.RTSLogActionCreator;
 import de.dagere.peass.ci.logs.rts.RTSLogSummary;
 import de.dagere.peass.ci.process.RTSInfos;
-import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import hudson.model.Run;
 
 public class LogActionCreator {

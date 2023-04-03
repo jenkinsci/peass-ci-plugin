@@ -9,11 +9,10 @@ import java.util.Map.Entry;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-
+import de.dagere.nodeDiffDetector.data.MethodCall;
+import de.dagere.nodeDiffDetector.data.TestCase;
+import de.dagere.nodeDiffDetector.data.TestMethodCall;
 import de.dagere.peass.SearchCauseStarter;
 import de.dagere.peass.analysis.changes.Change;
 import de.dagere.peass.analysis.changes.Changes;
@@ -21,9 +20,6 @@ import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.ci.NonIncludedTestRemover;
 import de.dagere.peass.config.FixedCommitConfig;
 import de.dagere.peass.config.MeasurementConfig;
-import de.dagere.peass.dependency.analysis.data.ChangedEntity;
-import de.dagere.peass.dependency.analysis.data.TestCase;
-import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.dependencyprocessors.CommitComparatorInstance;
 import de.dagere.peass.execution.utils.EnvironmentVariables;
 import de.dagere.peass.folders.CauseSearchFolders;
@@ -32,7 +28,6 @@ import de.dagere.peass.measurement.rca.data.CauseSearchData;
 import de.dagere.peass.measurement.rca.kieker.BothTreeReader;
 import de.dagere.peass.measurement.rca.searcher.CauseSearcher;
 import de.dagere.peass.utils.Constants;
-import kieker.analysis.exception.AnalysisConfigurationException;
 
 public class RCAExecutor {
 
@@ -92,8 +87,8 @@ public class RCAExecutor {
    private TestMethodCall getTestMethodCall(Entry<String, List<Change>> testcases, Change change) {
       final TestMethodCall testCase;
       String testClazzName = testcases.getKey();
-      if (testClazzName.contains(ChangedEntity.MODULE_SEPARATOR)) {
-         int moduleSeparatorIndex = testClazzName.indexOf(ChangedEntity.MODULE_SEPARATOR);
+      if (testClazzName.contains(MethodCall.MODULE_SEPARATOR)) {
+         int moduleSeparatorIndex = testClazzName.indexOf(MethodCall.MODULE_SEPARATOR);
          String module = testClazzName.substring(0, moduleSeparatorIndex);
          String testclazz = testClazzName.substring(moduleSeparatorIndex + 1, testClazzName.length());
          testCase = new TestMethodCall(testclazz, change.getMethod(), module, change.getParams());

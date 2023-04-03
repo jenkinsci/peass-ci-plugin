@@ -14,14 +14,14 @@ import org.apache.logging.log4j.Logger;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
+import de.dagere.nodeDiffDetector.data.TestCase;
+import de.dagere.nodeDiffDetector.data.TestMethodCall;
+import de.dagere.nodeDiffDetector.data.Type;
 import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.ci.helper.IdHelper;
 import de.dagere.peass.ci.logs.rts.RTSLogSummary;
 import de.dagere.peass.config.FixedCommitConfig;
-import de.dagere.peass.dependency.analysis.data.ChangedEntity;
-import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.analysis.data.TestSet;
-import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.dependency.persistence.CommitStaticSelection;
 import de.dagere.peass.dependency.persistence.ExecutionData;
 import de.dagere.peass.dependency.persistence.StaticTestSelection;
@@ -158,12 +158,12 @@ public class RTSVisualizationCreator {
    }
 
    private void addCommitDataToChangeliste(final Map<String, List<String>> changesList, final CommitStaticSelection commit) {
-      for (Map.Entry<ChangedEntity, TestSet> entry : commit.getChangedClazzes().entrySet()) {
+      for (Map.Entry<Type, TestSet> entry : commit.getChangedClazzes().entrySet()) {
          List<String> tests = new LinkedList<>();
          for (TestCase test : entry.getValue().getTests()) {
             tests.add(test.toString());
          }
-         ChangedEntity changedClazz = entry.getKey();
+         Type changedClazz = entry.getKey();
          changesList.put(changedClazz.toString(), tests);
       }
    }

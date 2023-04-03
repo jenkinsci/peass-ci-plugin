@@ -9,10 +9,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jenkinsci.remoting.RoleChecker;
 
+import de.dagere.nodeDiffDetector.data.TestMethodCall;
 import de.dagere.peass.ci.ContinuousExecutor;
 import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.ci.process.JenkinsLogRedirector;
-import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import hudson.FilePath.FileCallable;
 import hudson.model.TaskListener;
 import hudson.remoting.VirtualChannel;

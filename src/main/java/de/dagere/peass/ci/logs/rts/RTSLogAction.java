@@ -1,7 +1,7 @@
 package de.dagere.peass.ci.logs.rts;
 
+import de.dagere.nodeDiffDetector.data.TestCase;
 import de.dagere.peass.ci.VisibleAction;
-import de.dagere.peass.dependency.analysis.data.TestCase;
 
 public class RTSLogAction extends VisibleAction {
    private final String commit;

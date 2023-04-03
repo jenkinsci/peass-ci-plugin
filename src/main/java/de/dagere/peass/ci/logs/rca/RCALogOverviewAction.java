@@ -3,9 +3,9 @@ package de.dagere.peass.ci.logs.rca;
 import java.util.List;
 import java.util.Map;
 
+import de.dagere.nodeDiffDetector.data.TestCase;
 import de.dagere.peass.ci.Messages;
 import de.dagere.peass.ci.VisibleAction;
-import de.dagere.peass.dependency.analysis.data.TestCase;
 
 public class RCALogOverviewAction extends VisibleAction {
    

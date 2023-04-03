@@ -6,10 +6,10 @@ import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import de.dagere.nodeDiffDetector.data.TestMethodCall;
 import de.dagere.peass.ci.RTSResult;
 import de.dagere.peass.ci.logs.rts.AggregatedRTSResult;
 import de.dagere.peass.ci.logs.rts.RTSLogSummary;
-import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 
 public class TestAggregatedRTSResult {
 

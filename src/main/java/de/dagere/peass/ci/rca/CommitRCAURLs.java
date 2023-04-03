@@ -3,7 +3,7 @@ package de.dagere.peass.ci.rca;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
+import de.dagere.nodeDiffDetector.data.TestMethodCall;
 
 public class CommitRCAURLs{
    private Map<TestMethodCall, String> executionURLs = new LinkedHashMap<>();

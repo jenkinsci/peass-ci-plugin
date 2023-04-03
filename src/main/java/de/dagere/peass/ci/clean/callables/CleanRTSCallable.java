@@ -9,7 +9,6 @@ import de.dagere.peass.ci.ContinuousFolderUtil;
 import de.dagere.peass.folders.CauseSearchFolders;
 import de.dagere.peass.folders.ResultsFolders;
 import de.dagere.peass.vcs.VersionControlSystem;
-import groovyjarjarantlr4.v4.codegen.model.ThrowEarlyExitException;
 import hudson.model.TaskListener;
 import hudson.remoting.VirtualChannel;
 

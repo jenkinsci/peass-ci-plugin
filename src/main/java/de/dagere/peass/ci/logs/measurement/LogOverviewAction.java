@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.dagere.nodeDiffDetector.data.TestCase;
 import de.dagere.peass.ci.Messages;
 import de.dagere.peass.ci.VisibleAction;
 import de.dagere.peass.ci.logs.LogFiles;
-import de.dagere.peass.dependency.analysis.data.TestCase;
 
 public class LogOverviewAction extends VisibleAction {
    

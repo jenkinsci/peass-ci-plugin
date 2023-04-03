@@ -7,14 +7,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import de.dagere.nodeDiffDetector.data.TestCase;
+import de.dagere.nodeDiffDetector.data.TestMethodCall;
+import de.dagere.nodeDiffDetector.data.Type;
 import de.dagere.peass.analysis.changes.Change;
 import de.dagere.peass.analysis.changes.Changes;
 import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.analysis.measurement.ProjectStatistics;
-import de.dagere.peass.dependency.analysis.data.ChangedEntity;
-import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.dependency.analysis.data.TestSet;
-import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.dependency.persistence.CommitStaticSelection;
 import de.dagere.peass.dependency.persistence.ExecutionData;
 import de.dagere.peass.dependency.persistence.StaticTestSelection;
@@ -84,7 +84,7 @@ public class ProjectData {
    }
 
    private void addCommitData(List<ChangeLine> result, String commit, CommitStaticSelection commitStaticSelection) {
-      Map<ChangedEntity, TestSet> changedClazzes = commitStaticSelection.getChangedClazzes();
+      Map<Type, TestSet> changedClazzes = commitStaticSelection.getChangedClazzes();
 
       Map<TestMethodCall, Set<String>> oneTestCausingChanges = new LinkedHashMap<>();
       List<String> changesWithNoTest = new LinkedList<>();
@@ -95,8 +95,8 @@ public class ProjectData {
       addNoneTestCausingChanges(result, commit, changesWithNoTest);
    }
 
-   private void fillOneOrLessTests(Map<ChangedEntity, TestSet> changedClazzes, Map<TestMethodCall, Set<String>> oneTestCausingChanges, List<String> changesWithNoTest) {
-      for (Map.Entry<ChangedEntity, TestSet> entry : changedClazzes.entrySet()) {
+   private void fillOneOrLessTests(Map<Type, TestSet> changedClazzes, Map<TestMethodCall, Set<String>> oneTestCausingChanges, List<String> changesWithNoTest) {
+      for (Map.Entry<Type, TestSet> entry : changedClazzes.entrySet()) {
 
          String changedEntity = entry.getKey().toString();
          if (entry.getValue().getTestMethods().size() > 0) {

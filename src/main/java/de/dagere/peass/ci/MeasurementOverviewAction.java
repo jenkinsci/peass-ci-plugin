@@ -12,6 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jvnet.localizer.LocaleProvider;
 
+import de.dagere.nodeDiffDetector.data.TestMethodCall;
 import de.dagere.peass.analysis.changes.Change;
 import de.dagere.peass.analysis.changes.Changes;
 import de.dagere.peass.analysis.measurement.ProjectStatistics;
@@ -19,7 +20,6 @@ import de.dagere.peass.ci.helper.HistogramValues;
 import de.dagere.peass.ci.helper.UnitConverter;
 import de.dagere.peass.ci.rca.RCAVisualizer;
 import de.dagere.peass.config.MeasurementConfig;
-import de.dagere.peass.dependency.analysis.testData.TestMethodCall;
 import de.dagere.peass.measurement.statistics.StatisticUtil;
 import de.dagere.peass.measurement.statistics.data.TestcaseStatistic;
 

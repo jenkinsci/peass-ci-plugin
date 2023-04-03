@@ -3,7 +3,8 @@ package de.dagere.peass.ci.remote;
 import java.io.Serializable;
 import java.util.List;
 
-import de.dagere.peass.dependency.analysis.data.TestCase;
+import de.dagere.nodeDiffDetector.data.TestCase;
+
 
 public class RCAResult implements Serializable {
    private static final long serialVersionUID = -1651195171472844693L;

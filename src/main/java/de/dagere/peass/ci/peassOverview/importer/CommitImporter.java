@@ -18,7 +18,7 @@ import de.dagere.kopeme.kopemedata.Kopemedata;
 import de.dagere.kopeme.kopemedata.TestMethod;
 import de.dagere.kopeme.kopemedata.VMResult;
 import de.dagere.kopeme.kopemedata.VMResultChunk;
-import de.dagere.peass.dependency.analysis.data.ChangedEntity;
+import de.dagere.nodeDiffDetector.data.MethodCall;
 import de.dagere.peass.utils.Constants;
 import de.dagere.peass.vcs.GitUtils;
 
@@ -134,7 +134,7 @@ public class CommitImporter {
                      File resultFile = new File(fakeMeasurementFolder, jsonFile.getName());
                      Constants.OBJECTMAPPER.writeValue(resultFile, copiedData);
 
-                     String clazzWithoutModule = clazzName.substring(clazzName.indexOf(ChangedEntity.MODULE_SEPARATOR) + 1);
+                     String clazzWithoutModule = clazzName.substring(clazzName.indexOf(MethodCall.MODULE_SEPARATOR) + 1);
                      File measurementsFolder = new File(measurementsFullFolder, "measurements");
                      if (measurementsFolder.exists()) {
                         File runFolder = new File(measurementsFolder, clazzWithoutModule + "/" + commit);

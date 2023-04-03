@@ -10,13 +10,13 @@ import java.util.List;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.jenkinsci.remoting.RoleChecker;
 
+import de.dagere.nodeDiffDetector.data.TestCase;
 import de.dagere.peass.analysis.changes.ProjectChanges;
 import de.dagere.peass.ci.ContinuousFolderUtil;
 import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.ci.logHandling.LogRedirector;
 import de.dagere.peass.ci.rca.RCAExecutor;
 import de.dagere.peass.config.MeasurementConfig;
-import de.dagere.peass.dependency.analysis.data.TestCase;
 import de.dagere.peass.execution.utils.EnvironmentVariables;
 import de.dagere.peass.folders.ResultsFolders;
 import de.dagere.peass.measurement.rca.CauseSearcherConfig;
