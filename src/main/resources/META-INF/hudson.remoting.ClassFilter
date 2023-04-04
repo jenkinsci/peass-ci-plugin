@@ -13,8 +13,8 @@ de.dagere.peass.dependency.persistence.InitialCommit
 de.dagere.peass.dependency.persistence.InitialCallList
 de.dagere.peass.dependency.persistence.CommitStaticSelection
 de.dagere.peass.dependency.analysis.data.ChangedEntity
-import de.dagere.nodeDiffDetector.data.Type
-import de.dagere.nodeDiffDetector.data.MethodCall
+de.dagere.nodeDiffDetector.data.Type
+de.dagere.nodeDiffDetector.data.MethodCall
 de.dagere.peass.ci.RTSResult
 de.dagere.peass.analysis.changes.Changes
 de.dagere.peass.analysis.changes.Change
@@ -22,6 +22,7 @@ de.dagere.peass.measurement.statistics.data.TestcaseStatistic
 de.dagere.peass.dependency.analysis.data.TestCase
 de.dagere.peass.dependency.analysis.testData.TestMethodCall
 de.dagere.peass.dependency.analysis.testData.TestClazzCall
+de.dagere.nodeDiffDetector.data.TestCase
 de.dagere.nodeDiffDetector.data.TestMethodCall
 de.dagere.nodeDiffDetector.data.TestClazzCall
 de.dagere.peass.dependency.traces.coverage.CoverageSelectionCommit
