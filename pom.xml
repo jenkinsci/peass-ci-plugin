@@ -13,7 +13,7 @@
   <version>${revision}-${changelist}</version>
   <packaging>hpi</packaging>
   <properties>
-    <jenkins.version>2.401.3</jenkins.version>
+    <jenkins.version>2.414.3</jenkins.version>
     <maven.test.redirectTestOutputToFile>false</maven.test.redirectTestOutputToFile>
     <!-- The revision reflects the Peass core version, 2.1.11 uses Peass 0.1.11. -->
     <revision>2.3.9</revision>
@@ -77,10 +77,45 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
-      <version>5.9.3</version>
+      <version>5.10.1</version>
     </dependency>
-
+    
     <!-- To avoid enforcer problems -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>5.10.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.vintage</groupId>
+      <artifactId>junit-vintage-engine</artifactId>
+      <version>5.10.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-engine</artifactId>
+      <version>1.10.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-commons</artifactId>
+      <version>1.10.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <version>5.3.29</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-core</artifactId>
+      <version>5.3.29</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-jcl</artifactId>
+      <version>5.3.29</version>
+    </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-math3</artifactId>
@@ -95,11 +130,6 @@
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.core</artifactId>
       <version>6.0.0</version>
-    </dependency>
-    <dependency>
-      <groupId>com.github.javaparser</groupId>
-      <artifactId>javaparser-core</artifactId>
-      <version>3.25.6</version>
     </dependency>
 
     <dependency>
@@ -123,8 +153,10 @@
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-web</artifactId>
-      <version>2.20.0</version>
+      <version>2.21.1</version>
     </dependency>
+    
+    
 
     <dependency>
       <groupId>org.jenkins-ci.plugins</groupId>
@@ -207,8 +239,8 @@
     <dependencies>
       <dependency>
         <groupId>io.jenkins.tools.bom</groupId>
-        <artifactId>bom-2.401.x</artifactId>
-        <version>2483.v3b_22f030990a_</version>
+        <artifactId>bom-2.414.x</artifactId>
+        <version>2555.v3190a_8a_c60c6</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
