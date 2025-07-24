@@ -24,7 +24,6 @@ import de.dagere.peass.dependencyprocessors.CommitComparatorInstance;
 import de.dagere.peass.folders.ResultsFolders;
 import de.dagere.peass.measurement.statistics.data.TestcaseStatistic;
 import de.dagere.peass.utils.Constants;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class MeasurementMerger {
    
@@ -33,7 +32,6 @@ public class MeasurementMerger {
    private File[] changeFile;
    private final SelectedTests selectedTests;
    
-   @SuppressFBWarnings
    public MeasurementMerger(File[] changeFile, SelectedTests selectedTests) {
       this.changeFile = changeFile;
       this.selectedTests = selectedTests;
