@@ -13,7 +13,7 @@
   <version>${revision}-${changelist}</version>
   <packaging>hpi</packaging>
   <properties>
-    <jenkins.version>2.479.3</jenkins.version>
+    <jenkins.version>2.492.3</jenkins.version>
     <maven.test.redirectTestOutputToFile>false</maven.test.redirectTestOutputToFile>
     <!-- The revision reflects the Peass core version, 2.1.11 uses Peass 0.1.11. -->
     <revision>2.4.1</revision>
@@ -113,7 +113,7 @@
     <dependency>
       <groupId>com.google.errorprone</groupId>
       <artifactId>error_prone_annotations</artifactId>
-      <version>2.28.0</version>
+      <version>2.36.0</version>
     </dependency>
     <dependency>
       <groupId>com.github.javaparser</groupId>
@@ -240,8 +240,8 @@
     <dependencies>
       <dependency>
         <groupId>io.jenkins.tools.bom</groupId>
-        <artifactId>bom-2.479.x</artifactId>
-        <version>4228.v0a_71308d905b_</version>
+         <artifactId>bom-2.492.x</artifactId>
+         <version>4228.v0a_71308d905b_</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
