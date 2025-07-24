@@ -1,6 +1,5 @@
 package de.dagere.peass.ci.helper;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
@@ -34,7 +33,7 @@ public class TestHistogramReader {
       double[] valuesCurrent = measurements.get("de.test.CalleeTest#onlyCallMethod1").getValuesCurrent();
 
       MeasurementOverviewAction measureVersionActionMock = Mockito.mock(MeasurementOverviewAction.class);
-      when(measureVersionActionMock.getValuesReadable(any(double[].class))).thenCallRealMethod();
+      when(measureVersionActionMock.getValuesReadable(Mockito.any(double[].class))).thenCallRealMethod();
 
       Assert.assertEquals(2, measureVersionActionMock.getValuesReadable(valuesBefore).split(",").length);
       Assert.assertEquals(2, measureVersionActionMock.getValuesReadable(valuesCurrent).split(",").length);
@@ -70,7 +69,7 @@ public class TestHistogramReader {
       double[] valuesCurrent = measurements.get("de.test.CalleeTest#onlyCallMethod2").getValuesCurrent();
 
       MeasurementOverviewAction measureVersionActionMock = Mockito.mock(MeasurementOverviewAction.class);
-      when(measureVersionActionMock.getValuesReadable(any(double[].class))).thenCallRealMethod();
+      when(measureVersionActionMock.getValuesReadable(Mockito.any(double[].class))).thenCallRealMethod();
 
       Assert.assertEquals(measureVersionActionMock.getValuesReadable(valuesBefore).split(",").length, 2);
       Assert.assertEquals(measureVersionActionMock.getValuesReadable(valuesCurrent).split(",").length, 2);
