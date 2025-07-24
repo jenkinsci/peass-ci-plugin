@@ -27,6 +27,7 @@ import de.dagere.peass.measurement.rca.CauseSearcherConfig;
 import de.dagere.peass.measurement.rca.data.CauseSearchData;
 import de.dagere.peass.measurement.rca.kieker.BothTreeReader;
 import de.dagere.peass.measurement.rca.searcher.CauseSearcher;
+import de.dagere.peass.measurement.rca.searcher.ICauseSearcher;
 import de.dagere.peass.utils.Constants;
 
 public class RCAExecutor {
@@ -153,7 +154,7 @@ public class RCAExecutor {
       final CauseSearchFolders alternateFolders = new CauseSearchFolders(projectFolder);
       final BothTreeReader reader = new BothTreeReader(causeSearcherConfig, config, alternateFolders, env);
 
-      CauseSearcher tester = SearchCauseStarter.getCauseSeacher(config, causeSearcherConfig, alternateFolders, reader, comparator);
+      ICauseSearcher tester = SearchCauseStarter.getCauseSeacher(config, causeSearcherConfig, alternateFolders, reader, comparator);
       tester.search();
    }
 
