@@ -1,19 +1,19 @@
 package de.dagere.peass.ci.logs;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import de.dagere.nodeDiffDetector.data.TestCase;
@@ -28,7 +28,7 @@ import de.dagere.peass.folders.PeassFolders;
 import de.dagere.peass.folders.ResultsFolders;
 import de.dagere.peass.utils.Constants;
 
-public class TestLogFileReader {
+class TestLogFileReader {
 
    private static final String VERSION_OLD = "33ce17c04b5218c25c40137d4d09f40fbb3e4f0f";
    private static final String VERSION = "a23e385264c31def8dcda86c3cf64faa698c62d8";
@@ -38,7 +38,7 @@ public class TestLogFileReader {
    private static final File RESOURCES_FOLDER = new File("src/test/resources/");
 
    @BeforeEach
-   public void init() throws IOException {
+   void setUp() throws Exception {
       SimpleModule methodDeserializer = new SimpleModule().addKeyDeserializer(TestMethodCall.class, new TestMethodCallKeyDeserializer());
       Constants.OBJECTMAPPER.registerModules(methodDeserializer);
 
@@ -63,7 +63,7 @@ public class TestLogFileReader {
    }
 
    @Test
-   public void testReading() throws JsonParseException, JsonMappingException, IOException {
+   void testReading() throws Exception {
       MeasurementConfig peassDemoConfig = new MeasurementConfig(2, VERSION, VERSION_OLD);
       PeassProcessConfiguration peassConfig = new PeassProcessConfiguration(false, peassDemoConfig, null, null, 5, false, false, false, null);
 
@@ -74,17 +74,17 @@ public class TestLogFileReader {
       ProjectStatistics statistics = Constants.OBJECTMAPPER.readValue(new File("src/test/resources/demo-results-logs/statistics.json"), ProjectStatistics.class);
       Map<TestCase, List<LogFiles>> testcases = reader.readAllTestcases(statistics.getStatistics().get(VERSION).keySet());
 
-      Assert.assertEquals(1, testcases.size());
+      assertEquals(1, testcases.size());
       TestMethodCall test = new TestMethodCall("de.test.CalleeTest", "onlyCallMethod2");
       List<LogFiles> logFiles = testcases.get(test);
-      Assert.assertEquals(2, logFiles.size());
+      assertEquals(2, logFiles.size());
 
       String measureLog = reader.getMeasureLog();
-      Assert.assertEquals("This is a measurement log test", measureLog);
+      assertEquals("This is a measurement log test", measureLog);
    }
 
    @Test
-   public void testReadingIterationChanged() throws JsonParseException, JsonMappingException, IOException {
+   void testReadingIterationChanged() throws Exception {
       MeasurementConfig peassDemoConfig = new MeasurementConfig(2, VERSION, VERSION_OLD);
       PeassProcessConfiguration peassConfig = new PeassProcessConfiguration(false, peassDemoConfig, null, null, 5, false, false, false, null);
 
@@ -95,15 +95,15 @@ public class TestLogFileReader {
       ProjectStatistics statistics = Constants.OBJECTMAPPER.readValue(new File("src/test/resources/demo-results-logs/statistics.json"), ProjectStatistics.class);
       Map<TestCase, List<LogFiles>> testcases = reader.readAllTestcases(statistics.getStatistics().get(VERSION).keySet());
 
-      Assert.assertEquals(1, testcases.size());
+      assertEquals(1, testcases.size());
       TestMethodCall test = new TestMethodCall("de.test.CalleeTest", "onlyCallMethod2");
       List<LogFiles> logFiles = testcases.get(test);
-      Assert.assertEquals(2, logFiles.size());
+      assertEquals(2, logFiles.size());
 
-      Assert.assertFalse(logFiles.get(0).isCurrentSuccess());
-      Assert.assertTrue(logFiles.get(0).isPredecessorSuccess());
+      assertFalse(logFiles.get(0).isCurrentSuccess());
+      assertTrue(logFiles.get(0).isPredecessorSuccess());
 
-      Assert.assertTrue(logFiles.get(1).isCurrentSuccess());
-      Assert.assertTrue(logFiles.get(1).isPredecessorSuccess());
+      assertTrue(logFiles.get(1).isCurrentSuccess());
+      assertTrue(logFiles.get(1).isPredecessorSuccess());
    }
 }
