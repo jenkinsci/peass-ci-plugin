@@ -9,19 +9,16 @@ public class HistogramValues {
    private final double[] valuesCurrent;
    private final MeasurementConfig currentConfig;
 
-   @SuppressFBWarnings
    public HistogramValues(final double[] valuesPredecessor, final double[] valuesCurrent, final MeasurementConfig currentConfig) {
       this.valuesPredecessor = valuesPredecessor;
       this.valuesCurrent = valuesCurrent;
       this.currentConfig = currentConfig;
    }
 
-   @SuppressFBWarnings
    public double[] getValuesBefore() {
       return valuesPredecessor;
    }
 
-   @SuppressFBWarnings
    public double[] getValuesCurrent() {
       return valuesCurrent;
    }

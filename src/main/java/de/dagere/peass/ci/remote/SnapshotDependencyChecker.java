@@ -56,8 +56,8 @@ public class SnapshotDependencyChecker {
    }
 
    private static File getRepository() {
-      String maven_home = System.getenv("HOME");
-      LOG.debug("HOME: " + maven_home);
+      String maven_home = System.getProperty("user.home"); // formerly System.getenv("HOME"); - change back if problems occur
+      LOG.debug("user.home: " + maven_home);
 
       final String mavenRepo;
       if (maven_home != null) {

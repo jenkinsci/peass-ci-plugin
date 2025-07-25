@@ -22,7 +22,7 @@
       </j:forEach>
       
       <div class="button-wrap">
-        <a href="downloadClassification" style='position: absolute; right: 10px; top: 120px; width: 200px;'>Download Classifications</a>
+        <a href="downloadClassification" style='position: absolute; right: 10px; top: 120px; width: 200px;'>Download Classifications (Disabled, see code)</a>
       </div>
       
       <div class="button-wrap">
