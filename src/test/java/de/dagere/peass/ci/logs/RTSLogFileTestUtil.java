@@ -1,7 +1,6 @@
 package de.dagere.peass.ci.logs;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.FileUtils;
@@ -23,7 +22,7 @@ public class RTSLogFileTestUtil {
 
    static final File localFolder = new File("target/" + MeasureVersionBuilder.PEASS_FOLDER_NAME);
    static final File testFolder = new File(localFolder, "current_peass");
-   
+
    private final TestMethodCall test1;
    private final String projectName;
 
@@ -32,7 +31,7 @@ public class RTSLogFileTestUtil {
       this.projectName = projectName;
    }
 
-   public void init(final File source) throws IOException {
+   public void init(final File source) throws Exception {
       if (localFolder.exists()) {
          FileUtils.deleteDirectory(localFolder);
       }
@@ -47,14 +46,14 @@ public class RTSLogFileTestUtil {
       initExampleTraceDiffFile(folders);
    }
 
-   private ResultsFolders initExampleLogFile(final String projectName) throws IOException {
+   private ResultsFolders initExampleLogFile(final String projectName) throws Exception {
       ResultsFolders folders = new ResultsFolders(localFolder, projectName);
       File rtsLogFile = folders.getRTSLogFile(COMMIT, COMMIT_OLD);
       FileUtils.write(rtsLogFile, "This is a rts log test", StandardCharsets.UTF_8);
       return folders;
    }
 
-   private void initExampleTraceDiffFile(final ResultsFolders folders) throws IOException {
+   private void initExampleTraceDiffFile(final ResultsFolders folders) throws Exception {
       File viewMethodDir = folders.getViewMethodDir(COMMIT_OLD, test1);
       File methodFile = new File(viewMethodDir, TraceWriter.getShortCommit(COMMIT_OLD) + ".txt");
       FileUtils.write(methodFile, "This is a trace generated for rts trace diff", StandardCharsets.UTF_8);
@@ -62,13 +61,12 @@ public class RTSLogFileTestUtil {
 
    RTSLogFileReader initializeReader() {
       MeasurementConfig peassDemoConfig = new MeasurementConfig(2, COMMIT, COMMIT_OLD);
-      PeassProcessConfiguration peassConfig = new PeassProcessConfiguration(false, peassDemoConfig, null, null, 100, false, false, false, null);           
+      PeassProcessConfiguration peassConfig = new PeassProcessConfiguration(false, peassDemoConfig, null, null, 100, false, false, false, null);
 
       VisualizationFolderManager visualizationFolders = Mockito.mock(VisualizationFolderManager.class);
       Mockito.when(visualizationFolders.getPeassFolders()).thenReturn(new PeassFolders(testFolder));
       Mockito.when(visualizationFolders.getResultsFolders()).thenReturn(new ResultsFolders(localFolder, projectName));
-      RTSLogFileReader reader = new RTSLogFileReader(visualizationFolders, peassConfig);
-      return reader;
+      return new RTSLogFileReader(visualizationFolders, peassConfig);
    }
 
 }

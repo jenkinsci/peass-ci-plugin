@@ -14,8 +14,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.servlet.ServletException;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jvnet.localizer.LocaleProvider;
@@ -292,66 +290,70 @@ public class PeassOverviewAction extends VisibleAction {
       }
    }
 
-   public HttpResponse doDownloadClassification() {
-      return new HttpResponse() {
-
-         @Override
-         public void generateResponse(StaplerRequest req, StaplerResponse rsp, Object node) throws IOException, ServletException {
-            rsp.addHeader("Content-Type", "application/json");
-
-            File classificationFile = new File(path, "classifications.json");
-            Classifications classifications = Constants.OBJECTMAPPER.readValue(classificationFile, Classifications.class);
-
-            String responseText = Constants.OBJECTMAPPER.writeValueAsString(classifications);
-            byte[] responseBytes = responseText.getBytes(StandardCharsets.UTF_8);
-            InputStream stream = new ByteArrayInputStream(responseBytes);
-
-            rsp.serveFile(req, stream, System.currentTimeMillis(), (long) responseBytes.length, "classifications.json");
-
-         }
-      };
-
-   }
-
-   public HttpResponse doDownloadUnclassified() {
-      return new HttpResponse() {
-
-         @Override
-         public void generateResponse(StaplerRequest req, StaplerResponse rsp, Object node) throws IOException, ServletException {
-            rsp.addHeader("Content-Type", "application/json");
-
-            Classifications unclassifiedList = buildUnclassifiedList();
-
-            String responseText = Constants.OBJECTMAPPER.writeValueAsString(unclassifiedList);
-            byte[] responseBytes = responseText.getBytes(StandardCharsets.UTF_8);
-            InputStream stream = new ByteArrayInputStream(responseBytes);
-
-            rsp.serveFile(req, stream, System.currentTimeMillis(), (long) responseBytes.length, "unclassified.json");
-
-         }
-
-         private Classifications buildUnclassifiedList() {
-            Classifications unclassifiedClassification = new Classifications();
-
-            for (Entry<String, ProjectData> project : projects.entrySet()) {
-               String projectName = project.getKey();
-               for (Entry<String, Changes> commit : project.getValue().getChanges().getCommitChanges().entrySet()) {
-                  for (Entry<String, List<Change>> changes : commit.getValue().getTestcaseChanges().entrySet()) {
-                     for (Change change : changes.getValue()) {
-                        String testcase = changes.getKey() + "#" + change.getMethod();
-                        String commitName = commit.getKey();
-
-                        if (getClassification(projectName, commitName, testcase).equals("TODO")) {
-                           unclassifiedClassification.setClassification(projectName, commitName, testcase, "TODO");
-                        }
-                     }
-                  }
-               }
-            }
-            return unclassifiedClassification;
-         }
-      };
-
-   }
+   /** Commenting out this code makes it impossible to do the classifications; 
+   however, this code is incompatible with jakarta 5 and above, so fixing this requires some time; so for now, I'll go with
+   deactivating
+   */
+//   public HttpResponse doDownloadClassification() {
+//      return new HttpResponse() {
+//         
+//         @Override
+//         public void generateResponse(StaplerRequest req, StaplerResponse rsp, Object node) throws IOException, ServletException {
+//            rsp.addHeader("Content-Type", "application/json");
+//
+//            File classificationFile = new File(path, "classifications.json");
+//            Classifications classifications = Constants.OBJECTMAPPER.readValue(classificationFile, Classifications.class);
+//
+//            String responseText = Constants.OBJECTMAPPER.writeValueAsString(classifications);
+//            byte[] responseBytes = responseText.getBytes(StandardCharsets.UTF_8);
+//            InputStream stream = new ByteArrayInputStream(responseBytes);
+//
+//            rsp.serveFile(req, stream, System.currentTimeMillis(), (long) responseBytes.length, "classifications.json");
+//
+//         }
+//      };
+//
+//   }
+//
+//   public HttpResponse doDownloadUnclassified() {
+//      return new HttpResponse() {
+//
+//         @Override
+//         public void generateResponse(StaplerRequest req, StaplerResponse rsp, Object node) throws IOException, ServletException {
+//            rsp.addHeader("Content-Type", "application/json");
+//
+//            Classifications unclassifiedList = buildUnclassifiedList();
+//
+//            String responseText = Constants.OBJECTMAPPER.writeValueAsString(unclassifiedList);
+//            byte[] responseBytes = responseText.getBytes(StandardCharsets.UTF_8);
+//            InputStream stream = new ByteArrayInputStream(responseBytes);
+//
+//            rsp.serveFile(req, stream, System.currentTimeMillis(), (long) responseBytes.length, "unclassified.json");
+//
+//         }
+//
+//         private Classifications buildUnclassifiedList() {
+//            Classifications unclassifiedClassification = new Classifications();
+//
+//            for (Entry<String, ProjectData> project : projects.entrySet()) {
+//               String projectName = project.getKey();
+//               for (Entry<String, Changes> commit : project.getValue().getChanges().getCommitChanges().entrySet()) {
+//                  for (Entry<String, List<Change>> changes : commit.getValue().getTestcaseChanges().entrySet()) {
+//                     for (Change change : changes.getValue()) {
+//                        String testcase = changes.getKey() + "#" + change.getMethod();
+//                        String commitName = commit.getKey();
+//
+//                        if (getClassification(projectName, commitName, testcase).equals("TODO")) {
+//                           unclassifiedClassification.setClassification(projectName, commitName, testcase, "TODO");
+//                        }
+//                     }
+//                  }
+//               }
+//            }
+//            return unclassifiedClassification;
+//         }
+//      };
+//
+//   }
 
 }

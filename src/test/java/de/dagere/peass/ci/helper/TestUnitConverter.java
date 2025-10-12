@@ -1,29 +1,32 @@
 package de.dagere.peass.ci.helper;
 
-import org.junit.Assert;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Test;
 
-public class TestUnitConverter {
+class TestUnitConverter {
 
-   final double nanoSecondMean = 123;
-   final double mikroSecondMean = 1234;
-   final double milliSecondMean = 1234567;
-   final double secondMean = 12345678E6;
+   private static final double NANO_SECOND_MEAN = 123;
+   private static final double MICRO_SECOND_MEAN = 1234;
+   private static final double MILLI_SECOND_MEAN = 1234567;
+   private static final double SECOND_MEAN = 12345678E6;
 
    @Test
-   public void testGetFactorByMean() {
-      Assert.assertEquals(1, UnitConverter.getFactorByMean(nanoSecondMean));
-      Assert.assertEquals(UnitConverter.NANOSECONDS_TO_MICROSECONDS, UnitConverter.getFactorByMean(mikroSecondMean));
-      Assert.assertEquals(UnitConverter.NANOSECONDS_TO_MILLISECONDS, UnitConverter.getFactorByMean(milliSecondMean));
-      Assert.assertEquals(UnitConverter.NANOSECONDS_TO_SECONDS, UnitConverter.getFactorByMean(secondMean));
+   void testGetFactorByMean() {
+      assertEquals(1, UnitConverter.getFactorByMean(NANO_SECOND_MEAN));
+      assertEquals(UnitConverter.NANOSECONDS_TO_MICROSECONDS, UnitConverter.getFactorByMean(
+          MICRO_SECOND_MEAN));
+      assertEquals(UnitConverter.NANOSECONDS_TO_MILLISECONDS, UnitConverter.getFactorByMean(
+          MILLI_SECOND_MEAN));
+      assertEquals(UnitConverter.NANOSECONDS_TO_SECONDS, UnitConverter.getFactorByMean(SECOND_MEAN));
    }
 
    @Test
-   public void testGetUnitByFactor() {
-      Assert.assertEquals(UnitConverter.NANOSECONDS, UnitConverter.getUnitByFactor(1));
-      Assert.assertEquals(UnitConverter.MICROSECONDS, UnitConverter.getUnitByFactor(UnitConverter.NANOSECONDS_TO_MICROSECONDS));
-      Assert.assertEquals(UnitConverter.MILLISECONDS, UnitConverter.getUnitByFactor(UnitConverter.NANOSECONDS_TO_MILLISECONDS));
-      Assert.assertEquals(UnitConverter.SECONDS, UnitConverter.getUnitByFactor(UnitConverter.NANOSECONDS_TO_SECONDS));
+   void testGetUnitByFactor() {
+      assertEquals(UnitConverter.NANOSECONDS, UnitConverter.getUnitByFactor(1));
+      assertEquals(UnitConverter.MICROSECONDS, UnitConverter.getUnitByFactor(UnitConverter.NANOSECONDS_TO_MICROSECONDS));
+      assertEquals(UnitConverter.MILLISECONDS, UnitConverter.getUnitByFactor(UnitConverter.NANOSECONDS_TO_MILLISECONDS));
+      assertEquals(UnitConverter.SECONDS, UnitConverter.getUnitByFactor(UnitConverter.NANOSECONDS_TO_SECONDS));
    }
 
 }
