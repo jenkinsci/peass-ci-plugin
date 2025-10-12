@@ -13,7 +13,7 @@
   <version>${revision}-${changelist}</version>
   <packaging>hpi</packaging>
   <properties>
-    <jenkins.version>2.492.3</jenkins.version>
+    <jenkins.version>2.504.3</jenkins.version>
     <maven.test.redirectTestOutputToFile>false</maven.test.redirectTestOutputToFile>
     <!-- The revision reflects the Peass core version, 2.1.11 uses Peass 0.1.11. -->
     <revision>2.4.1</revision>
@@ -130,6 +130,11 @@
       <artifactId>commons-io</artifactId>
       <version>2.19.0</version>
     </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.19.0</version>
+    </dependency>
 
 
 
@@ -239,8 +244,8 @@
     <dependencies>
       <dependency>
         <groupId>io.jenkins.tools.bom</groupId>
-         <artifactId>bom-2.492.x</artifactId>
-         <version>4228.v0a_71308d905b_</version>
+         <artifactId>bom-2.504.x</artifactId>
+         <version>5543.vfd758c7c868d</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
