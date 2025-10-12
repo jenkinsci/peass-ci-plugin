@@ -1,34 +1,39 @@
 package de.dagere.peass.ci.clean;
 
-import java.io.File;
-import java.io.IOException;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import org.hamcrest.MatcherAssert;
+import java.io.File;
+
 import org.hamcrest.Matchers;
 import org.hamcrest.io.FileMatchers;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.jvnet.hudson.test.JenkinsRule;
 
 import com.google.common.io.Files;
 
 import de.dagere.peass.ci.MeasureVersionBuilder;
 import de.dagere.peass.folders.ResultsFolders;
-import hudson.model.FreeStyleBuild;
 import hudson.model.FreeStyleProject;
 import hudson.model.Result;
+import org.jvnet.hudson.test.junit.jupiter.WithJenkins;
 
-public class CleanBuilderTest {
-
-   @Rule
-   public JenkinsRule jenkins = new JenkinsRule();
+@WithJenkins
+class CleanBuilderTest {
 
    private File dependencyFile, trendFile, visualizationFolder;
    private File rtsLogFolder, measurementLogFolder;
 
+   private JenkinsRule jenkins;
+
+   @BeforeEach
+   void setUp(JenkinsRule rule) {
+      jenkins = rule;
+   }
+
    @Test
-   public void testEmptyFolderCleaning() throws Exception {
+   void testEmptyFolderCleaning() throws Exception {
       FreeStyleProject project = jenkins.createFreeStyleProject();
 
       createDummyData(project);
@@ -38,21 +43,21 @@ public class CleanBuilderTest {
       project.getBuildersList().add(builder);
       project = jenkins.configRoundtrip(project);
 
-      FreeStyleBuild build = jenkins.buildAndAssertStatus(Result.SUCCESS, project);
+      jenkins.buildAndAssertStatus(Result.SUCCESS, project);
 
       checkAllDeleted();
    }
 
    private void checkAllDeleted() {
-      Assert.assertFalse("Dependencyfile " + dependencyFile.getAbsolutePath() + " should not exist", dependencyFile.exists());
-      Assert.assertFalse(trendFile.exists());
-      Assert.assertFalse(visualizationFolder.exists());
+      assertFalse(dependencyFile.exists(), "Dependencyfile " + dependencyFile.getAbsolutePath() + " should not exist");
+      assertFalse(trendFile.exists());
+      assertFalse(visualizationFolder.exists());
 
-      MatcherAssert.assertThat(rtsLogFolder, Matchers.not(FileMatchers.anExistingDirectory()));
-      MatcherAssert.assertThat(measurementLogFolder, Matchers.not(FileMatchers.anExistingDirectory()));
+      assertThat(rtsLogFolder, Matchers.not(FileMatchers.anExistingDirectory()));
+      assertThat(measurementLogFolder, Matchers.not(FileMatchers.anExistingDirectory()));
    }
 
-   private void createDummyData(final FreeStyleProject project) throws IOException {
+   private void createDummyData(final FreeStyleProject project) throws Exception {
       File rootDir = new File(project.getRootDir(), MeasureVersionBuilder.PEASS_FOLDER_NAME);
       rootDir.mkdirs();
 
@@ -70,7 +75,7 @@ public class CleanBuilderTest {
       visualizationFolder.mkdir();
    }
 
-   private void initializeLogFolders(final FreeStyleProject project, File rootDir) throws IOException {
+   private void initializeLogFolders(final FreeStyleProject project, File rootDir) throws Exception {
       File peassFolder = new File(rootDir, project.getName() + "_peass/");
       rtsLogFolder = new File(peassFolder, "logs/dependencyLogs");
       rtsLogFolder.mkdirs();
@@ -81,7 +86,7 @@ public class CleanBuilderTest {
       Files.touch(new File(measurementLogFolder, "myLog.txt"));
    }
 
-   private void initializeFakeGitFolders(final FreeStyleProject project, File rootDir) throws IOException {
+   private void initializeFakeGitFolders(final FreeStyleProject project, File rootDir) throws Exception {
       new File(rootDir, project.getName()).mkdir();
       Files.touch(new File(rootDir, project.getName() + "/.git"));
 

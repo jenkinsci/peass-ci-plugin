@@ -1,23 +1,21 @@
 package de.dagere.peass.ci.process;
 
-import java.io.File;
-import java.io.IOException;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Assert;
+import java.io.File;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import com.fasterxml.jackson.core.exc.StreamReadException;
-import com.fasterxml.jackson.databind.DatabindException;
 
 import de.dagere.peass.ci.PeassProcessConfiguration;
 import de.dagere.peass.config.MeasurementConfig;
 import de.dagere.peass.folders.ResultsFolders;
 
-public class RTSInfosTest {
+class RTSInfosTest {
 
    @Test
-   public void testRTSInfos() throws StreamReadException, DatabindException, IOException {
+   void testRTSInfos() throws Exception {
       ResultsFolders folders = Mockito.mock(ResultsFolders.class);
       File selectionFile = new File("src/test/resources/noSelectedTest/" + ResultsFolders.STATIC_SELECTION_PREFIX + "demo.json");
       Mockito.when(folders.getStaticTestSelectionFile()).thenReturn(selectionFile);
@@ -29,7 +27,7 @@ public class RTSInfosTest {
 
       RTSInfos infos = RTSInfos.readInfosFromFolders(folders, config);
 
-      Assert.assertFalse(infos.isStaticallySelectedTests());
-      Assert.assertTrue(infos.isStaticChanges());
+      assertFalse(infos.isStaticallySelectedTests());
+      assertTrue(infos.isStaticChanges());
    }
 }
