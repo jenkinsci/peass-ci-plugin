@@ -67,10 +67,10 @@ import hudson.tasks.Builder;
 import hudson.util.FormValidation;
 import hudson.util.ListBoxModel;
 import hudson.util.ListBoxModel.Option;
-import io.jenkins.cli.shaded.org.apache.commons.lang.StringUtils;
 import jenkins.model.Jenkins;
 import jenkins.tasks.SimpleBuildStep;
 import net.kieker.sourceinstrumentation.AllowedKiekerRecord;
+import java.util.Objects;
 
 public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, Serializable {
 
@@ -1219,7 +1219,7 @@ public class MeasureVersionBuilder extends Builder implements SimpleBuildStep, S
                            : ACL.SYSTEM,
                      new LinkedList<>(),
                      CredentialsMatchers.instanceOf(StandardUsernamePasswordCredentials.class))) {
-            if (StringUtils.equals(value, o.value)) {
+            if (Objects.equals(value, o.value)) {
                // TODO check if this type of credential is acceptable to the Git client or does it merit warning
                // NOTE: we would need to actually lookup the credential to do the check, which may require
                // fetching the actual credential instance from a remote credentials store. Perhaps this is
