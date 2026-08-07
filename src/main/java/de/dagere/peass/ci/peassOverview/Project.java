@@ -2,7 +2,6 @@ package de.dagere.peass.ci.peassOverview;
 
 import java.io.Serializable;
 
-import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
 
@@ -38,7 +37,7 @@ public class Project extends AbstractDescribableImpl<Project> implements Seriali
 
       @Override
       public String getDisplayName() {
-         return StringUtils.EMPTY;
+         return "";
       }
    }
 }
